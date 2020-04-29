@@ -1,104 +1,142 @@
 <template>
-  <div style="margin-left: 25%;">
-    <v-toolbar-title class="white--text font-weight-light align-self-center"></v-toolbar-title>
+  <div>
+    <v-toolbar class="pt-1 pb-5" height="90px">
+      <v-layout row wrap>
+        <v-flex xs3></v-flex>
+        <v-flex xs4 class="pr-5">
+          <SearchAlumni @getUserData="getUserData"></SearchAlumni>
+        </v-flex>
 
-    <v-spacer />
+        <v-flex xs3 class="pt-5 pl-5">
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="date"
+            transition="scale-transition"
+            offset-y
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="inputDate"
+                label="Effective Date"
+                prepend-icon="event"
+                v-on="on"
+                style="width:70%"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="inputDate" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+              <v-btn text color="primary" @click="$refs.menu.save(inputDate)">OK</v-btn>
+            </v-date-picker>
+          </v-menu>
+        </v-flex>
+        <v-flex xs2 class="pr-5">
+          <v-menu transition="scale-transition" offset-y>
+            <template v-slot:activator="{ attrs, on }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-icon v-on="on">mdi-view-dashboard</v-icon>
+                  </template>
+                  <span>Legends</span>
+                </v-tooltip>
+              </v-btn>
+            </template>
 
-    <v-toolbar-items>
-      <!-- <img src="@/assets/alumx-logo-1.png" style="height: 50px" class="my-2" /> -->
-      <v-layout row wrap align-center>
-        <v-flex xs12>
-          <SearchAlumni />
+            <v-card dark max-width="250">
+              <v-img src="@/assets/legendicon.png"></v-img>
+            </v-card>
+          </v-menu>
         </v-flex>
       </v-layout>
-      <v-row align="center" class="mx-0">
-        <!-- <v-text-field
-          class="mb-2"
-          v-model="search"
-          append-icon="search"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-          label="Search"
-          dark
-          single-line
-          filled
-          rounded
-          dense
-          hide-details
-        ></v-text-field>-->
-        <v-spacer></v-spacer>
-
-        <v-menu bottom left offset-y transition="slide-y-transition">
-          <template v-slot:activator="{ attrs, on }">
-            <v-btn class="toolbar-items" icon v-bind="attrs" v-on="on">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-icon color="white" v-on="on">mdi-view-dashboard</v-icon>
-                </template>
-                <span>Legends</span>
-              </v-tooltip>
-            </v-btn>
-          </template>
-
-          <v-card class="mx-auto" dark max-width="300">
-            <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
-          </v-card>
-        </v-menu>
-
-        <v-menu offset-y>
-          <template v-slot:activator="{ on,attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
-              <v-icon color="white">mdi-account</v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item v-for="(item, index) in items" :key="index" :to="item.to">
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-
-        <!-- <v-btn to="/profile/user-profile" icon>
-          <v-icon color="white">mdi-account</v-icon>
-        </v-btn>-->
-      </v-row>
-    </v-toolbar-items>
+    </v-toolbar>
+    <v-layout row wrap>
+      <v-flex xs12>
+        <v-divider color="rgba(0,0,0,.12)"></v-divider>
+      </v-flex>
+    </v-layout>
+    <div v-if="showLoading">
+      <v-overlay>
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
+    </div>
   </div>
 </template>
 
 <script>
 // Utilities
-import { mapMutations } from "vuex";
+
 import SearchAlumni from "@/components/SearchAlumni";
 
 export default {
-  data: () => ({}),
+  data: () => ({
+    date: new Date().toISOString().substr(0, 10),
+    menu: false,
+    search: ""
+  }),
+
   components: {
     SearchAlumni
   },
-  watch: {
-    $route(val) {
-      this.title = val.name;
+  computed: {
+    inputDate: {
+      get() {
+        return this.$store.getters.getinputDate;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setinputDate", data);
+      }
+    },
+    showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
+      }
+    },
+    showNavDrawer: {
+      get() {
+        return this.$store.getters.getshownavDrawer;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshownavDrawer", data);
+      }
+    },
+    showFilter: {
+      get() {
+        return this.$store.getters.getshowFilter;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowFilter", data);
+      }
     }
   },
 
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.onResponsiveInverted);
-  },
-
   methods: {
-    ...mapMutations("app", ["setDrawer", "toggleDrawer"]),
-    onClick() {
-      this.setDrawer(!this.$store.state.app.drawer);
-    },
-    onResponsiveInverted() {
-      if (window.innerWidth < 991) {
-        this.responsive = true;
-      } else {
-        this.responsive = false;
-      }
+    getUserData(data) {
+      this.showFilter = false;
+      this.$router.push({ path: "/" });
+      var date1 = new Date(this.inputDate).toISOString();
+      this.showLoading = true;
+      this.$store
+        .dispatch("testcall", {
+          userid: data,
+          date: date1
+        })
+        .then(response => {
+          if (response) {
+            console.log("testing");
+            this.showLoading = false;
+            this.$router.push({ path: "/orgchart" });
+          }
+        });
     }
   }
 };

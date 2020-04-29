@@ -4,13 +4,13 @@
       <v-text-field
         v-model="search"
         :loading="isLoading"
+        solo-inverted
         rounded
-        dark
         filled
-        color="blue-grey lighten-2"
+        color="#F1F3F4"
         label="Search User"
         append-icon="search"
-        @keyup.enter.native="getData(search)"
+        @keyup.enter.native="getData()"
       ></v-text-field>
     </v-flex>
   </v-layout>
@@ -22,16 +22,33 @@ export default {
   data() {
     return {
       alumniList: [],
-      search: "",
       isLoading: false,
-      searchAlumni: null
+      searchAlumni: null,
+      search:""
     };
   },
+  
+  
   methods: {
-    getData(Searchdata) {
-      var data = Searchdata;
-      console.log(data);
-      this.search=""
+    getData() {
+      this.$emit("getUserData", this.search);
+      
+      // this.$store.dispatch("testcall", data).then(response => {
+      //   var nodes = response;
+      //   console.log(nodes);
+      // nodes = addTags(nodes)
+      // for (var i = 0; i < nodes.length; i++) {
+      //   getChlidData(nodes[i])
+      // }
+      // console.log(nodes)
+      // orgChartData = nodes
+      // getPayGrade(orgChartData)
+      // subList("sublist", 0, userPayGrade)
+      // // document.getElementById("switch_id").style.visibility = "visible"
+      // document.getElementById("mySidebar").style.visibility = "visible"
+      // drawOrgChart(orgChartData, null)
+      // appendChild(orgChartData)
+      // });
     }
   }
 };
