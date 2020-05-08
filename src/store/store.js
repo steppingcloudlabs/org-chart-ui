@@ -57,8 +57,9 @@ export default new Vuex.Store({
         showLoading: (state) => {
             state.showLoading = true
         },
-
-
+        setProfileData: (state, data) => {
+            state.profileData = data
+        }
     },
     getters: {
         getuserData: (state) => {
@@ -84,6 +85,10 @@ export default new Vuex.Store({
         },
         getshowLoading: (state) => {
             return state.showLoading
+        },
+        getProfileData: (state) => {
+            console.log(state.profileData)
+            return state.profileData
         }
     },
     actions: {

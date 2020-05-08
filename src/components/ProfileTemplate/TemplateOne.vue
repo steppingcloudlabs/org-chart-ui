@@ -7,13 +7,15 @@
             <tbody>
               <tr>
                 <td rowspan="4" style="width: 20%;">
-                  <img id="emp-profile-img" src="placeholder.png" class="avatar" />
+                  <img id="emp-profile-img" :src="profileBasicData.img" class="avatar" />
                 </td>
                 <td style="width: 15%;" class="table-heading">Position</td>
-                <td id="emp-profile-role" style="width: 16%;" class="table-value" colspan="3">
-                  Head - Product
-                  Development
-                </td>
+                <td
+                  id="emp-profile-role"
+                  style="width: 16%;"
+                  class="table-value"
+                  colspan="3"
+                >{{profileBasicData.positionTitle}}</td>
               </tr>
               <tr>
                 <td style="width: 15%;" class="table-heading">Incumbent</td>
@@ -26,7 +28,7 @@
                   style="width: 16%;"
                   class="table-value"
                   colspan="3"
-                >Head</td>
+                >{{profileBasicData.jobLevel}}</td>
               </tr>
               <tr>
                 <td style="width: 15%;" class="table-heading">DOB</td>
@@ -674,7 +676,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "TemplateOne",
+  props: {
+    profileBasicData: {
+      default: undefined,
+      type: Object
+    }
+  }
+};
 </script>
 
 <style>

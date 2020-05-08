@@ -17,7 +17,7 @@
             <v-btn dark text @click="showProfileDialog = false">Print</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <TemplateOne />
+        <TemplateOne :profileBasicData="profileBasicData" />
       </v-card>
     </v-dialog>
   </v-row>
@@ -43,11 +43,13 @@ export default {
     showProfileDialog: {
       get() {
         return this.$store.getters.getShowProfileDialog;
-        // return true;
       },
       set(data) {
         this.$store.commit("setShowProfileDialog", data);
       }
+    },
+    profileBasicData() {
+      return this.$store.getters.getProfileData;
     }
   }
 };
