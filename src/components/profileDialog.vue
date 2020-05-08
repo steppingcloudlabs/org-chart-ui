@@ -18,195 +18,726 @@
           </v-toolbar-items>
         </v-toolbar>
         <div class="container">
-          <div class="division"  id="div-1">
-        <div class="displayImage">
-           <img src="placeholder.png" class='avatar'/>
+          <div class="column" id="div-1">
+            <div class="table-container">
+              <table class="profile-info-table">
+                <tbody>
+                  <tr>
+                    <td rowspan="4" style="width: 20%;">
+                      <img id="emp-profile-img" src="placeholder.png" class="avatar" />
+                    </td>
+                    <td style="width: 15%;" class="table-heading">Position</td>
+                    <td id="emp-profile-role" style="width: 16%;" class="table-value" colspan="3">
+                      Head - Product
+                      Development
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="width: 15%;" class="table-heading">Incumbent</td>
+                    <td style="width: 16%;" class="table-value" colspan="3">Simon Ralph Warburton</td>
+                  </tr>
+                  <tr>
+                    <td style="width: 15%;" class="table-heading">Designation</td>
+                    <td
+                      id="emp-profile-designation"
+                      style="width: 16%;"
+                      class="table-value"
+                      colspan="3"
+                    >Head</td>
+                  </tr>
+                  <tr>
+                    <td style="width: 15%;" class="table-heading">DOB</td>
+                    <td id="emp-profile-dob" style="width: 16%;" class="table-value">14-Aug-1965</td>
+                    <td style="width: 15%;" class="table-heading">DOR</td>
+                    <td style="width: 16%;" class="table-value">Aug 2023</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="acad-exp-container">
+              <div class="section-wrapper">
+                <div class="heading-section">
+                  <p class="table-heading">Academics</p>
+                </div>
+                <div class="data-section">
+                  <ul>
+                    <li>BSc (Hons) Mech. Engg, Univ. of Southampton - 1987</li>
+                    <li>Leading Product Development, HBS - 2008</li>
+                  </ul>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <div class="section-wrapper">
+                <div class="heading-section">
+                  <p class="table-heading">Pre- RE work experience</p>
+                </div>
+                <div class="data-section">
+                  <ol>
+                    <li>Triumph Motorcycles - Design Engineer (Jan 1997 - Jan 2006)</li>
+                    <li>Triumph Motorcycles - Product Manager (Jan 2006 - Oct 2014)</li>
+                  </ol>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <div class="section-wrapper">
+                <div class="heading-section">
+                  <p class="table-heading">RE work experience</p>
+                </div>
+                <div class="data-section">
+                  <ol>
+                    <li>Joined in Jan 2015 as Head of Product Planning and Strategy</li>
+                    <li>Managed Product Development from Jul 2015</li>
+                    <li>Re-designated as Head Product Development in Aug 2016</li>
+                  </ol>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
           </div>
 
-    
-     <div class="nextToImage">
-     
-     <span  class="FieldTag">Position</span>
-     <span class="FieldValue">Test</span><br>
-     <span class="FieldTag">Incumbent</span>
-     <span class="FieldValue">Test</span><br>
-     <span class="FieldTag">Designation</span>
-     <span class="FieldValue">Test</span><br>
-     <span class="FieldTag" style="margin-right:30px">DOB</span>
-     <span class="FieldValue">Test</span>
-     <span class="FieldTag" style="margin-left:15px !important">DOR</span>
-     <span class="FieldValue" style="position:relative;left:-25px">Test</span>
-     </div>
-     
-    
-     <div class="belowImage">
-     <span class="FieldTag1">Academics</span>
-     <span class="FieldValue1 " >
-     <ul style="padding:15px">
-     <li>
-     BSc (Hons) Mech. Engg, Univ. of Southampton - 1987
-     </li>
-     <li>
-     Leading Product Development, HBS - 2008
-     </li>
-     </ul>
-     </span><br>
-     <span class="FieldTag1">Pre- Re Work experience</span>
-     <span class="FieldValue1" style="height:150px !important">
-     <ol type="1" style="padding:15px">
-     <li>
-     Triumph Motorcycles - Design Engineer (Jan 1997 - Jan 2006)
-     </li>
-     <li>
-     Triumph Motorcycles - Product Manager (Jan 2006 - Oct 2014)
-     </li>
-     </ol>
-     </span><br>
-     <span class="FieldTag1">Re work experience</span>
-     <span class="FieldValue1" style="height:150px !important">
-     <ol type="1" style="padding:15px">
-     <li>
-     Joined in Jan 2015 as Head of Product Planning and Strategy
-     </li>
-     <li>
-    Managed Product Development from Jul 2015
-     </li>
-     <li>
-     Re-designated as Head Product Development in Aug 2016
-     </li>
-     </ol>
-     </span><br>
-      
-     </div>
-   </div>
-   
+          <div class="column">
+            <div>
+              <div class="column" id="nestedcolumn">
+                <table class="performance-table">
+                  <tbody>
+                    <tr>
+                      <td style="width:60%" class="table-heading">RE Behaviours</td>
+                      <td
+                        style="width:10%; text-align: center; text-align:center"
+                        class="table-heading"
+                        colspan="4"
+                      >Levels</td>
+                    </tr>
+                    <tr>
+                      <td style="width:60%"></td>
+                      <td style="width:10%; text-align: center" class="table-heading">1</td>
+                      <td style="width:10%; text-align: center" class="table-heading">2</td>
+                      <td style="width:10%; text-align: center" class="table-heading">3</td>
+                      <td style="width:10%; text-align: center" class="table-heading">4</td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading" style="width:60%">Empowering Leadership</td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-one-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-two-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-three-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-four-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading" style="width:60%">Customer Advocacy</td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-one-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-two-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-three-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-four-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading" style="width:60%">Thinking Unconventional</td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-one-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-two-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-three-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-four-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading" style="width:60%">Boundaryless Collaboration</td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-one-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-two-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-three-color"></div>
+                      </td>
+                      <td style="width:10%; text-align: center">
+                        <div class="perf-circle level-four-color"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="column" id="nestedcolumn" style="padding-left: 20px;">
+                <table class="performance-table">
+                  <tbody>
+                    <tr>
+                      <td class="table-heading">Perf Rating FY16-17</td>
+                      <td></td>
+                      <td>
+                        <div class="perf-circle perf-one-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-four-color perf-circled-border"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-five-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading">Perf Rating FY17-18</td>
+                      <td></td>
+                      <td>
+                        <div class="perf-circle perf-one-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-four-color perf-circled-border"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-five-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading">Perf Rating FY18-19</td>
+                      <td></td>
+                      <td>
+                        <div class="perf-circle perf-one-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-four-color perf-circled-border"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-five-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading">Pot Rating 2019</td>
+                      <td>
+                        <div class="perf-circle perf-zero-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-one-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-three-color perf-circled-border"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-five-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading">Culture Fit</td>
+                      <td></td>
+                      <td>
+                        <div class="perf-circle perf-one-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading">Position Criticality</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td class="table-heading">Talent Risk</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td>
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="clearfix"></div>
+            </div>
 
+            <div>
+              <div class="column">
+                <div class="strength-wrapper">
+                  <div class="strength-header">
+                    <p class="table-heading" style="text-align: center;">Strengths</p>
+                  </div>
+                  <div class="strength-body">
+                    <ul>
+                      <li>
+                        Systematic approach in overall PD Administration, government liasioning in UK, relationship
+                        managementand poised leader
+                      </li>
+                      <li>Able administrator, good communication skills, perseverance</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
 
+              <div class="column">
+                <div class="strength-wrapper">
+                  <div class="strength-header">
+                    <p class="table-heading" style="text-align: center;">Areas of Devlopment</p>
+                  </div>
+                  <div class="strength-body">
+                    <ul>
+                      <li>Review and provide clarity on resolving issues</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
 
-   
-   <div class="division"  >
-    
-   
-    <div class="division" id="nesteddivision">
-    <div class="behaviourTags">RE Behaviours</div>
-    <div class="behaviourTags"><p>Levels</p>
-     <p>1&nbsp;2&nbsp;3&nbsp;4&nbsp;5</p>
-    </div><br>
-    <div class="behaviourfield">Empowering LeaderShip</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Customer Advocacy</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Thinking unconditional</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Boundaryless collaboration</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <br>
-    <br>
-    <br>
-    <hr>
-    </div>
-    
+            <div style="padding-top: 20px;">
+              <p class="table-heading" style="text-align: center;">9 Box Grid</p>
+              <div id="gridbox">
+                <svg width="600" height="250" id="svg">
+                  <g>
+                    <rect
+                      x="100"
+                      y="0"
+                      width="140"
+                      height="67"
+                      id="rect00"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="170"
+                      y="40"
+                      text-anchor="middle"
+                      id="Rough Diamond"
+                      fill="black"
+                      font-size="14"
+                    >Rough Diamond</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="250"
+                      y="0"
+                      width="140"
+                      height="67"
+                      id="rect01"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="320"
+                      y="40"
+                      text-anchor="middle"
+                      id="Future Star"
+                      fill="black"
+                      font-size="14"
+                    >Future Star</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="400"
+                      y="0"
+                      width="140"
+                      height="67"
+                      id="rect02"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="470"
+                      y="40"
+                      text-anchor="middle"
+                      id="ConsistentStar"
+                      fill="black"
+                      font-size="14"
+                    >ConsistentStar</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="100"
+                      y="75"
+                      width="140"
+                      height="67"
+                      id="rect10"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="170"
+                      y="115"
+                      text-anchor="middle"
+                      id="Inconsitent performer"
+                      fill="black"
+                      font-size="14"
+                    >Inconsitent performer</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="250"
+                      y="75"
+                      width="140"
+                      height="67"
+                      id="rect11"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="320"
+                      y="115"
+                      text-anchor="middle"
+                      id="Key Player"
+                      fill="black"
+                      font-size="14"
+                    >Key Player</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="400"
+                      y="75"
+                      width="140"
+                      height="67"
+                      id="rect12"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="470"
+                      y="115"
+                      text-anchor="middle"
+                      id="Current Star"
+                      fill="black"
+                      font-size="14"
+                    >Current Star</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="100"
+                      y="150"
+                      width="140"
+                      height="67"
+                      id="rect20"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="170"
+                      y="190"
+                      text-anchor="middle"
+                      id="Talent Risk"
+                      fill="black"
+                      font-size="14"
+                    >Talent Risk</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="250"
+                      y="150"
+                      width="140"
+                      height="67"
+                      id="rect21"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(134, 188, 37)"
+                    />
+                    <text
+                      x="320"
+                      y="190"
+                      text-anchor="middle"
+                      id="Solid performer"
+                      fill="black"
+                      font-size="14"
+                    >Solid performer</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="400"
+                      y="150"
+                      width="140"
+                      height="67"
+                      id="rect22"
+                      stroke="rgb(217,217,217)"
+                      stroke-width="1"
+                      fill="rgb(217,217,217)"
+                    />
+                    <text
+                      x="470"
+                      y="190"
+                      text-anchor="middle"
+                      id="Consistent Performer"
+                      fill="black"
+                      font-size="14"
+                    >Consistent Performer</text>
+                  </g>
+                  <line x1="85" y1="0" x2="85" y2="230" stroke="rgb(217,217,217)" stroke-width="2" />
+                  <line x1="75" y1="0" x2="95" y2="0" stroke="rgb(217,217,217)" stroke-width="3" />
+                  <line
+                    x1="85"
+                    y1="230"
+                    x2="550"
+                    y2="230"
+                    stroke="rgb(217,217,217)"
+                    stroke-width="2"
+                  />
+                  <line
+                    x1="550"
+                    y1="220"
+                    x2="550"
+                    y2="240"
+                    stroke="rgb(217,217,217)"
+                    stroke-width="3"
+                  />
+                  <g>
+                    <text
+                      x="180"
+                      y="2"
+                      text-anchor="middle"
+                      id="text1"
+                      fill="black"
+                      font-size="10"
+                      transform="rotate(90 20,40)"
+                    >Continue</text>
+                    <text
+                      x="100"
+                      y="2"
+                      text-anchor="middle"
+                      id="text2"
+                      fill="black"
+                      font-size="10"
+                      transform="rotate(90 20,40)"
+                    >Grow</text>
+                    <text
+                      x="22"
+                      y="2"
+                      text-anchor="middle"
+                      id="text3"
+                      fill="black"
+                      font-size="10"
+                      transform="rotate(90 20,40)"
+                    >High Potential</text>
+                  </g>
+                  <g>
+                    <text
+                      x="160"
+                      y="250"
+                      text-anchor="middle"
+                      id="text4"
+                      fill="black"
+                      font-size="10"
+                    >Partially meets expectation</text>
+                    <text
+                      x="320"
+                      y="250"
+                      text-anchor="middle"
+                      id="text5"
+                      fill="black"
+                      font-size="10"
+                    >Meets expectation</text>
+                    <text
+                      x="450"
+                      y="250"
+                      text-anchor="middle"
+                      id="text6"
+                      fill="black"
+                      font-size="10"
+                    >Exceed expectation</text>
+                  </g>
+                </svg>
+              </div>
+              <p class="table-heading" style="text-align: center;">Performance</p>
+              <!-- <p style="text-align:center;margin-top:10px;margin-bottom:0px;color:goldenrod">9 Grid Box</p>
 
-    
-    <div class="division" id="nesteddivision">
-    
-    <div class="behaviourfield">Perf  Rating FY16-17</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Perf  Rating FY17-18</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Perf  Rating FY18-19</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Pot Rating 2019</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Culture Fit</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Position Criticality</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <div class="behaviourfield">Talent Risk</div>
-    <div class="behaviourrating"><img src="rating.png" class="rating"></div><br>
-    <hr>
-    </div>
+              <div class="outer-grid">
+                <div class="outer-square">
+                  <div class="inner-grid">
+                    <div class="inner-square">Rough Diamond </div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Future Star</div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Consistent Star</div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Inconsistent Performer </div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Key Player</div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Current Star</div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Talent Risk</div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Solid Performer</div>
+                  </div>
+                  <div class="inner-grid">
+                    <div class="inner-square">Consistent Performer</div>
+                  </div>
+                </div>
 
-    
-    <div class="division">
-    <p style="text-align:center;color:goldenrod">Strengths</p>
-    <div  class="twoblocks">
-    <ul style="margin-left:20px;margin-top:10px">
-    <li>
-    Systematic approach in overall PD Administration, government liasioning in UK, relationship management and poised leader
+              </div>
+              <p style="text-align:center;margin-top:10px;margin-bottom: 10px;color:goldenrod">Performance</p>-->
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="row">
+            <div class="column">
+              <div class="position-container">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td style="width: 23%;"></td>
+                      <td style="width: 50%;" class="table-heading">Proposed Position</td>
+                      <td
+                        colspan="3"
+                        style="width: 10%; text-align: center;"
+                        class="table-heading"
+                      >Position Readiness</td>
+                    </tr>
+                    <tr>
+                      <td style="width: 23%;" class="table-heading">Proposed role within function</td>
+                      <td style="width: 50%;" class="table-value"></td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width: 23%;" class="table-heading">Proposed role outside function</td>
+                      <td style="width: 50%;" class="table-value"></td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-    </li>
-    <li>
-    Able administrator, good communication skills, perseverance
-    </li>
-    
-    </ul>
-    </div>
-    <hr>
-    </div>
-    
-    
-     <div class="division">
-     <p style="text-align:center;color:goldenrod">Areas of Devlopment</p>
-    <div class="twoblocks">
-    <ul style="margin-left:20px;margin-top:10px">
-    <li >
-      Review and provide clarity on resolving issues
-    </li> 
-     </ul>
-    </div>
-    <hr>
-    </div>
-     
-     
-    <p style="text-align:center;margin-top:10px;margin-bottom:10px;color:goldenrod">9 Grid Box</p>
-    
-    <div class="outer-grid" id="gridbox">
-    </div>
-     <p style="text-align:center;margin-top:10px;margin-bottom: 10px;color:goldenrod">Performance</p>
-    
-
-
-   </div>
-   
-
-
-
-   <div class="row">
-   <hr>
-   
-   <div class="division">
-   <div class="lowersection">
-   <div class="lowersectiontag"> </div>
-   <div class="lowersectionvalue" style="background-color:white!important;color:goldenrod">Proposed Position </div>
-   <div class="lowersectionrating" style="top:0px !important">Position Readiness </div><br>
-   <div class="lowersectiontag">Proposed role within function </div>
-   <div class="lowersectionvalue"></div>
-   <div class="lowersectionrating"><img src="rating.png" class="rating"></div><br>
-   <div class="lowersectiontag">Proposed role outside function </div>
-   <div class="lowersectionvalue"></div>
-   <div class="lowersectionrating"><img src="rating.png" class="rating"></div><br>
-   </div>
-   </div>
-
-   
-    <div class="division">
-   <div class="lowersection">
-   <div class="lowersectiontag" style="min-width:100px !important"> </div>
-   <div class="lowersectionvalue" style="background-color:white!important;color:goldenrod;">Proposed incumbents to the above position 
-</div>
-   <div class="lowersectionrating" style="top:0px !important">Incumbent Readiness </div><br>
-   <div class="lowersectiontag">Incumbent 1 </div>
-   <div class="lowersectionvalue"></div>
-   <div class="lowersectionrating"><img src="rating.png" class="rating"></div><br>
-   <div class="lowersectiontag">Incumbent 2 </div>
-   <div class="lowersectionvalue"></div>
-   <div class="lowersectionrating"><img src="rating.png" class="rating"></div><br>
-   </div>
-   </div>
-</div>
-</div>
-  </v-card>
+            <div class="column">
+              <div class="position-container">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td style="width: 23%;"></td>
+                      <td
+                        style="width: 50%;"
+                        class="table-heading"
+                      >Proposed incumbents to the above position</td>
+                      <td
+                        colspan="3"
+                        style="width: 10%; text-align: center;"
+                        class="table-heading"
+                      >Incumbent Readiness</td>
+                    </tr>
+                    <tr>
+                      <td style="width: 23%;" class="table-heading">Incumbent 1</td>
+                      <td style="width: 50%;" class="table-value"></td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width: 23%;" class="table-heading">Incumbent 2</td>
+                      <td style="width: 50%;" class="table-value"></td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-four-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-three-color"></div>
+                      </td>
+                      <td style="width: 9%;">
+                        <div class="perf-circle perf-two-color"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </v-card>
     </v-dialog>
   </v-row>
 </template>
@@ -221,7 +752,7 @@ export default {
       widgets: false
     };
   },
- 
+
   computed: {
     showProfileDialog: {
       get() {
@@ -237,238 +768,154 @@ export default {
 </script>
 
 <style  scoped>
-
-
-.avatar {
-    width: 150px;
-    height: 180px;
-
+.container {
 }
 
-
-.displayImage {
-    padding: 10px 10px 10px 10px;
-    width: 20%;
-    float: left;
-
+table tbody tr td {
+  padding: 5px;
 }
 
-.nextTOImage {
-    padding: 10px 10px 10px 30px;
-    display: table-row;
-    width: 70%;
-    float: left;
+.profile-info-table {
+  padding-right: 20px;
 }
 
-.belowImage {
-    padding: 10px 10px 10px 10px;
-    width: 100%;
-    float: left;
-    display: table-row;
+.table-heading {
+  color: rgb(162, 145, 97);
+  font-weight: 700;
+  font-size: 16px;
 }
 
-.nextTOImage>span {
-    display: table-cell
+.profile-info-table .table-value,
+.position-container .table-value {
+  background-color: rgb(239, 239, 239);
 }
 
-.belowImage>span {
-    display: table-cell
+.profile-info-table .avatar {
+  width: 160px;
+  height: 190px;
+  border-radius: 0;
 }
 
-
-
-.fieldValue {
-    background-color: #EFEFEF;
-    height: 30px;
-    width: 330px;
-    display: inline-block;
-    padding-left: 10px;
+.section-wrapper {
+  margin: 10px 0;
+}
+.acad-exp-container {
+  padding-right: 20px;
 }
 
-.fieldValue1 {
-    background-color: #EFEFEF;
-    height: 100px;
-    width: 450px;
-    display: inline-block;
-    position: relative;
-    left: 25px;
-    padding: 10px;
+.acad-exp-container .heading-section {
+  width: 23%;
+  float: left;
+  padding: 20px;
 }
 
-.fieldTag {
-    height: 30px;
-    min-width: 100px;
-    display: inline-block;
-    padding-left: 10px;
-    color: goldenrod;
-
+.acad-exp-container .data-section {
+  width: 77%;
+  background-color: rgb(239, 239, 239);
+  float: right;
+  padding: 20px 30px;
+  min-height: 140px;
 }
 
-.fieldTag1 {
-    height: 30px;
-    min-width: 130px;
-    max-width: 130px;
-    display: inline-block;
-    position: relative;
-    top: 25px;
-    left: 15px;
-    color: goldenrod;
-
-
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
-#nesteddivision {
-    display: table-row;
+table.performance-table tbody tr td {
+  padding: 2px;
 }
 
-#nesteddivision>div {
-    display: table-cell;
+.level-one-color {
+  background-color: rgb(243, 243, 243);
 }
 
-.division {
-    float: left;
-    width: 50%;
-
-    /* Should be removed. Only for demonstration */
+.level-two-color {
+  background-color: rgb(217, 234, 211);
 }
 
-.behaviourTags {
-
-    height: 30px;
-    min-width: 200px;
-    display: inline-block;
-    position: relative;
-
-    left: 10px;
-    color: goldenrod;
-
+.level-three-color {
+  background-color: rgb(182, 215, 168);
 }
 
-.behaviourfield {
-
-    min-width: 200px;
-    display: inline-block;
-    position: relative;
-
-    left: 10px;
-    color: goldenrod;
-
+.level-four-color {
+  background-color: rgb(106, 168, 79);
 }
 
-.twoblocks {
-    margin: 10px 10px 10px 20px;
-    min-height: 150px;
-    width: 90%;
-    background: #ccc;
-    padding: 10px;
+.perf-zero-color {
+  background-color: rgb(153, 153, 153);
 }
 
-.behaviourrating {
-
-    min-width: 200px;
-    display: inline-block;
-    position: relative;
-
-    left: 10px;
-    color: goldenrod;
-
+.perf-one-color {
+  background-color: rgb(183, 183, 183);
 }
 
-.rating {
-    height: 15px;
-    width: 100px;
+.perf-two-color {
+  background-color: rgb(255, 0, 0);
 }
 
-.row {
-    float: left;
-    width: 100%;
-    height: 300px;
-
-    /* Should be removed. Only for demonstration */
+.perf-three-color {
+  background-color: rgb(255, 153, 0);
 }
 
-.outer-grid {
-    position: relative;
-    float: left;
-    width: 100%;
-    padding-bottom: 33.3%;
-
+.perf-four-color {
+  background-color: rgb(182, 215, 168);
 }
 
-.outer-square {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 90%;
-    height: 90%;
-
-    margin: 1% 1% 2% 9%;
-    display: -webkit-flex;
-    -webkit-flex-wrap: wrap;
-    display: flex;
-    flex-wrap: wrap;
+.perf-five-color {
+  background-color: rgb(106, 168, 79);
 }
 
-.inner-grid {
-    width: 25.3%;
-    height: 33.3%;
-    border: none;
-    display: table;
-    background-color: #ccc;
-    margin: 4px 2px 0px 10px;
+.perf-circled-border {
+  border: 2px solid black;
 }
 
-.inner-square {
-    line-height: 100%;
-    font-size: 15px;
-    font-weight: bold;
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
+.perf-circle {
+  height: 20px;
+  width: 22px;
+  border-radius: 50%;
+  margin: auto;
 }
 
-.lowersection {
-    padding: 10px 10px 10px 10px;
-    width: 100%;
-    float: left;
-    display: table-row;
+.strength-header {
+  padding: 10px;
 }
 
-.lowersection>div {
-    display: table-cell
+.strength-body {
+  background-color: rgb(239, 239, 239);
+  min-height: 150px;
+  padding: 10px 30px;
+  margin: 0 10px 0 0;
 }
 
-.lowersectiontag {
-    height: 38px;
-    min-width: 130px;
-    max-width: 130px;
-    display: inline-block;
-    position: relative;
-
-    left: 15px;
-    color: goldenrod;
-
+.position-container table td {
+  height: 48px;
 }
 
-.lowersectionvalue {
-    background-color: #EFEFEF;
-    min-height: 38px;
-    min-width: 300px;
-    display: inline-block;
-    padding-left: 10px;
-    position: relative;
-    left: 20px;
+.overlay li {
+  margin-top: 0;
 }
 
-.lowersectionrating {
-
-    min-width: 200px;
-    display: inline-block;
-    position: relative;
-    top: 10px;
-    left: 8%;
-    color: goldenrod;
-
+.overlay ul {
+  list-style: disc;
 }
 
+#nestedcolumn {
+  display: block;
+}
+
+#nestedcolumn > div {
+  display: table-cell;
+}
+
+.column {
+  float: left;
+  width: 48%;
+  padding-left: 20px;
+  /* Should be removed. Only for demonstration */
+}
+#gridbox {
+  text-align: center;
+}
 </style>
