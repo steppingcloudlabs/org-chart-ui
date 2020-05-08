@@ -1,17 +1,32 @@
 <template>
   <v-layout row wrap class="search-alumni-wrapper">
     <v-flex xs12 style="padding-top:10px">
-      <v-text-field
+      <v-autocomplete
         v-model="search"
         :loading="isLoading"
+        :items="userList"
+        :search-input.sync="searchUser"
         solo-inverted
         rounded
         filled
         color="#F1F3F4"
         label="Search User"
         append-icon="search"
-        @keyup.enter.native="getData()"
-      ></v-text-field>
+        item-text="defaultFullName"
+        item-value="userId"
+        @change="getData()"
+      >
+        <template v-slot:item="data">
+          <template>
+            <v-list-item-content>
+              <v-list-item-title
+                v-html="data.item.defaultFullName"
+              ></v-list-item-title>
+              <v-list-item-subtitle v-html="data.item.userId"></v-list-item-subtitle>
+            </v-list-item-content>
+          </template>
+        </template>
+      </v-autocomplete>
     </v-flex>
   </v-layout>
 </template>
@@ -21,18 +36,42 @@ export default {
   name: "SearchAlumni",
   data() {
     return {
-      alumniList: [],
+      userList: [],
       isLoading: false,
-      searchAlumni: null,
-      search:""
+      search: "",
+      searchUser: null
     };
   },
-  
-  
+  watch: {
+    searchUser(val) {
+      if (!val || !val.trim()) {
+        this.userList = [];
+        this.search = "";
+        return;
+      }
+      if (this.isLoading) {
+        return;
+      }
+      this.isLoading = true;
+      console.log(this.search);
+
+      let data = val;
+
+      this.$store
+        .dispatch("getAllUser", data)
+        .then(response => {
+          this.userList = response;
+
+          console.log(this.userList);
+        })
+        .finally(() => (this.isLoading = false));
+     }
+  },
+
   methods: {
     getData() {
       this.$emit("getUserData", this.search);
-      
+
       // this.$store.dispatch("testcall", data).then(response => {
       //   var nodes = response;
       //   console.log(nodes);

@@ -1,5 +1,6 @@
 <template>
-  <v-navigation-drawer permanent height="650px">
+<div>
+  <v-navigation-drawer permanent height="650px" style="border-right:5px">
     <v-list-item class="px-2">
       <v-list-item-avatar>
         <v-icon>mdi-filter</v-icon>
@@ -35,6 +36,8 @@
       <v-treeview selectable selected-color="red" :items="sortBy" v-model="selectedSortItem" @input="validateSort"></v-treeview>
     </v-container>
   </v-navigation-drawer>
+ 
+   </div>
 </template>
 <script>
 export default {

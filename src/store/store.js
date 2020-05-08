@@ -12,9 +12,9 @@ export default new Vuex.Store({
         userPayGrade: [],
         showNavDrawer: false,
         showFilter: false,
-        showProfileDialog:false,
-        profileData:null,
-        showLoading:false
+        showProfileDialog: false,
+        profileData: null,
+        showLoading: false
     },
     mutations: {
         setuserData: (state, data) => {
@@ -44,18 +44,18 @@ export default new Vuex.Store({
         showFilter: (state) => {
             state.showFilter = true
         },
-        setShowProfileDialog: (state,data) => {
+        setShowProfileDialog: (state, data) => {
             state.showProfileDialog = data
         },
-        ShowProfileDialog: (state,data) => {
-            state.showProfileDialog =true
-            state.profileData=data
+        ShowProfileDialog: (state, data) => {
+            state.showProfileDialog = true
+            state.profileData = data
         },
-        setshowLoading:(state,data)=>{
-            state.showLoading=data
+        setshowLoading: (state, data) => {
+            state.showLoading = data
         },
-        showLoading:(state)=>{
-            state.showLoading=true
+        showLoading: (state) => {
+            state.showLoading = true
         },
 
 
@@ -79,11 +79,11 @@ export default new Vuex.Store({
         getshowFilter: (state) => {
             return state.showFilter
         },
-        getShowProfileDialog:(state)=>{
+        getShowProfileDialog: (state) => {
             return state.showProfileDialog
         },
-        getshowLoading:(state)=>{
-           return state.showLoading
+        getshowLoading: (state) => {
+            return state.showLoading
         }
     },
     actions: {
@@ -136,6 +136,33 @@ export default new Vuex.Store({
             })
 
         },
+
+
+        getAllUser: ({
+            commit
+        }, data) => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com//orgchart/getAllUsers',
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: {
+                        "companyId": "SFPART041835",
+                        "searchKey": data
+                    }
+                }).then((response) => {
+                    resolve(response.data)
+                    commit("setflag", "hello")
+                    console.log(response)
+                })
+            })
+
+        },
+
+
 
 
 

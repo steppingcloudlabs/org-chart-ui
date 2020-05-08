@@ -1,27 +1,30 @@
 <template>
-  <div >
-   
-   
+  <div>
     <v-card height="550px" width="100%" color="white" elevation="0">
-      <v-layout row wrap  >
-        <v-flex xs2 >
-           <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
+      <v-layout row wrap>
+        <v-flex xs2>
+          <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
         </v-flex>
-        <v-flex xs10 >
-        <div id="tree" ref="tree"></div>
+        <v-flex xs10>
+          <div id="tree" ref="tree"></div>
         </v-flex>
-       
       </v-layout>
     </v-card>
     <profile></profile>
   </div>
-
 </template>
 
 <script>
 import OrgChart from "@balkangraph/orgchart.js/orgchart";
 import Sidenav from "@/components/Sidenav";
-import profile from "@/components/profileDialog"
+import profile from "@/components/profileDialog";
+import $ from "jquery";
+//import { DOMParser } from "xmldom";
+import Canvg from "canvg";
+// const preset = presets.node({
+//   DOMParser
+// });
+
 export default {
   name: "tree",
   data() {
@@ -29,7 +32,7 @@ export default {
       nodes: {},
       chart: {},
       isbuffered: [],
-     
+
       fieldToDisplay: [
         "userPayGrade",
         "userDepartmentId",
@@ -41,7 +44,7 @@ export default {
       field: "true",
       field1: "true",
 
-     selectedId:null,
+      selectedId: null,
       temp: {}
     };
   },
@@ -49,7 +52,15 @@ export default {
     Sidenav,
     profile
   },
-  beforeMount() {},
+  beforeMount() {
+    const plugin = document.createElement("script");
+    plugin.setAttribute("src", "https://unpkg.com/canvg@3.0.4/lib/umd.js");
+    plugin.setAttribute("type", "text/javascript");
+    plugin.setAttribute("body", "true");
+    //plugin.async = true;
+    document.head.appendChild(plugin);
+  },
+
   computed: {
     inputDate: {
       get() {
@@ -69,7 +80,7 @@ export default {
         this.$store.commit("setuserData", data);
       }
     },
-     userPayGrade: {
+    userPayGrade: {
       get() {
         return this.$store.getters.getuserPayGrade;
         // return true;
@@ -87,7 +98,7 @@ export default {
         this.$store.commit("setuserMasterData", data);
       }
     },
-     showNavDrawer: {
+    showNavDrawer: {
       get() {
         return this.$store.getters.getshownavDrawer;
         // return true;
@@ -96,7 +107,7 @@ export default {
         this.$store.commit("setshownavDrawer", data);
       }
     },
-      showProfileDialog: {
+    showProfileDialog: {
       get() {
         return this.$store.getters.getShowProfileDialog;
         // return true;
@@ -104,7 +115,7 @@ export default {
       set(data) {
         this.$store.commit("setShowProfileDialog", data);
       }
-    },
+    }
   },
   watch: {
     userData() {
@@ -123,31 +134,28 @@ export default {
         console.log(this.nodes);
         this.orgChartData = this.nodes;
         this.getPayGrade(this.orgChartData);
-        this.oc(this.$refs.tree, this.orgChartData,null);
+        this.oc(this.$refs.tree, this.orgChartData, null);
       }
     },
-    
-    redraw(data)
-    {
-      this.fieldToDisplay=data.fieldToDisplay
-      this.oc(this.$refs.tree, data.output,data.orderBy);
+
+    redraw(data) {
+      this.fieldToDisplay = data.fieldToDisplay;
+      this.oc(this.$refs.tree, data.output, data.orderBy);
     },
 
-    reset()
-    {
-      this.fieldToDisplay= [
+    reset() {
+      (this.fieldToDisplay = [
         "userPayGrade",
         "userDepartmentId",
         "userDivision",
         "businessUnit"
-      ],
-      this.oc(this.$refs.tree,this.orgChartData,null);
+      ]),
+        this.oc(this.$refs.tree, this.orgChartData, null);
     },
-
 
     exportUserProfile(nodeId) {
       var nodeData = this.chart.get(nodeId);
-       this.$store.commit("ShowProfileDialog",nodeData);
+      this.$store.commit("ShowProfileDialog", nodeData);
       console.log(nodeId);
     },
 
@@ -339,22 +347,60 @@ export default {
     },
 
     download() {
-      //   $("#tree svg").makeCssInline();
-      //   const svg = $("#tree").html();
-      //   const canvas = document.createElement("canvas");
-      //   canvas.height = 4000; //parseInt($("svg")[0].getAttribute("height")) * 40
-      //   canvas.width = 4000; //parseInt($("svg")[0].getAttribute("width")) * 40
-      //   const ctx = canvas.getContext("2d");
-      //   v = canvg.Canvg.fromString(ctx, svg);
-      //   v.start();
-      //   setTimeout(() => {
-      //     const urlImg = canvas.toDataURL("image/png");
-      //     var dl = document.createElement("a");
-      //     document.body.appendChild(dl);
-      //     dl.setAttribute("href", urlImg);
-      //     dl.setAttribute("download", "OrgChart.png");
-      //     dl.click();
-      //   }, 3000);
+      this.test();
+      $("#tree svg").makeCssInline();
+      var svg = $("#tree").html();
+
+      svg = svg.substr(0, svg.lastIndexOf("</svg>") + 6);
+      console.log(svg);
+      const canvas = document.createElement("canvas");
+      canvas.height = 4000; //parseInt($("svg")[0].getAttribute("height")) * 40
+      canvas.width = 4000; //parseInt($("svg")[0].getAttribute("width")) * 40
+      const ctx = canvas.getContext("2d");
+      var v = Canvg.fromString(ctx, svg);
+      v.start();
+      setTimeout(() => {
+        const urlImg = canvas.toDataURL("image/png");
+        var dl = document.createElement("a");
+        document.body.appendChild(dl);
+        dl.setAttribute("href", urlImg);
+        dl.setAttribute("download", "OrgChart.png");
+        dl.click();
+      }, 3000);
+    },
+
+    test() {
+      let cssProporty = [
+        "stroke-dasharray",
+        "fill",
+        "color",
+        "stroke",
+        "stop-color",
+        "flood-color",
+        "lighting-color",
+        "background",
+        "background-color",
+        "filter",
+        "stroke-width",
+        "d"
+      ];
+      $.extend($.fn, {
+        makeCssInline: function() {
+          this.each(function(idx, el) {
+            var style = el.style;
+            var properties = [];
+            for (var property in style) {
+              if ($(this).css(property) && cssProporty.indexOf(property) > -1) {
+                properties.push(property + ":" + $(this).css(property));
+              }
+            }
+            this.style.cssText = properties.join(";");
+            $(this)
+              .children()
+              .makeCssInline();
+          });
+        }
+      });
     },
 
     field2_binding(sender, node) {
@@ -453,7 +499,7 @@ export default {
       }
     },
 
-    oc: function(domEl, x,orderBy) {
+    oc: function(domEl, x, orderBy) {
       OrgChart.templates.myTemplate = Object.assign(
         {},
         OrgChart.templates.rony
@@ -499,15 +545,15 @@ export default {
                     </filter>';
       this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
-        
+
         nodeMouseClick: OrgChart.action.none,
         toolbar: {
           zoom: true,
           fit: true,
           expandAll: false
         },
-        showXScroll: OrgChart.scroll.visible, 
-        showYScroll: OrgChart.scroll.visible, 
+        showXScroll: OrgChart.scroll.visible,
+        showYScroll: OrgChart.scroll.visible,
         mouseScrool: OrgChart.action.none,
 
         enableSearch: false,
@@ -576,16 +622,12 @@ export default {
         }
       });
       this.chart.fit();
-      this.chart.on('click', (sender, args)=>{
+      this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);
         this.selectedId = data.id;
-         this.blur();
-         // document.getElementsByClassName("edit-fields")[0].style.visibility = "hidden"
+        this.blur();
+        // document.getElementsByClassName("edit-fields")[0].style.visibility = "hidden"
       });
-    
-
-      
-
     },
     blur() {
       if (this.selectedId == null) {
@@ -596,34 +638,32 @@ export default {
       var skipBlurLink = [];
       while (node.parent) {
         skipBlur.push(node.parent.id);
-        skipBlurLink.push('[' + node.parent.id + '][' + node.id + ']')
+        skipBlurLink.push("[" + node.parent.id + "][" + node.id + "]");
         node = node.parent;
       }
 
-      var nodeElements = document.querySelectorAll('[node-id]');
+      var nodeElements = document.querySelectorAll("[node-id]");
       for (var i = 0; i < nodeElements.length; i++) {
-        var id = nodeElements[i].getAttribute('node-id');
+        var id = nodeElements[i].getAttribute("node-id");
         if (skipBlur.indexOf(id) == -1)
-          nodeElements[i].setAttribute('filter', 'url(#f1)');
+          nodeElements[i].setAttribute("filter", "url(#f1)");
       }
 
-      var expcollElements = document.querySelectorAll('[control-expcoll-id]');
-      for ( i = 0; i < expcollElements.length; i++) {
-         id = expcollElements[i].getAttribute('control-expcoll-id');
+      var expcollElements = document.querySelectorAll("[control-expcoll-id]");
+      for (i = 0; i < expcollElements.length; i++) {
+        id = expcollElements[i].getAttribute("control-expcoll-id");
         if (skipBlur.indexOf(id) == -1)
-          expcollElements[i].setAttribute('filter', 'url(#f1)');
+          expcollElements[i].setAttribute("filter", "url(#f1)");
       }
 
-      var linksElements = document.querySelectorAll('[link-id]');
-      for ( i = 0; i < linksElements.length; i++) {
-         id = linksElements[i].getAttribute('link-id');
+      var linksElements = document.querySelectorAll("[link-id]");
+      for (i = 0; i < linksElements.length; i++) {
+        id = linksElements[i].getAttribute("link-id");
 
         if (skipBlurLink.indexOf(id) == -1)
-          linksElements[i].setAttribute('filter', 'url(#f1)');
+          linksElements[i].setAttribute("filter", "url(#f1)");
       }
     }
- 
-
   },
 
   mounted() {
@@ -753,5 +793,4 @@ export default {
   background-color: rgb(0, 0, 0, 0) !important;
   height: 100%;
 }
-
 </style>
