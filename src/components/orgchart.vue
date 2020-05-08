@@ -53,12 +53,12 @@ export default {
     profile
   },
   beforeMount() {
-    const plugin = document.createElement("script");
-    plugin.setAttribute("src", "https://unpkg.com/canvg@3.0.4/lib/umd.js");
-    plugin.setAttribute("type", "text/javascript");
-    plugin.setAttribute("body", "true");
-    //plugin.async = true;
-    document.head.appendChild(plugin);
+    // const plugin = document.createElement("script");
+    // plugin.setAttribute("src", "https://unpkg.com/canvg@3.0.4/lib/umd.js");
+    // plugin.setAttribute("type", "text/javascript");
+    // plugin.setAttribute("body", "true");
+    // //plugin.async = true;
+    // document.head.appendChild(plugin);
   },
 
   computed: {
@@ -349,9 +349,9 @@ export default {
     download() {
       this.test();
       $("#tree svg").makeCssInline();
-      var svg = $("#tree").html();
+      var svg = document.getElementById("tree").innerHTML;
 
-      svg = svg.substr(0, svg.lastIndexOf("</svg>") + 6);
+      svg = svg.substr(0, svg.indexOf("</svg>") + 6);
       console.log(svg);
       const canvas = document.createElement("canvas");
       canvas.height = 4000; //parseInt($("svg")[0].getAttribute("height")) * 40
