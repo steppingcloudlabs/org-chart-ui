@@ -14,7 +14,9 @@ export default new Vuex.Store({
         showFilter: false,
         showProfileDialog: false,
         profileData: null,
-        showLoading: false
+        showLoading: false,
+    nodeData:null,
+        showNodeProfile:false,
     },
     mutations: {
         setuserData: (state, data) => {
@@ -59,7 +61,20 @@ export default new Vuex.Store({
         },
         setProfileData: (state, data) => {
             state.profileData = data
+        },
+        setshowNodeProfile:(state,data)=>
+        {
+            state.showNodeProfile=data
+        },
+        ShowNodeProfile:(state,data)=>
+        {
+            state.showNodeProfile=true,
+            state.nodeData=data
+        },
+        setNodeData:(state,data)=>{
+             state.nodeData=data
         }
+        
     },
     getters: {
         getuserData: (state) => {
@@ -89,6 +104,13 @@ export default new Vuex.Store({
         getProfileData: (state) => {
             console.log(state.profileData)
             return state.profileData
+        },
+        getshowNodeProfile:(state)=>
+        {
+           return state.showNodeProfile
+        },
+        getNodeData:(state)=>{
+            return state.nodeData
         }
     },
     actions: {
@@ -149,7 +171,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com//orgchart/getAllUsers',
+                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com/orgchart/getAllUsers',
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -167,6 +189,30 @@ export default new Vuex.Store({
 
         },
 
+
+        getRecruitmentData: ({
+            commit
+        }, data) => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com/orgchart/getPosReqData',
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: {
+                        "companyId": "SFPART041835",
+                        "positionNumber": data
+                    }
+                }).then((response) => {
+                    resolve(response.data)
+                    commit("setflag", "hello")
+                    console.log(response)
+                })
+            })
+
+        },
 
 
 

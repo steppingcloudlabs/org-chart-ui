@@ -70,8 +70,10 @@ export default {
 
   methods: {
     getData() {
-      this.$emit("getUserData", this.search);
-
+      let searchData=this.search
+      this.search=""
+      this.$emit("getUserData",searchData);
+     
       // this.$store.dispatch("testcall", data).then(response => {
       //   var nodes = response;
       //   console.log(nodes);

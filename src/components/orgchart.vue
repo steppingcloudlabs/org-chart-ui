@@ -11,6 +11,7 @@
       </v-layout>
     </v-card>
     <profile></profile>
+    <nodeProfile></nodeProfile>
   </div>
 </template>
 
@@ -18,12 +19,9 @@
 import OrgChart from "@balkangraph/orgchart.js/orgchart";
 import Sidenav from "@/components/Sidenav";
 import profile from "@/components/profileDialog";
+import nodeProfile from "@/components/NodeProfile";
 import $ from "jquery";
-//import { DOMParser } from "xmldom";
 import Canvg from "canvg";
-// const preset = presets.node({
-//   DOMParser
-// });
 
 export default {
   name: "tree",
@@ -50,18 +48,19 @@ export default {
   },
   components: {
     Sidenav,
-    profile
+    profile,
+    nodeProfile
   },
-  beforeMount() {
-    // const plugin = document.createElement("script");
-    // plugin.setAttribute("src", "https://unpkg.com/canvg@3.0.4/lib/umd.js");
-    // plugin.setAttribute("type", "text/javascript");
-    // plugin.setAttribute("body", "true");
-    // //plugin.async = true;
-    // document.head.appendChild(plugin);
-  },
-
   computed: {
+    showNodeProfile: {
+      get() {
+        return this.$store.getters.getshowNodeProfile;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowNodeProfile", data);
+      }
+    },
     inputDate: {
       get() {
         return this.$store.getters.getinputDate;
@@ -268,9 +267,9 @@ export default {
         if (node["positionVacant"] == false && node.img) {
           node["img"] = "data:image/jpg;base64," + node.img;
         } else if (node["positionVacant"] == false && !node.img) {
-          node["img"] = "/placeholder.png";
+          node["img"] = "./assets/placeholder.png";
         } else {
-          node["img"] = "/vacantposition.png";
+          node["img"] = "./assets/vacantposition.png";
         }
         if (node.userId == "poojas") {
           node.tags.push("assistant");
@@ -465,9 +464,9 @@ export default {
       });
       console.log(resignedIndex + criticalIndex);
       var field =
-        '<image   xlink:href="/caution.png" x="10" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
+        '<image   xlink:href="/assets/caution.png" x="10" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
       var flag_field =
-        '<image class="redflag"  xlink:href="/flag.png" x="10" y="225" width="22" height="22"> <title>Resigned</title></image>';
+        '<image class="redflag"  xlink:href="/assets/flag.png" x="10" y="225" width="22" height="22"> <title>Resigned</title></image>';
       if (resignedIndex > -1) {
         isResigned = true;
       }
@@ -476,23 +475,23 @@ export default {
       }
       if (isResigned && isCritical) {
         field =
-          '<image   xlink:href="/caution.png" x="35" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
+          '<image   xlink:href="/assets/caution.png" x="35" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
         flag_field =
-          '<image class="redflag"  xlink:href="/redflag.png" x="10" y="230" width="22" height="22"> <title>Impact of loss</title></image>';
+          '<image class="redflag"  xlink:href="/assets/redflag.png" x="10" y="230" width="22" height="22"> <title>Impact of loss</title></image>';
 
         return field + flag_field;
       } else if (isResigned) {
         flag_field =
-          '<image class="redflag"  xlink:href="/yellowflag.png" x="10" y="225" width="22" height="22"> <title>Impact of Loss</title></image>';
+          '<image class="redflag"  xlink:href="/assets/yellowflag.png" x="10" y="225" width="22" height="22"> <title>Impact of Loss</title></image>';
         var field1 =
-          '<image   xlink:href="/greenface.png" x="35" y="225" width="22" height="22"> <title>Risk of Loss</title></image>';
+          '<image   xlink:href="/assets/greenface.png" x="35" y="225" width="22" height="22"> <title>Risk of Loss</title></image>';
         var field2 =
-          '<image   xlink:href="/resign.png" x="65" y="225" width="22" height="22"> <title>Resigned</title></image>';
+          '<image   xlink:href="/assets/resign.png" x="65" y="225" width="22" height="22"> <title>Resigned</title></image>';
 
         return flag_field + field1 + field2;
       } else if (isCritical) {
         var field5 =
-          '<image   xlink:href="/redface.png" x="35" y="229" width="20" height="20"> <title>Risk of Loss</title></image>';
+          '<image   xlink:href="/assets/redface.png" x="35" y="229" width="20" height="20"> <title>Risk of Loss</title></image>';
         return field + field5;
       } else {
         return null;
@@ -626,7 +625,11 @@ export default {
         var data = sender.get(args.node.id);
         this.selectedId = data.id;
         this.blur();
-        // document.getElementsByClassName("edit-fields")[0].style.visibility = "hidden"
+        if (!this.showNodeProfile) {
+          this.$store.commit("ShowNodeProfile", data);
+        } else {
+          this.showNodeProfile = !this.showNodeProfile;
+        }
       });
     },
     blur() {
