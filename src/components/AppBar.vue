@@ -46,7 +46,7 @@
             </template>
 
             <v-card dark max-width="250">
-              <v-img src="@/assets/legendicon.png"></v-img>
+              <v-img src="/assets/legendicon.png"></v-img>
             </v-card>
           </v-menu>
         </v-flex>
