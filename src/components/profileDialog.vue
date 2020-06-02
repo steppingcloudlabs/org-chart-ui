@@ -14,7 +14,7 @@
           <v-toolbar-title>User Profile</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text @click="showProfileDialog = false">Print</v-btn>
+            <v-btn dark text @click="printProfile">Print</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <TemplateOne :profileBasicData="profileBasicData" />
@@ -50,6 +50,13 @@ export default {
     },
     profileBasicData() {
       return this.$store.getters.getProfileData;
+    }
+  },
+  methods: {
+    printProfile()
+    {
+      //var printContents = document.getElementById("").innerHTML;
+      this.$htmlToPaper('container');
     }
   }
 };

@@ -31,7 +31,7 @@
 
     <v-container fluid style="font-size:12px">
       <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
-      <v-treeview selectable selected-color="red" :items="itemVacant" v-model="selectedVacantItem" ></v-treeview>
+      <v-treeview selectable selected-color="red" :items="itemVacant" v-model="selectedVacantItem" @input="validateVacant" ></v-treeview>
       <v-treeview selectable selected-color="red" :items="fieldItems" v-model="fieldToDisplay" @input="validateFields"></v-treeview>
       <v-treeview selectable selected-color="red" :items="sortBy" v-model="selectedSortItem" @input="validateSort"></v-treeview>
     </v-container>
@@ -125,6 +125,20 @@ export default {
     }
   },
   methods: {
+    validateVacant()
+    {
+      var count=0
+    for(var i=0;i<this.selectedVacantItem.length;i++)
+    {
+      count++
+    }
+      
+      if(count>1)
+      {
+        this.selectedVacantItem.pop()
+       setTimeout(function(){alert("You can sort by one field only")},1000); 
+      }
+    },
     validateSort()
   {
     var count=0
@@ -136,7 +150,7 @@ export default {
       if(count>1)
       {
         this.selectedSortItem.pop()
-       setTimeout(function(){alert("You can sort by one field only")},2000); 
+       setTimeout(function(){alert("You can sort by one field only")},1000); 
       }
   
 
@@ -152,7 +166,7 @@ export default {
       if(count>4)
       {
         this.fieldToDisplay.pop()
-       setTimeout(function(){alert("You can select upto 4 fields")},2000); 
+       setTimeout(function(){alert("You can select upto 4 fields")},1000); 
       }
   
 

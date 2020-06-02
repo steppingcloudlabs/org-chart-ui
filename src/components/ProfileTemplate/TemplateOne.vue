@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-    <div class="container">
+    <div class="maincontainer" id="container">
       <div class="column" id="div-1">
         <div class="table-container">
           <table class="profile-info-table">
@@ -166,7 +166,7 @@
             <table class="performance-table">
               <tbody>
                 <tr>
-                  <td class="table-heading">Perf Rating FY16-17</td>
+                  <td class="table-heading" style="width:40%">Perf Rating FY16-17</td>
                   <td></td>
                   <td>
                     <div class="perf-circle perf-one-color"></div>
@@ -676,6 +676,7 @@
 </template>
 
 <script>
+import $ from "jquery";
 export default {
   name: "TemplateOne",
   props: {
@@ -683,12 +684,45 @@ export default {
       default: undefined,
       type: Object
     }
+  },
+  mounted() {
+    this.printProfile();
+  },
+  methods: {
+    test() {
+      $.extend($.fn, {
+        makeProfileCssInline: function() {
+          this.each(function(idx, el) {
+            var style = el.style;
+            var properties = [];
+            for (var property in style) {
+              if ($(this).css(property)) {
+                properties.push(property + ":" + $(this).css(property));
+              }
+            }
+            this.style.cssText = properties.join(";");
+            $(this)
+              .children()
+              .makeProfileCssInline();
+          });
+        }
+      });
+    },
+
+    printProfile() {
+        this.test();
+       $("#container").makeProfileCssInline();
+      //var printContents = document.getElementById("").innerHTML;
+     // this.$htmlToPaper("container");
+    }
   }
 };
 </script>
 
 <style>
-.container {
+.maincontainer {
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 table tbody tr td {
@@ -702,9 +736,11 @@ table tbody tr td {
 .table-heading {
   color: rgb(162, 145, 97);
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
 }
-
+.performance-table {
+  line-height: 0.9;
+}
 .profile-info-table .table-value,
 .position-container .table-value {
   background-color: rgb(239, 239, 239);
@@ -734,7 +770,7 @@ table tbody tr td {
   background-color: rgb(239, 239, 239);
   float: right;
   padding: 20px 30px;
-  min-height: 140px;
+  min-height: 180px;
 }
 
 .clearfix::after {
@@ -804,9 +840,10 @@ table.performance-table tbody tr td {
 
 .strength-body {
   background-color: rgb(239, 239, 239);
-  min-height: 150px;
-  padding: 10px 30px;
-  margin: 0 10px 0 0;
+  min-height: 200px;
+  padding: 10px 10px;
+  margin: 0 5px 0 0;
+  min-width: 270px;
 }
 
 .position-container table td {
@@ -831,7 +868,7 @@ table.performance-table tbody tr td {
 
 .column {
   float: left;
-  width: 48%;
+  width: 50%;
   padding-left: 20px;
   /* Should be removed. Only for demonstration */
 }
