@@ -7,7 +7,7 @@
       transition="dialog-right-transition"
     >
       <v-card>
-        <v-toolbar dark color="primary">
+        <v-toolbar dark color="primary" >
           <v-btn icon dark @click="showProfileDialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import TemplateOne from "@/components/ProfileTemplate/TemplateOne";
+import TemplateOne from "@/components/ProfileTemplate/temp2";
 
 export default {
   data() {
@@ -53,10 +53,10 @@ export default {
     }
   },
   methods: {
-    printProfile()
-    {
+    printProfile() {
       //var printContents = document.getElementById("").innerHTML;
-      this.$htmlToPaper('container');
+      this.$htmlToPaper("profilecontainer");
+      // window.print()
     }
   }
 };

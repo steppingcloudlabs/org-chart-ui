@@ -1,0 +1,185 @@
+html,
+body {
+  font-size: 10px;
+}
+
+.v-application p {
+  margin-bottom: 3px !important;
+}
+
+.maincontainer {
+  margin-left: 50px;
+  margin-right: 50px;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+table tbody tr td {
+  padding: 2px;
+}
+
+.profile-info-table {
+  padding-right: 20px;
+}
+
+.table-heading {
+  color: rgb(162, 145, 97);
+  font-weight: 700;
+  font-size: 10px;
+  margin-bottom: 1px;
+}
+
+.performance-table {
+  line-height: 0.9;
+}
+
+.profile-info-table .table-value,
+.position-container .table-value {
+  background-color: rgb(239, 239, 239);
+  font-size: 10px;
+}
+
+.profile-info-table .avatar {
+  width: 160px;
+  height: 190px;
+  border-radius: 0;
+}
+
+.section-wrapper {
+  margin: 3px 0;
+}
+
+.acad-exp-container {
+  padding-right: 20px;
+}
+
+.acad-exp-container .heading-section {
+  width: 23%;
+  float: left;
+  padding: 12px;
+}
+
+.acad-exp-container .data-section {
+  width: 77%;
+  background-color: rgb(239, 239, 239);
+  float: right;
+  padding: 20px 30px;
+  min-height: 80px;
+  font-size: 12px;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+table.performance-table tbody tr td {
+  padding: 2px;
+}
+
+.level-one-color {
+  background-color: rgb(243, 243, 243);
+}
+
+.level-two-color {
+  background-color: rgb(217, 234, 211);
+}
+
+.level-three-color {
+  background-color: rgb(182, 215, 168);
+}
+
+.level-four-color {
+  background-color: rgb(106, 168, 79);
+}
+
+.perf-zero-color {
+  background-color: rgb(153, 153, 153);
+}
+
+.perf-one-color {
+  background-color: rgb(183, 183, 183);
+}
+
+.perf-two-color {
+  background-color: rgb(255, 0, 0);
+}
+
+.perf-three-color {
+  background-color: rgb(255, 153, 0);
+}
+
+.perf-four-color {
+  background-color: rgb(182, 215, 168);
+}
+
+.perf-five-color {
+  background-color: rgb(106, 168, 79);
+}
+
+.perf-circled-border {
+  border: 2px solid black;
+}
+
+.perf-circle {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.strength-header {
+  padding: 0px;
+}
+
+.strength-body {
+  background-color: rgb(239, 239, 239);
+  min-height: 110px;
+  padding: 10px 10px;
+  margin: 0 5px 0 0;
+  min-width: 270px;
+  font-size: 10px;
+}
+
+li {
+  line-height: 1.2;
+}
+
+.position-container table tbody td {
+  height: 23px;
+}
+
+.overlay li {
+  margin-top: 0;
+}
+
+.overlay ul {
+  list-style: disc;
+}
+
+#nestedcolumn {
+  display: block;
+}
+
+#nestedcolumn>div {
+  display: table-cell;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding-left: 4px;
+  /* Should be removed. Only for demonstration */
+}
+
+#gridbox {
+  text-align: center;
+}
+
+@media print {
+  @page {
+    size: landscape;
+  }
+}

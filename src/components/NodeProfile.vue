@@ -16,7 +16,7 @@
         <p style="text-align:center;font-size:30px;color:#387DC3">{{nodeData.userName}}</p>
          <p style="text-align:center;line-height:0px;color:grey">{{nodeData.positionTitle}}</p>
       </div>
-      <v-divider color="#387DC3"></v-divider>  
+      <v-divider style="margin-top:10px" color="#387DC3"></v-divider>  
   <v-row justify="center" class="mt-2 ml-1">
     <v-expansion-panels flat accordion  v-model="panel">
     

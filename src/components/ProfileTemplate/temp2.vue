@@ -1,21 +1,16 @@
 <template>
   <v-layout row wrap id="profile">
-    <div class="maincontainer" id="container">
+    <div class="maincontainer" id="profilecontainer" ref="content">
       <div class="column" id="div-1">
         <div class="table-container">
           <table class="profile-info-table">
             <tbody>
               <tr>
                 <td rowspan="4" style="width: 20%;">
-                  <img id="emp-profile-img" :src="profileBasicData.img" class="avatar" />
+                  <img id="emp-profile-img" class="avatar" />
                 </td>
                 <td style="width: 15%;" class="table-heading">Position</td>
-                <td
-                  id="emp-profile-role"
-                  style="width: 16%;"
-                  class="table-value"
-                  colspan="3"
-                >{{profileBasicData.positionTitle}}</td>
+                <td id="emp-profile-role" style="width: 16%;" class="table-value" colspan="3">hello</td>
               </tr>
               <tr>
                 <td style="width: 15%;" class="table-heading">Incumbent</td>
@@ -28,7 +23,7 @@
                   style="width: 16%;"
                   class="table-value"
                   colspan="3"
-                >{{profileBasicData.jobLevel}}</td>
+                >hello</td>
               </tr>
               <tr>
                 <td style="width: 15%;" class="table-heading">DOB</td>
@@ -162,7 +157,7 @@
               </tbody>
             </table>
           </div>
-          <div class="column" id="nestedcolumn" style="padding-left: 20px;">
+          <div class="column" id="nestedcolumn">
             <table class="performance-table">
               <tbody>
                 <tr>
@@ -295,7 +290,6 @@
           </div>
           <div class="clearfix"></div>
         </div>
-
         <div>
           <div class="column">
             <div class="strength-wrapper">
@@ -329,272 +323,29 @@
           <div class="clearfix"></div>
         </div>
 
-        <div style="padding-top: 20px;">
+        <div style="padding-top:0px;">
           <p class="table-heading" style="text-align: center;">9 Box Grid</p>
-          <div id="gridbox">
-            <svg width="600" height="250" id="svg">
-              <g>
-                <rect
-                  x="100"
-                  y="0"
-                  width="140"
-                  height="67"
-                  id="rect00"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="170"
-                  y="40"
-                  text-anchor="middle"
-                  id="Rough Diamond"
-                  fill="black"
-                  font-size="12"
-                >Rough Diamond</text>
-              </g>
-              <g>
-                <rect
-                  x="250"
-                  y="0"
-                  width="140"
-                  height="67"
-                  id="rect01"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="320"
-                  y="40"
-                  text-anchor="middle"
-                  id="Future Star"
-                  fill="black"
-                  font-size="12"
-                >Future Star</text>
-              </g>
-              <g>
-                <rect
-                  x="400"
-                  y="0"
-                  width="140"
-                  height="67"
-                  id="rect02"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="470"
-                  y="40"
-                  text-anchor="middle"
-                  id="ConsistentStar"
-                  fill="black"
-                  font-size="12"
-                >ConsistentStar</text>
-              </g>
-              <g>
-                <rect
-                  x="100"
-                  y="75"
-                  width="140"
-                  height="67"
-                  id="rect10"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="170"
-                  y="115"
-                  text-anchor="middle"
-                  id="Inconsitent performer"
-                  fill="black"
-                  font-size="12"
-                >Inconsitent performer</text>
-              </g>
-              <g>
-                <rect
-                  x="250"
-                  y="75"
-                  width="140"
-                  height="67"
-                  id="rect11"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="320"
-                  y="115"
-                  text-anchor="middle"
-                  id="Key Player"
-                  fill="black"
-                  font-size="12"
-                >Key Player</text>
-              </g>
-              <g>
-                <rect
-                  x="400"
-                  y="75"
-                  width="140"
-                  height="67"
-                  id="rect12"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="470"
-                  y="115"
-                  text-anchor="middle"
-                  id="Current Star"
-                  fill="black"
-                  font-size="12"
-                >Current Star</text>
-              </g>
-              <g>
-                <rect
-                  x="100"
-                  y="150"
-                  width="140"
-                  height="67"
-                  id="rect20"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="170"
-                  y="190"
-                  text-anchor="middle"
-                  id="Talent Risk"
-                  fill="black"
-                  font-size="12"
-                >Talent Risk</text>
-              </g>
-              <g>
-                <rect
-                  x="250"
-                  y="150"
-                  width="140"
-                  height="67"
-                  id="rect21"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(134, 188, 37)"
-                />
-                <text
-                  x="320"
-                  y="190"
-                  text-anchor="middle"
-                  id="Solid performer"
-                  fill="black"
-                  font-size="12"
-                >Solid performer</text>
-              </g>
-              <g>
-                <rect
-                  x="400"
-                  y="150"
-                  width="140"
-                  height="67"
-                  id="rect22"
-                  stroke="rgb(217,217,217)"
-                  stroke-width="1"
-                  fill="rgb(217,217,217)"
-                />
-                <text
-                  x="470"
-                  y="190"
-                  text-anchor="middle"
-                  id="Consistent Performer"
-                  fill="black"
-                  font-size="12"
-                >Consistent Performer</text>
-              </g>
-              <line x1="85" y1="0" x2="85" y2="230" stroke="rgb(217,217,217)" stroke-width="2" />
-              <line x1="75" y1="0" x2="95" y2="0" stroke="rgb(217,217,217)" stroke-width="3" />
-              <line x1="85" y1="230" x2="550" y2="230" stroke="rgb(217,217,217)" stroke-width="2" />
-              <line x1="550" y1="220" x2="550" y2="240" stroke="rgb(217,217,217)" stroke-width="3" />
-              <g>
-                <text
-                  x="180"
-                  y="2"
-                  text-anchor="middle"
-                  id="text1"
-                  fill="black"
-                  font-size="10"
-                  transform="rotate(90 20,40)"
-                >Continue</text>
-                <text
-                  x="100"
-                  y="2"
-                  text-anchor="middle"
-                  id="text2"
-                  fill="black"
-                  font-size="10"
-                  transform="rotate(90 20,40)"
-                >Grow</text>
-                <text
-                  x="22"
-                  y="2"
-                  text-anchor="middle"
-                  id="text3"
-                  fill="black"
-                  font-size="10"
-                  transform="rotate(90 20,40)"
-                >High Potential</text>
-              </g>
-              <g>
-                <text
-                  x="160"
-                  y="250"
-                  text-anchor="middle"
-                  id="text4"
-                  fill="black"
-                  font-size="10"
-                >Partially meets expectation</text>
-                <text
-                  x="320"
-                  y="250"
-                  text-anchor="middle"
-                  id="text5"
-                  fill="black"
-                  font-size="10"
-                >Meets expectation</text>
-                <text
-                  x="450"
-                  y="250"
-                  text-anchor="middle"
-                  id="text6"
-                  fill="black"
-                  font-size="10"
-                >Exceed expectation</text>
-              </g>
-            </svg>
-          </div>
-          <p class="table-heading" style="text-align: center;">Performance</p>
+          <div id="gridbox"></div>
         </div>
       </div>
       <div class="clearfix"></div>
       <div class="row">
         <div class="column">
           <div class="position-container">
-            <table>
+            <table style="margin-left:5px">
               <tbody>
                 <tr>
-                  <td style="width: 23%;"></td>
-                  <td style="width: 50%;" class="table-heading">Proposed Position</td>
+                  <td style="width: 40%;"></td>
+                  <td style="width: 40%;" class="table-heading">Proposed Position</td>
                   <td
                     colspan="3"
-                    style="width: 10%; text-align: center;"
+                    style="width: 20%; text-align: center;"
                     class="table-heading"
                   >Position Readiness</td>
                 </tr>
                 <tr>
-                  <td style="width: 23%;" class="table-heading">Proposed role within function</td>
-                  <td style="width: 50%;" class="table-value"></td>
+                  <td style="width: 40%;" class="table-heading">Proposed role within function</td>
+                  <td style="width: 30%;" class="table-value"></td>
                   <td style="width: 9%;">
                     <div class="perf-circle perf-four-color"></div>
                   </td>
@@ -606,8 +357,8 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="width: 23%;" class="table-heading">Proposed role outside function</td>
-                  <td style="width: 50%;" class="table-value"></td>
+                  <td style="width: 40%;" class="table-heading">Proposed role outside function</td>
+                  <td style="width: 30%;" class="table-value"></td>
                   <td style="width: 9%;">
                     <div class="perf-circle perf-four-color"></div>
                   </td>
@@ -625,7 +376,7 @@
 
         <div class="column">
           <div class="position-container">
-            <table>
+            <table style="margin-left:5%">
               <tbody>
                 <tr>
                   <td style="width: 23%;"></td>
@@ -677,6 +428,8 @@
 
 <script>
 import $ from "jquery";
+
+//import printJS from 'print-js'
 export default {
   name: "TemplateOne",
   props: {
@@ -686,10 +439,18 @@ export default {
     }
   },
   mounted() {
+    this.createSvg();
     this.printProfile();
+  
   },
   methods: {
     test() {
+      //  let profileCss = ["height", "width", "border", "margin", "margin-left", "margin-right", "margin-bottom",
+      //   "margin-top", "padding", "padding-left", "padding-right", "padding-bottom", "padding-top", "float",
+      //   "display", "border-collapse", "borderCollapse", "text-align", "color", "text-transform",
+      //   "font-weight", "border-radius","stroke","stroke-width","border-radius","display","list","text-align",
+      //   "font-size", "max-width","line-height","transform","table","tbody","tr","td","fill","color","background-color",
+      //   "min-height","min-width","float","clear","content","overflow"]
       $.extend($.fn, {
         makeProfileCssInline: function() {
           this.each(function(idx, el) {
@@ -709,17 +470,223 @@ export default {
       });
     },
 
+    createSvg() {
+      var ArrayRating = [
+        ["Rough Diamond", "Future Star", "ConsistentStar"],
+        ["Inconsitent performer", "Key Player", "Current Star"],
+        ["Talent Risk", "Solid performer", "Consistent Performer"]
+      ];
+      var ArrayRating1 = [
+        ["Rough Diamond1", "Future Star1", "ConsistentStar1"],
+        ["Inconsitent performer1", "Key Player1", "Current Star1"],
+        ["Talent Risk1", "Solid performer1", "Consistent Performer1"]
+      ];
+      var x = 10;
+      var y = 0;
+      var tempX;
+      var tempY;
+      // var svgx=document.getElementById("gridbox").style.width
+      // var svgy=document.getElementById("gridbox").style.height
+      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", 600);
+      svg.setAttribute("height", 200);
+      svg.setAttribute("id", "svg");
+      for (var i = 0; i < 3; i++) {
+        x = 5;
+        y = i * 55;
+        for (var j = 0; j < 3; j++) {
+          x = 100 + j * 150;
+
+          var group = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "g"
+          );
+
+          var rectangle = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "rect"
+          );
+          rectangle.setAttribute("x", x);
+          rectangle.setAttribute("y", y);
+          rectangle.setAttribute("width", "130");
+          rectangle.setAttribute("height", "47");
+          rectangle.setAttribute("stroke", "green");
+          rectangle.setAttribute("stroke-width", 1);
+          rectangle.setAttribute("fill", "#EFEFEF");
+          rectangle.setAttribute("id", ArrayRating1[i][j]);
+
+          var text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+          );
+          //var txt = document.createTextNode(ArrayRating[i][j]);
+          text.setAttribute("x", x + 70);
+          text.setAttribute("y", y + 20);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("id", ArrayRating[i][j]);
+          text.setAttribute("fill", "black");
+          text.setAttribute("font-size", "12");
+
+          group.appendChild(rectangle);
+          group.appendChild(text);
+          svg.appendChild(group);
+        }
+        tempX = x;
+        tempY = y;
+      }
+
+      var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", 85);
+      line.setAttribute("y1", 0);
+      line.setAttribute("x2", 85);
+      line.setAttribute("y2", tempY + 60);
+
+      line.setAttribute("stroke", "green");
+      line.setAttribute("stroke-width", 2);
+
+      svg.appendChild(line);
+
+      line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", 75);
+      line.setAttribute("y1", 0);
+      line.setAttribute("x2", 95);
+      line.setAttribute("y2", 0);
+      line.setAttribute("stroke", "green");
+      line.setAttribute("stroke-width", 3);
+      svg.appendChild(line);
+
+      line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", 85);
+      line.setAttribute("y1", tempY + 60);
+      line.setAttribute("x2", tempX + 150);
+      line.setAttribute("y2", tempY + 60);
+      line.setAttribute("stroke", "green");
+      line.setAttribute("stroke-width", 2);
+
+      svg.appendChild(line);
+
+      line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", tempX + 150);
+      line.setAttribute("y1", tempY + 50);
+      line.setAttribute("x2", tempX + 150);
+      line.setAttribute("y2", tempY + 70);
+      line.setAttribute("stroke", "green");
+      line.setAttribute("stroke-width", 3);
+      svg.appendChild(line);
+
+      group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", 130);
+      text.setAttribute("y", 2);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("id", "text1");
+      text.setAttribute("fill", "black");
+      text.setAttribute("font-size", "8");
+      text.setAttribute("transform", "rotate(90 20,40)");
+
+      var text1 = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "text"
+      );
+      text1.setAttribute("x", 80);
+      text1.setAttribute("y", 2);
+      text1.setAttribute("text-anchor", "middle");
+      text1.setAttribute("id", "text2");
+      text1.setAttribute("fill", "black");
+      text1.setAttribute("font-size", "8");
+      text1.setAttribute("transform", "rotate(90 20,40)");
+
+      var text2 = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "text"
+      );
+      text2.setAttribute("x", 15);
+      text2.setAttribute("y", 2);
+      text2.setAttribute("text-anchor", "middle");
+      text2.setAttribute("id", "text3");
+      text2.setAttribute("fill", "black");
+      text2.setAttribute("font-size", "8");
+      text2.setAttribute("transform", "rotate(90 20,40)");
+
+      group.appendChild(text);
+      group.appendChild(text1);
+      group.appendChild(text2);
+      svg.appendChild(group);
+
+      document.getElementById("gridbox").appendChild(svg);
+
+      document.getElementById("text1").textContent = "Continue";
+      document.getElementById("text2").textContent = "Grow";
+      document.getElementById("text3").textContent = "High Potential";
+
+      group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", 160);
+      text.setAttribute("y", 190);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("id", "text4");
+      text.setAttribute("fill", "black");
+      text.setAttribute("font-size", "8");
+
+      text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text1.setAttribute("x", 320);
+      text1.setAttribute("y", 190);
+      text1.setAttribute("text-anchor", "middle");
+      text1.setAttribute("id", "text5");
+      text1.setAttribute("fill", "black");
+      text1.setAttribute("font-size", "8");
+
+      text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text2.setAttribute("x", 450);
+      text2.setAttribute("y", 190);
+      text2.setAttribute("text-anchor", "middle");
+      text2.setAttribute("id", "text6");
+      text2.setAttribute("fill", "black");
+      text2.setAttribute("font-size", "8");
+
+      group.appendChild(text);
+      group.appendChild(text1);
+      group.appendChild(text2);
+      svg.appendChild(group);
+
+      document.getElementById("gridbox").appendChild(svg);
+
+      document.getElementById("text1").textContent = "Continue";
+      document.getElementById("text2").textContent = "Grow";
+      document.getElementById("text3").textContent = "High Potential";
+
+      document.getElementById("text4").textContent =
+        "Partially meets expectation";
+      document.getElementById("text5").textContent = "Meets expectation";
+      document.getElementById("text6").textContent = "Exceed expectation";
+
+      for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+          document.getElementById(ArrayRating[i][j]).textContent =
+            ArrayRating[i][j];
+        }
+      }
+      document.getElementById("Solid performer1").style.fill = "green";
+      document.getElementById("svg").style.marginLeft = "-53px";
+    },
+
     printProfile() {
-      // this.test();
-      // $("#profile").makeProfileCssInline();
-      //var printContents = document.getElementById("").innerHTML;
-      // this.$htmlToPaper("container");
-    }
+      //   this.test();
+      //   $("#profile").makeProfileCssInline();
+      //   //var printContents = document.getElementById("#container").innerHTML;
+      //   //console.log(printContents)
+      this.$htmlToPaper("profilecontainer");
+      //window.print();
+    },
+   
   }
 };
 </script>
 
 <style>
+.v-application p {
+  margin-bottom: 3px !important;
+}
 .maincontainer {
   margin-left: 50px;
   margin-right: 50px;
@@ -729,7 +696,7 @@ export default {
 }
 
 table tbody tr td {
-  padding: 5px;
+  padding: 2px;
 }
 
 .profile-info-table {
@@ -739,7 +706,8 @@ table tbody tr td {
 .table-heading {
   color: rgb(162, 145, 97);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 10px;
+  margin-bottom: 1px;
 }
 .performance-table {
   line-height: 0.9;
@@ -747,6 +715,7 @@ table tbody tr td {
 .profile-info-table .table-value,
 .position-container .table-value {
   background-color: rgb(239, 239, 239);
+  font-size: 10px;
 }
 
 .profile-info-table .avatar {
@@ -756,7 +725,7 @@ table tbody tr td {
 }
 
 .section-wrapper {
-  margin: 10px 0;
+  margin: 3px 0;
 }
 .acad-exp-container {
   padding-right: 20px;
@@ -773,7 +742,7 @@ table tbody tr td {
   background-color: rgb(239, 239, 239);
   float: right;
   padding: 20px 30px;
-  min-height: 100px;
+  min-height: 80px;
   font-size: 12px;
 }
 
@@ -839,20 +808,22 @@ table.performance-table tbody tr td {
 }
 
 .strength-header {
-  padding: 10px;
+  padding: 0px;
 }
 
 .strength-body {
   background-color: rgb(239, 239, 239);
-  min-height: 150px;
+  min-height: 110px;
   padding: 10px 10px;
   margin: 0 5px 0 0;
   min-width: 270px;
-  font-size: 12px;
+  font-size: 10px;
 }
-
+li {
+  line-height: 1.2;
+}
 .position-container table tbody td {
-  height: 48px;
+  height: 23px;
 }
 
 .overlay li {
@@ -874,7 +845,7 @@ table.performance-table tbody tr td {
 .column {
   float: left;
   width: 50%;
-  padding-left: 20px;
+  padding-left: 4px;
   /* Should be removed. Only for demonstration */
 }
 #gridbox {
