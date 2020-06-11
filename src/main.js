@@ -17,10 +17,10 @@ const options = {
   ],
   styles: [
     'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+    './kidlat.css',
     './landscape.css',
-    "./style.css"],
-  
-
+    './style.css'
+  ],
 }
 
 Vue.use(VueHtmlToPaper, options);

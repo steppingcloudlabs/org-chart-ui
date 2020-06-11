@@ -579,7 +579,7 @@
       </div>
       <div class="clearfix"></div>
       <div class="row">
-        <div class="column">
+        <div class="column" style="padding-left: 20px;">
           <div class="position-container">
             <table>
               <tbody>
@@ -721,6 +721,7 @@ export default {
 
 <style>
 .maincontainer {
+  margin-top: 20px;
   margin-left: 50px;
   margin-right: 50px;
   height: 100%;
@@ -844,7 +845,7 @@ table.performance-table tbody tr td {
 
 .strength-body {
   background-color: rgb(239, 239, 239);
-  min-height: 150px;
+  min-height: 120px;
   padding: 10px 10px;
   margin: 0 5px 0 0;
   min-width: 270px;
@@ -874,7 +875,6 @@ table.performance-table tbody tr td {
 .column {
   float: left;
   width: 50%;
-  padding-left: 20px;
   /* Should be removed. Only for demonstration */
 }
 #gridbox {
