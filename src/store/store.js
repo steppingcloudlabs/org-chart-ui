@@ -15,8 +15,8 @@ export default new Vuex.Store({
         showProfileDialog: false,
         profileData: null,
         showLoading: false,
-    nodeData:null,
-        showNodeProfile:false,
+        nodeData: null,
+        showNodeProfile: false,
     },
     mutations: {
         setuserData: (state, data) => {
@@ -62,19 +62,17 @@ export default new Vuex.Store({
         setProfileData: (state, data) => {
             state.profileData = data
         },
-        setshowNodeProfile:(state,data)=>
-        {
-            state.showNodeProfile=data
+        setshowNodeProfile: (state, data) => {
+            state.showNodeProfile = data
         },
-        ShowNodeProfile:(state,data)=>
-        {
-            state.showNodeProfile=true,
-            state.nodeData=data
+        ShowNodeProfile: (state, data) => {
+            state.showNodeProfile = true,
+                state.nodeData = data
         },
-        setNodeData:(state,data)=>{
-             state.nodeData=data
+        setNodeData: (state, data) => {
+            state.nodeData = data
         }
-        
+
     },
     getters: {
         getuserData: (state) => {
@@ -105,11 +103,10 @@ export default new Vuex.Store({
             console.log(state.profileData)
             return state.profileData
         },
-        getshowNodeProfile:(state)=>
-        {
-           return state.showNodeProfile
+        getshowNodeProfile: (state) => {
+            return state.showNodeProfile
         },
-        getNodeData:(state)=>{
+        getNodeData: (state) => {
             return state.nodeData
         }
     },
@@ -117,16 +114,20 @@ export default new Vuex.Store({
         testcall: ({
             commit
         }, data) => {
-
+            console.log(window.location.href)
+            // let url = "https://579c9337tenant1-dev-orgchart-app.cfapps.eu10.hana.ondemand.com/index.html#/orgchart"
+            let url = window.location.href
+            let tenant = url.substring(8, url.indexOf("-"))
+            console.log(tenant)
             return new Promise((resolve) => {
                 axios({
-                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com/orgchart/getOrgChartData',
-                    method: "POST",
+                    url: '/srv/getOrgChartData',
+                    method: "GET",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    data: {
-                        "companyId": "SFPART041835",
+                    params: {
+                        "companyId": tenant,
                         "userId": data.userid,
                         "effectiveDateTime": data.date
                     }
@@ -142,16 +143,20 @@ export default new Vuex.Store({
         testcall1: ({
             commit
         }, data) => {
-
+            console.log(window.location.href)
+            // let url = "https://579c9337tenant1-dev-orgchart-app.cfapps.eu10.hana.ondemand.com/index.html#/orgchart"
+            let url = window.location.href
+            let tenant = url.substring(8, url.indexOf("-"))
+            console.log(tenant)
             return new Promise((resolve) => {
                 axios({
-                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com/orgchart/getOrgChartData',
-                    method: "POST",
+                    url: '/srv/getOrgChartData',
+                    method: "GET",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    data: {
-                        "companyId": "SFPART041835",
+                    params: {
+                        "companyId": tenant,
                         "userId": data.userid,
                         "effectiveDateTime": data.date
                     }
@@ -168,22 +173,25 @@ export default new Vuex.Store({
         getAllUser: ({
             commit
         }, data) => {
-
+            console.log(window.location.href)
+            // let url = "https://579c9337tenant1-dev-orgchart-app.cfapps.eu10.hana.ondemand.com/index.html#/orgchart"
+            let url = window.location.href
+            let tenant = url.substring(8, url.indexOf("-"))
+            console.log(tenant)
             return new Promise((resolve) => {
                 axios({
-                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com/orgchart/getAllUsers',
-                    method: "POST",
+                    url: '/srv/getAllUsers',
+                    method: "GET",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    data: {
-                        "companyId": "SFPART041835",
+                    params: {
+                        "companyId": tenant,
                         "searchKey": data
                     }
                 }).then((response) => {
                     resolve(response.data)
                     commit("setflag", "hello")
-                    console.log(response)
                 })
             })
 
@@ -193,16 +201,18 @@ export default new Vuex.Store({
         getRecruitmentData: ({
             commit
         }, data) => {
-
+            // let url = "https://579c9337tenant1-dev-orgchart-app.cfapps.eu10.hana.ondemand.com/index.html#/orgchart"
+            let url = window.location.href
+            let tenant = url.substring(8, url.indexOf("-"))
             return new Promise((resolve) => {
                 axios({
-                    url: 'https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com/orgchart/getPosReqData',
-                    method: "POST",
+                    url: '/srv/getPosReqData',
+                    method: "GET",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    data: {
-                        "companyId": "SFPART041835",
+                    params: {
+                        "companyId": tenant,
                         "positionNumber": data
                     }
                 }).then((response) => {
@@ -213,13 +223,5 @@ export default new Vuex.Store({
             })
 
         },
-
-
-
-
-
     },
-
-
-
 })

@@ -123,7 +123,7 @@ export default {
     getUserData(data) {
       this.showFilter = false;
       this.$router.push({ path: "/" });
-      var date1 = new Date(this.inputDate).toISOString();
+      var date1 = new Date(this.inputDate).getTime();
       this.showLoading = true;
       this.$store
         .dispatch("testcall", {

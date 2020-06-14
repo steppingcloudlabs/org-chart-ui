@@ -5,28 +5,28 @@ import orgchart from '../components/orgchart'
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/',
-    name: 'Home',
-    component: Home,
-    children: [{
-      path: 'orgchart',
-      name: 'Orgchart',
-      component: orgchart
-    }, ]
-  },
+  path: '/',
+  name: 'Home',
+  component: Home,
+  children: [{
+    path: 'orgchart',
+    name: 'Orgchart',
+    component: orgchart
+  },]
+},
 
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import( /* webpackChunkName: "about" */ '@/components/ProfileTemplate/temp2.vue')
-  }
+{
+  path: '/about',
+  name: 'About',
+  // route level code-splitting
+  // this generates a separate chunk (about.[hash].js) for this route
+  // which is lazy-loaded when the route is visited.
+  component: () => import( /* webpackChunkName: "about" */ '@/components/ProfileTemplate/temp2.vue')
+}
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })

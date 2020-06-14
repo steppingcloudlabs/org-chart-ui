@@ -167,7 +167,7 @@ export default {
           !this.userMasterData[node.userManagerId])
       ) {
         var userNameInput = null;
-        var date1 = new Date(this.inputDate).toISOString();
+        var date1 = new Date(this.inputDate).getTime();
         if (!node.isRoot) {
           userNameInput = node.userId;
           this.isbuffered[node.userId] = false;
