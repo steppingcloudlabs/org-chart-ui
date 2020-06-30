@@ -23,7 +23,7 @@
           :enable-download="true"
           :preview-modal="false"
           :paginate-elements-by-height="1200"
-          filename="hee hee"
+          :filename="profileBasicData.userName ? profileBasicData.userName : 'My Profile'"
           :pdf-quality="2"
           pdf-format="a3"
           pdf-orientation="landscape"

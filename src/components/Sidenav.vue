@@ -36,7 +36,6 @@
           selected-color="red"
           :items="itemVacant"
           v-model="selectedVacantItem"
-          @input="validateVacant"
         ></v-treeview>
         <v-treeview
           selectable
@@ -63,9 +62,9 @@ export default {
       drawer: false,
       mini: true,
       selectedItem: [],
-      selectedVacantItem: [],
+      selectedVacantItem: [0, 1],
       selectedSortItem: [],
-      fieldToDisplay: [],
+      fieldToDisplay: [0, 1, 2, 3],
       items: [
         {
           id: 999,
@@ -83,7 +82,6 @@ export default {
           ]
         }
       ],
-
       fieldItems: [
         {
           id: 999,
@@ -101,10 +99,7 @@ export default {
         {
           id: 999,
           name: "Sort By",
-          children: [
-            { id: 0, name: "PayGrade", value: "userPayGrade" },
-            { id: 1, name: "Cost Center", value: "cost-center" }
-          ]
+          children: [{ id: 0, name: "PayGrade", value: "userPayGrade" }]
         }
       ]
     };
@@ -146,7 +141,7 @@ export default {
       for (var i = 0; i < this.selectedVacantItem.length; i++) {
         count++;
       }
-
+      console.log(this.selectedVacantItem);
       if (count > 1) {
         this.selectedVacantItem.pop();
         setTimeout(function() {
@@ -159,7 +154,6 @@ export default {
       for (var i = 0; i < this.selectedSortItem.length; i++) {
         count++;
       }
-
       if (count > 1) {
         this.selectedSortItem.pop();
         setTimeout(function() {
@@ -172,13 +166,13 @@ export default {
       for (var i = 0; i < this.fieldToDisplay.length; i++) {
         count++;
       }
-
       if (count > 4) {
         this.fieldToDisplay.pop();
-        //  setTimeout(function(){alert("You can select upto 4 fields")},1000);
+        setTimeout(function() {
+          alert("You can select upto 4 fields");
+        }, 1000);
       }
     },
-
     userGradeData() {
       console.log(this.items);
       this.items[0].children = this.userPayGrade.map((data, index) => {
@@ -186,24 +180,25 @@ export default {
         if (data != undefined) {
           item["id"] = index;
           item["name"] = data;
+          this.selectedItem.push(index);
           return item;
         } else {
           item["id"] = index;
-          item["name"] = "undefined";
+          item["name"] = undefined;
+          this.selectedItem.push(index);
           return item;
         }
       });
+      console.log(this.selectedItem);
     },
     filterapplied(orgChartData, filterArray, filterType) {
       var newA = orgChartData.filter(function(item) {
-        if (!(filterArray.indexOf(item[filterType]) > -1)) {
+        if (filterArray.indexOf(item[filterType]) > -1) {
           return item;
         }
       });
-
       return newA;
     },
-
     applySort(sortValue, newB) {
       if (sortValue == "userPayGrade") {
         newB = newB.map(function(element) {
@@ -214,13 +209,11 @@ export default {
           } else {
             element["orderByPayGrade"] = -1;
           }
-
           return element;
         });
       }
       return newB;
     },
-
     ApplyFilter() {
       var gradeFilter = [];
       var vacantFilter = [];
@@ -247,7 +240,6 @@ export default {
         );
         console.log(filteredData);
       }
-
       if (this.selectedVacantItem.length) {
         for (i = 0; i < this.selectedVacantItem.length; i++) {
           vacantFilter.push(
@@ -265,7 +257,6 @@ export default {
         sortValue = this.sortBy[0].children[this.selectedSortItem[0]]["value"];
         console.log(sortValue);
       }
-
       // var finalData = this.applySort(sortValue, filteredData)
       this.$emit("redraw", {
         output: filteredData,
@@ -273,15 +264,11 @@ export default {
         fieldToDisplay: fields
       });
     },
-
     reset() {
-      this.selectedItem = [];
-
-      this.selectedVacantItem = [];
-
+      this.selectedItem = [999];
+      this.selectedVacantItem = [0, 1];
       this.selectedSortItem = [];
-      this.fieldToDisplay = [];
-
+      this.fieldToDisplay = [0, 1, 2, 3];
       this.$emit("reset");
     }
   },
@@ -298,7 +285,6 @@ export default {
   padding: 3px;
   margin-right: 15px;
 }
-
 .right {
   transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
