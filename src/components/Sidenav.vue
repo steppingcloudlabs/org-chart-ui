@@ -36,7 +36,6 @@
           selected-color="red"
           :items="itemVacant"
           v-model="selectedVacantItem"
-          @input="validateVacant"
         ></v-treeview>
         <v-treeview
           selectable
@@ -63,9 +62,9 @@ export default {
       drawer: false,
       mini: true,
       selectedItem: [],
-      selectedVacantItem: [],
+      selectedVacantItem: [0, 1],
       selectedSortItem: [],
-      fieldToDisplay: [],
+      fieldToDisplay: [0, 1, 2, 3],
       items: [
         {
           id: 999,
@@ -102,8 +101,8 @@ export default {
           id: 999,
           name: "Sort By",
           children: [
-            { id: 0, name: "PayGrade", value: "userPayGrade" },
-            { id: 1, name: "Cost Center", value: "cost-center" }
+            { id: 0, name: "PayGrade", value: "userPayGrade" }
+           
           ]
         }
       ]
@@ -140,13 +139,14 @@ export default {
       this.userGradeData();
     }
   },
+
   methods: {
     validateVacant() {
       var count = 0;
       for (var i = 0; i < this.selectedVacantItem.length; i++) {
         count++;
       }
-
+      console.log(this.selectedVacantItem);
       if (count > 1) {
         this.selectedVacantItem.pop();
         setTimeout(function() {
@@ -175,7 +175,9 @@ export default {
 
       if (count > 4) {
         this.fieldToDisplay.pop();
-        //  setTimeout(function(){alert("You can select upto 4 fields")},1000);
+        setTimeout(function() {
+          alert("You can select upto 4 fields");
+        }, 1000);
       }
     },
 
@@ -186,17 +188,20 @@ export default {
         if (data != undefined) {
           item["id"] = index;
           item["name"] = data;
+          this.selectedItem.push(index);
           return item;
         } else {
           item["id"] = index;
-          item["name"] = "undefined";
+          item["name"] = undefined;
+          this.selectedItem.push(index);
           return item;
         }
       });
+      console.log(this.selectedItem);
     },
     filterapplied(orgChartData, filterArray, filterType) {
       var newA = orgChartData.filter(function(item) {
-        if (!(filterArray.indexOf(item[filterType]) > -1)) {
+        if ((filterArray.indexOf(item[filterType]) > -1)) {
           return item;
         }
       });
@@ -275,12 +280,12 @@ export default {
     },
 
     reset() {
-      this.selectedItem = [];
+      this.selectedItem = [999];
 
-      this.selectedVacantItem = [];
+      this.selectedVacantItem = [0, 1];
 
       this.selectedSortItem = [];
-      this.fieldToDisplay = [];
+      this.fieldToDisplay = [0,1,2,3];
 
       this.$emit("reset");
     }
