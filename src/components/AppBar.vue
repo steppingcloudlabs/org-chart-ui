@@ -1,8 +1,10 @@
 <template>
   <div>
-    <v-toolbar class="pt-1 pb-5" height="90px">
+    <v-toolbar class="pt-1 pb-5" height="80px">
       <v-layout row wrap>
-        <v-flex xs3></v-flex>
+        <v-flex xs3>
+          <img src="org-chart-ui\src\assets\hdr_logo.png"/>
+        </v-flex>
         <v-flex xs4 class="pr-5">
           <SearchAlumni @getUserData="getUserData"></SearchAlumni>
         </v-flex>
