@@ -14,7 +14,7 @@
                     <v-avatar class="profile" color="grey" size="100" tile >
                         <v-img style="border:2px" src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
                     </v-avatar>
-                    <p class="pt-2 name" style="font-size:20px;font-weight:600;color:#166AB8">DARAKSHA ABID</p>
+                    <p class="pt-2 name" style="font-size:15px;font-weight:600;color:#166AB8">WILLIAM JHON</p>
                     <p class="name" style="font-size:15px;font-weight:600;color:black;margin-bottom: -1px; line-height: 0px; margin-top: -6px;">DEVELOPER</p>
                 </div>
                  <!-- Data division -->
@@ -23,19 +23,19 @@
                   <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Personal Information</p>
                  <v-divider></v-divider>
                  <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px;margin-left:2px">
-                     <v-row style="line-height:2px">
+                     <v-row style="line-height:12px">
                          <v-col>Position:</v-col>
                          <v-col>Test</v-col>
                      </v-row>
-                     <v-row style="line-height:2px">
+                     <v-row style="line-height:12px">
                          <v-col>Incumbent:</v-col>
-                         <v-col>Test</v-col>
+                         <v-col>Simon Ralph Warburton</v-col>
                      </v-row>   
-                     <v-row style="line-height:2px">
+                     <v-row style="line-height:12px">
                          <v-col>Date Of birth:</v-col>
-                         <v-col>24th Aug,1998</v-col>
+                         <v-col>24th Aug,98</v-col>
                      </v-row>   
-                     <v-row style="line-height:2px">
+                     <v-row style="line-height:12px">
                          <v-col>DOR</v-col>
                          <v-col>Test</v-col>
                      </v-row>    
@@ -45,12 +45,17 @@
                  <v-divider></v-divider>
                   <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Academics</p>
                  <v-divider></v-divider>
-                <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                     <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+               <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
+                <v-layout row wrap class="ml-1">
+                <v-row
+                  class="mt-2"
+                  v-for="(item, i) in academics"
+                  :key="i"
+                  style="text-align:left;height: 33px;"
+                >
+                  <p>{{i+1}}.{{item}}</p>
+                </v-row>
+              </v-layout>
                  </p>
                 </div>
                  <!-- Pre work division -->
@@ -58,12 +63,17 @@
                  <v-divider></v-divider>
                   <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Pre- RE work experience</p>
                  <v-divider></v-divider>
-                <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                     <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+                 <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
+                <v-layout row wrap class="ml-1">
+                <v-row
+                  class="mt-2"
+                  v-for="(item, i) in pre_work"
+                  :key="i"
+                  style="text-align:left;height: 33px;"
+                >
+                  <p>{{i+1}}.{{item}}</p>
+                </v-row>
+              </v-layout>
                  </p>
                 </div>
 
@@ -73,11 +83,16 @@
                   <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">RE-Work ExperIence</p>
                  <v-divider></v-divider>
                  <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                     <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+                <v-layout row wrap class="ml-1">
+                <v-row
+                  class="mt-2"
+                  v-for="(item, i) in work"
+                  :key="i"
+                  style="text-align:left;height: 33px;"
+                >
+                  <p>{{i+1}}.{{item}}</p>
+                </v-row>
+              </v-layout>
                  </p>
                 </div>
             </v-card>
@@ -177,7 +192,7 @@
                      <table  class="performance-table pt-5">
                             <tbody>
                                 <tr>
-                                <td class="heading" style="width:40%">Perf Rating FY16-17</td>
+                                <td class="heading" style="width:50%">Perf Rating FY16-17</td>
                                 <td></td>
                                 <td>
                                     <div class="perf-circle perf-one-color"></div>
@@ -310,10 +325,12 @@
                      <v-divider></v-divider> 
                      <p   class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
                      <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+                  <li>
+                    Systematic approach in overall PD Administration, government liasioning in UK, relationship
+                    managementand poised leader
+                  </li>
+                  <li>Able administrator, good communication skills, perseverance</li>
+                </ul>
                  </p>
                 </div>   
                  <div style="padding-top:35px">
@@ -322,10 +339,8 @@
                      <v-divider></v-divider> 
                      <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
                      <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+                  <li>Review and provide clarity on resolving issues</li>
+                </ul>
                  </p>
                 </div> 
 
@@ -345,6 +360,21 @@
 </template>
 <script>
 export default {
+    data: () => ({
+      academics: [
+      "BSc (Hons), Univ. of Southampton - 1987",
+      "Leading Product Development, HBS - 2008"
+    ],
+    pre_work: [
+      "Triumph-Engineer(Jan 1997-Jan 2006)",
+      "Triumph-Manager(Jan 2006-Oct 2014)"
+    ],
+   work: [
+      "Joined in Jan 2015 as Head of Product Planning and Strategy",
+      "Managed Product Development from Jul 2015",
+      "Re-designated as Head Product Development in Aug 2016"
+    ]
+  }),
     mounted(){
     this.createSvg()
     },

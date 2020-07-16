@@ -11,7 +11,7 @@
             <v-avatar class="profile" color="grey" size="100" tile style="border:2px solid">
               <v-img style="border:2px" src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
             </v-avatar>
-            <p class="pt-2 name" style="font-size:20px;font-weight:600;color:#166AB8">DARAKSHA ABID</p>
+            <p class="pt-2 name" style="font-size:20px;font-weight:600;color:#166AB8">WILLIAM JHON</p>
             <p
               class="name"
               style="font-size:15px;font-weight:600;color:black; line-height: 0px; margin-top: -6px;"
@@ -57,11 +57,16 @@
               style="font-size:15px;font-weight:600;color:#166AB8;margin-bottom:-2px"
             >Academics</p>
              <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                     <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+                <v-layout row wrap class="ml-1">
+                <v-row
+                  class="mt-2"
+                  v-for="(item, i) in academics"
+                  :key="i"
+                  style="text-align:left;height: 33px;"
+                >
+                  <p>{{i+1}}.{{item}}</p>
+                </v-row>
+              </v-layout>
                  </p>
           </div>
         </v-col>
@@ -127,16 +132,22 @@
        <v-row no-gutters class="mt-5 mb-5">
         <v-col class="ml-5 mr-5">
           <div>
-            <p
+            
+               <p
               class="pa-2 header"
               style="font-size:15px;font-weight:600;color:#166AB8;margin-bottom:-2px"
-            >Pre RE Work Experience</p>
+            > Pre RE Work Experience</p>
              <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                     <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+                <v-layout row wrap class="ml-1">
+                <v-row
+                  class="mt-2"
+                  v-for="(item, i) in pre_work"
+                  :key="i"
+                  style="text-align:left;height: 33px;"
+                >
+                  <p>{{i+1}}.{{item}}</p>
+                </v-row>
+              </v-layout>
                  </p>
           </div>
         </v-col>
@@ -147,11 +158,16 @@
               style="font-size:15px;font-weight:600;color:#166AB8;margin-bottom:-2px"
             > RE Work Experience</p>
              <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                     <ul>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                         <li>hellovvkhvhvhv</li>
-                     </ul>
+                <v-layout row wrap class="ml-1">
+                <v-row
+                  class="mt-2"
+                  v-for="(item, i) in work"
+                  :key="i"
+                  style="text-align:left;height: 33px;"
+                >
+                  <p>{{i+1}}.{{item}}</p>
+                </v-row>
+              </v-layout>
                  </p>
           </div>
         </v-col>
@@ -244,7 +260,7 @@
           <table class="performance-table"  style="font-size:12px;font-weight:500;">
             <tbody>
               <tr>
-                <td class="heading" style="width:40%">Perf Rating FY16-17</td>
+                <td class="heading" style="width:50%">Perf Rating FY16-17</td>
                 <td></td>
                 <td>
                   <div class="perf-circle perf-one-color"></div>
@@ -627,7 +643,26 @@
     </v-container>
   </v-card>
 </template>
-
+<script>
+export default {
+  
+  data: () => ({
+      academics: [
+      "BSc (Hons), Univ. of Southampton - 1987",
+      "Leading Product Development, HBS - 2008"
+    ],
+    pre_work: [
+      "Triumph-Engineer(Jan 1997-Jan 2006)",
+      "Triumph-Manager(Jan 2006-Oct 2014)"
+    ],
+   work: [
+      "Joined in Jan 2015 as Head of Product Planning and Strategy",
+      "Managed Product Development from Jul 2015",
+      "Re-designated as Head Product Development in Aug 2016"
+    ]
+  })
+}
+</script>
 
 <style scoped>
 .name {
