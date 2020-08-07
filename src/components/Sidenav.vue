@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer permanent height="650px" style="border-right:5px">
+    <v-navigation-drawer permanent height="650px" style="border-right:5px;width: 100%;">
       <v-list-item class="px-2">
         <v-list-item-avatar>
           <v-icon>mdi-filter</v-icon>
@@ -69,8 +69,8 @@ export default {
         {
           id: 999,
           name: "PayGrade",
-          children: []
-        }
+          children: [],
+        },
       ],
       itemVacant: [
         {
@@ -78,9 +78,9 @@ export default {
           name: "Vacant/Occupied",
           children: [
             { id: 0, name: "Vacant", value: true },
-            { id: 1, name: "Occupied", value: false }
-          ]
-        }
+            { id: 1, name: "Occupied", value: false },
+          ],
+        },
       ],
 
       fieldItems: [
@@ -92,27 +92,24 @@ export default {
             { id: 1, name: "DepartmentId", value: "userDepartmentId" },
             { id: 2, name: "Division", value: "userDivision" },
             { id: 3, name: "businessUnit", value: "businessUnit" },
-            { id: 4, name: "Job Level", value: "jobLevel" }
-          ]
-        }
+            { id: 4, name: "Job Level", value: "jobLevel" },
+          ],
+        },
       ],
       sortBy: [
         {
           id: 999,
           name: "Sort By",
-          children: [
-            { id: 0, name: "PayGrade", value: "userPayGrade" }
-           
-          ]
-        }
-      ]
+          children: [{ id: 0, name: "PayGrade", value: "userPayGrade" }],
+        },
+      ],
     };
   },
   props: {
     chartData: {
       type: Array,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     userPayGrade: {
@@ -122,7 +119,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserPayGrade", data);
-      }
+      },
     },
     showNavDrawer: {
       get() {
@@ -131,13 +128,13 @@ export default {
       },
       set(data) {
         this.$store.commit("setshownavDrawer", data);
-      }
-    }
+      },
+    },
   },
   watch: {
     userPayGrade() {
       this.userGradeData();
-    }
+    },
   },
 
   methods: {
@@ -149,7 +146,7 @@ export default {
       console.log(this.selectedVacantItem);
       if (count > 1) {
         this.selectedVacantItem.pop();
-        setTimeout(function() {
+        setTimeout(function () {
           alert("You can sort by one field only");
         }, 1000);
       }
@@ -162,7 +159,7 @@ export default {
 
       if (count > 1) {
         this.selectedSortItem.pop();
-        setTimeout(function() {
+        setTimeout(function () {
           alert("You can sort by one field only");
         }, 1000);
       }
@@ -175,7 +172,7 @@ export default {
 
       if (count > 4) {
         this.fieldToDisplay.pop();
-        setTimeout(function() {
+        setTimeout(function () {
           alert("You can select upto 4 fields");
         }, 1000);
       }
@@ -200,8 +197,8 @@ export default {
       console.log(this.selectedItem);
     },
     filterapplied(orgChartData, filterArray, filterType) {
-      var newA = orgChartData.filter(function(item) {
-        if ((filterArray.indexOf(item[filterType]) > -1)) {
+      var newA = orgChartData.filter(function (item) {
+        if (filterArray.indexOf(item[filterType]) > -1) {
           return item;
         }
       });
@@ -211,7 +208,7 @@ export default {
 
     applySort(sortValue, newB) {
       if (sortValue == "userPayGrade") {
-        newB = newB.map(function(element) {
+        newB = newB.map(function (element) {
           if (this.userPayGrade.indexOf(element.userPayGrade) > -1) {
             element["orderByPayGrade"] = this.userPayGrade.indexOf(
               element.userPayGrade
@@ -275,7 +272,7 @@ export default {
       this.$emit("redraw", {
         output: filteredData,
         orderBy: sortValue,
-        fieldToDisplay: fields
+        fieldToDisplay: fields,
       });
     },
 
@@ -285,14 +282,14 @@ export default {
       this.selectedVacantItem = [0, 1];
 
       this.selectedSortItem = [];
-      this.fieldToDisplay = [0,1,2,3];
+      this.fieldToDisplay = [0, 1, 2, 3];
 
       this.$emit("reset");
-    }
+    },
   },
   mounted() {
     this.userGradeData();
-  }
+  },
 };
 </script>
 <style >

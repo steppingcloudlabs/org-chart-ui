@@ -8,16 +8,42 @@
     >
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click="showProfileDialog = false">
-            <v-icon>mdi-close</v-icon>
+          <v-btn icon dark @click="backButtonClicked">
+            <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
           <v-toolbar-title>User Profile</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn dark text @click="printProfile">Print</v-btn>
-          </v-toolbar-items>
+          <v-toolbar-items></v-toolbar-items>
+          <v-btn class="mr-2" dark icon @click="printProfile">
+            <v-icon>mdi-printer</v-icon>
+          </v-btn>
+          <v-btn icon dark @click="showProfileDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-toolbar>
-        <TemplateOne :profileBasicData="profileBasicData" />
+        <v-container v-if="selectedTemplate == 'selectionScreen'">
+          <TemplateSelectionContainer
+            @next="templatedSelected"
+            :isEmployeeDataNeeded="showProfileDialog"
+            :empBasicData="profileBasicData"
+          />
+        </v-container>
+        <TemplateOne
+          v-else-if="selectedTemplate == 'template-1'"
+          :profileBasicData="profileBasicData"
+        />
+        <TemplateTwo
+          v-else-if="selectedTemplate == 'template-2'"
+          :profileBasicData="profileBasicData"
+        />
+        <TemplateThree
+          v-else-if="selectedTemplate == 'template-3'"
+          :profileBasicData="profileBasicData"
+        />
+        <TemplateFour
+          v-else-if="selectedTemplate == 'template-4'"
+          :profileBasicData="profileBasicData"
+        />
         <vue-html2pdf
           :show-layout="false"
           :enable-download="true"
@@ -35,7 +61,6 @@
         >
           <section slot="pdf-content">
             <!-- PDF Content Here -->
-            <TemplateOne :profileBasicData="profileBasicData"></TemplateOne>
           </section>
         </vue-html2pdf>
         <v-overlay :absolute="true" opacity=".5" :value="overlay">
@@ -49,6 +74,11 @@
 
 <script>
 import TemplateOne from "@/components/ProfileTemplate/TemplateOne";
+import TemplateTwo from "@/components/ProfileTemplate/TemplateTwo";
+import TemplateThree from "@/components/ProfileTemplate/TemplateThree";
+import TemplateFour from "@/components/ProfileTemplate/TemplateFour";
+import TemplateSelectionContainer from "@/components/EmployeeProfile/TemplateSelectionContainer";
+
 import VueHtml2pdf from "vue-html2pdf";
 
 export default {
@@ -58,12 +88,17 @@ export default {
       notifications: false,
       sound: true,
       widgets: false,
-      overlay: false
+      overlay: false,
+      selectedTemplate: "selectionScreen",
     };
   },
   components: {
     TemplateOne,
-    VueHtml2pdf
+    TemplateTwo,
+    TemplateThree,
+    TemplateFour,
+    VueHtml2pdf,
+    TemplateSelectionContainer,
   },
 
   computed: {
@@ -73,13 +108,29 @@ export default {
       },
       set(data) {
         this.$store.commit("setShowProfileDialog", data);
-      }
+      },
     },
     profileBasicData() {
       return this.$store.getters.getProfileData;
-    }
+    },
   },
+  watch: {
+    // showProfileDialog() {
+    //   if (this.showProfileDialog) {
+    //     this.getUserProfileData(
+    //       this.$route.params.id
+    //         ? this.$route.params.id
+    //         : this.profileBasicData.userId
+    //     );
+    //   }
+    // },
+  },
+
   methods: {
+    templatedSelected(selectedTemplate) {
+      this.selectedTemplate = selectedTemplate;
+      console.log("Next Clicked");
+    },
     printProfile() {
       this.$refs.html2Pdf.generatePdf();
       this.overlay = true;
@@ -91,8 +142,15 @@ export default {
     hasGenerated(event) {
       console.log(event);
       this.overlay = false;
-    }
-  }
+    },
+    backButtonClicked() {
+      if (this.selectedTemplate == "selectionScreen") {
+        this.showProfileDialog = false;
+      } else {
+        this.selectedTemplate = "selectionScreen";
+      }
+    },
+  },
 };
 </script>
 

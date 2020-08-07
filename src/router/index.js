@@ -6,24 +6,40 @@ import orgchart from '../components/orgchart'
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/',
-    name: 'Home',
-    component: Home,
-    children: [{
-      path: 'orgchart',
-      name: 'Orgchart',
-      component: orgchart
-    }, ]
-  },
+  path: '/',
+  name: 'Home',
+  component: Home,
+  children: [{
+    path: 'orgchart',
+    name: 'Orgchart',
+    component: orgchart
+  },]
+},
 
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import( /* webpackChunkName: "about" */ '@/components/ProfileTemplate/TemplateTwo.vue')
-  }
+{
+  path: '/about',
+  name: 'About',
+  // route level code-splitting
+  // this generates a separate chunk (about.[hash].js) for this route
+  // which is lazy-loaded when the route is visited.
+  component: () => import( /* webpackChunkName: "about" */ '@/components/ProfileTemplate/TemplateTwo.vue')
+},
+
+{
+  path: '/profile/:id',
+  name: 'EmployeeProfile',
+  // route level code-splitting
+  // this generates a separate chunk (about.[hash].js) for this route
+  // which is lazy-loaded when the route is visited.
+  component: () => import('@/components/EmployeeProfile/EmpProfileContainer.vue'),
+  children: [
+    {
+      path: 'template-selection',
+      name: 'TemplateSelection',
+      component: () => import('@/components/EmployeeProfile/TemplateSelectionContainer.vue'),
+    }
+  ]
+}
 ]
 
 const router = new VueRouter({

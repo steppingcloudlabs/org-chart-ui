@@ -1,6 +1,6 @@
 <template>
   <v-content class="grey lighten-3">
-    <div id="core-view" style="background: rgb(35, 43, 43)">
+    <div id="core-view">
       <v-fade-transition mode="out-in">
         <router-view />
       </v-fade-transition>
@@ -9,13 +9,13 @@
 </template>
 
 <script>
-  export default {
-    name: 'CoreView',
+export default {
+  name: "CoreView",
 
-    metaInfo () {
-      return {
-        title: 'Vue Material Dashboard by CreativeTim'
-      }
-    }
-  }
+  metaInfo() {
+    return {
+      title: "Vue Material Dashboard by CreativeTim",
+    };
+  },
+};
 </script>

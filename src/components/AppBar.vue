@@ -3,7 +3,7 @@
     <v-toolbar class="pt-1 pb-5" height="80px">
       <v-layout row wrap>
         <v-flex xs3>
-          <img src="org-chart-ui\src\assets\hdr_logo.png"/>
+          <img src="/assets/hdr_logo.png" style="height: 50px; margin-left: 20px;" />
         </v-flex>
         <v-flex xs4 class="pr-5">
           <SearchAlumni @getUserData="getUserData"></SearchAlumni>
@@ -46,7 +46,6 @@
                 </v-tooltip>
               </v-btn>
             </template>
-
             <v-card dark max-width="250">
               <v-img src="/assets/legendicon.png"></v-img>
             </v-card>
@@ -76,11 +75,11 @@ export default {
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
     menu: false,
-    search: ""
+    search: "",
   }),
 
   components: {
-    SearchAlumni
+    SearchAlumni,
   },
   computed: {
     inputDate: {
@@ -90,7 +89,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setinputDate", data);
-      }
+      },
     },
     showLoading: {
       get() {
@@ -99,7 +98,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setshowLoading", data);
-      }
+      },
     },
     showNavDrawer: {
       get() {
@@ -108,7 +107,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setshownavDrawer", data);
-      }
+      },
     },
     showFilter: {
       get() {
@@ -117,30 +116,30 @@ export default {
       },
       set(data) {
         this.$store.commit("setshowFilter", data);
-      }
-    }
+      },
+    },
   },
 
   methods: {
     getUserData(data) {
       this.showFilter = false;
       this.$router.push({ path: "/" });
-      var date1 = new Date(this.inputDate).toISOString();
+      var date1 = new Date(this.inputDate).getTime();
       this.showLoading = true;
       this.$store
         .dispatch("testcall", {
           userid: data,
-          date: date1
+          date: date1,
         })
-        .then(response => {
+        .then((response) => {
           if (response) {
             console.log("testing");
             this.showLoading = false;
             this.$router.push({ path: "/orgchart" });
           }
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -9,17 +9,21 @@
                 <td rowspan="4" style="width: 20%;">
                   <img id="emp-profile-img" :src="profileBasicData.img" class="avatar" />
                 </td>
-                <td style="width: 15%;" class="table-heading">Position</td>
+                <td style="width: 15%;" class="table-heading">Name</td>
                 <td
                   id="emp-profile-role"
                   style="width: 16%;"
                   class="table-value"
                   colspan="3"
-                >{{profileBasicData.positionTitle}}</td>
+                >{{profileBasicData.userName}}</td>
               </tr>
               <tr>
-                <td style="width: 15%;" class="table-heading">Incumbent</td>
-                <td style="width: 16%;" class="table-value" colspan="3">Simon Ralph Warburton</td>
+                <td style="width: 15%;" class="table-heading">Position</td>
+                <td
+                  style="width: 16%;"
+                  class="table-value"
+                  colspan="3"
+                >{{profileBasicData.positionTitle}}</td>
               </tr>
               <tr>
                 <td style="width: 15%;" class="table-heading">Designation</td>
@@ -31,10 +35,14 @@
                 >{{profileBasicData.jobLevel}}</td>
               </tr>
               <tr>
-                <td style="width: 15%;" class="table-heading">DOB</td>
-                <td id="emp-profile-dob" style="width: 16%;" class="table-value">14-Aug-1965</td>
-                <td style="width: 15%;" class="table-heading">DOR</td>
-                <td style="width: 16%;" class="table-value">Aug 2023</td>
+                <td style="width: 15%;" class="table-heading">Pay Grade</td>
+                <td
+                  id="emp-profile-dob"
+                  style="width: 16%;"
+                  class="table-value"
+                >{{profileBasicData.userPayGrade}}</td>
+                <td style="width: 15%;" class="table-heading">Division</td>
+                <td style="width: 16%;" class="table-value">{{profileBasicData.userDivision}}</td>
               </tr>
             </tbody>
           </table>
@@ -46,33 +54,41 @@
             </div>
             <div class="data-section">
               <ul>
-                <li>BSc (Hons) Mech. Engg, Univ. of Southampton - 1987</li>
-                <li>Leading Product Development, HBS - 2008</li>
+                <li
+                  v-for="(data, k) in empProfileData.bgEducation"
+                  :key="'bgEducation'+k"
+                >{{ getEmployeeEducation(data) }}</li>
               </ul>
             </div>
             <div class="clearfix"></div>
           </div>
           <div class="section-wrapper">
             <div class="heading-section">
-              <p class="table-heading">Pre- RE work experience</p>
+              <p class="table-heading">Pre-Work Experience</p>
             </div>
             <div class="data-section">
               <ol>
-                <li>Triumph Motorcycles - Design Engineer (Jan 1997 - Jan 2006)</li>
-                <li>Triumph Motorcycles - Product Manager (Jan 2006 - Oct 2014)</li>
+                <li
+                  v-for="(data, k) in empProfileData.previousExperience"
+                  :key="'previousExperience'+k"
+                >{{getPreviousExperience(data) }}</li>
               </ol>
             </div>
             <div class="clearfix"></div>
           </div>
           <div class="section-wrapper">
             <div class="heading-section">
-              <p class="table-heading">RE work experience</p>
+              <p class="table-heading">Re-Work Experience</p>
             </div>
             <div class="data-section">
               <ol>
-                <li>Joined in Jan 2015 as Head of Product Planning and Strategy</li>
+                <li
+                  v-for="(data, k) in empProfileData.insideExperience"
+                  :key="'insideExperience'+k"
+                >{{ getInsideExperience(data) }}</li>
+                <!-- <li>Joined in Jan 2015 as Head of Product Planning and Strategy</li>
                 <li>Managed Product Development from Jul 2015</li>
-                <li>Re-designated as Head Product Development in Aug 2016</li>
+                <li>Re-designated as Head Product Development in Aug 2016</li>-->
               </ol>
             </div>
             <div class="clearfix"></div>
@@ -165,130 +181,14 @@
           <div class="column" id="nestedcolumn" style="padding-left: 20px;">
             <table class="performance-table">
               <tbody>
-                <tr>
-                  <td class="table-heading" style="width:40%">Perf Rating FY16-17</td>
-                  <td></td>
-                  <td>
-                    <div class="perf-circle perf-one-color"></div>
+                <tr v-for="(data, k) in performanceRating" :key="'performanceRating'+k">
+                  <td
+                    class="table-heading"
+                    style="width:50%"
+                  >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
+                  <td class="text-left">
+                    <v-rating v-model="data.rating" dense readonly :length="data.max"></v-rating>
                   </td>
-                  <td>
-                    <div class="perf-circle perf-two-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-three-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-four-color perf-circled-border"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-five-color"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-heading">Perf Rating FY17-18</td>
-                  <td></td>
-                  <td>
-                    <div class="perf-circle perf-one-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-two-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-three-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-four-color perf-circled-border"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-five-color"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-heading">Perf Rating FY18-19</td>
-                  <td></td>
-                  <td>
-                    <div class="perf-circle perf-one-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-two-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-three-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-four-color perf-circled-border"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-five-color"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-heading">Pot Rating 2019</td>
-                  <td>
-                    <div class="perf-circle perf-zero-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-one-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-two-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-three-color perf-circled-border"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-four-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-five-color"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-heading">Culture Fit</td>
-                  <td></td>
-                  <td>
-                    <div class="perf-circle perf-one-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-two-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-three-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-four-color"></div>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td class="table-heading">Position Criticality</td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <div class="perf-circle perf-two-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-three-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-four-color"></div>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td class="table-heading">Talent Risk</td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <div class="perf-circle perf-two-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-three-color"></div>
-                  </td>
-                  <td>
-                    <div class="perf-circle perf-four-color"></div>
-                  </td>
-                  <td></td>
                 </tr>
               </tbody>
             </table>
@@ -676,23 +576,95 @@
 </template>
 
 <script>
+import moment from "moment";
 import $ from "jquery";
 export default {
   name: "TemplateOne",
+  data() {
+    return {
+      rating: 3,
+    };
+  },
   props: {
     profileBasicData: {
       default: undefined,
-      type: Object
-    }
+      type: Object,
+    },
   },
   mounted() {
     this.printProfile();
+    console.log(moment);
+  },
+  computed: {
+    empProfileData() {
+      return this.$store.getters.getEmpProfileData;
+    },
+    performanceRating() {
+      return this.empProfileData.performanceRating.filter((element) => {
+        element.rating = parseInt(element.rating);
+        return element.rating > -1;
+      });
+    },
   },
   methods: {
+    getInsideExperience(insideExp) {
+      return (
+        insideExp.title +
+        " in " +
+        insideExp.department +
+        " department from, " +
+        moment
+          .unix(
+            insideExp.startDate.substring(6, insideExp.startDate.length - 5)
+          )
+          .format("MM-YYYY") +
+        " to " +
+        moment
+          .unix(insideExp.endDate.substring(6, insideExp.endDate.length - 5))
+          .format("MM-YYYY")
+      );
+    },
+    getEmployeeEducation(bgEducation) {
+      return (
+        bgEducation.degree +
+        " in " +
+        bgEducation.major +
+        " from " +
+        bgEducation.school +
+        ", " +
+        moment
+          .unix(
+            bgEducation.endDate.substring(6, bgEducation.endDate.length - 5)
+          )
+          .format("YYYY")
+      );
+    },
+    getPreviousExperience(preExp) {
+      return (
+        preExp.startTitle +
+        " in " +
+        preExp.employer +
+        " from " +
+        moment
+          .unix(preExp.startDate.substring(6, preExp.startDate.length - 5))
+          .format("MM-YYYY") +
+        " to " +
+        moment
+          .unix(preExp.endDate.substring(6, preExp.endDate.length - 5))
+          .format("MM-YYYY")
+      );
+    },
+    getRatingYear(startDate, endDate) {
+      return (
+        moment.unix(startDate.substring(6, startDate.length - 5)).format("YY") +
+        "-" +
+        moment.unix(endDate.substring(6, endDate.length - 5)).format("YY")
+      );
+    },
     test() {
       $.extend($.fn, {
-        makeProfileCssInline: function() {
-          this.each(function(idx, el) {
+        makeProfileCssInline: function () {
+          this.each(function (idx, el) {
             var style = el.style;
             var properties = [];
             for (var property in style) {
@@ -701,11 +673,9 @@ export default {
               }
             }
             this.style.cssText = properties.join(";");
-            $(this)
-              .children()
-              .makeProfileCssInline();
+            $(this).children().makeProfileCssInline();
           });
-        }
+        },
       });
     },
 
@@ -714,8 +684,8 @@ export default {
       // $("#profile").makeProfileCssInline();
       //var printContents = document.getElementById("").innerHTML;
       // this.$htmlToPaper("container");
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -744,6 +714,7 @@ table tbody tr td {
 }
 .performance-table {
   line-height: 0.9;
+  width: 100%;
 }
 .profile-info-table .table-value,
 .position-container .table-value {

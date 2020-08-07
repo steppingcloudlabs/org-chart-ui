@@ -35,7 +35,7 @@ export default {
         "userPayGrade",
         "userDepartmentId",
         "userDivision",
-        "businessUnit"
+        "businessUnit",
       ],
       filter1: [],
       orgChartData: [],
@@ -43,13 +43,13 @@ export default {
       field1: "true",
 
       selectedId: null,
-      temp: {}
+      temp: {},
     };
   },
   components: {
     Sidenav,
     profile,
-    nodeProfile
+    nodeProfile,
   },
   computed: {
     showNodeProfile: {
@@ -59,7 +59,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setshowNodeProfile", data);
-      }
+      },
     },
     inputDate: {
       get() {
@@ -68,7 +68,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setinputDate", data);
-      }
+      },
     },
     userData: {
       get() {
@@ -77,7 +77,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserData", data);
-      }
+      },
     },
     userPayGrade: {
       get() {
@@ -86,7 +86,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserPayGrade", data);
-      }
+      },
     },
     userMasterData: {
       get() {
@@ -95,7 +95,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserMasterData", data);
-      }
+      },
     },
     showNavDrawer: {
       get() {
@@ -104,7 +104,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setshownavDrawer", data);
-      }
+      },
     },
     showProfileDialog: {
       get() {
@@ -113,13 +113,13 @@ export default {
       },
       set(data) {
         this.$store.commit("setShowProfileDialog", data);
-      }
-    }
+      },
+    },
   },
   watch: {
     userData() {
       this.temp = this.userData;
-    }
+    },
   },
   methods: {
     getData() {
@@ -147,13 +147,14 @@ export default {
         "userPayGrade",
         "userDepartmentId",
         "userDivision",
-        "businessUnit"
+        "businessUnit",
       ]),
         this.oc(this.$refs.tree, this.orgChartData, null);
     },
 
     exportUserProfile(nodeId) {
       var nodeData = this.chart.get(nodeId);
+      // this.$router.push(`/profile/${nodeData.userId}/template-selection`);
       this.$store.commit("ShowProfileDialog", nodeData);
       console.log(nodeId);
     },
@@ -167,7 +168,7 @@ export default {
           !this.userMasterData[node.userManagerId])
       ) {
         var userNameInput = null;
-        var date1 = new Date(this.inputDate).toISOString();
+        var date1 = new Date(this.inputDate).getTime();
         if (!node.isRoot) {
           userNameInput = node.userId;
           this.isbuffered[node.userId] = false;
@@ -178,9 +179,9 @@ export default {
         this.$store
           .dispatch("testcall1", {
             userid: userNameInput,
-            date: date1
+            date: date1,
           })
-          .then(response => {
+          .then((response) => {
             if (response && response.length) {
               if (!node.isRoot) {
                 this.userMasterData[node.userId] = response.splice(
@@ -193,7 +194,7 @@ export default {
                 // userMasterData[node.userManagerId] = response.data.splice(1, response.data.length)
                 this.userMasterData[node.userManagerId] = response;
                 let index = this.userMasterData[node.userManagerId].findIndex(
-                  element => {
+                  (element) => {
                     return node.userId == element.userId;
                   }
                 );
@@ -201,7 +202,7 @@ export default {
                 console.log(index);
                 this.userMasterData[node.userManagerId] = this.userMasterData[
                   node.userManagerId
-                ].filter(function(item) {
+                ].filter(function (item) {
                   if (node.userId != item.userId) {
                     return item;
                   }
@@ -295,12 +296,12 @@ export default {
       }
       if (this.isbuffered[id] == true) {
         if (nodeData.isRoot) {
-          let index = this.orgChartData.findIndex(element => {
+          let index = this.orgChartData.findIndex((element) => {
             return nodeData.userId == element.userId;
           });
           if (index > -1) {
             this.orgChartData[index].isRoot = false;
-            let tagIndex = nodeData.tags.findIndex(element => {
+            let tagIndex = nodeData.tags.findIndex((element) => {
               return element == "RootNode";
             });
             this.orgChartData[index].tags.splice(tagIndex, 1);
@@ -381,11 +382,11 @@ export default {
         "background-color",
         "filter",
         "stroke-width",
-        "d"
+        "d",
       ];
       $.extend($.fn, {
-        makeCssInline: function() {
-          this.each(function(idx, el) {
+        makeCssInline: function () {
+          this.each(function (idx, el) {
             var style = el.style;
             var properties = [];
             for (var property in style) {
@@ -394,11 +395,9 @@ export default {
               }
             }
             this.style.cssText = properties.join(";");
-            $(this)
-              .children()
-              .makeCssInline();
+            $(this).children().makeCssInline();
           });
-        }
+        },
       });
     },
 
@@ -456,10 +455,10 @@ export default {
       var isCritical = false;
       var data = sender.get(node.id);
 
-      let resignedIndex = data.tags.findIndex(element => {
+      let resignedIndex = data.tags.findIndex((element) => {
         return element == "Resigned";
       });
-      let criticalIndex = data.tags.findIndex(element => {
+      let criticalIndex = data.tags.findIndex((element) => {
         return element == "Critical";
       });
       console.log(resignedIndex + criticalIndex);
@@ -498,7 +497,7 @@ export default {
       }
     },
 
-    oc: function(domEl, x, orderBy) {
+    oc: function (domEl, x, orderBy) {
       OrgChart.templates.myTemplate = Object.assign(
         {},
         OrgChart.templates.rony
@@ -549,7 +548,7 @@ export default {
         toolbar: {
           zoom: true,
           fit: true,
-          expandAll: false
+          expandAll: false,
         },
         showXScroll: OrgChart.scroll.visible,
         showYScroll: OrgChart.scroll.visible,
@@ -561,23 +560,23 @@ export default {
           Export: {
             text: "Export Chart",
             icon: OrgChart.icon.svg(18, 18),
-            onClick: this.download
-          }
+            onClick: this.download,
+          },
         },
         nodeMenu: {
           levelDown: {
             text: "Level Down",
             icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
-            onClick: this.addChildDataToChart
+            onClick: this.addChildDataToChart,
           },
           exportProfile: {
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
-            onClick: this.exportUserProfile
+            onClick: this.exportUserProfile,
           },
           edit: {
-            text: "Edit"
-          }
+            text: "Edit",
+          },
         },
 
         tags: {
@@ -586,21 +585,21 @@ export default {
               levelUp: {
                 text: "Level Up",
                 icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
-                onClick: this.addChildDataToChart
+                onClick: this.addChildDataToChart,
               },
               exportProfile: {
                 text: "View Profile",
                 icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
-                onClick: this.exportUserProfile
+                onClick: this.exportUserProfile,
               },
               edit: {
-                text: "Edit"
-              }
-            }
+                text: "Edit",
+              },
+            },
           },
           assistant: {
-            template: "belinda"
-          }
+            template: "belinda",
+          },
         },
 
         template: "myTemplate",
@@ -617,8 +616,8 @@ export default {
           field_8: "jobLevel",
           field_9: "positionVacant",
           img_0: "img",
-          field_10: this.binder
-        }
+          field_10: this.binder,
+        },
       });
       this.chart.fit();
       this.chart.on("click", (sender, args) => {
@@ -666,13 +665,13 @@ export default {
         if (skipBlurLink.indexOf(id) == -1)
           linksElements[i].setAttribute("filter", "url(#f1)");
       }
-    }
+    },
   },
 
   mounted() {
     this.getData();
     // this.oc(this.$refs.tree, this.orgChartData);
-  }
+  },
 };
 </script>
 <style>
