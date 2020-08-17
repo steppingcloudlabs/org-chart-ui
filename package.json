@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@balkangraph/orgchart.js": "^6.2.63",
+    "@balkangraph/orgchart.js": "^7.1.98",
     "axios": "^0.19.2",
     "canvg": "^3.0.6",
     "core-js": "^3.6.4",

@@ -62,54 +62,55 @@ export default {
       drawer: false,
       mini: true,
       selectedItem: [],
-      selectedVacantItem: [0, 1],
+      selectedVacantItem: [0, 1, 2],
       selectedSortItem: [],
       fieldToDisplay: [0, 1, 2, 3],
       items: [
         {
           id: 999,
           name: "PayGrade",
-          children: [],
-        },
+          children: []
+        }
       ],
       itemVacant: [
         {
           id: 999,
-          name: "Vacant/Occupied",
+          name: "Filter",
           children: [
-            { id: 0, name: "Vacant", value: true },
-            { id: 1, name: "Occupied", value: false },
-          ],
-        },
+            { id: 0, name: "Vacant", value: "Vacant" },
+            { id: 1, name: "Occupied", value: "Occupied" },
+            { id: 2, name: "Resigned", value: "Resigned" }
+          ]
+        }
       ],
 
       fieldItems: [
         {
           id: 999,
-          name: "Fields",
+          name: " Display Fields",
           children: [
             { id: 0, name: "PayGrade", value: "userPayGrade" },
             { id: 1, name: "DepartmentId", value: "userDepartmentId" },
             { id: 2, name: "Division", value: "userDivision" },
             { id: 3, name: "businessUnit", value: "businessUnit" },
-            { id: 4, name: "Job Level", value: "jobLevel" },
-          ],
-        },
+            { id: 4, name: "Job Level", value: "jobLevel" }
+          ]
+        }
       ],
       sortBy: [
         {
           id: 999,
           name: "Sort By",
-          children: [{ id: 0, name: "PayGrade", value: "userPayGrade" }],
-        },
-      ],
+          children: [{ id: 0, name: "PayGrade", value: "userPayGrade" }]
+        }
+      ]
     };
   },
   props: {
     chartData: {
       type: Array,
-      default: null,
-    },
+      default: null
+    }
   },
   computed: {
     userPayGrade: {
@@ -119,7 +120,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserPayGrade", data);
-      },
+      }
     },
     showNavDrawer: {
       get() {
@@ -128,13 +129,13 @@ export default {
       },
       set(data) {
         this.$store.commit("setshownavDrawer", data);
-      },
-    },
+      }
+    }
   },
   watch: {
     userPayGrade() {
       this.userGradeData();
-    },
+    }
   },
 
   methods: {
@@ -146,8 +147,8 @@ export default {
       console.log(this.selectedVacantItem);
       if (count > 1) {
         this.selectedVacantItem.pop();
-        setTimeout(function () {
-          alert("You can sort by one field only");
+        setTimeout(function() {
+          alert("You can Filter by one field only");
         }, 1000);
       }
     },
@@ -159,7 +160,7 @@ export default {
 
       if (count > 1) {
         this.selectedSortItem.pop();
-        setTimeout(function () {
+        setTimeout(function() {
           alert("You can sort by one field only");
         }, 1000);
       }
@@ -172,7 +173,7 @@ export default {
 
       if (count > 4) {
         this.fieldToDisplay.pop();
-        setTimeout(function () {
+        setTimeout(function() {
           alert("You can select upto 4 fields");
         }, 1000);
       }
@@ -197,18 +198,39 @@ export default {
       console.log(this.selectedItem);
     },
     filterapplied(orgChartData, filterArray, filterType) {
-      var newA = orgChartData.filter(function (item) {
-        if (filterArray.indexOf(item[filterType]) > -1) {
+      var newA = orgChartData.filter(function(item) {
+        if (
+          filterArray.indexOf(item[filterType]) > -1 ||
+          item["isRoot"] == true
+        ) {
           return item;
         }
       });
 
       return newA;
     },
+     filterappliedTags(orgChartData, filterArray, filterType) {
+       var test=[]
+      orgChartData.filter(function(item) {
+        for(var i=0;i<item[filterType].length;i++)
+        {
+           if (
+          filterArray.indexOf(item[filterType][i]) > -1 ||
+          item["isRoot"] == true
+        ) {
+          test.push(item);
+        }
+        }
+      
+      });
+
+       return test;
+    },
+
 
     applySort(sortValue, newB) {
       if (sortValue == "userPayGrade") {
-        newB = newB.map(function (element) {
+        newB = newB.map(function(element) {
           if (this.userPayGrade.indexOf(element.userPayGrade) > -1) {
             element["orderByPayGrade"] = this.userPayGrade.indexOf(
               element.userPayGrade
@@ -256,11 +278,7 @@ export default {
             this.itemVacant[0].children[this.selectedVacantItem[i]]["value"]
           );
         }
-        filteredData = this.filterapplied(
-          filteredData,
-          vacantFilter,
-          "positionVacant"
-        );
+        filteredData = this.filterappliedTags(filteredData, vacantFilter, "tags");
       }
       if (this.selectedSortItem.length) {
         console.log(this.selectedSortItem[0]);
@@ -272,24 +290,24 @@ export default {
       this.$emit("redraw", {
         output: filteredData,
         orderBy: sortValue,
-        fieldToDisplay: fields,
+        fieldToDisplay: fields
       });
     },
 
     reset() {
       this.selectedItem = [999];
 
-      this.selectedVacantItem = [0, 1];
+      this.selectedVacantItem = [0, 1, 2];
 
       this.selectedSortItem = [];
       this.fieldToDisplay = [0, 1, 2, 3];
 
       this.$emit("reset");
-    },
+    }
   },
   mounted() {
     this.userGradeData();
-  },
+  }
 };
 </script>
 <style >

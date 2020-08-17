@@ -7,7 +7,7 @@
     <v-container class="lighten-5">
       <v-row no-gutters>
         
-          <v-col class="ml-5 mr-5">
+          <v-col class="ml-5 mr-1">
             <v-card class="pa-2" style="box-shadow: none">
                 <!-- Profile with title -->
                 <div style="text-align:center" >

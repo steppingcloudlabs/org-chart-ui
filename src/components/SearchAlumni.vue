@@ -10,7 +10,7 @@
         rounded
         filled
         color="#F1F3F4"
-        label="Search User"
+        label="Begin Your Search"
         append-icon="search"
         item-text="defaultFullName"
         item-value="userId"

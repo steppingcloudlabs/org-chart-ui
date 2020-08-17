@@ -137,7 +137,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "SFPART041835",
+                        "companyId": "kalpatarugrp",
                         "userId": data.userid,
                         "effectiveDateTime": data.date
                     }
@@ -162,7 +162,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "SFPART041835",
+                        "companyId": "kalpatarugrp",
                         "userId": data.userid,
                         "effectiveDateTime": data.date
                     }
@@ -186,7 +186,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "SFPART041835",
+                        "companyId": "kalpatarugrp",
                         "searchKey": data
                     }
                 }).then((response) => {
@@ -207,7 +207,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "SFPART041835",
+                        "companyId": "kalpatarugrp",
                         "positionNumber": data
                     }
                 }).then((response) => {
@@ -228,7 +228,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "SFPART041835",
+                        "companyId": "kalpatarugrp",
                         "userId": data
                     }
                 }).then((response) => {

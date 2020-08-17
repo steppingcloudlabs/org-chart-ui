@@ -97,7 +97,7 @@
 
            </div>
            <p v-else style="text-align:center;font-size:15px;font-weight:400">
-             No Recruitment Raised 
+             No Requisition Raised 
            </p>
          </div>
         </v-expansion-panel-content>
