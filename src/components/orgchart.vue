@@ -30,11 +30,18 @@ export default {
       nodes: {},
       chart: {},
       isbuffered: [],
+      totalHeadCount: 0,
+      vacantCount: 0,
+      resignedCount: 0,
+      maleCount: 0,
+      femaleCount: 0,
+      gradecount: [],
+      gradeOccurence: [],
 
       fieldToDisplay: [
         "userPayGrade",
-        "userDepartmentId",
-        "userDivision",
+        "userDepartmentName",
+        "userDivisionName",
         "businessUnit"
       ],
       filter1: [],
@@ -134,19 +141,76 @@ export default {
         this.orgChartData = this.nodes;
         this.getPayGrade(this.orgChartData);
         this.oc(this.$refs.tree, this.orgChartData, null);
+        var str = "";
+        for (var j = 0; j < this.gradecount.length; j++) {
+          str +=
+            "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>" +
+            this.userPayGrade[j] +
+            "-" +
+            this.gradecount[j] +
+            "</p>";
+        }
+        var legent = document.createElement("div");
+        legent.setAttribute("id", "legendd");
+        legent.style.position = "absolute";
+        legent.style.top = "20px";
+        legent.style.left = "50px";
+        legent.style.color = "#2B81D6";
+        legent.style.border = "2px solid black";
+        legent.innerHTML =
+          "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>Total Head Count-" +
+          this.totalHeadCount +
+          "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Total Vacant Position-" +
+          this.vacantCount +
+          "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+          this.maleCount +
+          ":" +
+          this.femaleCount +
+          "</p>" +
+          str;
+        this.chart.element.appendChild(legent);
+        // this.gradeCounting()
       }
     },
 
     redraw(data) {
       this.fieldToDisplay = data.fieldToDisplay;
       this.oc(this.$refs.tree, data.output, data.orderBy);
+      var legent = document.createElement("div");
+      legent.setAttribute("id", "legendd");
+      legent.style.position = "absolute";
+      legent.style.top = "20px";
+      legent.style.left = "50px";
+      legent.style.color = "#2B81D6";
+      legent.style.border = "2px solid black";
+        var str = "";
+        for (var j = 0; j < this.gradecount.length; j++) {
+          str +=
+            "<p class='p2-1 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>" +
+            this.userPayGrade[j] +
+            "-" +
+            this.gradecount[j] +
+            "</p>";
+        }
+      legent.innerHTML =
+        "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>Total Head Count-" +
+        this.totalHeadCount +
+        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Total Vacant Position-" +
+        this.vacantCount +
+        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+        this.maleCount +
+        ":" +
+        this.femaleCount +
+        "</p>"+str;
+      this.chart.element.appendChild(legent);
+      this.gradeCounting();
     },
 
     reset() {
       (this.fieldToDisplay = [
         "userPayGrade",
-        "userDepartmentId",
-        "userDivision",
+        "userDepartmentName",
+        "userDivisionName",
         "businessUnit"
       ]),
         this.oc(this.$refs.tree, this.orgChartData, null);
@@ -230,27 +294,52 @@ export default {
           '><span class="checkmark"></span></label></li>';
       }
     },
+    gradeCounting() {
+      for (var i = 0; i < this.userPayGrade.length; i++) {
+        var g = this;
+        this.gradecount[i] = this.gradeOccurence.filter(function(item) {
+          return item === g.userPayGrade[i];
+        }).length;
+        console.log(this.gradecount);
+      }
+    },
     getPayGrade(orgChartData) {
       for (var i = 0; i < orgChartData.length; i++) {
         console.log(orgChartData[i].userPayGrade);
+        this.gradeOccurence.push(orgChartData[i].userPayGrade);
         if (this.userPayGrade.indexOf(orgChartData[i].userPayGrade) === -1) {
           this.userPayGrade.push(orgChartData[i].userPayGrade);
         }
       }
 
-      console.log(this.userPayGrade.sort());
+      console.log(this.userPayGrade);
+      this.gradeCounting();
     },
 
     addTags(nodes) {
       for (var i = 0; i < nodes.length; i++) {
+        this.totalHeadCount++;
         var node = nodes[i];
         switch (node.positionVacant) {
-          case true:
+          case true: {
             node.tags = ["Vacant"];
+            this.vacantCount++;
             break;
+          }
 
           case false:
             node.tags = ["Occupied"];
+            break;
+        }
+        switch (node.gender) {
+          case "M":
+            node.tags.push("male");
+            this.maleCount++;
+            break;
+
+          case "F":
+            node.tags.push("female");
+            this.femaleCount++;
             break;
         }
         node.tags.push(node.userPayGrade);
@@ -264,6 +353,7 @@ export default {
         if (node.resignationStatus == "On Notice Period") {
           node.tags.splice(node.tags.indexOf("Occupied"), 1);
           node.tags.push("Resigned");
+          this.resignedCount++;
         }
         if (node["positionVacant"] == false && node.img) {
           node["img"] = "data:image/jpg;base64," + node.img;
@@ -281,7 +371,7 @@ export default {
         nodes[3].tags.push("MediumImpact");
         nodes[3].tags.push("HighRisk");
       }
-
+      console.log(this.vacantCount);
       return nodes;
     },
 
@@ -344,6 +434,34 @@ export default {
       } else {
         alert("No Data!");
       }
+        var str = "";
+        for (var j = 0; j < this.gradecount.length; j++) {
+          str +=
+            "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>" +
+            this.userPayGrade[j] +
+            "-" +
+            this.gradecount[j] +
+            "</p>";
+        }
+      var legent = document.getElementById("legendd");
+
+      legent.innerHTML =
+        "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>Total Head Count-" +
+        this.totalHeadCount +
+        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Total Vacant Position-" +
+        this.vacantCount +
+        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+        this.maleCount +
+        ":" +
+        this.femaleCount +
+        "</p>"+str;
+      this.chart.element.appendChild(legent);
+    },
+    pdf() {
+      this.chart.exportPDF({
+        format: "A2",
+        footer: "My Footer. Page {current-page} of {total-pages}"
+      });
     },
 
     download() {
@@ -352,6 +470,8 @@ export default {
       var svg = document.getElementById("tree").innerHTML;
 
       svg = svg.substr(0, svg.indexOf("</svg>") + 6);
+      svg = svg.split("</svg>")[0];
+      svg += document.getElementById("legendd").innerHTML + "</svg>";
       console.log(svg);
       const canvas = document.createElement("canvas");
       canvas.height = 4000; //parseInt($("svg")[0].getAttribute("height")) * 40
@@ -519,6 +639,8 @@ export default {
         '<g><rect x="0" y="220" width="180" height="40"  fill="#03BFCB" rx="5" ry="5"></rect> </g>';
       OrgChart.templates.myTemplate.field_9 =
         '<g><line x1="1" y1="1" x2="179" y2="1"  /> </g>';
+      // OrgChart.templates.myTemplate.field_11 =
+      //   '<g><line x1="1" y1="260" x2="179" y2="260"  /> </g>';
       OrgChart.templates.myTemplate.img_0 =
         '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="50" y="20"  width="80" height="80"></image>';
       // OrgChart.templates.myTemplate.webcallMe = '<g  transform="translate(35,230)" class="flag"><path d="M18.344,16.174l-7.98-12.856c-0.172-0.288-0.586-0.288-0.758,0L1.627,16.217c0.339-0.543-0.603,0.668,0.384,0.682h15.991C18.893,16.891,18.167,15.961,18.344,16.174 M2.789,16.008l7.196-11.6l7.224,11.6H2.789z M10.455,7.552v3.561c0,0.244-0.199,0.445-0.443,0.445s-0.443-0.201-0.443-0.445V7.552c0-0.245,0.199-0.445,0.443-0.445S10.455,7.307,10.455,7.552M10.012,12.439c-0.733,0-1.33,0.6-1.33,1.336s0.597,1.336,1.33,1.336c0.734,0,1.33-0.6,1.33-1.336S10.746,12.439,10.012,12.439M10.012,14.221c-0.244,0-0.443-0.199-0.443-0.445c0-0.244,0.199-0.445,0.443-0.445s0.443,0.201,0.443,0.445C10.455,14.021,10.256,14.221,10.012,14.221"></path></g>'
@@ -563,6 +685,11 @@ export default {
             text: "Export Chart",
             icon: OrgChart.icon.svg(18, 18),
             onClick: this.download
+          },
+          pdf: {
+            text: "Export PDF",
+            icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
+            onClick: this.pdf
           }
         },
         nodeMenu: {
@@ -617,6 +744,7 @@ export default {
           field_7: this.field5_binding,
           field_8: "jobLevel",
           field_9: "positionVacant",
+          // field_11: "positionVacant",
           img_0: "img",
           field_10: this.binder
         }
@@ -631,6 +759,14 @@ export default {
         } else {
           this.showNodeProfile = !this.showNodeProfile;
         }
+      });
+
+      this.chart.on("exportstart", function(sender, args) {
+        args.content +=
+          '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
+
+        args.content += document.getElementById("myStyles").outerHTML;
+        args.content += document.getElementById("legendd").outerHTML;
       });
     },
     blur() {
@@ -676,125 +812,3 @@ export default {
   }
 };
 </script>
-<style>
-[node-id] rect {
-  fill: #231e39;
-  filter: none;
-}
-
-[node-id] g rect {
-  fill: #1f1a36;
-  filter: none;
-}
-
-[node-id] g line {
-  stroke: blue;
-  stroke-width: 3;
-}
-
-.node.Vacant g line {
-  stroke: rgb(255, 255, 0);
-  stroke-width: 3;
-}
-
-.node.GR-18 g line {
-  stroke: rgb(255, 0, 0);
-  stroke-width: 3;
-}
-
-.GR-18 path {
-  stroke: rgb(255, 0, 0) !important;
-  stroke-width: 2;
-}
-
-.GR-18 path:hover {
-  stroke: rgb(255, 0, 0) !important;
-  stroke-width: 2;
-}
-
-.node.GR-14 g line {
-  stroke: orange;
-  stroke-width: 3;
-}
-
-.GR-14 path {
-  stroke: orange !important;
-  stroke-width: 2;
-}
-
-.GR-14 path:hover {
-  stroke: orange !important;
-  stroke-width: 6;
-}
-
-.node.GR-17 g line {
-  stroke: green;
-  stroke-width: 3;
-}
-
-.GR-17 path {
-  stroke: green !important;
-  stroke-width: 2;
-}
-
-.GR-17 path:hover {
-  stroke: green !important;
-  stroke-width: 6;
-}
-
-[node-id] g path {
-  fill: "aqua";
-  filter: none;
-}
-
-[link-id] path {
-  stroke: blue;
-  cursor: pointer;
-}
-
-.Vacant path {
-  stroke: yellow !important;
-  stroke-dasharray: 5 !important;
-  stroke-width: 3;
-}
-
-.Vacant path:hover {
-  stroke: yellow !important;
-  stroke-dasharray: 5 !important;
-  stroke-width: 7;
-}
-
-.node.Vacant rect {
-  fill: #013565;
-  cursor: pointer;
-}
-
-.node.Vacant rect:hover .Vacant path {
-  stroke-width: 7 !important;
-}
-
-.node.assistant circle {
-  fill: rgb(74, 101, 114, 0.7);
-}
-
-.assistant path {
-  stroke: rgb(74, 101, 114) !important;
-  stroke-dasharray: 20, 10, 5, 5, 5, 10 !important;
-  stroke-width: 3;
-}
-
-.node.assistant g line {
-  stroke: #4e0d3a;
-  stroke-width: 3;
-}
-
-[control-expcoll-id] circle {
-  fill: #231e39;
-  stroke: #ffc809;
-}
-
-.body #tree > svg {
-  background-color: rgb(0, 0, 0, 0) !important;
-  height: 100%;
-}
-</style>

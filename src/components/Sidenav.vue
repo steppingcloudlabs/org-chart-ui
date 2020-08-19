@@ -36,6 +36,7 @@
           selected-color="red"
           :items="itemVacant"
           v-model="selectedVacantItem"
+          @input="validateVacant"
         ></v-treeview>
         <v-treeview
           selectable
@@ -62,7 +63,7 @@ export default {
       drawer: false,
       mini: true,
       selectedItem: [],
-      selectedVacantItem: [0, 1, 2],
+      selectedVacantItem: [],
       selectedSortItem: [],
       fieldToDisplay: [0, 1, 2, 3],
       items: [
@@ -89,11 +90,11 @@ export default {
           id: 999,
           name: " Display Fields",
           children: [
-            { id: 0, name: "PayGrade", value: "userPayGrade" },
-            { id: 1, name: "DepartmentId", value: "userDepartmentId" },
-            { id: 2, name: "Division", value: "userDivision" },
-            { id: 3, name: "businessUnit", value: "businessUnit" },
-            { id: 4, name: "Job Level", value: "jobLevel" }
+            { id: 0, name: "Pay Grade", value: "userPayGrade" },
+            { id: 1, name: "Department", value: "userDepartmentName" },
+            { id: 2, name: "Division", value: "userDivisionName" },
+            { id: 3, name: "business Unit", value: "businessUnit" },
+            { id: 4, name: "Location", value: "location" }
           ]
         }
       ],
@@ -209,24 +210,21 @@ export default {
 
       return newA;
     },
-     filterappliedTags(orgChartData, filterArray, filterType) {
-       var test=[]
+    filterappliedTags(orgChartData, filterArray, filterType) {
+      var test = [];
       orgChartData.filter(function(item) {
-        for(var i=0;i<item[filterType].length;i++)
-        {
-           if (
-          filterArray.indexOf(item[filterType][i]) > -1 ||
-          item["isRoot"] == true
-        ) {
-          test.push(item);
+        for (var i = 0; i < item[filterType].length; i++) {
+          if (
+            filterArray.indexOf(item[filterType][i]) > -1 ||
+            item["isRoot"] == true
+          ) {
+            test.push(item);
+          }
         }
-        }
-      
       });
 
-       return test;
+      return test;
     },
-
 
     applySort(sortValue, newB) {
       if (sortValue == "userPayGrade") {
@@ -278,7 +276,11 @@ export default {
             this.itemVacant[0].children[this.selectedVacantItem[i]]["value"]
           );
         }
-        filteredData = this.filterappliedTags(filteredData, vacantFilter, "tags");
+        filteredData = this.filterappliedTags(
+          filteredData,
+          vacantFilter,
+          "tags"
+        );
       }
       if (this.selectedSortItem.length) {
         console.log(this.selectedSortItem[0]);
@@ -297,7 +299,7 @@ export default {
     reset() {
       this.selectedItem = [999];
 
-      this.selectedVacantItem = [0, 1, 2];
+      this.selectedVacantItem = [];
 
       this.selectedSortItem = [];
       this.fieldToDisplay = [0, 1, 2, 3];
