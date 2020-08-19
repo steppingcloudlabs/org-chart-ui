@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+// const companyId = "SFPART041835"
+const companyId = "kalpatarugrp"
+// const companyId = "SFPART041835"
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -137,7 +141,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "kalpatarugrp",
+                        "companyId": companyId,
                         "userId": data.userid,
                         "effectiveDateTime": data.date
                     }
@@ -162,7 +166,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "kalpatarugrp",
+                        "companyId": companyId,
                         "userId": data.userid,
                         "effectiveDateTime": data.date
                     }
@@ -186,7 +190,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "kalpatarugrp",
+                        "companyId": companyId,
                         "searchKey": data
                     }
                 }).then((response) => {
@@ -207,7 +211,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "kalpatarugrp",
+                        "companyId": companyId,
                         "positionNumber": data
                     }
                 }).then((response) => {
@@ -228,7 +232,7 @@ export default new Vuex.Store({
                         "Content-Type": "application/json"
                     },
                     params: {
-                        "companyId": "kalpatarugrp",
+                        "companyId": companyId,
                         "userId": data
                     }
                 }).then((response) => {
