@@ -9,7 +9,7 @@
         solo-inverted
         rounded
         filled
-        color="#F1F3F4"
+        
         label="Begin Your Search"
         append-icon="search"
         item-text="defaultFullName"

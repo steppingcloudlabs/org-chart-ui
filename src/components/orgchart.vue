@@ -22,6 +22,7 @@ import profile from "@/components/profileDialog";
 import nodeProfile from "@/components/NodeProfile";
 import $ from "jquery";
 import Canvg from "canvg";
+//import imageToBase64 from "image-to-base64";
 
 export default {
   name: "tree",
@@ -129,6 +130,20 @@ export default {
     }
   },
   methods: {
+    getbase64(file) {
+      var canvas = document.createElement("CANVAS");
+      var img = document.createElement("img");
+      img.src = file;
+      var base;
+      img.onload = function() {
+        canvas.height = img.height;
+        canvas.width = img.width;
+        var dataURL = canvas.toDataURL("image/png");
+        base = dataURL;
+        canvas = null;
+      };
+      return base;
+    },
     getData() {
       if (this.userData) {
         console.log(this.userData);
@@ -142,13 +157,10 @@ export default {
         this.getPayGrade(this.orgChartData);
         this.oc(this.$refs.tree, this.orgChartData, null);
         var str = "";
-        for (var j = 0; j < this.gradecount.length; j++) {
-          str +=
-            "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>" +
-            this.userPayGrade[j] +
-            "-" +
-            this.gradecount[j] +
-            "</p>";
+        for (var j = 0; j < this.gradecount.length; j=j+2) {
+          str +="<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>"+this.userPayGrade[j] +
+            "-" +this.gradecount[j] +"</span><span class='ml-2'>"+this.userPayGrade[j+1] +
+            "-" + this.gradecount[j+1] +"</span></p>";
         }
         var legent = document.createElement("div");
         legent.setAttribute("id", "legendd");
@@ -156,19 +168,30 @@ export default {
         legent.style.top = "20px";
         legent.style.left = "50px";
         legent.style.color = "#2B81D6";
-        legent.style.border = "2px solid black";
+        legent.style.border = "1px solid black";
         legent.innerHTML =
-          "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>Total Head Count-" +
+          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
           this.totalHeadCount +
-          "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Total Vacant Position-" +
+          "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
           this.vacantCount +
-          "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+          "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
           this.maleCount +
           ":" +
           this.femaleCount +
           "</p>" +
           str;
         this.chart.element.appendChild(legent);
+
+        var leg = document.createElement("div");
+        leg.setAttribute("id", "legTag");
+        leg.style.position = "absolute";
+        leg.style.top = "20px";
+        leg.style.right = "150px";
+        leg.style.color = "#2B81D6";
+        //leg.style.border = "1px solid black";
+        leg.innerHTML =
+          '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
+        this.chart.element.appendChild(leg);
         // this.gradeCounting()
       }
     },
@@ -182,28 +205,38 @@ export default {
       legent.style.top = "20px";
       legent.style.left = "50px";
       legent.style.color = "#2B81D6";
+      legent.style.width = "50px";
       legent.style.border = "2px solid black";
-        var str = "";
-        for (var j = 0; j < this.gradecount.length; j++) {
-          str +=
-            "<p class='p2-1 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>" +
-            this.userPayGrade[j] +
-            "-" +
-            this.gradecount[j] +
-            "</p>";
-        }
+      var str = "";
+      for (var j = 0; j < this.gradecount.length; j=j+2) {
+        str +=
+                  str +="<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>"+this.userPayGrade[j] +
+            "-" +this.gradecount[j] +"</span><span class='ml-2'>"+this.userPayGrade[j+1] +
+            "-" + this.gradecount[j+1] +"</span></p>";
+      }
       legent.innerHTML =
-        "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>Total Head Count-" +
+        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
         this.totalHeadCount +
-        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Total Vacant Position-" +
+        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
         this.vacantCount +
-        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
         this.maleCount +
         ":" +
         this.femaleCount +
-        "</p>"+str;
+        "</p>" +
+        str;
       this.chart.element.appendChild(legent);
-      this.gradeCounting();
+      //this.gradeCounting();
+      var leg = document.createElement("div");
+      leg.setAttribute("id", "legTag");
+      leg.style.position = "absolute";
+      leg.style.top = "20px";
+      leg.style.right = "50px";
+      leg.style.color = "#2B81D6";
+      //leg.style.border = "1px solid black";
+      leg.innerHTML =
+        '<div style="font-size:8px"><div ><div class="mr-1 id="UCgrade"></div> UC</div><div><div class="mr-1 id="Mgrade"></div>M1-M5</div><div><div id="Sgrade" class="mr-1></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
+      this.chart.element.appendChild(leg);
     },
 
     reset() {
@@ -358,9 +391,9 @@ export default {
         if (node["positionVacant"] == false && node.img) {
           node["img"] = "data:image/jpg;base64," + node.img;
         } else if (node["positionVacant"] == false && !node.img) {
-          node["img"] = "./assets/placeholder.png";
+          node["img"] = "https://i.ibb.co/zxjJ4TK/placeholder.png";
         } else {
-          node["img"] = "./assets/vacantposition.png";
+          node["img"] = "https://i.ibb.co/LShM7dV/vacantposition.png";
         }
         if (node.userId == "poojas") {
           node.tags.push("assistant");
@@ -434,32 +467,31 @@ export default {
       } else {
         alert("No Data!");
       }
-        var str = "";
-        for (var j = 0; j < this.gradecount.length; j++) {
-          str +=
-            "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>" +
-            this.userPayGrade[j] +
-            "-" +
-            this.gradecount[j] +
-            "</p>";
-        }
+      var str = "";
+      for (var j = 0; j < this.gradecount.length; j=j+2) {
+        str +="<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>"+this.userPayGrade[j] +
+            "-" +this.gradecount[j] +"</span><span class='ml-2'>"+this.userPayGrade[j+1] +
+            "-" + this.gradecount[j+1] +"</span></p>";
+      }
       var legent = document.getElementById("legendd");
 
       legent.innerHTML =
-        "<p class='pl-2 pr-2 pt-1' style='font-size:8px;margin-bottom:5px;'>Total Head Count-" +
+        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
         this.totalHeadCount +
-        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Total Vacant Position-" +
+        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
         this.vacantCount +
-        "</p><p class='pl-2 pr-2'style='font-size:8px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
         this.maleCount +
         ":" +
         this.femaleCount +
-        "</p>"+str;
+        "</p>" +
+        str;
       this.chart.element.appendChild(legent);
     },
     pdf() {
       this.chart.exportPDF({
         format: "A2",
+
         footer: "My Footer. Page {current-page} of {total-pages}"
       });
     },
@@ -584,10 +616,11 @@ export default {
         return element == "Critical";
       });
       console.log(resignedIndex + criticalIndex);
+
       var field =
-        '<image   xlink:href="/assets/caution.png" x="10" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
+        '<image     xlink:href="https://i.ibb.co/rxM0SM2/caution-Copy.png" x="10" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
       var flag_field =
-        '<image class="redflag"  xlink:href="/assets/flag.png" x="10" y="225" width="22" height="22"> <title>Resigned</title></image>';
+        '<image class="redflag" xlink:href="/assets/redflag.png" x="10" y="225" width="22" height="22"> <title>Resigned</title></image>';
       if (resignedIndex > -1) {
         isResigned = true;
       }
@@ -596,23 +629,23 @@ export default {
       }
       if (isResigned && isCritical) {
         field =
-          '<image   xlink:href="/assets/caution.png" x="35" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
+          '<image   xlink:href="https://i.ibb.co/FWZTmXh/resign-Copy.png" x="35" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
         flag_field =
-          '<image class="redflag"  xlink:href="/assets/redflag.png" x="10" y="230" width="22" height="22"> <title>Impact of loss</title></image>';
+          '<image class="redflag" xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="10" y="230" width="22" height="22"> <title>Impact of loss</title></image>';
 
         return field + flag_field;
       } else if (isResigned) {
         flag_field =
-          '<image class="redflag"  xlink:href="/assets/yellowflag.png" x="10" y="225" width="22" height="22"> <title>Impact of Loss</title></image>';
+          '<image class="redflag"  xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="10" y="225" width="22" height="22"> <title>Impact of Loss</title></image>';
         var field1 =
-          '<image   xlink:href="/assets/greenface.png" x="35" y="225" width="22" height="22"> <title>Risk of Loss</title></image>';
+          '<image   xlink:href="https://i.ibb.co/wSZNKXY/yellowface.png" x="35" y="225" width="22" height="22"> <title>Risk of Loss</title></image>';
         var field2 =
-          '<image   xlink:href="/assets/resign.png" x="65" y="225" width="22" height="22"> <title>Resigned</title></image>';
+          '<image  xlink:href="https://i.ibb.co/FWZTmXh/resign-Copy.png" x="65" y="225" width="22" height="22"> <title>Resigned</title></image>';
 
         return flag_field + field1 + field2;
       } else if (isCritical) {
         var field5 =
-          '<image   xlink:href="/assets/redface.png" x="35" y="229" width="20" height="20"> <title>Risk of Loss</title></image>';
+          '<image  xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="35" y="229" width="20" height="20"> <title>Risk of Loss</title></image>';
         return field + field5;
       } else {
         return null;
@@ -625,7 +658,7 @@ export default {
         OrgChart.templates.rony
       );
       OrgChart.templates.myTemplate.field_0 =
-        '<text width="200" text-overflow="ellipsis" style="font-size: 12px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
+        '<text width="200" text-overflow="ellipsis" style="font-size: 11px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
       OrgChart.templates.myTemplate.field_8 =
         '<text text-overflow="ellipsis" style="font-size: 12px;" fill="white" x="155" y="130" text-anchor="middle">({val})</text>';
       OrgChart.templates.myTemplate.field_1 =
@@ -690,6 +723,9 @@ export default {
             text: "Export PDF",
             icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
             onClick: this.pdf
+          },
+          png: {
+            text: "Export PNG"
           }
         },
         nodeMenu: {
@@ -752,10 +788,14 @@ export default {
       this.chart.fit();
       this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);
+
+        var data1 = sender.get(args.node.pid);
+
         this.selectedId = data.id;
         this.blur();
         if (!this.showNodeProfile) {
           this.$store.commit("ShowNodeProfile", data);
+          this.$store.commit("parentNodeData", data1);
         } else {
           this.showNodeProfile = !this.showNodeProfile;
         }
@@ -767,6 +807,7 @@ export default {
 
         args.content += document.getElementById("myStyles").outerHTML;
         args.content += document.getElementById("legendd").outerHTML;
+         args.content += document.getElementById("legTag").outerHTML;
       });
     },
     blur() {

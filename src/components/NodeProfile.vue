@@ -27,12 +27,16 @@
            <table>
         <tbody style="font-size:15px">
           <tr>
+            <td style="font-weight:600">User Id:</td>
+            <td style="font-weight:400">{{nodeData.userId}}</td>
+          </tr>
+           <tr>
             <td style="font-weight:600">Department:</td>
-            <td style="font-weight:400">{{nodeData.department}}</td>
+            <td style="font-weight:400">{{nodeData.userDepartmentName}}</td>
           </tr>
             <tr>
             <td style="font-weight:600">Business Unit:</td>
-            <td style="font-weight:400">{{nodeData.businessUnit}}</td>
+            <td style="font-weight:400">{{nodeData.businessUnitName}}</td>
           </tr>
            
             <tr>
@@ -41,12 +45,15 @@
           </tr>
            <tr>
             <td style="font-weight:600">Division:</td>
-            <td style="font-weight:400">{{nodeData.userDivision}}</td>
+            <td style="font-weight:400">{{nodeData.userDivisionName}}</td>
           </tr>
            <tr>
             <td style="font-weight:600">Manager:</td>
-            <td style="font-weight:400">{{nodeData.userManagerId}}</td>
+            <td style="font-weight:400" v-if="nodeData.isRoot==true">{{nodeData.userManagerId}}</td>
+            <td style="font-weight:400" v-else-if="nodeData.userManagerId==parentData.userId">{{nodeData.userManagerId}}</td>
+             <td style="font-weight:400" v-else>{{nodeData.userManagerId}}(Reports to different manager)</td>
           </tr>
+           
         </tbody>
     </table>
          </div>
@@ -133,6 +140,12 @@
       },
       set(data) {
         this.$store.commit("setNodeData", data);
+      }
+    },
+     parentData: {
+      get() {
+        return this.$store.getters.getparentData;
+        // return true;
       }
     },
     },

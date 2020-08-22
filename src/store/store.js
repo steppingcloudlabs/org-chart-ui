@@ -20,6 +20,7 @@ export default new Vuex.Store({
         profileData: null,
         showLoading: false,
         nodeData: null,
+        parentData:null,
         showNodeProfile: false,
         empProfileData: {},
         isEmployeeDataFetched: "Not Fetched"
@@ -75,6 +76,9 @@ export default new Vuex.Store({
             state.showNodeProfile = true,
                 state.nodeData = data
         },
+        parentNodeData: (state, data) => {
+             state.parentData = data
+        },
         setNodeData: (state, data) => {
             state.nodeData = data
         },
@@ -89,6 +93,9 @@ export default new Vuex.Store({
     getters: {
         getuserData: (state) => {
             return state.userData
+        },
+        getparentData: (state) => {
+            return state.parentData
         },
         getuserPayGrade: (state) => {
             return state.userPayGrade
