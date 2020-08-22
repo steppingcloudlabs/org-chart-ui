@@ -12,17 +12,15 @@
         
         label="Begin Your Search"
         append-icon="search"
-        item-text="defaultFullName"
+        item-text="userNav.defaultFullName"
         item-value="userId"
         @change="getData()"
       >
         <template v-slot:item="data">
           <template>
             <v-list-item-content>
-              <v-list-item-title
-                v-html="data.item.defaultFullName"
-              ></v-list-item-title>
-              <v-list-item-subtitle v-html="data.item.userId"></v-list-item-subtitle>
+              <v-list-item-title v-html="data.item.userNav.defaultFullName"></v-list-item-title>
+              <v-list-item-subtitle v-html="data.item.userNav.userId"></v-list-item-subtitle>
             </v-list-item-content>
           </template>
         </template>
@@ -39,7 +37,7 @@ export default {
       userList: [],
       isLoading: false,
       search: "",
-      searchUser: null
+      searchUser: null,
     };
   },
   watch: {
@@ -59,21 +57,21 @@ export default {
 
       this.$store
         .dispatch("getAllUser", data)
-        .then(response => {
+        .then((response) => {
           this.userList = response;
 
           console.log(this.userList);
         })
         .finally(() => (this.isLoading = false));
-     }
+    },
   },
 
   methods: {
     getData() {
-      let searchData=this.search
-      this.search=""
-      this.$emit("getUserData",searchData);
-     
+      let searchData = this.search;
+      this.search = "";
+      this.$emit("getUserData", searchData);
+
       // this.$store.dispatch("testcall", data).then(response => {
       //   var nodes = response;
       //   console.log(nodes);
@@ -90,8 +88,8 @@ export default {
       // drawOrgChart(orgChartData, null)
       // appendChild(orgChartData)
       // });
-    }
-  }
+    },
+  },
 };
 </script>
 
