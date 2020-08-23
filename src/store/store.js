@@ -20,7 +20,7 @@ export default new Vuex.Store({
         profileData: null,
         showLoading: false,
         nodeData: null,
-        parentData:null,
+        parentData: null,
         showNodeProfile: false,
         empProfileData: {},
         isEmployeeDataFetched: "Not Fetched"
@@ -77,7 +77,7 @@ export default new Vuex.Store({
                 state.nodeData = data
         },
         parentNodeData: (state, data) => {
-             state.parentData = data
+            state.parentData = data
         },
         setNodeData: (state, data) => {
             state.nodeData = data
@@ -150,6 +150,7 @@ export default new Vuex.Store({
                     params: {
                         "companyId": companyId,
                         "userId": data.userid,
+                        "position": data.position,
                         "effectiveDateTime": data.date
                     }
                 }).then((response) => {
@@ -175,6 +176,7 @@ export default new Vuex.Store({
                     params: {
                         "companyId": companyId,
                         "userId": data.userid,
+                        "position": data.position,
                         "effectiveDateTime": data.date
                     }
                 }).then((response) => {

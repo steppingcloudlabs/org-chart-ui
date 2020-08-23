@@ -9,7 +9,6 @@
         solo-inverted
         rounded
         filled
-        
         label="Begin Your Search"
         append-icon="search"
         item-text="userNav.defaultFullName"
@@ -70,7 +69,10 @@ export default {
     getData() {
       let searchData = this.search;
       this.search = "";
-      this.$emit("getUserData", searchData);
+      let userObj = this.userList.find((element) => {
+        return searchData == element.userId;
+      });
+      this.$emit("getUserData", userObj);
 
       // this.$store.dispatch("testcall", data).then(response => {
       //   var nodes = response;

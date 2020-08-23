@@ -128,7 +128,8 @@ export default {
       this.showLoading = true;
       this.$store
         .dispatch("testcall", {
-          userid: data,
+          userid: data.userId,
+          position: data.position,
           date: date1,
         })
         .then((response) => {

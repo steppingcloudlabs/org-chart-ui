@@ -43,7 +43,7 @@ export default {
         "userPayGrade",
         "userDepartmentName",
         "userDivisionName",
-        "businessUnit"
+        "businessUnit",
       ],
       filter1: [],
       orgChartData: [],
@@ -51,13 +51,13 @@ export default {
       field1: "true",
 
       selectedId: null,
-      temp: {}
+      temp: {},
     };
   },
   components: {
     Sidenav,
     profile,
-    nodeProfile
+    nodeProfile,
   },
   computed: {
     showNodeProfile: {
@@ -67,7 +67,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setshowNodeProfile", data);
-      }
+      },
     },
     inputDate: {
       get() {
@@ -76,7 +76,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setinputDate", data);
-      }
+      },
     },
     userData: {
       get() {
@@ -85,7 +85,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserData", data);
-      }
+      },
     },
     userPayGrade: {
       get() {
@@ -94,7 +94,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserPayGrade", data);
-      }
+      },
     },
     userMasterData: {
       get() {
@@ -103,7 +103,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserMasterData", data);
-      }
+      },
     },
     showNavDrawer: {
       get() {
@@ -112,7 +112,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setshownavDrawer", data);
-      }
+      },
     },
     showProfileDialog: {
       get() {
@@ -121,13 +121,13 @@ export default {
       },
       set(data) {
         this.$store.commit("setShowProfileDialog", data);
-      }
-    }
+      },
+    },
   },
   watch: {
     userData() {
       this.temp = this.userData;
-    }
+    },
   },
   methods: {
     getbase64(file) {
@@ -135,7 +135,7 @@ export default {
       var img = document.createElement("img");
       img.src = file;
       var base;
-      img.onload = function() {
+      img.onload = function () {
         canvas.height = img.height;
         canvas.width = img.width;
         var dataURL = canvas.toDataURL("image/png");
@@ -157,10 +157,17 @@ export default {
         this.getPayGrade(this.orgChartData);
         this.oc(this.$refs.tree, this.orgChartData, null);
         var str = "";
-        for (var j = 0; j < this.gradecount.length; j=j+2) {
-          str +="<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>"+this.userPayGrade[j] +
-            "-" +this.gradecount[j] +"</span><span class='ml-2'>"+this.userPayGrade[j+1] +
-            "-" + this.gradecount[j+1] +"</span></p>";
+        for (var j = 0; j < this.gradecount.length; j = j + 2) {
+          str +=
+            "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+            this.userPayGrade[j] +
+            "-" +
+            this.gradecount[j] +
+            "</span><span class='ml-2'>" +
+            this.userPayGrade[j + 1] +
+            "-" +
+            this.gradecount[j + 1] +
+            "</span></p>";
         }
         var legent = document.createElement("div");
         legent.setAttribute("id", "legendd");
@@ -208,11 +215,17 @@ export default {
       legent.style.width = "50px";
       legent.style.border = "2px solid black";
       var str = "";
-      for (var j = 0; j < this.gradecount.length; j=j+2) {
-        str +=
-                  str +="<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>"+this.userPayGrade[j] +
-            "-" +this.gradecount[j] +"</span><span class='ml-2'>"+this.userPayGrade[j+1] +
-            "-" + this.gradecount[j+1] +"</span></p>";
+      for (var j = 0; j < this.gradecount.length; j = j + 2) {
+        str += str +=
+          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+          this.userPayGrade[j] +
+          "-" +
+          this.gradecount[j] +
+          "</span><span class='ml-2'>" +
+          this.userPayGrade[j + 1] +
+          "-" +
+          this.gradecount[j + 1] +
+          "</span></p>";
       }
       legent.innerHTML =
         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
@@ -244,7 +257,7 @@ export default {
         "userPayGrade",
         "userDepartmentName",
         "userDivisionName",
-        "businessUnit"
+        "businessUnit",
       ]),
         this.oc(this.$refs.tree, this.orgChartData, null);
     },
@@ -265,20 +278,24 @@ export default {
           !this.userMasterData[node.userManagerId])
       ) {
         var userNameInput = null;
+        var userPosition = null;
         var date1 = new Date(this.inputDate).getTime();
         if (!node.isRoot) {
           userNameInput = node.userId;
+          userPosition = node.id;
           this.isbuffered[node.userId] = false;
         } else {
           userNameInput = node.userManagerId;
+          userPosition = node.pid;
           this.isbuffered[node.userManagerId] = false;
         }
         this.$store
           .dispatch("testcall1", {
             userid: userNameInput,
-            date: date1
+            position: userPosition,
+            date: date1,
           })
-          .then(response => {
+          .then((response) => {
             if (response && response.length) {
               if (!node.isRoot) {
                 this.userMasterData[node.userId] = response.splice(
@@ -291,7 +308,7 @@ export default {
                 // userMasterData[node.userManagerId] = response.data.splice(1, response.data.length)
                 this.userMasterData[node.userManagerId] = response;
                 let index = this.userMasterData[node.userManagerId].findIndex(
-                  element => {
+                  (element) => {
                     return node.userId == element.userId;
                   }
                 );
@@ -299,7 +316,7 @@ export default {
                 console.log(index);
                 this.userMasterData[node.userManagerId] = this.userMasterData[
                   node.userManagerId
-                ].filter(function(item) {
+                ].filter(function (item) {
                   if (node.userId != item.userId) {
                     return item;
                   }
@@ -330,7 +347,7 @@ export default {
     gradeCounting() {
       for (var i = 0; i < this.userPayGrade.length; i++) {
         var g = this;
-        this.gradecount[i] = this.gradeOccurence.filter(function(item) {
+        this.gradecount[i] = this.gradeOccurence.filter(function (item) {
           return item === g.userPayGrade[i];
         }).length;
         console.log(this.gradecount);
@@ -419,12 +436,12 @@ export default {
       }
       if (this.isbuffered[id] == true) {
         if (nodeData.isRoot) {
-          let index = this.orgChartData.findIndex(element => {
+          let index = this.orgChartData.findIndex((element) => {
             return nodeData.userId == element.userId;
           });
           if (index > -1) {
             this.orgChartData[index].isRoot = false;
-            let tagIndex = nodeData.tags.findIndex(element => {
+            let tagIndex = nodeData.tags.findIndex((element) => {
               return element == "RootNode";
             });
             this.orgChartData[index].tags.splice(tagIndex, 1);
@@ -468,10 +485,17 @@ export default {
         alert("No Data!");
       }
       var str = "";
-      for (var j = 0; j < this.gradecount.length; j=j+2) {
-        str +="<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>"+this.userPayGrade[j] +
-            "-" +this.gradecount[j] +"</span><span class='ml-2'>"+this.userPayGrade[j+1] +
-            "-" + this.gradecount[j+1] +"</span></p>";
+      for (var j = 0; j < this.gradecount.length; j = j + 2) {
+        str +=
+          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+          this.userPayGrade[j] +
+          "-" +
+          this.gradecount[j] +
+          "</span><span class='ml-2'>" +
+          this.userPayGrade[j + 1] +
+          "-" +
+          this.gradecount[j + 1] +
+          "</span></p>";
       }
       var legent = document.getElementById("legendd");
 
@@ -492,7 +516,7 @@ export default {
       this.chart.exportPDF({
         format: "A2",
 
-        footer: "My Footer. Page {current-page} of {total-pages}"
+        footer: "My Footer. Page {current-page} of {total-pages}",
       });
     },
 
@@ -534,11 +558,11 @@ export default {
         "background-color",
         "filter",
         "stroke-width",
-        "d"
+        "d",
       ];
       $.extend($.fn, {
-        makeCssInline: function() {
-          this.each(function(idx, el) {
+        makeCssInline: function () {
+          this.each(function (idx, el) {
             var style = el.style;
             var properties = [];
             for (var property in style) {
@@ -547,11 +571,9 @@ export default {
               }
             }
             this.style.cssText = properties.join(";");
-            $(this)
-              .children()
-              .makeCssInline();
+            $(this).children().makeCssInline();
           });
-        }
+        },
       });
     },
 
@@ -609,10 +631,10 @@ export default {
       var isCritical = false;
       var data = sender.get(node.id);
 
-      let resignedIndex = data.tags.findIndex(element => {
+      let resignedIndex = data.tags.findIndex((element) => {
         return element == "Resigned";
       });
-      let criticalIndex = data.tags.findIndex(element => {
+      let criticalIndex = data.tags.findIndex((element) => {
         return element == "Critical";
       });
       console.log(resignedIndex + criticalIndex);
@@ -652,7 +674,7 @@ export default {
       }
     },
 
-    oc: function(domEl, x, orderBy) {
+    oc: function (domEl, x, orderBy) {
       OrgChart.templates.myTemplate = Object.assign(
         {},
         OrgChart.templates.rony
@@ -705,7 +727,7 @@ export default {
         toolbar: {
           zoom: true,
           fit: true,
-          expandAll: false
+          expandAll: false,
         },
         showXScroll: OrgChart.scroll.visible,
         showYScroll: OrgChart.scroll.visible,
@@ -717,31 +739,31 @@ export default {
           Export: {
             text: "Export Chart",
             icon: OrgChart.icon.svg(18, 18),
-            onClick: this.download
+            onClick: this.download,
           },
           pdf: {
             text: "Export PDF",
             icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
-            onClick: this.pdf
+            onClick: this.pdf,
           },
           png: {
-            text: "Export PNG"
-          }
+            text: "Export PNG",
+          },
         },
         nodeMenu: {
           levelDown: {
             text: "Level Down",
             icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
-            onClick: this.addChildDataToChart
+            onClick: this.addChildDataToChart,
           },
           exportProfile: {
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
-            onClick: this.exportUserProfile
+            onClick: this.exportUserProfile,
           },
           edit: {
-            text: "Edit"
-          }
+            text: "Edit",
+          },
         },
 
         tags: {
@@ -750,21 +772,21 @@ export default {
               levelUp: {
                 text: "Level Up",
                 icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
-                onClick: this.addChildDataToChart
+                onClick: this.addChildDataToChart,
               },
               exportProfile: {
                 text: "View Profile",
                 icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
-                onClick: this.exportUserProfile
+                onClick: this.exportUserProfile,
               },
               edit: {
-                text: "Edit"
-              }
-            }
+                text: "Edit",
+              },
+            },
           },
           assistant: {
-            template: "belinda"
-          }
+            template: "belinda",
+          },
         },
 
         template: "myTemplate",
@@ -782,8 +804,8 @@ export default {
           field_9: "positionVacant",
           // field_11: "positionVacant",
           img_0: "img",
-          field_10: this.binder
-        }
+          field_10: this.binder,
+        },
       });
       this.chart.fit();
       this.chart.on("click", (sender, args) => {
@@ -801,13 +823,13 @@ export default {
         }
       });
 
-      this.chart.on("exportstart", function(sender, args) {
+      this.chart.on("exportstart", function (sender, args) {
         args.content +=
           '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
 
         args.content += document.getElementById("myStyles").outerHTML;
         args.content += document.getElementById("legendd").outerHTML;
-         args.content += document.getElementById("legTag").outerHTML;
+        args.content += document.getElementById("legTag").outerHTML;
       });
     },
     blur() {
@@ -844,12 +866,12 @@ export default {
         if (skipBlurLink.indexOf(id) == -1)
           linksElements[i].setAttribute("filter", "url(#f1)");
       }
-    }
+    },
   },
 
   mounted() {
     this.getData();
     // this.oc(this.$refs.tree, this.orgChartData);
-  }
+  },
 };
 </script>
