@@ -56,7 +56,7 @@
               <ul>
                 <li
                   v-for="(data, k) in empProfileData.bgEducation"
-                  :key="'bgEducation'+k"
+                  :key="'bgEducation' + k"
                 >{{ getEmployeeEducation(data) }}</li>
               </ul>
             </div>
@@ -71,7 +71,7 @@
                 <li
                   v-for="(data, k) in empProfileData.previousExperience"
                   :key="'previousExperience'+k"
-                >{{getPreviousExperience(data) }}</li>
+                >{{ getPreviousExperience(data) }}</li>
               </ol>
             </div>
             <div class="clearfix"></div>
@@ -625,19 +625,14 @@ export default {
       );
     },
     getEmployeeEducation(bgEducation) {
-      return (
+      let educationString =
         bgEducation.degree +
-        " in " +
-        bgEducation.major +
+        (bgEducation.major ? " in " + bgEducation.major : "") +
         " from " +
         bgEducation.school +
         ", " +
-        moment
-          .unix(
-            bgEducation.endDate.substring(6, bgEducation.endDate.length - 5)
-          )
-          .format("YYYY")
-      );
+        bgEducation.year;
+      return educationString;
     },
     getPreviousExperience(preExp) {
       return (
