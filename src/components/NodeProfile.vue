@@ -7,8 +7,9 @@
       hide-overlay
       width="350px"
       height="650px"
+      v-if="nodeData"
     >
-        <div>
+        <div >
         <v-img v-if="nodeData.img" width="100px" height="100px" class="mt-4" style="margin-left: auto;
         margin-right: auto;border-radius:50%" :src="nodeData.img"></v-img>
         </div>
@@ -49,9 +50,15 @@
           </tr>
            <tr>
             <td style="font-weight:600">Manager:</td>
+            <td style="font-weight:400" v-if="nodeData.isRoot==true">{{nodeData.userManagerName}}</td>
+            <td style="font-weight:400" v-else-if="nodeData.userManagerId==parentData.userId">{{nodeData.userManagerName}}</td>
+             <td style="font-weight:400" v-else>{{nodeData.userManagerName}}(Reports to different manager)</td>
+          </tr>
+           <tr>
+            <td style="font-weight:600">Manager Id:</td>
             <td style="font-weight:400" v-if="nodeData.isRoot==true">{{nodeData.userManagerId}}</td>
-            <td style="font-weight:400" v-else-if="nodeData.userManagerId==parentData.userId">{{nodeData.userManagerId}}</td>
-             <td style="font-weight:400" v-else>{{nodeData.userManagerId}}(Reports to different manager)</td>
+            <td style="font-weight:400" v-else-if="nodeData.userManagerId==parentData.userId">{{nodeData.userManagerI}}</td>
+             <td style="font-weight:400" v-else>{{nodeData.userManagerId}}</td>
           </tr>
            
         </tbody>

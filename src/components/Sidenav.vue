@@ -199,27 +199,57 @@ export default {
       console.log(this.selectedItem);
     },
     filterapplied(orgChartData, filterArray, filterType) {
-      var newA = orgChartData.filter(function(item) {
+      var test = [];
+     orgChartData.filter(function(item) {
         if (
           filterArray.indexOf(item[filterType]) > -1 ||
           item["isRoot"] == true
         ) {
-          return item;
+         test.push(item);
         }
+       else{
+          var dummy={}
+           var tags=[]
+           dummy.id=item.id
+           dummy.pid=item.pid
+           tags.push("dummy")
+           dummy.tags=tags
+         test.push(dummy)
+       }
+           
+        
       });
 
-      return newA;
+      return test;
     },
     filterappliedTags(orgChartData, filterArray, filterType) {
       var test = [];
+     
       orgChartData.filter(function(item) {
+         var flag=0
         for (var i = 0; i < item[filterType].length; i++) {
           if (
             filterArray.indexOf(item[filterType][i]) > -1 ||
             item["isRoot"] == true
           ) {
-            test.push(item);
+            flag=1
+            break
           }
+           
+        }
+        if(flag==0)
+        {
+           var dummy={}
+           var tags=[]
+           dummy.id=item.id
+           dummy.pid=item.pid
+           tags.push("dummy")
+           dummy.tags=tags
+           test.push(dummy)
+        }
+        else
+        {
+          test.push(item)
         }
       });
 
