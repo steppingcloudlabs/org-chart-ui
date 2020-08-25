@@ -31,6 +31,8 @@
 
       <v-container fluid style="font-size:12px">
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
+                <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
+                  <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
         <v-treeview
           selectable
           selected-color="red"
@@ -63,13 +65,29 @@ export default {
       drawer: false,
       mini: true,
       selectedItem: [],
+      selecteddepItem: [],
+      selecteddivItem: [],
       selectedVacantItem: [],
       selectedSortItem: [],
       fieldToDisplay: [0, 1, 2, 3],
       items: [
         {
           id: 999,
-          name: "PayGrade",
+          name: "Pay Grade",
+          children: []
+        }
+      ],
+       itemsdepartment: [
+        {
+          id: 999,
+          name: "Department",
+          children: []
+        }
+      ],
+      itemsdivision: [
+        {
+          id: 999,
+          name: "Division",
           children: []
         }
       ],
@@ -93,7 +111,7 @@ export default {
             { id: 0, name: "Pay Grade", value: "userPayGrade" },
             { id: 1, name: "Department", value: "userDepartmentName" },
             { id: 2, name: "Division", value: "userDivisionName" },
-            { id: 3, name: "business Unit", value: "businessUnit" },
+            { id: 3, name: "Business Unit", value: "businessUnit" },
             { id: 4, name: "Location", value: "location" }
           ]
         }
@@ -102,7 +120,7 @@ export default {
         {
           id: 999,
           name: "Sort By",
-          children: [{ id: 0, name: "PayGrade", value: "userPayGrade" }]
+          children: [{ id: 0, name: "Pay Grade", value: "userPayGrade" }]
         }
       ]
     };
@@ -123,6 +141,24 @@ export default {
         this.$store.commit("setuserPayGrade", data);
       }
     },
+     department: {
+      get() {
+        return this.$store.getters.getdepartment;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setdepartment", data);
+      }
+    },
+     division: {
+      get() {
+        return this.$store.getters.getdivision;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setdivision", data);
+      }
+    },
     showNavDrawer: {
       get() {
         return this.$store.getters.getshownavDrawer;
@@ -136,6 +172,12 @@ export default {
   watch: {
     userPayGrade() {
       this.userGradeData();
+    },
+    division() {
+      this.divData();
+    },
+     department() {
+      this.depData();
     }
   },
 
@@ -193,6 +235,42 @@ export default {
           item["id"] = index;
           item["name"] = undefined;
           this.selectedItem.push(index);
+          return item;
+        }
+      });
+      console.log(this.selectedItem);
+    },
+     divData() {
+      console.log(this.itemsdivision);
+      this.itemsdivision[0].children = this.division.map((data, index) => {
+        let item = {};
+        if (data != undefined) {
+          item["id"] = index;
+          item["name"] = data;
+          this.selecteddivItem.push(index);
+          return item;
+        } else {
+          item["id"] = index;
+          item["name"] = undefined;
+          this.selecteddivItem.push(index);
+          return item;
+        }
+      });
+      console.log(this.selecteddivItem);
+    },
+     depData() {
+      console.log(this.itemsdepartment);
+      this.itemsdepartment[0].children = this.department.map((data, index) => {
+        let item = {};
+        if (data != undefined) {
+          item["id"] = index;
+          item["name"] = data;
+          this.selecteddepItem.push(index);
+          return item;
+        } else {
+          item["id"] = index;
+          item["name"] = undefined;
+          this.selecteddepItem.push(index);
           return item;
         }
       });
@@ -275,6 +353,8 @@ export default {
 
     ApplyFilter() {
       var gradeFilter = [];
+      var divFilter=[];
+      var depFilter=[];
       var vacantFilter = [];
       var filteredData = this.chartData;
       var fields = [];
@@ -299,6 +379,37 @@ export default {
         );
         console.log(filteredData);
       }
+
+      if (this.selecteddepItem.length) {
+        for (i = 0; i < this.selecteddepItem.length; i++) {
+          depFilter.push(
+            this.itemsdepartment[0].children[this.selecteddepItem[i]]["name"]
+          );
+        }
+        console.log(depFilter);
+        filteredData = this.filterapplied(
+          filteredData,
+         depFilter,
+          "userDepartmentName"
+        );
+        console.log(filteredData);
+      }
+      if (this.selecteddivItem.length) {
+        for (i = 0; i < this.selecteddivItem.length; i++) {
+          divFilter.push(
+            this.itemsdivision[0].children[this.selecteddivItem[i]]["name"]
+          );
+        }
+        console.log(divFilter);
+        filteredData = this.filterapplied(
+          filteredData,
+          divFilter,
+          "userDivisionName"
+        );
+        console.log(filteredData);
+      }
+
+
 
       if (this.selectedVacantItem.length) {
         for (i = 0; i < this.selectedVacantItem.length; i++) {

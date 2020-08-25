@@ -96,6 +96,24 @@ export default {
         this.$store.commit("setuserPayGrade", data);
       }
     },
+    department: {
+      get() {
+        return this.$store.getters.getdepartment;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setdepartment", data);
+      }
+    },
+    division: {
+      get() {
+        return this.$store.getters.getdivision;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setdivision", data);
+      }
+    },
     userMasterData: {
       get() {
         return this.$store.getters.getuserMasterData;
@@ -169,17 +187,16 @@ export default {
             this.gradecount[j + 1] +
             "</span>";
 
-             if(this.gradecount[j + 3])
-        {
-          str+="<span class='ml-2'>" +
-          this.userPayGrade[j + 2] +
-          "-" +
-          this.gradecount[j + 2] +
-          "</span></p>"
-        }
-        else{
-          str+="</p>"
-        }
+          if (this.gradecount[j + 3]) {
+            str +=
+              "<span class='ml-2'>" +
+              this.userPayGrade[j + 2] +
+              "-" +
+              this.gradecount[j + 2] +
+              "</span></p>";
+          } else {
+            str += "</p>";
+          }
         }
         var legent = document.createElement("div");
         legent.setAttribute("id", "legendd");
@@ -229,7 +246,7 @@ export default {
       legent.style.border = "2px solid black";
       var str = "";
       for (var j = 0; j < this.gradecount.length; j = j + 3) {
-        str += 
+        str +=
           "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
           this.userPayGrade[j] +
           "-" +
@@ -239,16 +256,15 @@ export default {
           "-" +
           this.gradecount[j + 1] +
           "</span>";
-           if(this.gradecount[j + 3])
-        {
-          str+="<span class='ml-2'>" +
-          this.userPayGrade[j + 2] +
-          "-" +
-          this.gradecount[j + 2] +
-          "</span></p>"
-        }
-        else{
-          str+="</p>"
+        if (this.gradecount[j + 3]) {
+          str +=
+            "<span class='ml-2'>" +
+            this.userPayGrade[j + 2] +
+            "-" +
+            this.gradecount[j + 2] +
+            "</span></p>";
+        } else {
+          str += "</p>";
         }
       }
       legent.innerHTML =
@@ -296,20 +312,19 @@ export default {
           "-" +
           this.gradecount[j + 1] +
           "</span>";
-        if(this.gradecount[j + 3])
-        {
-          str+="<span class='ml-2'>" +
-          this.userPayGrade[j + 2] +
-          "-" +
-          this.gradecount[j + 2] +
-          "</span></p>"
-        }
-        else{
-          str+="</p>"
+        if (this.gradecount[j + 3]) {
+          str +=
+            "<span class='ml-2'>" +
+            this.userPayGrade[j + 2] +
+            "-" +
+            this.gradecount[j + 2] +
+            "</span></p>";
+        } else {
+          str += "</p>";
         }
       }
-       var legent = document.createElement("div");
-       legent.setAttribute("id", "legendd");
+      var legent = document.createElement("div");
+      legent.setAttribute("id", "legendd");
       legent.style.position = "absolute";
       legent.style.top = "20px";
       legent.style.left = "50px";
@@ -438,6 +453,14 @@ export default {
         this.gradeOccurence.push(orgChartData[i].userPayGrade);
         if (this.userPayGrade.indexOf(orgChartData[i].userPayGrade) === -1) {
           this.userPayGrade.push(orgChartData[i].userPayGrade);
+        }
+        if (this.division.indexOf(orgChartData[i].userDivisionName) === -1) {
+          this.division.push(orgChartData[i].userDivisionName);
+        }
+        if (
+          this.department.indexOf(orgChartData[i].userDepartmentName) === -1
+        ) {
+          this.department.push(orgChartData[i].userDepartmentName);
         }
       }
 
@@ -575,16 +598,15 @@ export default {
           "-" +
           this.gradecount[j + 1] +
           "</span>";
-           if(this.gradecount[j + 3])
-        {
-          str+="<span class='ml-2'>" +
-          this.userPayGrade[j + 2] +
-          "-" +
-          this.gradecount[j + 2] +
-          "</span></p>"
-        }
-        else{
-          str+="</p>"
+        if (this.gradecount[j + 3]) {
+          str +=
+            "<span class='ml-2'>" +
+            this.userPayGrade[j + 2] +
+            "-" +
+            this.gradecount[j + 2] +
+            "</span></p>";
+        } else {
+          str += "</p>";
         }
       }
       var legent = document.getElementById("legendd");

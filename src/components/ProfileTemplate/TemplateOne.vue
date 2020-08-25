@@ -23,16 +23,16 @@
                   style="width: 16%;"
                   class="table-value"
                   colspan="3"
-                >{{profileBasicData.positionTitle}}</td>
+                >{{profileBasicData.positionTitle}}({{profileBasicData.pid}})</td>
               </tr>
               <tr>
-                <td style="width: 15%;" class="table-heading">Designation</td>
+                <td style="width: 15%;" class="table-heading">Manager</td>
                 <td
                   id="emp-profile-designation"
                   style="width: 16%;"
                   class="table-value"
                   colspan="3"
-                >{{profileBasicData.jobLevel}}</td>
+                >{{profileBasicData.userManagerName}}</td>
               </tr>
               <tr>
                 <td style="width: 15%;" class="table-heading">Pay Grade</td>
@@ -40,9 +40,9 @@
                   id="emp-profile-dob"
                   style="width: 16%;"
                   class="table-value"
-                >{{profileBasicData.userPayGrade}}</td>
+                >{{profileBasicData.userPayGradeName}}</td>
                 <td style="width: 15%;" class="table-heading">Division</td>
-                <td style="width: 16%;" class="table-value">{{profileBasicData.userDivision}}</td>
+                <td style="width: 16%;" class="table-value">{{profileBasicData.userDivisionName}}</td>
               </tr>
             </tbody>
           </table>
@@ -76,7 +76,7 @@
             </div>
             <div class="clearfix"></div>
           </div>
-          <div class="section-wrapper">
+          <div class="section-wrapper" v-if="empProfileData.insideExperience.length">
             <div class="heading-section">
               <p class="table-heading">Re-Work Experience</p>
             </div>
@@ -101,78 +101,13 @@
             <table class="performance-table">
               <tbody>
                 <tr>
-                  <td style="width:60%" class="table-heading">RE Behaviours</td>
-                  <td
-                    style="width:10%; text-align: center; text-align:center"
-                    class="table-heading"
-                    colspan="4"
-                  >Levels</td>
+                  <th class="table-heading" style="width:65%">Competency</th>
+                  <th class="text-left table-heading">Ratings</th>
                 </tr>
-                <tr>
-                  <td style="width:60%"></td>
-                  <td style="width:10%; text-align: center" class="table-heading">1</td>
-                  <td style="width:10%; text-align: center" class="table-heading">2</td>
-                  <td style="width:10%; text-align: center" class="table-heading">3</td>
-                  <td style="width:10%; text-align: center" class="table-heading">4</td>
-                </tr>
-                <tr>
-                  <td class="table-heading" style="width:60%">Empowering Leadership</td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-one-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-two-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-three-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-four-color"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-heading" style="width:60%">Customer Advocacy</td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-one-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-two-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-three-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-four-color"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-heading" style="width:60%">Thinking Unconventional</td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-one-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-two-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-three-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-four-color"></div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-heading" style="width:60%">Boundaryless Collaboration</td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-one-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-two-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-three-color"></div>
-                  </td>
-                  <td style="width:10%; text-align: center">
-                    <div class="perf-circle level-four-color"></div>
+                <tr v-for="(data, k) in competencyRating" :key="'competencyRating'+k">
+                  <td class="table-row" style="width:70%">{{data.source}}({{data.module}})</td>
+                  <td class="text-left">
+                    <v-rating v-model="data.rating" dense readonly :length="data.max"></v-rating>
                   </td>
                 </tr>
               </tbody>
@@ -181,10 +116,14 @@
           <div class="column" id="nestedcolumn" style="padding-left: 20px;">
             <table class="performance-table">
               <tbody>
+                <tr>
+                  <th class="table-heading" style="width:63%">Performance</th>
+                  <th class="text-left table-heading">Ratings</th>
+                </tr>
                 <tr v-for="(data, k) in performanceRating" :key="'performanceRating'+k">
                   <td
-                    class="table-heading"
-                    style="width:50%"
+                    class="table-row"
+                    style="width:75%"
                   >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
                   <td class="text-left">
                     <v-rating v-model="data.rating" dense readonly :length="data.max"></v-rating>
@@ -196,7 +135,7 @@
           <div class="clearfix"></div>
         </div>
 
-        <div>
+        <!-- <div>
           <div class="column">
             <div class="strength-wrapper">
               <div class="strength-header">
@@ -227,9 +166,12 @@
             </div>
           </div>
           <div class="clearfix"></div>
-        </div>
+        </div>-->
 
-        <div style="padding-top: 20px;">
+        <div
+          style="padding-top: 20px;"
+          v-if="empProfileData.performanceRating.length &&empProfileData.potentialRating.length"
+        >
           <p class="table-heading" style="text-align: center;">9 Box Grid</p>
           <div id="gridbox">
             <svg width="600" height="250" id="svg">
@@ -239,7 +181,7 @@
                   y="0"
                   width="140"
                   height="67"
-                  id="rect00"
+                  id="rect31"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -248,7 +190,7 @@
                   x="170"
                   y="40"
                   text-anchor="middle"
-                  id="Rough Diamond"
+                  id="text31"
                   fill="black"
                   font-size="12"
                 >Rough Diamond</text>
@@ -259,7 +201,7 @@
                   y="0"
                   width="140"
                   height="67"
-                  id="rect01"
+                  id="rect32"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -268,7 +210,7 @@
                   x="320"
                   y="40"
                   text-anchor="middle"
-                  id="Future Star"
+                  id="text32"
                   fill="black"
                   font-size="12"
                 >Future Star</text>
@@ -279,7 +221,7 @@
                   y="0"
                   width="140"
                   height="67"
-                  id="rect02"
+                  id="rect33"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -288,7 +230,7 @@
                   x="470"
                   y="40"
                   text-anchor="middle"
-                  id="ConsistentStar"
+                  id="text33"
                   fill="black"
                   font-size="12"
                 >ConsistentStar</text>
@@ -299,7 +241,7 @@
                   y="75"
                   width="140"
                   height="67"
-                  id="rect10"
+                  id="rect21"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -308,7 +250,7 @@
                   x="170"
                   y="115"
                   text-anchor="middle"
-                  id="Inconsitent performer"
+                  id="text21"
                   fill="black"
                   font-size="12"
                 >Inconsitent performer</text>
@@ -319,7 +261,7 @@
                   y="75"
                   width="140"
                   height="67"
-                  id="rect11"
+                  id="rect22"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -328,7 +270,7 @@
                   x="320"
                   y="115"
                   text-anchor="middle"
-                  id="Key Player"
+                  id="text22"
                   fill="black"
                   font-size="12"
                 >Key Player</text>
@@ -339,7 +281,7 @@
                   y="75"
                   width="140"
                   height="67"
-                  id="rect12"
+                  id="rect23"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -348,7 +290,7 @@
                   x="470"
                   y="115"
                   text-anchor="middle"
-                  id="Current Star"
+                  id="text23"
                   fill="black"
                   font-size="12"
                 >Current Star</text>
@@ -359,7 +301,7 @@
                   y="150"
                   width="140"
                   height="67"
-                  id="rect20"
+                  id="rect11"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -368,7 +310,7 @@
                   x="170"
                   y="190"
                   text-anchor="middle"
-                  id="Talent Risk"
+                  id="text11"
                   fill="black"
                   font-size="12"
                 >Talent Risk</text>
@@ -379,16 +321,16 @@
                   y="150"
                   width="140"
                   height="67"
-                  id="rect21"
+                  id="rect12"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
-                  fill="rgb(134, 188, 37)"
+                  fill="rgb(217,217,217)"
                 />
                 <text
                   x="320"
                   y="190"
                   text-anchor="middle"
-                  id="Solid performer"
+                  id="text12"
                   fill="black"
                   font-size="12"
                 >Solid performer</text>
@@ -399,7 +341,7 @@
                   y="150"
                   width="140"
                   height="67"
-                  id="rect22"
+                  id="rect13"
                   stroke="rgb(217,217,217)"
                   stroke-width="1"
                   fill="rgb(217,217,217)"
@@ -408,7 +350,7 @@
                   x="470"
                   y="190"
                   text-anchor="middle"
-                  id="Consistent Performer"
+                  id="text13"
                   fill="black"
                   font-size="12"
                 >Consistent Performer</text>
@@ -474,11 +416,11 @@
               </g>
             </svg>
           </div>
-          <p class="table-heading" style="text-align: center;">Performance</p>
+         
         </div>
       </div>
       <div class="clearfix"></div>
-      <div class="row">
+      <div class="row" v-if="empProfileData.incumbents">
         <div class="column" style="padding-left: 20px;">
           <div class="position-container">
             <table>
@@ -582,29 +524,48 @@ export default {
   name: "TemplateOne",
   data() {
     return {
-      rating: 3,
+      rating: 3
     };
   },
   props: {
     profileBasicData: {
       default: undefined,
-      type: Object,
-    },
+      type: Object
+    }
   },
   mounted() {
     this.printProfile();
     console.log(moment);
+    if (
+      this.empProfileData.performanceRating &&
+      this.empProfileData.potentialRating
+    ) {
+      var c = this.empProfileData.potentialRating[0].rating;
+      var r = this.empProfileData.performanceRating[0].rating;
+      var id = "rect" + r.toString() + c.toString();
+      var textid="text" + r.toString() + c.toString();
+      var elem = document.getElementById(id);
+      elem.style.fill = "#1976D2";
+      var elem1 = document.getElementById(textid);
+      elem1.style.fill = "white";
+    }
   },
   computed: {
     empProfileData() {
       return this.$store.getters.getEmpProfileData;
     },
     performanceRating() {
-      return this.empProfileData.performanceRating.filter((element) => {
+      return this.empProfileData.performanceRating.filter(element => {
         element.rating = parseInt(element.rating);
         return element.rating > -1;
       });
     },
+    competencyRating() {
+      return this.empProfileData.competencyRating.filter(element => {
+        element.rating = parseInt(element.rating);
+        return element.rating > -1;
+      });
+    }
   },
   methods: {
     getInsideExperience(insideExp) {
@@ -658,8 +619,8 @@ export default {
     },
     test() {
       $.extend($.fn, {
-        makeProfileCssInline: function () {
-          this.each(function (idx, el) {
+        makeProfileCssInline: function() {
+          this.each(function(idx, el) {
             var style = el.style;
             var properties = [];
             for (var property in style) {
@@ -668,9 +629,11 @@ export default {
               }
             }
             this.style.cssText = properties.join(";");
-            $(this).children().makeProfileCssInline();
+            $(this)
+              .children()
+              .makeProfileCssInline();
           });
-        },
+        }
       });
     },
 
@@ -679,8 +642,8 @@ export default {
       // $("#profile").makeProfileCssInline();
       //var printContents = document.getElementById("").innerHTML;
       // this.$htmlToPaper("container");
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -706,6 +669,12 @@ table tbody tr td {
   color: rgb(162, 145, 97);
   font-weight: 700;
   font-size: 14px;
+}
+.table-row
+{
+  color: rgb(162, 145, 97);
+  font-weight: 500;
+  font-size: 12px;
 }
 .performance-table {
   line-height: 0.9;

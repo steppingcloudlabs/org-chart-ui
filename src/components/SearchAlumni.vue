@@ -36,8 +36,37 @@ export default {
       userList: [],
       isLoading: false,
       search: "",
-      searchUser: null,
+      searchUser: null
     };
+  },
+  computed: {
+    userPayGrade: {
+      get() {
+        return this.$store.getters.getuserPayGrade;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setuserPayGrade", data);
+      }
+    },
+     department: {
+      get() {
+        return this.$store.getters.getdepartment;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setdepartment", data);
+      }
+    },
+    division: {
+      get() {
+        return this.$store.getters.getdivision;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setdivision", data);
+      }
+    },
   },
   watch: {
     searchUser(val) {
@@ -56,20 +85,23 @@ export default {
 
       this.$store
         .dispatch("getAllUser", data)
-        .then((response) => {
+        .then(response => {
           this.userList = response;
 
           console.log(this.userList);
         })
         .finally(() => (this.isLoading = false));
-    },
+    }
   },
 
   methods: {
     getData() {
+      this.userPayGrade = [];
+      this.department=[];
+      this.division=[];
       let searchData = this.search;
       this.search = "";
-      let userObj = this.userList.find((element) => {
+      let userObj = this.userList.find(element => {
         return searchData == element.userId;
       });
       this.$emit("getUserData", userObj);
@@ -90,8 +122,8 @@ export default {
       // drawOrgChart(orgChartData, null)
       // appendChild(orgChartData)
       // });
-    },
-  },
+    }
+  }
 };
 </script>
 

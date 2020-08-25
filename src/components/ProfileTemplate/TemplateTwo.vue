@@ -1,325 +1,167 @@
 <template>
   <v-card
     min-height="800px"
-    max-width="50%"
+    max-width="80%"
     style="margin-left:auto;margin-right:auto;border-left:20px solid #166AB8"
   >
     <v-container class="lighten-5">
       <v-row no-gutters>
-        
-          <v-col class="ml-5 mr-1">
-            <v-card class="pa-2" style="box-shadow: none">
-                <!-- Profile with title -->
-                <div style="text-align:center" >
-                    <v-avatar class="profile" color="grey" size="100" tile >
-                        <v-img style="border:2px" src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
-                    </v-avatar>
-                    <p class="pt-2 name" style="font-size:15px;font-weight:600;color:#166AB8">WILLIAM JHON</p>
-                    <p class="name" style="font-size:15px;font-weight:600;color:black;margin-bottom: -1px; line-height: 0px; margin-top: -6px;">DEVELOPER</p>
-                </div>
-                 <!-- Data division -->
-                <div style="padding-top:35px">
-                 <v-divider></v-divider>
-                  <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Personal Information</p>
-                 <v-divider></v-divider>
-                 <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px;margin-left:2px">
-                     <v-row style="line-height:12px">
-                         <v-col>Position:</v-col>
-                         <v-col>Test</v-col>
-                     </v-row>
-                     <v-row style="line-height:12px">
-                         <v-col>Incumbent:</v-col>
-                         <v-col>Simon Ralph Warburton</v-col>
-                     </v-row>   
-                     <v-row style="line-height:12px">
-                         <v-col>Date Of birth:</v-col>
-                         <v-col>24th Aug,98</v-col>
-                     </v-row>   
-                     <v-row style="line-height:12px">
-                         <v-col>DOR</v-col>
-                         <v-col>Test</v-col>
-                     </v-row>    
-                 </p>
-                </div>
-                 <div style="padding-top:35px">
-                 <v-divider></v-divider>
-                  <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Academics</p>
-                 <v-divider></v-divider>
-               <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                <v-layout row wrap class="ml-1">
-                <v-row
-                  class="mt-2"
-                  v-for="(item, i) in academics"
-                  :key="i"
-                  style="text-align:left;height: 33px;"
-                >
-                  <p>{{i+1}}.{{item}}</p>
+        <v-col class="ml-5 mr-1">
+          <v-card class="pa-2" style="box-shadow: none">
+            <!-- Profile with title -->
+            <div style="text-align:center">
+              <v-avatar class="profile" color="grey" size="100" tile>
+                <v-img style="border:2px" :src="profileBasicData.img"></v-img>
+              </v-avatar>
+              <p
+                class="pt-2 name"
+                style="font-size:15px;font-weight:600;color:#166AB8"
+              >{{profileBasicData.userName}}</p>
+              <p
+                class="name"
+                style="font-size:15px;font-weight:600;color:black;margin-bottom: -1px; line-height: 0px; margin-top: -6px;"
+              >{{profileBasicData.positionTitle}}</p>
+            </div>
+            <!-- Data division -->
+            <div style="padding-top:35px">
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >Company Information</p>
+              <v-divider></v-divider>
+              <p
+                class="pt-3"
+                style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px;margin-left:2px"
+              >
+                <v-row style="line-height:12px">
+                  <v-col>Position Id:</v-col>
+                  <v-col>{{profileBasicData.pid}}</v-col>
                 </v-row>
-              </v-layout>
-                 </p>
-                </div>
-                 <!-- Pre work division -->
-                <div style="padding-top:35px">
-                 <v-divider></v-divider>
-                  <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Pre- RE work experience</p>
-                 <v-divider></v-divider>
-                 <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
-                <v-layout row wrap class="ml-1">
-                <v-row
-                  class="mt-2"
-                  v-for="(item, i) in pre_work"
-                  :key="i"
-                  style="text-align:left;height: 33px;"
-                >
-                  <p>{{i+1}}.{{item}}</p>
+                <v-row style="line-height:12px">
+                  <v-col>Manager:</v-col>
+                  <v-col>{{profileBasicData.userManagerName}}</v-col>
                 </v-row>
-              </v-layout>
-                 </p>
-                </div>
+                <v-row style="line-height:12px">
+                  <v-col>Pay Grade:</v-col>
+                  <v-col>{{profileBasicData.userPayGradeName}}</v-col>
+                </v-row>
+                <v-row style="line-height:12px">
+                  <v-col>Business Unit </v-col>
+                  <v-col>{{profileBasicData.businessUnitName}}</v-col>
+                </v-row>
+              </p>
+            </div>
+            <div style="padding-top:35px" v-if="this.empProfileData.bgEducation.length">
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >Academics</p>
+              <v-divider></v-divider>
+              <p class="pt-3 ml-5" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
+                <v-layout row wrap class="ml-1">
+                  <v-row
+                    class="mt-2"
+                    v-for="(data, k) in empProfileData.bgEducation"
+                    :key="'bgEducation' + k"
+                    style="text-align:left;height: 33px;width: 100%;"
+                  >
+                    <p>{{ getEmployeeEducation(data) }}</p>
+                  </v-row>
+                </v-layout>
+              </p>
+            </div>
+            <!-- Pre work division -->
+            <div style="padding-top:35px" v-if="this.empProfileData.previousExperience.length">
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >Pre- RE work experience</p>
+              <v-divider></v-divider>
+              <p class="pt-3 ml-5" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
+                <v-layout row wrap class="ml-1">
+                  <v-row
+                    class="mt-2"
+                    v-for="(data, k) in empProfileData.previousExperience"
+                    :key="'previousExperience'+k"
+                   
+                  >
+                    <p>{{ getPreviousExperience(data) }}</p>
+                  </v-row>
+                </v-layout>
+              </p>
+            </div>
 
-                 <!-- Re work division -->
-                <div style="padding-top:35px">
-                 <v-divider></v-divider>
-                  <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">RE-Work ExperIence</p>
-                 <v-divider></v-divider>
-                 <p  class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
+            <!-- Re work division -->
+            <div style="padding-top:35px" v-if="this.empProfileData.insideExperience.length" >
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >RE-Work ExperIence</p>
+              <v-divider></v-divider>
+              <p class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
                 <v-layout row wrap class="ml-1">
-                <v-row
-                  class="mt-2"
-                  v-for="(item, i) in work"
-                  :key="i"
-                  style="text-align:left;height: 33px;"
-                >
-                  <p>{{i+1}}.{{item}}</p>
-                </v-row>
-              </v-layout>
-                 </p>
-                </div>
-            </v-card>
-          </v-col>
+                  <v-row
+                    class="mt-2"
+                    v-for="(data, k) in empProfileData.insideExperience"
+                    :key="'insideExperience'+k"
+                    style="text-align:left;height: 33px;"
+                  >
+                    <p>{{ getInsideExperience(data) }}</p>
+                  </v-row>
+                </v-layout>
+              </p>
+            </div>
+          </v-card>
+        </v-col>
 
-  <!-- Column two -->
-          <v-col class="ml-5 mr-5">
-            <v-card class="pa-2" style="box-shadow: none;">
-                <div>
-                     <v-divider></v-divider>
-                     <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">RE Behaviours</p>
-                     <v-divider></v-divider>   
-                    <table class="performance-table">
-                        <tbody>
-                            <tr>
-                            <td style="width:60%" class="heading"></td>
-                            <td
-                                style="width:10%; text-align: center; text-align:center"
-                                class="heading"
-                                colspan="4"
-                            >Levels</td>
-                            </tr>
-                            <tr>
-                            <td style="width:60%"></td>
-                            <td style="width:10%; text-align: center" class="heading">1</td>
-                            <td style="width:10%; text-align: center" class="heading">2</td>
-                            <td style="width:10%; text-align: center" class="heading">3</td>
-                            <td style="width:10%; text-align: center" class="heading">4</td>
-                            </tr>
-                            <tr>
-                            <td class="heading" style="width:60%">Empowering Leadership</td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-one-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-two-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-three-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-four-color"></div>
-                            </td>
-                            </tr>
-                            <tr>
-                            <td class="heading" style="width:60%">Customer Advocacy</td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-one-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-two-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-three-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-four-color"></div>
-                            </td>
-                            </tr>
-                            <tr>
-                            <td class="heading" style="width:60%">Thinking Unconventional</td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-one-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-two-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-three-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-four-color"></div>
-                            </td>
-                            </tr>
-                            <tr>
-                            <td class="heading" style="width:60%">Boundaryless Collaboration</td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-one-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-two-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-three-color"></div>
-                            </td>
-                            <td style="width:10%; text-align: center">
-                                <div class="perf-circle level-four-color"></div>
-                            </td>
-                            </tr>
-                        </tbody>
-               </table>
-                </div>
-                 <div style="padding-top:35px">
-                     <v-divider></v-divider>
-                     <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Performance Behaviours</p>
-                     <v-divider></v-divider>   
-                     <table  class="performance-table pt-5">
-                            <tbody>
-                                <tr>
-                                <td class="heading" style="width:50%">Perf Rating FY16-17</td>
-                                <td></td>
-                                <td>
-                                    <div class="perf-circle perf-one-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-two-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-three-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-four-color perf-circled-border"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-five-color"></div>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td class="heading">Perf Rating FY17-18</td>
-                                <td></td>
-                                <td>
-                                    <div class="perf-circle perf-one-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-two-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-three-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-four-color perf-circled-border"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-five-color"></div>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td class="heading">Perf Rating FY18-19</td>
-                                <td></td>
-                                <td>
-                                    <div class="perf-circle perf-one-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-two-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-three-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-four-color perf-circled-border"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-five-color"></div>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td class="heading">Pot Rating 2019</td>
-                                <td>
-                                    <div class="perf-circle perf-zero-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-one-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-two-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-three-color perf-circled-border"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-four-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-five-color"></div>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td class="heading">Culture Fit</td>
-                                <td></td>
-                                <td>
-                                    <div class="perf-circle perf-one-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-two-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-three-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-four-color"></div>
-                                </td>
-                                <td></td>
-                                </tr>
-                                <tr>
-                                <td class="heading">Position Criticality</td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <div class="perf-circle perf-two-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-three-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-four-color"></div>
-                                </td>
-                                <td></td>
-                                </tr>
-                                <tr>
-                                <td class="heading">Talent Risk</td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <div class="perf-circle perf-two-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-three-color"></div>
-                                </td>
-                                <td>
-                                    <div class="perf-circle perf-four-color"></div>
-                                </td>
-                                <td></td>
-                                </tr>
-                            </tbody>
-            </table>
-                 </div>
-                <div style="padding-top:30px">
+        <!-- Column two -->
+        <v-col class="ml-5 mr-5">
+          <v-card class="pa-2" style="box-shadow: none;">
+            <div v-if="this.empProfileData.competencyRating.length">
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >RE Behaviours</p>
+              <v-divider></v-divider>
+              <table class="performance-table">
+                <tbody>
+                  <tr v-for="(data, k) in competencyRating" :key="'competencyRating'+k">
+                    <td
+                      style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
+                    >{{data.source}}({{data.module}})</td>
+                    <td class="text-left">
+                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="padding-top:35px" v-if="this.empProfileData.performanceRating.length">
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >Performance Behaviours</p>
+              <v-divider></v-divider>
+              <table class="performance-table pt-5">
+                <tbody>
+                  <tr v-for="(data, k) in performanceRating" :key="'performanceRating'+k">
+                    <td
+                      style="width:63%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
+                    >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
+                    <td class="text-left">
+                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- <div style="padding-top:30px">
                     <v-divider></v-divider>
                      <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px">Strength</p>
                      <v-divider></v-divider> 
@@ -342,53 +184,403 @@
                   <li>Review and provide clarity on resolving issues</li>
                 </ul>
                  </p>
-                </div> 
+            </div>-->
 
-            <div style="padding-top:35px">
-                 <v-divider></v-divider>
-                     <p class="pa-2 header" style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"> 9 Grid Box</p>
-                     <v-divider></v-divider> 
-                <div id="gridbox" class="pt-4">
-                </div>
-            </div>    
-            </v-card>
-          </v-col>
-       
+            <div style="padding-top:35px" v-if="this.empProfileData.performanceRating &&
+      this.empProfileData.potentialRating">
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >9 Grid Box</p>
+              <v-divider></v-divider>
+              <div id="gridbox" class="pt-5">
+                <svg width="400" height="200" id="svg" style="margin-left: -53px;">
+                  <g>
+                    <rect
+                      x="100"
+                      y="0"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect31"
+                    />
+                    <text
+                      x="145"
+                      y="20"
+                      text-anchor="middle"
+                      id="text31"
+                      fill="black"
+                      font-size="8.5"
+                    >Rough Diamond</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="200"
+                      y="0"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect32"
+                    />
+                    <text
+                      x="245"
+                      y="20"
+                      text-anchor="middle"
+                      id="text32"
+                      fill="black"
+                      font-size="8.5"
+                    >Future Star</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="300"
+                      y="0"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect33"
+                    />
+                    <text
+                      x="345"
+                      y="20"
+                      text-anchor="middle"
+                      id="text33"
+                      fill="black"
+                      font-size="8.5"
+                    >ConsistentStar</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="100"
+                      y="50"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect21"
+                    />
+                    <text
+                      x="145"
+                      y="70"
+                      text-anchor="middle"
+                      id="text21"
+                      fill="black"
+                      font-size="8.5"
+                    >Inconsitent performer</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="200"
+                      y="50"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect22"
+                    />
+                    <text
+                      x="245"
+                      y="70"
+                      text-anchor="middle"
+                      id="text22"
+                      fill="black"
+                      font-size="8.5"
+                    >Key Player</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="300"
+                      y="50"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect23"
+                    />
+                    <text
+                      x="345"
+                      y="70"
+                      text-anchor="middle"
+                      id="text23"
+                      fill="black"
+                      font-size="8.5"
+                    >Current Star</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="100"
+                      y="100"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect11"
+                    />
+                    <text
+                      x="145"
+                      y="120"
+                      text-anchor="middle"
+                      id="text11"
+                      fill="black"
+                      font-size="8.5"
+                    >Talent Risk</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="200"
+                      y="100"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect12"
+                     
+                    />
+                    <text
+                      x="245"
+                      y="120"
+                      text-anchor="middle"
+                      id="text12"
+                      fill="black"
+                      font-size="8.5"
+                    >Solid performer</text>
+                  </g>
+                  <g>
+                    <rect
+                      x="300"
+                      y="100"
+                      width="90"
+                      height="47"
+                      stroke="white"
+                      stroke-width="1"
+                      fill="#EFEFEF"
+                      id="rect13"
+                    />
+                    <text
+                      x="345"
+                      y="120"
+                      text-anchor="middle"
+                      id="text13"
+                      fill="black"
+                      font-size="8.5"
+                    >Consistent Performer</text>
+                  </g>
+                  <line x1="85" y1="0" x2="85" y2="160" stroke="#166AB8" stroke-width="2" />
+                  <line x1="75" y1="0" x2="95" y2="0" stroke="#166AB8" stroke-width="3" />
+                  <line x1="85" y1="160" x2="400" y2="160" stroke="#166AB8" stroke-width="2" />
+                  <line x1="400" y1="150" x2="400" y2="170" stroke="#166AB8" stroke-width="3" />
+                  <g>
+                    <text
+                      x="130"
+                      y="2"
+                      text-anchor="middle"
+                      id="text1"
+                      fill="black"
+                      font-size="7.5"
+                      transform="rotate(90 20,40)"
+                    >Continue</text>
+                    <text
+                      x="80"
+                      y="2"
+                      text-anchor="middle"
+                      id="text2"
+                      fill="black"
+                      font-size="7.5"
+                      transform="rotate(90 20,40)"
+                    >Grow</text>
+                    <text
+                      x="15"
+                      y="2"
+                      text-anchor="middle"
+                      id="text3"
+                      fill="black"
+                      font-size="7.5"
+                      transform="rotate(90 20,40)"
+                    >High Potential</text>
+                  </g>
+                  <g>
+                    <text
+                      x="140"
+                      y="190"
+                      text-anchor="middle"
+                      id="text4"
+                      fill="black"
+                      font-size="7.5"
+                    >Partially meets expectation</text>
+                    <text
+                      x="250"
+                      y="190"
+                      text-anchor="middle"
+                      id="text5"
+                      fill="black"
+                      font-size="7.5"
+                    >Meets expectation</text>
+                    <text
+                      x="340"
+                      y="190"
+                      text-anchor="middle"
+                      id="text6"
+                      fill="black"
+                      font-size="7.5"
+                    >Exceed expectation</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </v-card>
+        </v-col>
       </v-row>
     </v-container>
   </v-card>
 </template>
 <script>
+import moment from "moment";
+import $ from "jquery";
 export default {
-    data: () => ({
-      academics: [
-      "BSc (Hons), Univ. of Southampton - 1987",
-      "Leading Product Development, HBS - 2008"
-    ],
-    pre_work: [
-      "Triumph-Engineer(Jan 1997-Jan 2006)",
-      "Triumph-Manager(Jan 2006-Oct 2014)"
-    ],
-   work: [
-      "Joined in Jan 2015 as Head of Product Planning and Strategy",
-      "Managed Product Development from Jul 2015",
-      "Re-designated as Head Product Development in Aug 2016"
-    ]
-  }),
-    mounted(){
-    this.createSvg()
+  name: "TemplateTwo",
+  data() {
+    return {
+      rating: 3,
+    };
+  },
+  props: {
+    profileBasicData: {
+      default: undefined,
+      type: Object,
     },
-    methods:{
-         createSvg() {
+  },
+
+  mounted() {
+    //this.createSvg();
+    this.printProfile();
+    console.log(moment);
+    if (
+      this.empProfileData.performanceRating &&
+      this.empProfileData.potentialRating
+    ) {
+      var c = this.empProfileData.potentialRating[0].rating;
+      var r = this.empProfileData.performanceRating[0].rating;
+      var id = "rect" + r.toString() + c.toString();
+      var textid = "text" + r.toString() + c.toString();
+      var elem = document.getElementById(id);
+      elem.style.fill = "#1976D2";
+      var elem1 = document.getElementById(textid);
+      elem1.style.fill = "white";
+    }
+  },
+  computed: {
+    empProfileData() {
+      return this.$store.getters.getEmpProfileData;
+    },
+    performanceRating() {
+      return this.empProfileData.performanceRating.filter((element) => {
+        element.rating = parseInt(element.rating);
+        return element.rating > -1;
+      });
+    },
+    competencyRating() {
+      return this.empProfileData.competencyRating.filter((element) => {
+        element.rating = parseInt(element.rating);
+        return element.rating > -1;
+      });
+    },
+  },
+  methods: {
+    getInsideExperience(insideExp) {
+      return (
+        insideExp.title +
+        " in " +
+        insideExp.department +
+        " department from, " +
+        moment
+          .unix(
+            insideExp.startDate.substring(6, insideExp.startDate.length - 5)
+          )
+          .format("MM-YYYY") +
+        " to " +
+        moment
+          .unix(insideExp.endDate.substring(6, insideExp.endDate.length - 5))
+          .format("MM-YYYY")
+      );
+    },
+    getEmployeeEducation(bgEducation) {
+      let educationString =
+        bgEducation.degree +
+        (bgEducation.major ? " in " + bgEducation.major : "") +
+        " from " +
+        bgEducation.school +
+        ", " +
+        bgEducation.year;
+      return educationString;
+    },
+    getPreviousExperience(preExp) {
+      return (
+        preExp.startTitle +
+        " in " +
+        preExp.employer +
+        " from " +
+        moment
+          .unix(preExp.startDate.substring(6, preExp.startDate.length - 5))
+          .format("MM-YYYY") +
+        " to " +
+        moment
+          .unix(preExp.endDate.substring(6, preExp.endDate.length - 5))
+          .format("MM-YYYY")
+      );
+    },
+    getRatingYear(startDate, endDate) {
+      return (
+        moment.unix(startDate.substring(6, startDate.length - 5)).format("YY") +
+        "-" +
+        moment.unix(endDate.substring(6, endDate.length - 5)).format("YY")
+      );
+    },
+    test() {
+      $.extend($.fn, {
+        makeProfileCssInline: function () {
+          this.each(function (idx, el) {
+            var style = el.style;
+            var properties = [];
+            for (var property in style) {
+              if ($(this).css(property)) {
+                properties.push(property + ":" + $(this).css(property));
+              }
+            }
+            this.style.cssText = properties.join(";");
+            $(this).children().makeProfileCssInline();
+          });
+        },
+      });
+    },
+
+    printProfile() {
+      // this.test();
+      // $("#profile").makeProfileCssInline();
+      //var printContents = document.getElementById("").innerHTML;
+      // this.$htmlToPaper("container");
+    },
+    createSvg() {
       var ArrayRating = [
         ["Rough Diamond", "Future Star", "ConsistentStar"],
         ["Inconsitent performer", "Key Player", "Current Star"],
-        ["Talent Risk", "Solid performer", "Consistent Performer"]
+        ["Talent Risk", "Solid performer", "Consistent Performer"],
       ];
       var ArrayRating1 = [
         ["Rough Diamond1", "Future Star1", "ConsistentStar1"],
         ["Inconsitent performer1", "Key Player1", "Current Star1"],
-        ["Talent Risk1", "Solid performer1", "Consistent Performer1"]
+        ["Talent Risk1", "Solid performer1", "Consistent Performer1"],
       ];
       var x = 10;
       var y = 0;
@@ -577,26 +769,23 @@ export default {
       }
       document.getElementById("Solid performer1").style.fill = "#166AB8";
       document.getElementById("svg").style.marginLeft = "-53px";
-      
+      var elem3 = document.getElementById("svg");
+      console.log(elem3.outerHTML);
     },
-    
-    }
-}
+  },
+};
 </script>
 <style scoped>
-ul
-{
-    list-style-type: square
+ul {
+  list-style-type: square;
 }
-hr
-{
-    color: rgb(7, 1, 59);
+hr {
+  color: rgb(7, 1, 59);
 }
-.heading
-{
-    font-size: 12px;
-    color: black;
-    font-weight: 500;
+.heading {
+  font-size: 12px;
+  color: black;
+  font-weight: 500;
 }
 table.performance-table tbody tr td {
   padding: 2px;
@@ -652,12 +841,10 @@ table.performance-table tbody tr td {
   border-radius: 50%;
   margin: auto;
 }
-.name
-{
-    letter-spacing: 3px;
+.name {
+  letter-spacing: 3px;
 }
-.header
-{
-   letter-spacing: 2px; 
+.header {
+  letter-spacing: 2px;
 }
 </style>

@@ -56,9 +56,8 @@
           </tr>
            <tr>
             <td style="font-weight:600">Manager Id:</td>
-            <td style="font-weight:400" v-if="nodeData.isRoot==true">{{nodeData.userManagerId}}</td>
-            <td style="font-weight:400" v-else-if="nodeData.userManagerId==parentData.userId">{{nodeData.userManagerI}}</td>
-             <td style="font-weight:400" v-else>{{nodeData.userManagerId}}</td>
+            <td style="font-weight:400" >{{nodeData.userManagerId}}</td>
+            
           </tr>
            
         </tbody>

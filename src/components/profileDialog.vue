@@ -17,7 +17,7 @@
           <v-btn class="mr-2" dark icon @click="printProfile">
             <v-icon>mdi-printer</v-icon>
           </v-btn>
-          <v-btn icon dark @click="showProfileDialog = false">
+          <v-btn icon dark @click="closeTemplate">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
@@ -30,7 +30,7 @@
         </v-container>
         <TemplateOne
           v-else-if="selectedTemplate == 'template-1'"
-          :profileBasicData="profileBasicData"
+          :profileBasicData="profileBasicData" 
         />
         <TemplateTwo
           v-else-if="selectedTemplate == 'template-2'"
@@ -49,7 +49,7 @@
           :enable-download="true"
           :preview-modal="false"
           :paginate-elements-by-height="1200"
-          filename="hee hee"
+          filename="UserProfile"
           :pdf-quality="2"
           pdf-format="a3"
           pdf-orientation="landscape"
@@ -61,6 +61,22 @@
         >
           <section slot="pdf-content">
             <!-- PDF Content Here -->
+             <TemplateOne
+          v-if="selectedTemplate == 'template-1'"
+          :profileBasicData="profileBasicData" 
+        />
+        <TemplateTwo
+          v-else-if="selectedTemplate == 'template-2'"
+          :profileBasicData="profileBasicData"
+        />
+        <TemplateThree
+          v-else-if="selectedTemplate == 'template-3'"
+          :profileBasicData="profileBasicData"
+        />
+        <TemplateFour
+          v-else-if="selectedTemplate == 'template-4'"
+          :profileBasicData="profileBasicData"
+        />
           </section>
         </vue-html2pdf>
         <v-overlay :absolute="true" opacity=".5" :value="overlay">
@@ -127,6 +143,13 @@ export default {
   },
 
   methods: {
+   
+    closeTemplate()
+    {
+      this.showProfileDialog=false
+      this.selectedTemplate="selectionScreen"
+    },
+
     templatedSelected(selectedTemplate) {
       this.selectedTemplate = selectedTemplate;
       console.log("Next Clicked");

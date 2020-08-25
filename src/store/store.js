@@ -14,6 +14,8 @@ export default new Vuex.Store({
         inputDate: new Date().toISOString().substr(0, 10),
         flag: "",
         userPayGrade: [],
+        department:[],
+        division:[],
         showNavDrawer: false,
         showFilter: false,
         showProfileDialog: false,
@@ -31,6 +33,12 @@ export default new Vuex.Store({
         },
         setuserPayGrade: (state, data) => {
             state.userPayGrade = data
+        },
+        setdepartment: (state, data) => {
+            state.department = data
+        },
+        setdivision: (state, data) => {
+            state.division = data
         },
         setuserMasterData: (state, data) => {
             state.userMasterData = data
@@ -99,6 +107,12 @@ export default new Vuex.Store({
         },
         getuserPayGrade: (state) => {
             return state.userPayGrade
+        },
+        getdepartment: (state) => {
+            return state.department
+        },
+        getdivision: (state) => {
+            return state.division
         },
         getuserMasterData: (state) => {
             return state.userMasterData
