@@ -9,13 +9,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        isLevel:false,
+        levelPay:[],
+        selectedSearchField: [],
+        allPaygrade:[],
         userMasterData: {},
         userData: [],
         inputDate: new Date().toISOString().substr(0, 10),
         flag: "",
         userPayGrade: [],
-        department:[],
-        division:[],
+        department: [],
+        division: [],
+        BU: [],
+        location:[],
         showNavDrawer: false,
         showFilter: false,
         showProfileDialog: false,
@@ -25,11 +31,32 @@ export default new Vuex.Store({
         parentData: null,
         showNodeProfile: false,
         empProfileData: {},
+        imgRequire:true,
         isEmployeeDataFetched: "Not Fetched"
     },
     mutations: {
         setuserData: (state, data) => {
             state.userData = data
+        },
+        setisLevel: (state, data) => {
+            state.isLevel = data
+        },
+        setlevelPay: (state, data) => {
+            state.levelPay= data
+        },
+        setsearchField: (state, data) => {
+            state.selectedSearchField = data
+
+
+        },
+        setimgRequire: (state, data) => {
+            state.imgRequire = data
+
+
+        },
+        setallPaygradeData: (state, data) => {
+            state.allPaygrade = data
+            console.log(state.allPaygrade)
         },
         setuserPayGrade: (state, data) => {
             state.userPayGrade = data
@@ -39,6 +66,9 @@ export default new Vuex.Store({
         },
         setdivision: (state, data) => {
             state.division = data
+        },
+        setlocation: (state, data) => {
+            state.location = data
         },
         setuserMasterData: (state, data) => {
             state.userMasterData = data
@@ -90,6 +120,9 @@ export default new Vuex.Store({
         setNodeData: (state, data) => {
             state.nodeData = data
         },
+        setbusinessunit: (state, data) => {
+            state.BU = data
+        },
         setEmpProfileData: (state, data) => {
             state.empProfileData = data
         },
@@ -102,8 +135,29 @@ export default new Vuex.Store({
         getuserData: (state) => {
             return state.userData
         },
+        getisLevel: (state) => {
+            return state.isLevel
+        },
+        getlevelPay: (state) => {
+            return state.levelPay
+        },
+        getimgRequire: (state) => {
+            return state.imgRequire
+        },
+        getsearchField: (state) => {
+            return state.selectedSearchField
+        },
+        getallPaygradeData: (state) => {
+            return state.allPaygrade
+        },
         getparentData: (state) => {
             return state.parentData
+        },
+        getbusinessunit: (state) => {
+            return state.BU
+        },
+        getlocation: (state) => {
+            return state.location
         },
         getuserPayGrade: (state) => {
             return state.userPayGrade
@@ -150,6 +204,32 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        orgCategory:({
+            commit
+        }, data) => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getOrgChartData/all',
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    params: {
+                        "companyId": companyId,
+                        "type": data.type,
+                        "typeValue": data.typeValue,
+                        "effectiveDateTime": data.date
+                    }
+                    
+                }).then((response) => {
+                    resolve(response.data)
+                    commit('setuserData', response.data)
+                    console.log(response)
+                })
+            })
+
+        },
         testcall: ({
             commit
         }, data) => {
@@ -223,6 +303,85 @@ export default new Vuex.Store({
                 })
             })
         },
+
+        getAllPaygradeList: ({
+            commit
+        }) => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getPayGrade?companyId=' + companyId,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data)
+                    commit("setallPaygradeData", response.data.d.results)
+
+                })
+            })
+        },
+
+        getAllBusinessUnitList: () => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getBusinessUnitList?companyId=' + companyId,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data)
+                    //commit("setsearchField", response.data.d.results)
+
+                })
+            })
+        },
+
+
+        getAllDivisionList: () => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getDivisionList?companyId=' + companyId,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data)
+                    //commit("setsearchField", response.data.d.results)
+
+                    console.log(response)
+                })
+            })
+        },
+
+        getAllDepartmentList: () => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getDepartmentList?companyId=' + companyId,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data)
+                    //commit("setsearchField", response.data)
+                    console.log(response)
+                })
+            })
+        },
+
+
+
         getRecruitmentData: ({
             commit
         }, data) => {
@@ -245,7 +404,9 @@ export default new Vuex.Store({
             })
 
         },
-        getUserProfileData: ({ commit }, data) => {
+        getUserProfileData: ({
+            commit
+        }, data) => {
             console.log(data)
             return new Promise((resolve) => {
                 axios({

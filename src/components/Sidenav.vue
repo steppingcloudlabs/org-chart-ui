@@ -33,6 +33,8 @@
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
                 <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
                   <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
+                     <v-treeview selectable selected-color="red" :items="itemsBU" v-model="selectedBUItem"></v-treeview>
+                      <v-treeview selectable selected-color="red" :items="itemsLocation" v-model="selectedLocationItem"></v-treeview>
         <v-treeview
           selectable
           selected-color="red"
@@ -54,6 +56,13 @@
           v-model="selectedSortItem"
           @input="validateSort"
         ></v-treeview>
+        <v-treeview
+          selectable
+          selected-color="red"
+          :items="viewItem"
+          v-model="selectedView"
+           @input="validateView"
+        ></v-treeview>
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -64,12 +73,25 @@ export default {
     return {
       drawer: false,
       mini: true,
+      selectedView:[0],
       selectedItem: [],
       selecteddepItem: [],
       selecteddivItem: [],
       selectedVacantItem: [],
       selectedSortItem: [],
-      fieldToDisplay: [0, 1, 2, 3],
+      selectedBUItem:[],
+       selectedLocationItem:[],
+      fieldToDisplay: [0, 1, 2, 3,4],
+
+      viewItem:[
+          {
+          id: 999,
+          name: "View",
+          children: [ { id: 0, name: "Regular", value: "Regular" },
+            { id: 1, name: "Level Wise", value: "LevelWise" },]
+        }
+
+      ],
       items: [
         {
           id: 999,
@@ -91,10 +113,24 @@ export default {
           children: []
         }
       ],
+      itemsBU: [
+        {
+          id: 999,
+          name: "Business Unit",
+          children: []
+        }
+      ],
+      itemsLocation: [
+        {
+          id: 999,
+          name: "Location",
+          children: []
+        }
+      ],
       itemVacant: [
         {
           id: 999,
-          name: "Filter",
+          name: " Status Filter",
           children: [
             { id: 0, name: "Vacant", value: "Vacant" },
             { id: 1, name: "Occupied", value: "Occupied" },
@@ -112,7 +148,11 @@ export default {
             { id: 1, name: "Department", value: "userDepartmentName" },
             { id: 2, name: "Division", value: "userDivisionName" },
             { id: 3, name: "Business Unit", value: "businessUnit" },
-            { id: 4, name: "Location", value: "location" }
+             { id: 4, name: "Profile image", value: "image" },
+            { id: 5, name: "Revenue Managed", value: "location" },
+            { id: 6, name: "Cost Budget", value: "location" },
+            
+          
           ]
         }
       ],
@@ -141,6 +181,15 @@ export default {
         this.$store.commit("setuserPayGrade", data);
       }
     },
+     imgRequire: {
+      get() {
+        return this.$store.getters.getimgRequire;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setimgRequire", data);
+      }
+    },
      department: {
       get() {
         return this.$store.getters.getdepartment;
@@ -159,6 +208,26 @@ export default {
         this.$store.commit("setdivision", data);
       }
     },
+    businessunit: {
+      get() {
+        return this.$store.getters.getbusinessunit;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setbusinessunit", data);
+      }
+    },
+    
+    location: {
+      get() {
+        return this.$store.getters.getlocation;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setlocation", data);
+      }
+    },
+
     showNavDrawer: {
       get() {
         return this.$store.getters.getshownavDrawer;
@@ -167,6 +236,24 @@ export default {
       set(data) {
         this.$store.commit("setshownavDrawer", data);
       }
+    },
+    levelPay: {
+      get() {
+        return this.$store.getters.getlevelPay;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setlevelPay", data);
+      },
+    },
+    isLevel: {
+      get() {
+        return this.$store.getters.getisLevel;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisLevel", data);
+      },
     }
   },
   watch: {
@@ -178,10 +265,32 @@ export default {
     },
      department() {
       this.depData();
+    },
+     businessunit() {
+      this.BUData();
+    },
+     location() {
+      this.locationData();
     }
+  
   },
+  
 
   methods: {
+    validateView()
+    {
+     var count = 0;
+      for (var i = 0; i < this.selectedView.length; i++) {
+        count++;
+      }
+      console.log(this.selectedView);
+      if (count > 1) {
+        this.selectedView.pop();
+        setTimeout(function() {
+          alert("You can View by one field only");
+        }, 1000);
+      }
+    },
     validateVacant() {
       var count = 0;
       for (var i = 0; i < this.selectedVacantItem.length; i++) {
@@ -214,10 +323,10 @@ export default {
         count++;
       }
 
-      if (count > 4) {
+      if (count > 5) {
         this.fieldToDisplay.pop();
         setTimeout(function() {
-          alert("You can select upto 4 fields");
+          alert("You can select upto 5 fields");
         }, 1000);
       }
     },
@@ -258,6 +367,24 @@ export default {
       });
       console.log(this.selecteddivItem);
     },
+    locationData(){
+      console.log(this.itemsLocation);
+      this.itemsLocation[0].children = this.location.map((data, index) => {
+        let item = {};
+        if (data != undefined) {
+          item["id"] = index;
+          item["name"] = data;
+          this.selectedLocationItem.push(index);
+          return item;
+        } else {
+          item["id"] = index;
+          item["name"] = undefined;
+          this.selectedLocationItem.push(index);
+          return item;
+        }
+      });
+      console.log(this.selectedLocationItem);
+    },
      depData() {
       console.log(this.itemsdepartment);
       this.itemsdepartment[0].children = this.department.map((data, index) => {
@@ -271,6 +398,24 @@ export default {
           item["id"] = index;
           item["name"] = undefined;
           this.selecteddepItem.push(index);
+          return item;
+        }
+      });
+      console.log(this.selectedItem);
+    },
+     BUData() {
+      console.log(this.itemsdepartment);
+      this.itemsBU[0].children = this.businessunit.map((data, index) => {
+        let item = {};
+        if (data != undefined) {
+          item["id"] = index;
+          item["name"] = data;
+          this.selectedBUItem.push(index);
+          return item;
+        } else {
+          item["id"] = index;
+          item["name"] = undefined;
+          this.selectedBUItem.push(index);
           return item;
         }
       });
@@ -350,11 +495,41 @@ export default {
       }
       return newB;
     },
+    ApplyView()
+    {
+      var filteredData=this.chartData
+       if(this.selectedView==1)
+        {
+          this.isLevel=true
+          for(let i=0;i<filteredData.length;i++)
+          {
+             var indexpay = this.levelPay.findIndex(
+          (x) => x.externalCode == filteredData[i].userPayGrade
+        );
+        console.log(indexpay);
+          filteredData[i].tags.push("subLevels" + indexpay);
+          }
+          
+        }
+        else{
+          this.isLevel=false
+          for(let i=0;i<filteredData.length;i++)
+          {
+            filteredData[i].tags = filteredData[i].tags.filter(function (item) {
+             return item.indexOf("subLevels") !== 0;
+});
+          }
 
+        }
+        return filteredData
+       
+    },
     ApplyFilter() {
       var gradeFilter = [];
+      var BUFilter=[];
       var divFilter=[];
       var depFilter=[];
+      var locFilter=[];
       var vacantFilter = [];
       var filteredData = this.chartData;
       var fields = [];
@@ -365,6 +540,19 @@ export default {
         );
       }
       console.log(fields);
+      var indexImage=fields.indexOf("image")
+      indexImage > -1 ? fields.splice(indexImage, 1) : -1
+
+      if(indexImage>-1)
+      {
+        this.imgRequire=true
+      }
+      else
+      {
+        this.imgRequire=false
+      }
+
+      console.log(fields);
       if (this.selectedItem.length) {
         for (i = 0; i < this.selectedItem.length; i++) {
           gradeFilter.push(
@@ -372,8 +560,11 @@ export default {
           );
         }
         console.log(gradeFilter);
+       
+       filteredData=this.ApplyView()
+
         filteredData = this.filterapplied(
-          this.chartData,
+          filteredData,
           gradeFilter,
           "userPayGrade"
         );
@@ -394,6 +585,19 @@ export default {
         );
         console.log(filteredData);
       }
+
+      if (this.selectedBUItem.length) {
+        for (i = 0; i < this.selectedBUItem.length; i++) {
+          BUFilter.push(this.itemsBU[0].children[this.selectedBUItem[i]]["name"]);
+        }
+        console.log(depFilter);
+        filteredData = this.filterapplied(
+          filteredData,
+         BUFilter,
+          "businessUnitName"
+        );
+        console.log(filteredData);
+      }
       if (this.selecteddivItem.length) {
         for (i = 0; i < this.selecteddivItem.length; i++) {
           divFilter.push(
@@ -408,7 +612,21 @@ export default {
         );
         console.log(filteredData);
       }
-
+       
+        if (this.selectedLocationItem.length) {
+        for (i = 0; i < this.selectedLocationItem.length; i++) {
+          locFilter.push(
+            this.itemsLocation[0].children[this.selectedLocationItem[i]]["name"]
+          );
+        }
+        console.log(locFilter);
+        filteredData = this.filterapplied(
+          filteredData,
+         locFilter,
+          "location"
+        );
+        console.log(filteredData);
+      }
 
 
       if (this.selectedVacantItem.length) {
@@ -438,13 +656,15 @@ export default {
     },
 
     reset() {
+      
       this.selectedItem = [999];
-
+      this.isLevel=false
       this.selectedVacantItem = [];
-
+      this.selectedView=[0]
       this.selectedSortItem = [];
-      this.fieldToDisplay = [0, 1, 2, 3];
-
+      this.fieldToDisplay = [0, 1, 2, 3,4];
+     
+      
       this.$emit("reset");
     }
   },

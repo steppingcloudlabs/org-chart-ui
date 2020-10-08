@@ -28,6 +28,7 @@ export default {
   name: "tree",
   data() {
     return {
+      intersectPay: [],
       nodes: {},
       chart: {},
       isbuffered: [],
@@ -43,7 +44,7 @@ export default {
         "userPayGrade",
         "userDepartmentName",
         "userDivisionName",
-        "businessUnit"
+        "businessUnit",
       ],
       filter1: [],
       orgChartData: [],
@@ -51,13 +52,13 @@ export default {
       field1: "true",
 
       selectedId: null,
-      temp: {}
+      temp: {},
     };
   },
   components: {
     Sidenav,
     profile,
-    nodeProfile
+    nodeProfile,
   },
   computed: {
     showNodeProfile: {
@@ -67,7 +68,16 @@ export default {
       },
       set(data) {
         this.$store.commit("setshowNodeProfile", data);
-      }
+      },
+    },
+     levelPay: {
+      get() {
+        return this.$store.getters.getlevelPay;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setlevelPay", data);
+      },
     },
     inputDate: {
       get() {
@@ -76,7 +86,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setinputDate", data);
-      }
+      },
     },
     userData: {
       get() {
@@ -85,7 +95,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserData", data);
-      }
+      },
     },
     userPayGrade: {
       get() {
@@ -94,7 +104,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserPayGrade", data);
-      }
+      },
     },
     department: {
       get() {
@@ -103,7 +113,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setdepartment", data);
-      }
+      },
     },
     division: {
       get() {
@@ -112,7 +122,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setdivision", data);
-      }
+      },
     },
     userMasterData: {
       get() {
@@ -121,7 +131,25 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserMasterData", data);
-      }
+      },
+    },
+    imgRequire: {
+      get() {
+        return this.$store.getters.getimgRequire;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setimgRequire", data);
+      },
+    },
+    allPaygrade: {
+      get() {
+        return this.$store.getters.getallPaygradeData;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setallPaygradeData", data);
+      },
     },
     showNavDrawer: {
       get() {
@@ -130,7 +158,7 @@ export default {
       },
       set(data) {
         this.$store.commit("setshownavDrawer", data);
-      }
+      },
     },
     showProfileDialog: {
       get() {
@@ -139,13 +167,40 @@ export default {
       },
       set(data) {
         this.$store.commit("setShowProfileDialog", data);
-      }
+      },
+    },
+    businessunit: {
+      get() {
+        return this.$store.getters.getbusinessunit;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setbusinessunit", data);
+      },
+    },
+    location: {
+      get() {
+        return this.$store.getters.getlocation;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setlocation", data);
+      },
+    },
+    isLevel: {
+      get() {
+        return this.$store.getters.getisLevel;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisLevel", data);
+      },
     }
   },
   watch: {
     userData() {
       this.temp = this.userData;
-    }
+    },
   },
   methods: {
     getbase64(file) {
@@ -153,7 +208,7 @@ export default {
       var img = document.createElement("img");
       img.src = file;
       var base;
-      img.onload = function() {
+      img.onload = function () {
         canvas.height = img.height;
         canvas.width = img.width;
         var dataURL = canvas.toDataURL("image/png");
@@ -166,15 +221,19 @@ export default {
       if (this.userData) {
         console.log(this.userData);
         this.nodes = this.userData;
-        this.nodes = this.addTags(this.nodes);
+
         for (var i = 0; i < this.nodes.length; i++) {
           this.getChlidData(this.nodes[i]);
         }
         console.log(this.nodes);
+
+        this.getPayGrade(this.nodes);
+        this.nodes = this.addTags(this.nodes);
         this.orgChartData = this.nodes;
-        this.getPayGrade(this.orgChartData);
         this.oc(this.$refs.tree, this.orgChartData, null);
         var str = "";
+        // let intersectPay = [];
+
         for (var j = 0; j < this.gradecount.length; j = j + 3) {
           str +=
             "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
@@ -297,8 +356,16 @@ export default {
         "userPayGrade",
         "userDepartmentName",
         "userDivisionName",
-        "businessUnit"
+        "businessUnit",
       ]),
+       this.isLevel=false
+          for(let i=0;i<this.orgChartData.length;i++)
+          {
+            this.orgChartData[i].tags = this.orgChartData[i].tags.filter(function (item) {
+             return item.indexOf("subLevels") !== 0;
+});
+          }
+
         this.oc(this.$refs.tree, this.orgChartData, null);
       var str = "";
       for (var j = 0; j < this.gradecount.length; j = j + 3) {
@@ -387,9 +454,9 @@ export default {
           .dispatch("testcall1", {
             userid: userNameInput,
             position: userPosition,
-            date: date1
+            date: date1,
           })
-          .then(response => {
+          .then((response) => {
             if (response && response.length) {
               if (!node.isRoot) {
                 this.userMasterData[node.userId] = response.splice(
@@ -402,7 +469,7 @@ export default {
                 // userMasterData[node.userManagerId] = response.data.splice(1, response.data.length)
                 this.userMasterData[node.userManagerId] = response;
                 let index = this.userMasterData[node.userManagerId].findIndex(
-                  element => {
+                  (element) => {
                     return node.userId == element.userId;
                   }
                 );
@@ -410,7 +477,7 @@ export default {
                 console.log(index);
                 this.userMasterData[node.userManagerId] = this.userMasterData[
                   node.userManagerId
-                ].filter(function(item) {
+                ].filter(function (item) {
                   if (node.userId != item.userId) {
                     return item;
                   }
@@ -441,13 +508,14 @@ export default {
     gradeCounting() {
       for (var i = 0; i < this.userPayGrade.length; i++) {
         var g = this;
-        this.gradecount[i] = this.gradeOccurence.filter(function(item) {
+        this.gradecount[i] = this.gradeOccurence.filter(function (item) {
           return item === g.userPayGrade[i];
         }).length;
         console.log(this.gradecount);
       }
     },
     getPayGrade(orgChartData) {
+      let g = this;
       for (var i = 0; i < orgChartData.length; i++) {
         console.log(orgChartData[i].userPayGrade);
         this.gradeOccurence.push(orgChartData[i].userPayGrade);
@@ -462,9 +530,37 @@ export default {
         ) {
           this.department.push(orgChartData[i].userDepartmentName);
         }
+        if (
+          this.businessunit.indexOf(orgChartData[i].businessUnitName) === -1
+        ) {
+          this.businessunit.push(orgChartData[i].businessUnitName);
+        }
+        if (this.location.indexOf(orgChartData[i].location) === -1) {
+          this.location.push(orgChartData[i].location);
+        }
       }
 
       console.log(this.userPayGrade);
+
+      this.userPayGrade.map(function (item) {
+        var test = g.allPaygrade.find(function (element) {
+          return element.externalCode == item;
+        });
+        if (test != undefined) {
+          g.intersectPay.push(test);
+        }
+      });
+
+      this.intersectPay.sort(
+        (a, b) => parseInt(b.paygradeLevel) - parseInt(a.paygradeLevel)
+      );
+
+      let jsonObject = this.intersectPay.map(JSON.stringify);
+      let uniqueSet = new Set(jsonObject);
+      let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
+      this.intersectPay = uniqueArray;
+      this.levelPay=this.intersectPay
+      console.log(this.intersectPay);
       this.gradeCounting();
     },
 
@@ -472,6 +568,11 @@ export default {
       for (var i = 0; i < nodes.length; i++) {
         this.totalHeadCount++;
         var node = nodes[i];
+        var indexpay = this.intersectPay.findIndex(
+          (x) => x.externalCode == node.userPayGrade
+        );
+        console.log(indexpay);
+
         switch (node.positionVacant) {
           case true: {
             node.tags = ["Vacant"];
@@ -517,6 +618,11 @@ export default {
         if (node.userId == "poojas") {
           node.tags.push("assistant");
         }
+        if(this.isLevel==true)
+        {
+        node.tags.push("subLevels" + indexpay);
+        }
+      
       }
       if (nodes[3]) {
         nodes[3].tags.push("Critical");
@@ -524,6 +630,10 @@ export default {
         nodes[3].tags.push("HighRisk");
       }
       console.log(this.vacantCount);
+      // if(this.intersectPay.length<10)
+      // {
+
+      //}
       return nodes;
     },
 
@@ -538,21 +648,22 @@ export default {
       }
       if (this.isbuffered[id] == true) {
         if (nodeData.isRoot) {
-          let index = this.orgChartData.findIndex(element => {
+          let index = this.orgChartData.findIndex((element) => {
             return nodeData.userId == element.userId;
           });
           if (index > -1) {
             this.orgChartData[index].isRoot = false;
-            let tagIndex = nodeData.tags.findIndex(element => {
+            let tagIndex = nodeData.tags.findIndex((element) => {
               return element == "RootNode";
             });
             this.orgChartData[index].tags.splice(tagIndex, 1);
             this.userMasterData[nodeData.userManagerId][0].isRoot = true;
+            this.getPayGrade(this.userMasterData[nodeData.userManagerId]);
             this.userMasterData[nodeData.userManagerId] = this.addTags(
               this.userMasterData[nodeData.userManagerId]
             );
             bufferedChild = this.userMasterData[nodeData.userManagerId];
-            this.getPayGrade(this.userMasterData[nodeData.userManagerId]);
+
             this.orgChartData = this.orgChartData.concat(
               this.userMasterData[nodeData.userManagerId]
             );
@@ -560,11 +671,12 @@ export default {
             console.log(JSON.stringify(this.orgChartData));
           }
         } else {
+          this.getPayGrade(this.userMasterData[nodeData.userId]);
           this.userMasterData[nodeData.userId] = this.addTags(
             this.userMasterData[nodeData.userId]
           );
           bufferedChild = this.userMasterData[nodeData.userId];
-          this.getPayGrade(this.userMasterData[nodeData.userId]);
+
           this.orgChartData = this.orgChartData.concat(
             this.userMasterData[nodeData.userId]
           );
@@ -628,7 +740,7 @@ export default {
       this.chart.exportPDF({
         format: "A2",
 
-        footer: "My Footer. Page {current-page} of {total-pages}"
+        footer: "My Footer. Page {current-page} of {total-pages}",
       });
     },
 
@@ -670,11 +782,11 @@ export default {
         "background-color",
         "filter",
         "stroke-width",
-        "d"
+        "d",
       ];
       $.extend($.fn, {
-        makeCssInline: function() {
-          this.each(function(idx, el) {
+        makeCssInline: function () {
+          this.each(function (idx, el) {
             var style = el.style;
             var properties = [];
             for (var property in style) {
@@ -683,11 +795,9 @@ export default {
               }
             }
             this.style.cssText = properties.join(";");
-            $(this)
-              .children()
-              .makeCssInline();
+            $(this).children().makeCssInline();
           });
-        }
+        },
       });
     },
 
@@ -740,15 +850,31 @@ export default {
       return null;
     },
 
+    img_binding(sender, node) {
+      var data = sender.get(node.id);
+      if (this.imgRequire == true) {
+        // var ind=data.tags.indexOf("nonImage")
+        //  ind > -1 ? data.tags.splice(ind, 1) : -1
+        //console.log(data.img)
+       var field= '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+data.img+'" x="50" y="20"  width="80" height="80"></image>';
+      //console.log(field)
+      return field
+      } else {
+        // data.tags.push("nonImage");
+        // sender.updateNode(data)
+        return null
+      }
+    },
+
     binder(sender, node) {
       var isResigned = false;
       var isCritical = false;
       var data = sender.get(node.id);
 
-      let resignedIndex = data.tags.findIndex(element => {
+      let resignedIndex = data.tags.findIndex((element) => {
         return element == "Resigned";
       });
-      let criticalIndex = data.tags.findIndex(element => {
+      let criticalIndex = data.tags.findIndex((element) => {
         return element == "Critical";
       });
       console.log(resignedIndex + criticalIndex);
@@ -788,11 +914,13 @@ export default {
       }
     },
 
-    oc: function(domEl, x, orderBy) {
+    oc: function (domEl, x, orderBy) {
+      // alert(OrgChart.VERSION)
       OrgChart.templates.myTemplate = Object.assign(
         {},
         OrgChart.templates.rony
       );
+      //OrgChart.templates.myTemplate.size=[300, 180];
       OrgChart.templates.myTemplate.field_0 =
         '<text width="200" text-overflow="ellipsis" style="font-size: 11px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
       OrgChart.templates.myTemplate.field_8 =
@@ -810,8 +938,8 @@ export default {
         '<g><line x1="1" y1="1" x2="179" y2="1"  /> </g>';
       // OrgChart.templates.myTemplate.field_11 =
       //   '<g><line x1="1" y1="260" x2="179" y2="260"  /> </g>';
-      OrgChart.templates.myTemplate.img_0 =
-        '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="50" y="20"  width="80" height="80"></image>';
+       OrgChart.templates.myTemplate.img_0 ="{val}"
+      //   '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="50" y="20"  width="80" height="80"></image>';
       // OrgChart.templates.myTemplate.webcallMe = '<g  transform="translate(35,230)" class="flag"><path d="M18.344,16.174l-7.98-12.856c-0.172-0.288-0.586-0.288-0.758,0L1.627,16.217c0.339-0.543-0.603,0.668,0.384,0.682h15.991C18.893,16.891,18.167,15.961,18.344,16.174 M2.789,16.008l7.196-11.6l7.224,11.6H2.789z M10.455,7.552v3.561c0,0.244-0.199,0.445-0.443,0.445s-0.443-0.201-0.443-0.445V7.552c0-0.245,0.199-0.445,0.443-0.445S10.455,7.307,10.455,7.552M10.012,12.439c-0.733,0-1.33,0.6-1.33,1.336s0.597,1.336,1.33,1.336c0.734,0,1.33-0.6,1.33-1.336S10.746,12.439,10.012,12.439M10.012,14.221c-0.244,0-0.443-0.199-0.443-0.445c0-0.244,0.199-0.445,0.443-0.445s0.443,0.201,0.443,0.445C10.455,14.021,10.256,14.221,10.012,14.221"></path></g>'
       OrgChart.templates.myTemplate.field_10 = "{val}";
 
@@ -837,11 +965,13 @@ export default {
       this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
 
+        levelSeparation: 30,
+        subtreeSeparation: 30,
         nodeMouseClick: OrgChart.action.none,
         toolbar: {
           zoom: true,
           fit: true,
-          expandAll: false
+          expandAll: false,
         },
         showXScroll: OrgChart.scroll.visible,
         showYScroll: OrgChart.scroll.visible,
@@ -853,58 +983,101 @@ export default {
           Export: {
             text: "Export Chart",
             icon: OrgChart.icon.svg(18, 18),
-            onClick: this.download
+            onClick: this.download,
           },
           pdf: {
             text: "Export PDF",
             icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
-            onClick: this.pdf
+            onClick: this.pdf,
           },
           png: {
-            text: "Export PNG"
-          }
+            text: "Export PNG",
+          },
         },
         nodeMenu: {
           levelDown: {
             text: "Level Down",
             icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
-            onClick: this.addChildDataToChart
+            onClick: this.addChildDataToChart,
           },
           exportProfile: {
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
-            onClick: this.exportUserProfile
+            onClick: this.exportUserProfile,
           },
           edit: {
-            text: "Edit"
-          }
+            text: "Edit",
+          },
         },
 
         tags: {
+          subLevels0: {
+            subLevels: 0,
+            levelSeparation: 10,
+          },
+          subLevels1: {
+            subLevels: 1,
+            levelSeparation: 10,
+          },
+          subLevels2: {
+            subLevels: 2,
+            levelSeparation: 10,
+          },
+          subLevels3: {
+            subLevels: 3,
+            levelSeparation: 10,
+          },
+          subLevels4: {
+            subLevels: 4,
+            levelSeparation: 10,
+          },
+          subLevels5: {
+            subLevels: 5,
+            levelSeparation: 10,
+          },
+          subLevels6: {
+            subLevels: 6,
+            levelSeparation: 10,
+          },
+          subLevels7: {
+            subLevels: 7,
+            levelSeparation: 10,
+          },
+          subLevels8: {
+            subLevels: 8,
+            levelSeparation: 10,
+          },
+          subLevels9: {
+            subLevels: 9,
+            levelSeparation: 10,
+          },
           RootNode: {
             nodeMenu: {
               levelUp: {
                 text: "Level Up",
                 icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
-                onClick: this.addChildDataToChart
+                onClick: this.addChildDataToChart,
               },
               exportProfile: {
                 text: "View Profile",
                 icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
-                onClick: this.exportUserProfile
+                onClick: this.exportUserProfile,
               },
               edit: {
-                text: "Edit"
-              }
-            }
+                text: "Edit",
+              },
+            },
           },
           assistant: {
-            template: "belinda"
+            template: "belinda",
+          },
+           nonImage: {
+            template: "ula",
           },
           dummy: {
             template: "deborah",
-            nodeMenu: {}
-          }
+            nodeMenu: {},
+          },
         },
 
         template: "myTemplate",
@@ -921,9 +1094,9 @@ export default {
           field_8: "jobLevel",
           field_9: "positionVacant",
           // field_11: "positionVacant",
-          img_0: "img",
-          field_10: this.binder
-        }
+          img_0: this.img_binding,
+          field_10: this.binder,
+        },
       });
       this.chart.fit();
       this.chart.on("click", (sender, args) => {
@@ -941,10 +1114,9 @@ export default {
         }
       });
 
-      this.chart.on("exportstart", function(sender, args) {
+      this.chart.on("exportstart", function (sender, args) {
         args.content +=
           '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
-
         args.content += document.getElementById("myStyles").outerHTML;
         args.content += document.getElementById("legendd").outerHTML;
         args.content += document.getElementById("legTag").outerHTML;
@@ -984,12 +1156,12 @@ export default {
         if (skipBlurLink.indexOf(id) == -1)
           linksElements[i].setAttribute("filter", "url(#f1)");
       }
-    }
+    },
   },
 
   mounted() {
     this.getData();
     // this.oc(this.$refs.tree, this.orgChartData);
-  }
+  },
 };
 </script>

@@ -1,15 +1,16 @@
 <template>
   <div>
-    <v-toolbar class="pt-1 pb-5" height="80px">
+    <v-toolbar class="pt-1 pb-5">
       <v-layout row wrap>
         <v-flex xs3>
-          <img src="/assets/hdr_logo.png" style="height: 50px; margin-left: 20px;" />
+          <img src="/assets/hdr_logo.png" style="height: 60px; width:80px; margin-left: 20px;margin-top: 10px;" />
         </v-flex>
-        <v-flex xs4 class="pr-5">
-          <SearchAlumni @getUserData="getUserData"></SearchAlumni>
+        <v-flex xs6 class="pr-5 pt-5">
+          <!-- <SearchAlumni @getUserData="getUserData"></SearchAlumni> -->
+          <search @getUserData="getUserData"></search>
         </v-flex>
 
-        <v-flex xs3 class="pt-5 pl-5">
+        <v-flex xs3 class="pt-5 pl-5" style="margin-top: 10px;">
           <v-menu
             ref="menu"
             v-model="menu"
@@ -34,7 +35,7 @@
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex xs2 class="pr-5">
+        <!-- <v-flex xs2 class="pr-5">
           <v-menu transition="scale-transition" offset-y>
             <template v-slot:activator="{ attrs, on }">
               <v-btn icon v-bind="attrs" v-on="on">
@@ -50,7 +51,7 @@
               <v-img src="/assets/legendicon.png"></v-img>
             </v-card>
           </v-menu>
-        </v-flex>
+        </v-flex>-->
       </v-layout>
     </v-toolbar>
     <v-layout row wrap>
@@ -69,8 +70,8 @@
 <script>
 // Utilities
 
-import SearchAlumni from "@/components/SearchAlumni";
-
+//import SearchAlumni from "@/components/SearchAlumni";
+import search from "@/components/search.vue";
 export default {
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
@@ -79,18 +80,19 @@ export default {
   }),
 
   components: {
-    SearchAlumni,
+    // SearchAlumni,
+    search,
   },
-  computed: {
-    inputDate: {
-      get() {
-        return this.$store.getters.getinputDate;
-        // return true;
+    computed: {
+      inputDate: {
+        get() {
+          return this.$store.getters.getinputDate;
+          // return true;
+        },
+        set(data) {
+          this.$store.commit("setinputDate", data);
+        },
       },
-      set(data) {
-        this.$store.commit("setinputDate", data);
-      },
-    },
     showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
@@ -126,7 +128,9 @@ export default {
       this.$router.push({ path: "/" });
       var date1 = new Date(this.inputDate).getTime();
       this.showLoading = true;
-      this.$store
+      if(data.category=="People")
+      {
+        this.$store
         .dispatch("testcall", {
           userid: data.userId,
           position: data.position,
@@ -139,6 +143,23 @@ export default {
             this.$router.push({ path: "/orgchart" });
           }
         });
+      }
+      else{
+        this.$store
+        .dispatch("orgCategory",{
+          type: data.category,
+          typeValue: data.value,
+          date: date1,
+        })
+        .then((response) => {
+          if (response) {
+            console.log("testing");
+            this.showLoading = false;
+            this.$router.push({ path: "/orgchart" });
+          }
+        });
+      }
+      
     },
   },
 };

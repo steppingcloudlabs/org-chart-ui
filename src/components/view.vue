@@ -17,5 +17,6 @@ export default {
       title: "Vue Material Dashboard by CreativeTim",
     };
   },
+ 
 };
 </script>

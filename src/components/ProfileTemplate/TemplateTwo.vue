@@ -28,7 +28,7 @@
               <p
                 class="pa-2 header"
                 style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
-              >Company Information</p>
+              >Employee Information</p>
               <v-divider></v-divider>
               <p
                 class="pt-3"

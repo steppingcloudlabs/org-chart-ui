@@ -1,5 +1,5 @@
 <template>
-  <v-card min-height="800px" max-width="50%" style="margin-left:auto;margin-right:auto;">
+  <v-card min-height="800px" max-width="80%" style="margin-left:auto;margin-right:auto;">
     <v-container style="padding: unset;">
       <v-row justify="center" no-gutters style="height:800px">
         <v-col cols="5" style="background:#b0e7e2">
@@ -11,13 +11,13 @@
               tile
               style="border-radius:20%;border:2px solid"
             >
-              <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
+              <v-img :src="profileBasicData.img"></v-img>
             </v-avatar>
-            <p class="pt-2 name" style="font-size:20px;font-weight:600;color:#35383f">WILLIAM JHON</p>
+            <p class="pt-2 name" style="font-size:20px;font-weight:600;color:#35383f">{{profileBasicData.userName}}</p>
             <p
               class="name"
               style="font-size:15px;font-weight:600;color:black; line-height: 0px; margin-top: -6px;"
-            >DEVELOPER</p>
+            >{{profileBasicData.positionTitle}}</p>
           </div>
           <v-divider style="margin-left:25px;margin-right:25px;color:#35383f"></v-divider>
 
@@ -25,26 +25,26 @@
             <p
               class="pa-1 header"
               style="font-size:15px;font-weight:600;color:#35383f;margin-bottom:-2px;text-align:center"
-            >Personal Information</p>
+            >Employee Information</p>
             <div
               class="pt-3"
               style="font-size:12px;font-weight:500;color:black;margin-bottom:-2px;margin-left:2px"
             >
               <v-row style="line-height:2px">
                 <v-col class="column-header">Position:</v-col>
-                <v-col>Test</v-col>
+                <v-col>{{profileBasicData.pid}}</v-col>
               </v-row>
               <v-row style="line-height:2px">
-                <v-col class="column-header">Incumbent:</v-col>
-                <v-col>Test</v-col>
+                <v-col class="column-header">Manager:</v-col>
+                <v-col>{{profileBasicData.userManagerName}}</v-col>
+              </v-row>
+               <v-row style="line-height:2px">
+                <v-col class="column-header">Pay Grade:</v-col>
+                <v-col>{{profileBasicData.userPayGradeName}}</v-col>
               </v-row>
               <v-row style="line-height:2px">
-                <v-col class="column-header">Date Of birth:</v-col>
-                <v-col>24th Aug,1998</v-col>
-              </v-row>
-              <v-row style="line-height:2px">
-                <v-col class="column-header">DOR</v-col>
-                <v-col>Test</v-col>
+                <v-col class="column-header">Business Unit </v-col>
+                <v-col>{{profileBasicData.businessUnitName}} </v-col>
               </v-row>
             </div>
           </div>
@@ -80,7 +80,7 @@
             </div>
           </div>
           <v-divider class="mt-5" style="margin-left:25px;margin-right:25px;color:#35383f"></v-divider>
-          <div>
+          <div v-if="this.empProfileData.bgEducation.length">
             <p
               class="pa-1 header"
               style="font-size:15px;font-weight:600;color:#35383f;text-align:center;margin-bottom:2px"
@@ -90,19 +90,19 @@
               style="font-size:12px;font-weight:500;color:black;margin-left:2px"
             >
               <v-layout row wrap class="ml-3">
-                <v-row
-                  v-for="(item, i) in academics"
-                  :key="i"
-                  style="text-align:left;height: 33px;"
-                  class="mt-2"
-                >
-                  <span>{{i+1}}.{{item}}</span>
-                </v-row>
+               <v-row
+                    class="mt-2"
+                    v-for="(data, k) in empProfileData.bgEducation"
+                    :key="'bgEducation' + k"
+                    style="text-align:left;height: 33px;width: 100%;"
+                  >
+                    <p>{{ getEmployeeEducation(data) }}</p>
+                  </v-row>
               </v-layout>
             </div>
           </div>
           <v-divider class="mt-5" style="margin-left:25px;margin-right:25px;color:#35383f"></v-divider>
-          <div>
+          <div  v-if="this.empProfileData.previousExperience.length">
             <p
               class="pa-1 header"
               style="font-size:15px;font-weight:600;color:#35383f;text-align:center;margin-bottom:2px"
@@ -112,20 +112,20 @@
               style="font-size:12px;font-weight:500;color:black;margin-left:2px"
             >
               <v-layout row wrap class="ml-3">
-                <v-row
-                  v-for="(item, i) in pre_work"
-                  :key="i"
-                  style="text-align:left;height: 33px;"
-                  class="mt-2"
-                >
-                  <span>{{i+1}}.{{item}}</span>
-                </v-row>
+               <v-row
+                    class="mt-2"
+                    v-for="(data, k) in empProfileData.previousExperience"
+                    :key="'previousExperience'+k"
+                   
+                  >
+                    <p>{{ getPreviousExperience(data) }}</p>
+                  </v-row>
               </v-layout>
             </div>
           </div>
         </v-col>
         <v-col cols="7" style="background:#35383f">
-          <div>
+          <div v-if="this.empProfileData.insideExperience.length">
             <p
               class="pa-1 header"
               style="font-size:15px;font-weight:600;color:white;text-align:center;margin-bottom:2px"
@@ -135,230 +135,53 @@
               style="font-size:12px;font-weight:500;color:white;margin-left:2px"
             >
               <v-layout row wrap class="ml-3">
-                <v-row
-                  v-for="(item, i) in work"
-                  :key="i"
-                  style="text-align:left;height: 33px;"
-                  class="mt-2"
-                >
-                  <span>{{i+1}}.{{item}}</span>
-                </v-row>
+               <v-row
+                    class="mt-2"
+                    v-for="(data, k) in empProfileData.insideExperience"
+                    :key="'insideExperience'+k"
+                    style="text-align:left;height: 33px;"
+                  >
+                    <p>{{ getInsideExperience(data) }}</p>
+                  </v-row>
               </v-layout>
             </div>
           </div>
           <v-divider  style="margin-left:25px;margin-right:25px;background:white"></v-divider>
-          <div class="mt-2">
-            <table class="performance-table" style="font-size:12px;font-weight:500;margin-left:25px">
-            <tbody>
-              <tr>
-                <td style="font-size:15px;font-weight:600;color:white;margin-bottom:-2px" class="header">Re Behavior</td>
-                <td
-                  style="font-size:15px;font-weight:600;color:white;margin-bottom:-2px;"
-                  class="header"
-                  colspan="4"
-                >Levels</td>
-              </tr>
-              <tr>
-                <td style="width:60%"></td>
-                <td style="width:10%; text-align: center" class="head">1</td>
-                <td style="width:10%; text-align: center" class="head">2</td>
-                <td style="width:10%; text-align: center" class="head">3</td>
-                <td style="width:10%; text-align: center" class="head">4</td>
-              </tr>
-              <tr>
-                <td class="head" style="width:60%">Empowering Leadership</td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-one-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-two-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-three-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-four-color"></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="head" style="width:60%">Customer Advocacy</td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-one-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-two-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-three-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-four-color"></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="head" style="width:60%">Thinking Unconventional</td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-one-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-two-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-three-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-four-color"></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="head" style="width:60%">Boundaryless Collaboration</td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-one-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-two-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-three-color"></div>
-                </td>
-                <td style="width:10%; text-align: center">
-                  <div class="perf-circle level-four-color"></div>
-                </td>
-              </tr>
-            </tbody>
+          <div class="mt-2" v-if="this.empProfileData.competencyRating.length">
+             <p
+              class="pa-1 header"
+              style="text-align:center;font-size:15px;font-weight:600;color:#B0E7E2;margin-bottom:-2px"
+            > Competency Rating</p>   
+          <table class="performance-table" style="font-size:12px;font-weight:500;">
+           <tbody>
+                  <tr v-for="(data, k) in competencyRating" :key="'competencyRating'+k">
+                    <td
+                      style="width:73%;font-size:12px;font-weight:500;color:white;margin-bottom:-2px"
+                    >{{data.source}}({{data.module}})</td>
+                    <td class="text-left">
+                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                    </td>
+                  </tr>
+                </tbody>
           </table>
           </div>
            <v-divider  style="margin-left:25px;margin-right:25px;background:white"></v-divider>
-          <div class="mt-2">
-             
-             <table class="performance-table"  style="font-size:12px;font-weight:500;margin-left:25px">
+          <div class="mt-2"  v-if="this.empProfileData.performanceRating.length">
+              <p
+              class="pa-2 header"
+              style="text-align:center;font-size:15px;font-weight:600;color:#B0E7E2;margin-bottom:-2px"
+            > Performance Rating</p>
+          <table class="performance-table"  style="font-size:12px;font-weight:500;">
             <tbody>
-              <tr>
-                <td class="head" style="width:50%">Perf Rating FY16-17</td>
-                <td></td>
-                <td>
-                  <div class="perf-circle perf-one-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-two-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-three-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-four-color perf-circled-border"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-five-color"></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="head">Perf Rating FY17-18</td>
-                <td></td>
-                <td>
-                  <div class="perf-circle perf-one-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-two-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-three-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-four-color perf-circled-border"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-five-color"></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="head">Perf Rating FY18-19</td>
-                <td></td>
-                <td>
-                  <div class="perf-circle perf-one-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-two-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-three-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-four-color perf-circled-border"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-five-color"></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="head">Pot Rating 2019</td>
-                <td>
-                  <div class="perf-circle perf-zero-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-one-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-two-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-three-color perf-circled-border"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-four-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-five-color"></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="head">Culture Fit</td>
-                <td></td>
-                <td>
-                  <div class="perf-circle perf-one-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-two-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-three-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-four-color"></div>
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td class="head">Position Criticality</td>
-                <td></td>
-                <td></td>
-                <td>
-                  <div class="perf-circle perf-two-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-three-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-four-color"></div>
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td class="head">Talent Risk</td>
-                <td></td>
-                <td></td>
-                <td>
-                  <div class="perf-circle perf-two-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-three-color"></div>
-                </td>
-                <td>
-                  <div class="perf-circle perf-four-color"></div>
-                </td>
-                <td></td>
-              </tr>
-            </tbody>
+                  <tr v-for="(data, k) in performanceRating" :key="'performanceRating'+k">
+                    <td
+                      style="width:63%;font-size:12px;font-weight:500;color:white;margin-bottom:-2px"
+                    >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
+                    <td class="text-left">
+                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                    </td>
+                  </tr>
+                </tbody>
           </table>
           </div>
            <v-divider  style="margin-left:25px;margin-right:25px;background:white"></v-divider>
@@ -377,40 +200,141 @@
 </template>  
 
 <script>
+import moment from "moment";
+import $ from "jquery";
 export default {
-  data: () => ({
-    rating: 3.5,
-    star: ["Marketing", "Programming", "Management"],
-    academics: [
-      "BSc (Hons), Univ. of Southampton - 1987",
-      "Leading Product Development, HBS - 2008"
-    ],
-    pre_work: [
-      "Triumph-Engineer(Jan 1997-Jan 2006)",
-      "Triumph-Manager(Jan 2006-Oct 2014)"
-    ],
-    work: [
-      "Joined in Jan 2015 as Head of Product Planning and Strategy",
-      "Managed Product Development from Jul 2015",
-      "Re-designated as Head Product Development in Aug 2016"
-    ]
-  }),
-  mounted()
-  {
-    this.createSvg()
+  name: "TemplateTwo",
+  data() {
+    return {
+      rating: 3,
+    };
   },
-  methods:
-  {
-     createSvg() {
+  props: {
+    profileBasicData: {
+      default: undefined,
+      type: Object,
+    },
+  },
+
+  mounted() {
+    //this.createSvg();
+    this.printProfile();
+    console.log(moment);
+    if (
+      this.empProfileData.performanceRating &&
+      this.empProfileData.potentialRating
+    ) {
+      var c = this.empProfileData.potentialRating[0].rating;
+      var r = this.empProfileData.performanceRating[0].rating;
+      var id = "rect" + r.toString() + c.toString();
+      var textid = "text" + r.toString() + c.toString();
+      var elem = document.getElementById(id);
+      elem.style.fill = "#1976D2";
+      var elem1 = document.getElementById(textid);
+      elem1.style.fill = "white";
+    }
+  },
+  computed: {
+    empProfileData() {
+      return this.$store.getters.getEmpProfileData;
+    },
+    performanceRating() {
+      return this.empProfileData.performanceRating.filter((element) => {
+        element.rating = parseInt(element.rating);
+        return element.rating > -1;
+      });
+    },
+    competencyRating() {
+      return this.empProfileData.competencyRating.filter((element) => {
+        element.rating = parseInt(element.rating);
+        return element.rating > -1;
+      });
+    },
+  },
+  methods: {
+    getInsideExperience(insideExp) {
+      return (
+        insideExp.title +
+        " in " +
+        insideExp.department +
+        " department from, " +
+        moment
+          .unix(
+            insideExp.startDate.substring(6, insideExp.startDate.length - 5)
+          )
+          .format("MM-YYYY") +
+        " to " +
+        moment
+          .unix(insideExp.endDate.substring(6, insideExp.endDate.length - 5))
+          .format("MM-YYYY")
+      );
+    },
+    getEmployeeEducation(bgEducation) {
+      let educationString =
+        bgEducation.degree +
+        (bgEducation.major ? " in " + bgEducation.major : "") +
+        " from " +
+        bgEducation.school +
+        ", " +
+        bgEducation.year;
+      return educationString;
+    },
+    getPreviousExperience(preExp) {
+      return (
+        preExp.startTitle +
+        " in " +
+        preExp.employer +
+        " from " +
+        moment
+          .unix(preExp.startDate.substring(6, preExp.startDate.length - 5))
+          .format("MM-YYYY") +
+        " to " +
+        moment
+          .unix(preExp.endDate.substring(6, preExp.endDate.length - 5))
+          .format("MM-YYYY")
+      );
+    },
+    getRatingYear(startDate, endDate) {
+      return (
+        moment.unix(startDate.substring(6, startDate.length - 5)).format("YY") +
+        "-" +
+        moment.unix(endDate.substring(6, endDate.length - 5)).format("YY")
+      );
+    },
+    test() {
+      $.extend($.fn, {
+        makeProfileCssInline: function () {
+          this.each(function (idx, el) {
+            var style = el.style;
+            var properties = [];
+            for (var property in style) {
+              if ($(this).css(property)) {
+                properties.push(property + ":" + $(this).css(property));
+              }
+            }
+            this.style.cssText = properties.join(";");
+            $(this).children().makeProfileCssInline();
+          });
+        },
+      });
+    },
+
+    printProfile() {
+      // this.test();
+      // $("#profile").makeProfileCssInline();
+      //var printContents = document.getElementById("").innerHTML;
+      // this.$htmlToPaper("container");
+    },
+    createSvg() {
       var ArrayRating = [
         ["Rough Diamond", "Future Star", "ConsistentStar"],
         ["Inconsitent performer", "Key Player", "Current Star"],
-        ["Talent Risk", "Solid performer", "Consistent Performer"]
+        ["Talent Risk", "Solid performer", "Consistent Performer"],
       ];
       var ArrayRating1 = [
         ["Rough Diamond1", "Future Star1", "ConsistentStar1"],
         ["Inconsitent performer1", "Key Player1", "Current Star1"],
-        ["Talent Risk1", "Solid performer1", "Consistent Performer1"]
+        ["Talent Risk1", "Solid performer1", "Consistent Performer1"],
       ];
       var x = 10;
       var y = 0;
@@ -472,7 +396,7 @@ export default {
       line.setAttribute("x2", 85);
       line.setAttribute("y2", tempY + 60);
 
-      line.setAttribute("stroke", "white");
+      line.setAttribute("stroke", "#166AB8");
       line.setAttribute("stroke-width", 2);
 
       svg.appendChild(line);
@@ -482,7 +406,7 @@ export default {
       line.setAttribute("y1", 0);
       line.setAttribute("x2", 95);
       line.setAttribute("y2", 0);
-      line.setAttribute("stroke", "white");
+      line.setAttribute("stroke", "#166AB8");
       line.setAttribute("stroke-width", 3);
       svg.appendChild(line);
 
@@ -491,7 +415,7 @@ export default {
       line.setAttribute("y1", tempY + 60);
       line.setAttribute("x2", tempX + 100);
       line.setAttribute("y2", tempY + 60);
-      line.setAttribute("stroke", "white");
+      line.setAttribute("stroke", "#166AB8");
       line.setAttribute("stroke-width", 2);
 
       svg.appendChild(line);
@@ -501,7 +425,7 @@ export default {
       line.setAttribute("y1", tempY + 50);
       line.setAttribute("x2", tempX + 100);
       line.setAttribute("y2", tempY + 70);
-      line.setAttribute("stroke", "white");
+      line.setAttribute("stroke", "#166AB8");
       line.setAttribute("stroke-width", 3);
       svg.appendChild(line);
 
@@ -511,7 +435,7 @@ export default {
       text.setAttribute("y", 2);
       text.setAttribute("text-anchor", "middle");
       text.setAttribute("id", "text1");
-      text.setAttribute("fill", "white");
+      text.setAttribute("fill", "black");
       text.setAttribute("font-size", "7.5");
       text.setAttribute("transform", "rotate(90 20,40)");
 
@@ -523,7 +447,7 @@ export default {
       text1.setAttribute("y", 2);
       text1.setAttribute("text-anchor", "middle");
       text1.setAttribute("id", "text2");
-      text1.setAttribute("fill", "white");
+      text1.setAttribute("fill", "black");
       text1.setAttribute("font-size", "7.5");
       text1.setAttribute("transform", "rotate(90 20,40)");
 
@@ -535,7 +459,7 @@ export default {
       text2.setAttribute("y", 2);
       text2.setAttribute("text-anchor", "middle");
       text2.setAttribute("id", "text3");
-      text2.setAttribute("fill", "white");
+      text2.setAttribute("fill", "black");
       text2.setAttribute("font-size", "7.5");
       text2.setAttribute("transform", "rotate(90 20,40)");
 
@@ -556,7 +480,7 @@ export default {
       text.setAttribute("y", 190);
       text.setAttribute("text-anchor", "middle");
       text.setAttribute("id", "text4");
-      text.setAttribute("fill", "white");
+      text.setAttribute("fill", "black");
       text.setAttribute("font-size", "7.5");
 
       text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -564,7 +488,7 @@ export default {
       text1.setAttribute("y", 190);
       text1.setAttribute("text-anchor", "middle");
       text1.setAttribute("id", "text5");
-      text1.setAttribute("fill", "white");
+      text1.setAttribute("fill", "black");
       text1.setAttribute("font-size", "7.5");
 
       text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -572,7 +496,7 @@ export default {
       text2.setAttribute("y", 190);
       text2.setAttribute("text-anchor", "middle");
       text2.setAttribute("id", "text6");
-      text2.setAttribute("fill", "white");
+      text2.setAttribute("fill", "black");
       text2.setAttribute("font-size", "7.5");
 
       group.appendChild(text);
@@ -597,14 +521,14 @@ export default {
             ArrayRating[i][j];
         }
       }
-      document.getElementById("Solid performer1").style.fill = "#B0E7E2";
+      document.getElementById("Solid performer1").style.fill = "#166AB8";
       document.getElementById("svg").style.marginLeft = "-53px";
-      
-    }
-  }
+      var elem3 = document.getElementById("svg");
+      console.log(elem3.outerHTML);
+    },
+  },
 };
 </script>
-
 <style scoped>
 .head
 {
