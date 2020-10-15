@@ -609,7 +609,7 @@ export default {
           this.resignedCount++;
         }
         if (node["positionVacant"] == false && node.img) {
-          node["img"] = "data:image/jpg;base64," + node.img;
+          console.log("hello")
         } else if (node["positionVacant"] == false && !node.img) {
           node["img"] = "https://i.ibb.co/zxjJ4TK/placeholder.png";
         } else {
@@ -856,7 +856,7 @@ export default {
         // var ind=data.tags.indexOf("nonImage")
         //  ind > -1 ? data.tags.splice(ind, 1) : -1
         //console.log(data.img)
-       var field= '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+data.img+'" x="50" y="20"  width="80" height="80"></image>';
+       var field= '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `data:image/jpg;base64,${data.img}` ) + '" x="50" y="20"  width="80" height="80"></image>';
       //console.log(field)
       return field
       } else {
@@ -1126,7 +1126,7 @@ export default {
       if (this.selectedId == null) {
         return;
       }
-      var node = this.chart.getBGNode(this.selectedId);
+      var node = this.chart.getNode(this.selectedId);
       var skipBlur = [node.id];
       var skipBlurLink = [];
       while (node.parent) {

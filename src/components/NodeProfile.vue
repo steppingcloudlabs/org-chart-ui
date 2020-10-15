@@ -11,10 +11,10 @@
     >
         <div >
         <v-img v-if="nodeData.img" width="100px" height="100px" class="mt-4" style="margin-left: auto;
-        margin-right: auto;border-radius:50%" :src="nodeData.img"></v-img>
+        margin-right: auto;border-radius:50%" :src="nodeData && nodeData.img.indexOf('https') > -1 ? nodeData.img : `data:image/jpg;base64,${nodeData.img}`"></v-img>
         </div>
-      <div>
-        <p style="text-align:center;font-size:30px;color:#387DC3">{{nodeData.userName}}</p>
+      <div class="px-2">
+        <p style="text-align:center;font-size:24px;color:#387DC3">{{nodeData.userName}}</p>
          <p style="text-align:center;line-height:0px;color:grey">{{nodeData.positionTitle}}</p>
       </div>
       <v-divider style="margin-top:10px" color="#387DC3"></v-divider>  
