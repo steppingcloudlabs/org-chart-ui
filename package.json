@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@balkangraph/orgchart.js": "^7.1.98",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "canvg": "^3.0.6",
     "core-js": "^3.6.4",
     "html2canvas": "^1.0.0-rc.5",
