@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-4">
     <v-toolbar class="pt-1 pb-5">
       <v-layout row wrap>
         <v-flex xs3>

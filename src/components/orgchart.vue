@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-card height="550px" width="100%" color="white" elevation="0">
+  <div class="mt-5">
+    <v-card  width="100%" color="white" elevation="0">
       <v-layout row wrap>
         <v-flex xs2>
           <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
@@ -737,11 +737,9 @@ export default {
       this.chart.element.appendChild(legent);
     },
     pdf() {
-      this.chart.exportPDF({
-        format: "A2",
-
-        footer: "My Footer. Page {current-page} of {total-pages}",
-      });
+        OrgChart.pdfPrevUI.show(this.chart, {
+            format: 'A4'
+        });
     },
 
     download() {
@@ -988,7 +986,7 @@ export default {
           pdf: {
             text: "Export PDF",
             icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
-            onClick: this.pdf,
+           
           },
           png: {
             text: "Export PNG",
@@ -1098,10 +1096,10 @@ export default {
           field_10: this.binder,
         },
       });
-      this.chart.fit();
+     // this.chart.fit();
       this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);
-
+        
         var data1 = sender.get(args.node.pid);
 
         this.selectedId = data.id;
@@ -1118,8 +1116,8 @@ export default {
         args.content +=
           '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
         args.content += document.getElementById("myStyles").outerHTML;
-        args.content += document.getElementById("legendd").outerHTML;
-        args.content += document.getElementById("legTag").outerHTML;
+       // args.content += document.getElementById("legendd").outerHTML;
+        //args.content += document.getElementById("legTag").outerHTML;
       });
     },
     blur() {
