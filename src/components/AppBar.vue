@@ -1,9 +1,9 @@
 <template>
   <div class="mb-4">
-    <v-toolbar class="pt-1 pb-5">
+    <v-toolbar class="pt-1 pb-5" >
       <v-layout row wrap>
         <v-flex xs3>
-          <img src="/assets/hdr_logo.png" style="height: 60px; width:80px; margin-left: 20px;margin-top: 10px;" />
+          <img src="/assets/hdr_logo.png" style="height: 60px; width:120px; margin-left: 20px;margin-top: 10px;" />
         </v-flex>
         <v-flex xs6 class="pr-5 pt-5">
           <!-- <SearchAlumni @getUserData="getUserData"></SearchAlumni> -->

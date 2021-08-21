@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app width="100%">
     <core-view></core-view>
   </v-app>
 </template>

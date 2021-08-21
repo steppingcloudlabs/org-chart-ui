@@ -2,10 +2,45 @@
   <div class="mt-5">
     <v-card  width="100%" color="white" elevation="0">
       <v-layout row wrap>
-        <v-flex xs2>
-          <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
+        <v-flex xs3 class="pl-4">
+                  <v-tabs grow  v-model="tab">
+             <v-tab  >Filters</v-tab>
+             <v-tab  v-if="gradecount.length" >Head Count</v-tab>
+            </v-tabs>
+            <v-tabs-items  v-model="tab" >
+                  <v-tab-item >
+                    <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
+                  </v-tab-item>
+                  <v-tab-item v-if="gradecount.length" >
+                    <v-simple-table id="tabb">
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">
+                            Pay Grade
+                          </th>
+                          <th class="text-left">
+                            Head Count
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(item,i) in gradecount"
+                          :key="i"
+                        >
+                          <td>{{userPayGrade[i]}}</td>
+                          <td>{{item}}</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                  </v-tab-item>
+            </v-tabs-items>
+         <v-divider vertical></v-divider>
         </v-flex>
-        <v-flex xs10>
+        <v-flex xs9 style="height:100%">
+        
           <div id="tree" ref="tree"></div>
         </v-flex>
       </v-layout>
@@ -22,12 +57,17 @@ import profile from "@/components/profileDialog";
 import nodeProfile from "@/components/NodeProfile";
 import $ from "jquery";
 import Canvg from "canvg";
+import {legendTable} from "@/mixins/legendTable.js"
+
+
 //import imageToBase64 from "image-to-base64";
 
 export default {
+  mixins:[legendTable],
   name: "tree",
   data() {
     return {
+      tab:null,
       intersectPay: [],
       nodes: {},
       chart: {},
@@ -58,7 +98,8 @@ export default {
   components: {
     Sidenav,
     profile,
-    nodeProfile,
+    nodeProfile
+   
   },
   computed: {
     showNodeProfile: {
@@ -221,9 +262,17 @@ export default {
       if (this.userData) {
         console.log(this.userData);
         this.nodes = this.userData;
-
+        
+         
         for (var i = 0; i < this.nodes.length; i++) {
           this.getChlidData(this.nodes[i]);
+          if(this.nodes[i].experiencearray)
+          {
+           let expyear=this.nodes[i].experiencearray.sort((a,b) => a.startDate - b.startDate);
+           this.nodes[i].experiencearray=new Number((new Date().getTime() - new Date(expyear[0].startDate).getTime()) / 31536000000).toFixed(0)+" years";
+           console.log(this.nodes[i].experiencearray)
+          }
+           
         }
         console.log(this.nodes);
 
@@ -231,52 +280,54 @@ export default {
         this.nodes = this.addTags(this.nodes);
         this.orgChartData = this.nodes;
         this.oc(this.$refs.tree, this.orgChartData, null);
-        var str = "";
+        //var str = "";
         // let intersectPay = [];
+          this.gradeCounting()
+          var table=this.drawlegend(this.userPayGrade,this.gradecount)
+        // for (var j = 0; j < this.gradecount.length; j = j + 3) {
+        //   str +=
+        //     "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+        //     this.userPayGrade[j] +
+        //     "-" +
+        //     this.gradecount[j] +
+        //     "</span><span class='ml-2'>" +
+        //     this.userPayGrade[j + 1] +
+        //     "-" +
+        //     this.gradecount[j + 1] +
+        //     "</span>";
 
-        for (var j = 0; j < this.gradecount.length; j = j + 3) {
-          str +=
-            "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
-            this.userPayGrade[j] +
-            "-" +
-            this.gradecount[j] +
-            "</span><span class='ml-2'>" +
-            this.userPayGrade[j + 1] +
-            "-" +
-            this.gradecount[j + 1] +
-            "</span>";
-
-          if (this.gradecount[j + 3]) {
-            str +=
-              "<span class='ml-2'>" +
-              this.userPayGrade[j + 2] +
-              "-" +
-              this.gradecount[j + 2] +
-              "</span></p>";
-          } else {
-            str += "</p>";
-          }
-        }
-        var legent = document.createElement("div");
-        legent.setAttribute("id", "legendd");
-        legent.style.position = "absolute";
-        legent.style.top = "20px";
-        legent.style.left = "50px";
-        legent.style.color = "#2B81D6";
-        legent.style.width = "150px";
-        legent.style.border = "1px solid black";
-        legent.innerHTML =
-          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-          this.totalHeadCount +
-          "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-          this.vacantCount +
-          "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-          this.maleCount +
-          ":" +
-          this.femaleCount +
-          "</p>" +
-          str;
-        this.chart.element.appendChild(legent);
+        //   if (this.gradecount[j + 3]) {
+        //     str +=
+        //       "<span class='ml-2'>" +
+        //       this.userPayGrade[j + 2] +
+        //       "-" +
+        //       this.gradecount[j + 2] +
+        //       "</span></p>";
+        //   } else {
+        //     str += "</p>";
+        //   }
+        // }
+         
+        // var legent = document.createElement("div");
+        // legent.setAttribute("id", "legendd");
+        // legent.style.position = "absolute";
+        // legent.style.top = "20px";
+        // legent.style.left = "50px";
+        // legent.style.color = "#2B81D6";
+        // legent.style.width = "150px";
+        // legent.style.border = "1px solid black";
+        // legent.innerHTML =
+        //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
+        //   this.totalHeadCount +
+        //   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
+        //   this.vacantCount +
+        //   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+        //   this.maleCount +
+        //   ":" +
+        //   this.femaleCount +
+        //   "</p>" +
+        //   str;
+        this.chart.element.appendChild(table);
 
         var leg = document.createElement("div");
         leg.setAttribute("id", "legTag");
@@ -288,7 +339,7 @@ export default {
         leg.innerHTML =
           '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
         this.chart.element.appendChild(leg);
-        // this.gradeCounting()
+       
       }
     },
 
@@ -338,7 +389,7 @@ export default {
         "</p>" +
         str;
       this.chart.element.appendChild(legent);
-      //this.gradeCounting();
+      this.gradeCounting();
       var leg = document.createElement("div");
       leg.setAttribute("id", "legTag");
       leg.style.position = "absolute";
@@ -366,7 +417,7 @@ export default {
 });
           }
 
-        this.oc(this.$refs.tree, this.orgChartData, null);
+       this.oc(this.$refs.tree, this.orgChartData, null);
       var str = "";
       for (var j = 0; j < this.gradecount.length; j = j + 3) {
         str +=
@@ -418,9 +469,10 @@ export default {
       leg.style.right = "100px";
       leg.style.color = "#2B81D6";
       //leg.style.border = "1px solid black";
-      leg.innerHTML =
-        '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
-      this.chart.element.appendChild(leg);
+      // leg.innerHTML =
+      //   '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
+      // this.chart.element.appendChild(leg);
+      // 
     },
 
     exportUserProfile(nodeId) {
@@ -601,6 +653,14 @@ export default {
             node.tags.push("RootNode");
             break;
           case false:
+            break;
+        }
+        switch (node.type) {
+          case "Direct":
+            node.tags.push("Direct");
+            break;
+          case "Indirect":
+            node.tags.push("Indirect");
             break;
         }
         if (node.resignationStatus == "On Notice Period") {
@@ -960,9 +1020,9 @@ export default {
         '<filter id="f1" > \
                     <feGaussianBlur in="SourceGraphic" stdDeviation="4" /> \
                     </filter>';
+      
       this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
-
         levelSeparation: 30,
         subtreeSeparation: 30,
         nodeMouseClick: OrgChart.action.none,
@@ -1116,7 +1176,7 @@ export default {
         args.content +=
           '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
         args.content += document.getElementById("myStyles").outerHTML;
-       // args.content += document.getElementById("legendd").outerHTML;
+       args.content += document.getElementById("tabb").outerHTML;
         //args.content += document.getElementById("legTag").outerHTML;
       });
     },

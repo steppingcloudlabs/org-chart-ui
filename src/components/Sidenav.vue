@@ -1,14 +1,8 @@
 <template>
   <div>
     <v-navigation-drawer permanent height="650px" style="border-right:5px;width: 100%;">
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-icon>mdi-filter</v-icon>
-        </v-list-item-avatar>
-
-        <v-list-item-title>Filter</v-list-item-title>
-      </v-list-item>
-      <div class="text-center">
+      
+      <div class="text-center mt-1">
         <v-btn
           class="mr-2 mb-2"
           style="font-size:10px"
@@ -63,6 +57,13 @@
           v-model="selectedView"
            @input="validateView"
         ></v-treeview>
+        <v-treeview
+          selectable
+          selected-color="red"
+          :items="displayItem"
+          v-model="selectedDisplay"
+           @input="validateDisplay"
+        ></v-treeview>
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -82,6 +83,7 @@ export default {
       selectedBUItem:[],
        selectedLocationItem:[],
       fieldToDisplay: [0, 1, 2, 3,4],
+      selectedDisplay:[2],
 
       viewItem:[
           {
@@ -92,6 +94,17 @@ export default {
         }
 
       ],
+       displayItem:[
+          {
+          id: 999,
+          name: "Display type",
+          children: [ { id: 0, name: "Direct", value: "Direct" },
+            { id: 1, name: "Functional", value: "Indirect" },
+            { id: 2, name: "Both", value: "all" },]
+        }
+
+      ],
+
       items: [
         {
           id: 999,
@@ -149,8 +162,8 @@ export default {
             { id: 2, name: "Division", value: "userDivisionName" },
             { id: 3, name: "Business Unit", value: "businessUnit" },
              { id: 4, name: "Profile image", value: "image" },
-            { id: 5, name: "Revenue Managed", value: "location" },
-            { id: 6, name: "Cost Budget", value: "location" },
+            { id: 5, name: "Experience", value: "experiencearray" },
+           
             
           
           ]
@@ -284,6 +297,21 @@ export default {
         count++;
       }
       console.log(this.selectedView);
+      if (count > 1) {
+        this.selectedView.pop();
+        setTimeout(function() {
+          alert("You can View by one field only");
+        }, 1000);
+      }
+    },
+
+     validateDisplay()
+    {
+     var count = 0;
+      for (var i = 0; i < this.selectedDisplay.length; i++) {
+        count++;
+      }
+     
       if (count > 1) {
         this.selectedView.pop();
         setTimeout(function() {
@@ -479,6 +507,28 @@ export default {
       return test;
     },
 
+     filterappliedDisplay(orgChartData, filterArray, filterType) {
+      var test = [];
+     
+      orgChartData.filter(function(item) {
+        
+        for (var i = 0; i < item[filterType].length; i++) {
+          if (
+            filterArray.indexOf(item[filterType][i]) > -1) {
+              test.push(item)
+           
+          }
+           
+        }
+        
+       
+        
+       
+      });
+
+      return test;
+    },
+
     applySort(sortValue, newB) {
       if (sortValue == "userPayGrade") {
         newB = newB.map(function(element) {
@@ -534,6 +584,7 @@ export default {
       var filteredData = this.chartData;
       var fields = [];
       var sortValue = null;
+      var displaytype=[];
       for (var i = 0; i < this.fieldToDisplay.length; i++) {
         fields.push(
           this.fieldItems[0].children[this.fieldToDisplay[i]]["value"]
@@ -641,6 +692,29 @@ export default {
           "tags"
         );
       }
+      
+      if (this.selectedDisplay.length) {
+        for (i = 0; i < this.selectedDisplay.length; i++) {
+          if(this.selectedDisplay[i]!=2)
+          {
+              displaytype.push(
+            this.displayItem[0].children[this.selectedDisplay[i]]["value"]
+          );
+          }
+          else
+          {
+            displaytype=[]
+            displaytype.push("Direct")
+             displaytype.push("Indirect")
+          }
+        filteredData = this.filterappliedDisplay(
+          filteredData,
+          displaytype,
+          "tags"
+        );
+        }
+      }
+
       if (this.selectedSortItem.length) {
         console.log(this.selectedSortItem[0]);
         sortValue = this.sortBy[0].children[this.selectedSortItem[0]]["value"];
@@ -663,7 +737,7 @@ export default {
       this.selectedView=[0]
       this.selectedSortItem = [];
       this.fieldToDisplay = [0, 1, 2, 3,4];
-     
+      this.selectedDisplay=[2]
       
       this.$emit("reset");
     }
