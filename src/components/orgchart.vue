@@ -1,10 +1,13 @@
 <template>
-  <div class="mt-5">
-    <v-card  width="100%" color="white" elevation="0">
-      <v-layout row wrap>
-        <v-flex xs3 class="pl-4">
-                  <v-tabs grow  v-model="tab">
-             <v-tab  >Filters</v-tab>
+  <div >
+    <v-app light>   
+       <v-navigation-drawer
+      v-model="drawer"
+      app
+      permanent
+    >
+              <v-tabs grow  v-model="tab" background-color="grey lighten-4" >
+             <v-tab   >Filters</v-tab>
              <v-tab  v-if="gradecount.length" >Head Count</v-tab>
             </v-tabs>
             <v-tabs-items  v-model="tab" >
@@ -12,7 +15,7 @@
                     <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
                   </v-tab-item>
                   <v-tab-item v-if="gradecount.length" >
-                    <v-simple-table id="tabb">
+                    <v-simple-table id="tabb" background-color="grey lighten-4">
                     <template v-slot:default>
                       <thead>
                         <tr>
@@ -37,14 +40,17 @@
                   </v-simple-table>
                   </v-tab-item>
             </v-tabs-items>
-         <v-divider vertical></v-divider>
-        </v-flex>
-        <v-flex xs9 style="height:100%">
-        
-          <div id="tree" ref="tree"></div>
-        </v-flex>
-      </v-layout>
-    </v-card>
+       
+       </v-navigation-drawer>
+       <v-content >
+     
+        <div id="tree" ref="tree" style="background:white"></div>
+       
+      
+    </v-content>
+         
+     
+    </v-app>
     <profile></profile>
     <nodeProfile></nodeProfile>
   </div>
@@ -67,6 +73,8 @@ export default {
   name: "tree",
   data() {
     return {
+      drawer: true,
+       mini: true,
       tab:null,
       intersectPay: [],
       nodes: {},
@@ -1045,6 +1053,7 @@ export default {
           },
           pdf: {
             text: "Export PDF",
+           
             icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
            
           },
