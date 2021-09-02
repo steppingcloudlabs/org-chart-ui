@@ -13,9 +13,32 @@
             <v-tabs-items  v-model="tab" >
                   <v-tab-item >
                     <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
+                    <v-simple-table id="tabb" background-color="grey lighten-4" style="position: absolute;top: 10px;right: 50px;color:red;visibility:hidden">
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">
+                            Pay Grade
+                          </th>
+                          <th class="text-left">
+                            Head Count
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(item,i) in gradecount"
+                          :key="i"
+                        >
+                          <td>{{userPayGrade[i]}}</td>
+                          <td>{{item}}</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
                   </v-tab-item>
                   <v-tab-item v-if="gradecount.length" >
-                    <v-simple-table id="tabb" background-color="grey lighten-4">
+                    <v-simple-table  background-color="grey lighten-4" style="top: 10px;left: 20px;">
                     <template v-slot:default>
                       <thead>
                         <tr>
@@ -291,7 +314,7 @@ export default {
         //var str = "";
         // let intersectPay = [];
           this.gradeCounting()
-          var table=this.drawlegend(this.userPayGrade,this.gradecount)
+          //var table=this.drawlegend(this.userPayGrade,this.gradecount)
         // for (var j = 0; j < this.gradecount.length; j = j + 3) {
         //   str +=
         //     "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
@@ -335,18 +358,18 @@ export default {
         //   this.femaleCount +
         //   "</p>" +
         //   str;
-        this.chart.element.appendChild(table);
+        // this.chart.element.appendChild(table);
 
-        var leg = document.createElement("div");
-        leg.setAttribute("id", "legTag");
-        leg.style.position = "absolute";
-        leg.style.top = "20px";
-        leg.style.right = "100px";
-        leg.style.color = "#2B81D6";
-        //leg.style.border = "1px solid black";
-        leg.innerHTML =
-          '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
-        this.chart.element.appendChild(leg);
+        // var leg = document.createElement("div");
+        // leg.setAttribute("id", "legTag");
+        // leg.style.position = "absolute";
+        // leg.style.top = "20px";
+        // leg.style.right = "100px";
+        // leg.style.color = "#2B81D6";
+        // //leg.style.border = "1px solid black";
+        // leg.innerHTML =
+        //   '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
+        // this.chart.element.appendChild(leg);
        
       }
     },
@@ -354,60 +377,7 @@ export default {
     redraw(data) {
       this.fieldToDisplay = data.fieldToDisplay;
       this.oc(this.$refs.tree, data.output, data.orderBy);
-      var legent = document.createElement("div");
-      legent.setAttribute("id", "legendd");
-      legent.style.position = "absolute";
-      legent.style.top = "20px";
-      legent.style.left = "50px";
-      legent.style.color = "#2B81D6";
-      legent.style.width = "150px";
-      legent.style.border = "2px solid black";
-      var str = "";
-      for (var j = 0; j < this.gradecount.length; j = j + 3) {
-        str +=
-          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
-          this.userPayGrade[j] +
-          "-" +
-          this.gradecount[j] +
-          "</span><span class='ml-2'>" +
-          this.userPayGrade[j + 1] +
-          "-" +
-          this.gradecount[j + 1] +
-          "</span>";
-        if (this.gradecount[j + 3]) {
-          str +=
-            "<span class='ml-2'>" +
-            this.userPayGrade[j + 2] +
-            "-" +
-            this.gradecount[j + 2] +
-            "</span></p>";
-        } else {
-          str += "</p>";
-        }
-      }
-      legent.innerHTML =
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-        this.totalHeadCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-        this.vacantCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-        this.maleCount +
-        ":" +
-        this.femaleCount +
-        "</p>" +
-        str;
-      this.chart.element.appendChild(legent);
-      this.gradeCounting();
-      var leg = document.createElement("div");
-      leg.setAttribute("id", "legTag");
-      leg.style.position = "absolute";
-      leg.style.top = "20px";
-      leg.style.right = "100px";
-      leg.style.color = "#2B81D6";
-      //leg.style.border = "1px solid black";
-      leg.innerHTML =
-        '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
-      this.chart.element.appendChild(leg);
+      
     },
 
     reset() {
@@ -426,56 +396,8 @@ export default {
           }
 
        this.oc(this.$refs.tree, this.orgChartData, null);
-      var str = "";
-      for (var j = 0; j < this.gradecount.length; j = j + 3) {
-        str +=
-          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
-          this.userPayGrade[j] +
-          "-" +
-          this.gradecount[j] +
-          "</span><span class='ml-2'>" +
-          this.userPayGrade[j + 1] +
-          "-" +
-          this.gradecount[j + 1] +
-          "</span>";
-        if (this.gradecount[j + 3]) {
-          str +=
-            "<span class='ml-2'>" +
-            this.userPayGrade[j + 2] +
-            "-" +
-            this.gradecount[j + 2] +
-            "</span></p>";
-        } else {
-          str += "</p>";
-        }
-      }
-      var legent = document.createElement("div");
-      legent.setAttribute("id", "legendd");
-      legent.style.position = "absolute";
-      legent.style.top = "20px";
-      legent.style.left = "50px";
-      legent.style.color = "#2B81D6";
-      legent.style.width = "150px";
-      legent.style.border = "2px solid black";
-
-      legent.innerHTML =
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-        this.totalHeadCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-        this.vacantCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-        this.maleCount +
-        ":" +
-        this.femaleCount +
-        "</p>" +
-        str;
-      this.chart.element.appendChild(legent);
-      var leg = document.createElement("div");
-      leg.setAttribute("id", "legTag");
-      leg.style.position = "absolute";
-      leg.style.top = "20px";
-      leg.style.right = "100px";
-      leg.style.color = "#2B81D6";
+      
+     
       //leg.style.border = "1px solid black";
       // leg.innerHTML =
       //   '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
@@ -1182,11 +1104,13 @@ export default {
       });
 
       this.chart.on("exportstart", function (sender, args) {
+        document.getElementById("tabb").style.visibility="visible"
         args.content +=
           '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
         args.content += document.getElementById("myStyles").outerHTML;
        args.content += document.getElementById("tabb").outerHTML;
         //args.content += document.getElementById("legTag").outerHTML;
+        document.getElementById("tabb").style.visibility="hidden"
       });
     },
     blur() {

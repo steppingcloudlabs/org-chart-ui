@@ -59,7 +59,7 @@ export default {
     outerSelect: "",
     innerSelect: "",
     dropdown_data: [],
-    dropdown_font: [{text:"Business Unit",value:"businessunit"},{text:"Division",value:"division"} ,{text:"Department",value:"department"},{text:"People",value:"People"}],
+    dropdown_font: [{text:"Business Unit",value:"businessunit"},{text:"Division",value:"division"} ,{text:"Department",value:"department"},{text:"Cluster",value:"cluster"},{text:"People",value:"People"}],
   }),
   methods: {
     RefreshGrid() {
@@ -93,6 +93,22 @@ export default {
       }
       if (this.outerSelect === "department") {
         this.$store.dispatch("getAllDepartmentList").then((response) => {
+          console.log(response);
+          // for (let i = 0; i < response.d.results.length; i++) {
+          //  // console.log(g.selectedSearchField[i])
+          //   g.dropdown_data.push(response.d.results[i].externalCode) ;
+          // }
+          g.dropdown_data = response.d.results.map(function (item) {
+            let obj = {};
+            obj["name"] = item.name;
+            obj["id"] = item.externalCode;
+            return obj;
+          });
+        });
+      }
+
+        if (this.outerSelect === "cluster") {
+        this.$store.dispatch("getAllClusterList").then((response) => {
           console.log(response);
           // for (let i = 0; i < response.d.results.length; i++) {
           //  // console.log(g.selectedSearchField[i])

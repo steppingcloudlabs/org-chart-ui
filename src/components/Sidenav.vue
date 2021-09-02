@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <v-navigation-drawer permanent height="650px" style="border-right:5px;width: 100%;">
+  <div class="grey lighten-4">
+   
       
-      <div class="text-center mt-1">
+      <div class="text-center pt-2">
         <v-btn
           class="mr-2 mb-2"
           style="font-size:10px"
-          rounded
+         
           color="primary"
           dark
           @click="ApplyFilter"
@@ -14,7 +14,7 @@
         <v-btn
           class="ml-2 mb-2"
           style="font-size:10px"
-          rounded
+          
           color="secondary"
           dark
           @click="reset"
@@ -65,7 +65,7 @@
            @input="validateDisplay"
         ></v-treeview>
       </v-container>
-    </v-navigation-drawer>
+    
   </div>
 </template>
 <script>
@@ -298,10 +298,12 @@ export default {
       }
       console.log(this.selectedView);
       if (count > 1) {
-        this.selectedView.pop();
-        setTimeout(function() {
-          alert("You can View by one field only");
-        }, 1000);
+        let data=this.selectedView.pop();
+       this.selectedView.pop();
+       this.selectedView.push(data)
+        // setTimeout(function() {
+        //   alert("You can View by one field only");
+        // }, 1000);
       }
     },
 
@@ -313,24 +315,23 @@ export default {
       }
      
       if (count > 1) {
-        this.selectedView.pop();
-        setTimeout(function() {
-          alert("You can View by one field only");
-        }, 1000);
+        let data=this.selectedDisplay.pop();
+       this.selectedDisplay.pop();
+       this.selectedDisplay.push(data)
       }
     },
     validateVacant() {
       var count = 0;
       for (var i = 0; i < this.selectedVacantItem.length; i++) {
         count++;
+        console.log(count);
       }
       console.log(this.selectedVacantItem);
-      if (count > 1) {
-        this.selectedVacantItem.pop();
-        setTimeout(function() {
-          alert("You can Filter by one field only");
-        }, 1000);
-      }
+      // if (count > 1) {
+      //  let data=this.selectedVacantItem.pop();
+      //  this.selectedVacantItem.pop();
+      //  this.selectedVacantItem.push(data)
+      // }
     },
     validateSort() {
       var count = 0;
@@ -339,10 +340,9 @@ export default {
       }
 
       if (count > 1) {
-        this.selectedSortItem.pop();
-        setTimeout(function() {
-          alert("You can sort by one field only");
-        }, 1000);
+        let data=this.selectedSortItem.pop();
+       this.selectedSortItem.pop();
+       this.selectedSortItem.push(data)
       }
     },
     validateFields() {
@@ -352,10 +352,9 @@ export default {
       }
 
       if (count > 5) {
-        this.fieldToDisplay.pop();
-        setTimeout(function() {
-          alert("You can select upto 5 fields");
-        }, 1000);
+        let data=this.fieldToDisplay.pop();
+       this.fieldToDisplay.pop();
+       this.fieldToDisplay.push(data)
       }
     },
 
