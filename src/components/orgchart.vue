@@ -676,7 +676,8 @@ export default {
           this.userMasterData[nodeData.userId] &&
           this.userMasterData[nodeData.userId].length == 0
         ) {
-          alert("No Hierarchy for this Employee!");
+          // alert("No Hierarchy for this Employee!");
+          console.log("No Hierarchy for this Employee!")
         }
         for (var i = 0; i < bufferedChild.length; i++) {
           this.getChlidData(bufferedChild[i]);
@@ -684,48 +685,63 @@ export default {
         this.chart.load(this.orgChartData);
         //  this.subList("sublist", 0, this.userPayGrade);
       } else if (this.isbuffered[id] == false) {
-        alert("Data Processing!Please try again");
+       // alert("Data Processing!Please try again");
+        console.log("Data Processing!Please try again")
       } else {
-        alert("No Data!");
+        //alert("No Data!");
+         console.log("No Data!")
       }
-      var str = "";
-      for (var j = 0; j < this.gradecount.length; j = j + 3) {
-        str +=
-          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
-          this.userPayGrade[j] +
-          "-" +
-          this.gradecount[j] +
-          "</span><span class='ml-2'>" +
-          this.userPayGrade[j + 1] +
-          "-" +
-          this.gradecount[j + 1] +
-          "</span>";
-        if (this.gradecount[j + 3]) {
-          str +=
-            "<span class='ml-2'>" +
-            this.userPayGrade[j + 2] +
-            "-" +
-            this.gradecount[j + 2] +
-            "</span></p>";
-        } else {
-          str += "</p>";
-        }
-      }
-      var legent = document.getElementById("legendd");
+      // var str = "";
+      // for (var j = 0; j < this.gradecount.length; j = j + 3) {
+      //   str +=
+      //     "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+      //     this.userPayGrade[j] +
+      //     "-" +
+      //     this.gradecount[j] +
+      //     "</span><span class='ml-2'>" +
+      //     this.userPayGrade[j + 1] +
+      //     "-" +
+      //     this.gradecount[j + 1] +
+      //     "</span>";
+      //   if (this.gradecount[j + 3]) {
+      //     str +=
+      //       "<span class='ml-2'>" +
+      //       this.userPayGrade[j + 2] +
+      //       "-" +
+      //       this.gradecount[j + 2] +
+      //       "</span></p>";
+      //   } else {
+      //     str += "</p>";
+      //   }
+      // }
+      // var legent = document.getElementById("legendd");
 
-      legent.innerHTML =
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-        this.totalHeadCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-        this.vacantCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-        this.maleCount +
-        ":" +
-        this.femaleCount +
-        "</p>" +
-        str;
-      this.chart.element.appendChild(legent);
+      // legent.innerHTML =
+      //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
+      //   this.totalHeadCount +
+      //   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
+      //   this.vacantCount +
+      //   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+      //   this.maleCount +
+      //   ":" +
+      //   this.femaleCount +
+      //   "</p>" +
+      //   str;
+      // this.chart.element.appendChild(legent);
     },
+
+     expandLevelChild(nodeId)
+     {
+       var nodeData = this.chart.get(nodeId);
+       console.log(nodeId)
+      var siblings=this.orgChartData.filter(item=>item.pid==nodeData.pid)
+      console.log(siblings)
+      siblings.forEach((item)=>{
+        this.addChildDataToChart(item.id)
+      })
+     },
+
+
     pdf() {
         OrgChart.pdfPrevUI.show(this.chart, {
             format: 'A4'
@@ -988,6 +1004,13 @@ export default {
             text: "Level Down",
             icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
             onClick: this.addChildDataToChart,
+          },
+          allLevel:
+          {
+            text:"Expand all siblings",
+            onClick:this.expandLevelChild,
+            icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
+
           },
           exportProfile: {
             text: "View Profile",

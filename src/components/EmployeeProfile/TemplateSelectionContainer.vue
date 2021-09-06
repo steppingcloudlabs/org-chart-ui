@@ -42,6 +42,7 @@
         />
       </v-col>
     </v-row>
+    
   </v-row>
 </template>
 
@@ -51,6 +52,7 @@ export default {
   data: () => {
     return {
       selectedTemplate: "template-1",
+      showprogress:false
     };
   },
   props: {
@@ -72,22 +74,46 @@ export default {
         this.$store.commit("setIsEmployeeDataFetched", data);
       },
     },
+     showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
+      },
+    },
   },
   watch: {
-    isEmployeeDataNeeded() {
-      if (this.isEmployeeDataNeeded) {
+    // isEmployeeDataNeeded() {
+    //   if (this.isEmployeeDataNeeded) {
+    //     this.getUserProfileData(
+    //       this.$route.params.id
+    //         ? this.$route.params.id
+    //         : this.empBasicData.userId
+    //     );
+    //   }
+    // },
+    isEmployeeDataNeeded:{
+      immediate:true,
+      handler()
+      {
+         if (this.isEmployeeDataNeeded) {
         this.getUserProfileData(
           this.$route.params.id
             ? this.$route.params.id
             : this.empBasicData.userId
         );
       }
-    },
+      }
+    }
   },
   methods: {
     openProfile() {},
     getUserProfileData(userId) {
+       this.showLoading=true
       this.$store.dispatch("getUserProfileData", userId).then((response) => {
+        this.showLoading=false
         console.log(response);
       });
     },
@@ -96,9 +122,9 @@ export default {
     },
   },
   mounted() {
-    this.getUserProfileData(
-      this.$route.params.id ? this.$route.params.id : this.empBasicData.userId
-    );
+    // this.getUserProfileData(
+    //   this.$route.params.id ? this.$route.params.id : this.empBasicData.userId
+    // );
   },
 };
 </script>

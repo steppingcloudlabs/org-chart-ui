@@ -25,10 +25,10 @@
 
       <v-container fluid style="font-size:12px">
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
-                <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
+                <!-- <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
                   <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
                      <v-treeview selectable selected-color="red" :items="itemsBU" v-model="selectedBUItem"></v-treeview>
-                      <v-treeview selectable selected-color="red" :items="itemsLocation" v-model="selectedLocationItem"></v-treeview>
+                      <v-treeview selectable selected-color="red" :items="itemsLocation" v-model="selectedLocationItem"></v-treeview> -->
         <v-treeview
           selectable
           selected-color="red"

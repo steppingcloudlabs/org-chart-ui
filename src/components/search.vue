@@ -19,6 +19,9 @@
         item-value="id"
         label="Select"
         v-model="innerSelect"
+        :loading="isLoading"
+        :append-icon="isLoading?'mdi-spin mdi-white-balance-sunny':'mdi-menu-down'"
+        loader-height="3"
       ></v-select>
     </v-col>
     <v-col cols="12" sm="5" v-else>
@@ -26,6 +29,7 @@
         v-model="innerSelect"
         :loading="isLoading"
         :items="userList"
+        :append-icon="isLoading?'mdi-spin mdi-white-balance-sunny':'mdi-menu-down'"
         :search-input.sync="searchUser"
         label="Enter UserId"
         item-text="userNav.defaultFullName"
@@ -59,12 +63,13 @@ export default {
     outerSelect: "",
     innerSelect: "",
     dropdown_data: [],
-    dropdown_font: [{text:"Business Unit",value:"businessunit"},{text:"Division",value:"division"} ,{text:"Department",value:"department"},{text:"Cluster",value:"cluster"},{text:"People",value:"People"}],
+    dropdown_font: [{text:"Business Unit",value:"businessunit"},{text:"Department",value:"department"},{text:"Cluster",value:"cluster"},{text:"Location",value:"location"},{text:"People",value:"People"}],
   }),
   methods: {
     RefreshGrid() {
       let g = this;
       g.dropdown_data = [];
+      this.isLoading=true
       if (this.outerSelect === "businessunit") {
         this.$store.dispatch("getAllBusinessUnitList").then((response) => {
           console.log(response);
@@ -74,6 +79,7 @@ export default {
             obj["id"] = item.externalCode;
             return obj;
           });
+           this.isLoading=false
         });
       }
       if (this.outerSelect === "division") {
@@ -89,6 +95,7 @@ export default {
             obj["id"] = item.externalCode;
             return obj;
           });
+          this.isLoading=false
         });
       }
       if (this.outerSelect === "department") {
@@ -104,6 +111,7 @@ export default {
             obj["id"] = item.externalCode;
             return obj;
           });
+          this.isLoading=false
         });
       }
 
@@ -120,8 +128,26 @@ export default {
             obj["id"] = item.externalCode;
             return obj;
           });
+          this.isLoading=false
         });
       }
+      if (this.outerSelect === "location") {
+        this.$store.dispatch("getLocationList").then((response) => {
+          console.log(response);
+          // for (let i = 0; i < response.d.results.length; i++) {
+          //  // console.log(g.selectedSearchField[i])
+          //   g.dropdown_data.push(response.d.results[i].externalCode) ;
+          // }
+          g.dropdown_data = response.d.results.map(function (item) {
+            let obj = {};
+            obj["name"] = item.name;
+            obj["id"] = item.externalCode;
+            return obj;
+          });
+          this.isLoading=false
+        });
+      }
+
       if (this.outerSelect === "People") {
         // this.$store.dispatch("getAllUser").then((response) => {
         //   console.log(response);
@@ -174,9 +200,11 @@ export default {
        let userObj={}
      
       if (this.outerSelect == "People") {
+
          userObj = this.userList.find((element) => {
           return searchData == element.userId;
         });
+        
       } else {
         userObj["value"]=this.innerSelect
       }

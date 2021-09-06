@@ -9,7 +9,7 @@
         <v-col class="ml-5 mr-5">
           <div style="text-align:center">
             <v-avatar class="profile" color="grey" size="100" tile style="border:2px solid">
-              <v-img style="border:2px" :src="profileBasicData.img"></v-img>
+              <v-img style="border:2px" :src="'data:image/jpg;base64,'+profileBasicData.img"></v-img>
             </v-avatar>
             <p class="pt-2 name" style="font-size:20px;font-weight:600;color:#166AB8">{{profileBasicData.userName}}</p>
             <p
@@ -514,6 +514,11 @@ export default {
     competencyRating() {
       return this.empProfileData.competencyRating.filter((element) => {
         element.rating = parseInt(element.rating);
+         if(parseInt(element.max)==20)
+        {
+           element.max=element.max/4
+           element.rating=element.rating/4
+        }
         return element.rating > -1;
       });
     },

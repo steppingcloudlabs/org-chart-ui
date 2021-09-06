@@ -60,7 +60,7 @@
       </v-flex>
     </v-layout>
     <div v-if="showLoading">
-      <v-overlay>
+      <v-overlay style="z-index:9999">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </div>

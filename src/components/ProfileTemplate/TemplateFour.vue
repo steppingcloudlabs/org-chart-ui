@@ -11,7 +11,7 @@
               tile
               style="border-radius:20%;border:2px solid"
             >
-              <v-img :src="profileBasicData.img"></v-img>
+              <v-img :src="'data:image/jpg;base64,'+profileBasicData.img"></v-img>
             </v-avatar>
             <p class="pt-2 name" style="font-size:20px;font-weight:600;color:#35383f">{{profileBasicData.userName}}</p>
             <p
@@ -28,7 +28,7 @@
             >Employee Information</p>
             <div
               class="pt-3"
-              style="font-size:12px;font-weight:500;color:black;margin-bottom:-2px;margin-left:2px"
+              style="font-size:12px;font-weight:500;color:black;margin-bottom:8px;margin-left:2px"
             >
               <v-row style="line-height:2px">
                 <v-col class="column-header">Position:</v-col>
@@ -186,12 +186,12 @@
           </div>
            <v-divider  style="margin-left:25px;margin-right:25px;background:white"></v-divider>
           <div class="mt-2">
-             <p
+             <!-- <p
               class="pa-1 header"
               style="font-size:15px;font-weight:600;color:white;text-align:center;margin-bottom:2px"
             >9 Grid-Box</p>
             <div id="gridbox" class="pt-4">
-                </div>
+                </div> -->
           </div>
         </v-col>
       </v-row>
@@ -247,6 +247,11 @@ export default {
     competencyRating() {
       return this.empProfileData.competencyRating.filter((element) => {
         element.rating = parseInt(element.rating);
+         if(parseInt(element.max)==20)
+        {
+           element.max=element.max/4
+           element.rating=element.rating/4
+        }
         return element.rating > -1;
       });
     },

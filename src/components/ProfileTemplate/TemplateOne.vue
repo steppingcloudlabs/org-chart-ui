@@ -7,7 +7,7 @@
             <tbody>
               <tr>
                 <td rowspan="4" style="width: 20%;">
-                  <img id="emp-profile-img" :src="profileBasicData.img" class="avatar" />
+                  <img id="emp-profile-img" :src="'data:image/jpg;base64,'+profileBasicData.img" class="avatar" />
                 </td>
                 <td style="width: 15%;" class="table-heading">Name</td>
                 <td
@@ -97,15 +97,15 @@
       </div>
       <div class="column">
         <div>
-          <div class="column" id="nestedcolumn">
+          <div style="padding-top:2%" >
             <table class="performance-table">
               <tbody>
                 <tr>
-                  <th class="table-heading" style="width:65%">Competency</th>
+                  <th class="table-heading text-left" style="width:63%">Competency</th>
                   <th class="text-left table-heading">Ratings</th>
                 </tr>
                 <tr v-for="(data, k) in competencyRating" :key="'competencyRating'+k">
-                  <td class="table-row" style="width:70%">{{data.source}}({{data.module}})</td>
+                  <td class="table-row" style="width:75%">{{data.source}}({{data.module}})</td>
                   <td class="text-left">
                     <v-rating v-model="data.rating" dense readonly :length="data.max"></v-rating>
                   </td>
@@ -113,11 +113,11 @@
               </tbody>
             </table>
           </div>
-          <div class="column" id="nestedcolumn" style="padding-left: 20px;">
+          <div   style="padding-top:10%">
             <table class="performance-table">
               <tbody>
                 <tr>
-                  <th class="table-heading" style="width:63%">Performance</th>
+                  <th class="table-heading text-left" style="width:63%">Performance</th>
                   <th class="text-left table-heading">Ratings</th>
                 </tr>
                 <tr v-for="(data, k) in performanceRating" :key="'performanceRating'+k">
@@ -563,6 +563,11 @@ export default {
     competencyRating() {
       return this.empProfileData.competencyRating.filter(element => {
         element.rating = parseInt(element.rating);
+        if(parseInt(element.max)==20)
+        {
+           element.max=element.max/4
+           element.rating=element.rating/4
+        }
         return element.rating > -1;
       });
     }

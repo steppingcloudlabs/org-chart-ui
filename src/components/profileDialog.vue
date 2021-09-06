@@ -83,6 +83,7 @@
           <p></p>
           <v-btn color="primary lighten-2">Generating PDF . . .</v-btn>
         </v-overlay>
+        
       </v-card>
     </v-dialog>
   </v-row>
@@ -106,6 +107,7 @@ export default {
       widgets: false,
       overlay: false,
       selectedTemplate: "selectionScreen",
+      showprogress:false
     };
   },
   components: {
@@ -124,6 +126,15 @@ export default {
       },
       set(data) {
         this.$store.commit("setShowProfileDialog", data);
+      },
+    },
+    showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
       },
     },
     profileBasicData() {
@@ -151,6 +162,7 @@ export default {
     },
 
     templatedSelected(selectedTemplate) {
+     
       this.selectedTemplate = selectedTemplate;
       console.log("Next Clicked");
     },

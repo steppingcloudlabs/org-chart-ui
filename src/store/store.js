@@ -361,6 +361,24 @@ export default new Vuex.Store({
             })
         },
 
+        getLocationList: () => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getLocationList?companyId=' + companyId,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data)
+                    //commit("setsearchField", response.data.d.results)
+
+                })
+            })
+        },
+
 
         getAllDivisionList: () => {
 
