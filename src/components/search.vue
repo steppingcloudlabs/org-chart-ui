@@ -1,6 +1,15 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="5">
+     <v-col cols="12" sm="2" v-if="$route.path == '/'">
+       <v-select
+        :items="dropdown_font1"
+        item-text="text"
+        item-value="value"
+        label="Select template"
+        v-model="outertemp"
+      ></v-select>
+    </v-col>
+    <v-col cols="12" sm="4" v-if="$route.path == '/'">
       <v-select
         :items="dropdown_font"
         item-text="text"
@@ -12,7 +21,19 @@
       ></v-select>
     </v-col>
 
-    <v-col cols="12" sm="5" v-if="outerSelect!='People'">
+     <v-col cols="12" sm="5" v-else>
+      <v-select
+        :items="dropdown_font"
+        item-text="text"
+        item-value="value"
+       
+        @change="RefreshGrid"
+        label="Select Category"
+        v-model="outerSelect"
+      ></v-select>
+    </v-col>
+
+    <v-col cols="12" sm="4" v-if="outerSelect!='People'">
       <v-select
         :items="dropdown_data"
         item-text="name"
@@ -20,16 +41,16 @@
         label="Select"
         v-model="innerSelect"
         :loading="isLoading"
-        :append-icon="isLoading?'mdi-spin mdi-white-balance-sunny':'mdi-menu-down'"
+        :append-icon="isLoading?'mdi-spin mdi-loading':'mdi-menu-down'"
         loader-height="3"
       ></v-select>
     </v-col>
-    <v-col cols="12" sm="5" v-else>
+    <v-col cols="12" sm="4" v-else>
       <v-autocomplete
         v-model="innerSelect"
         :loading="isLoading"
         :items="userList"
-        :append-icon="isLoading?'mdi-spin mdi-white-balance-sunny':'mdi-menu-down'"
+        :append-icon="isLoading?'mdi-spin mdi-loading':'mdi-menu-down'"
         :search-input.sync="searchUser"
         label="Enter UserId"
         item-text="userNav.defaultFullName"
@@ -63,16 +84,18 @@ export default {
     outerSelect: "",
     innerSelect: "",
     dropdown_data: [],
-    dropdown_font: [{text:"Business Unit",value:"businessunit"},{text:"Department",value:"department"},{text:"Cluster",value:"cluster"},{text:"Location",value:"location"},{text:"People",value:"People"}],
+    dropdown_font: [{text:"Business Unit",value:"businessUnit"},{text:"Department",value:"department"},{text:"Cluster",value:"cluster"},{text:"Location",value:"location"},{text:"People",value:"People"}],
+    dropdown_font1: [{text:"Template1",value:"temp1"},{text:"Template2",value:"temp2"}],
+    outertemp:"temp1"
   }),
   methods: {
     RefreshGrid() {
       let g = this;
       g.dropdown_data = [];
       this.isLoading=true
-      if (this.outerSelect === "businessunit") {
+      if (this.outerSelect === "businessUnit") {
         this.$store.dispatch("getAllBusinessUnitList").then((response) => {
-          console.log(response);
+         
           g.dropdown_data = response.d.results.map(function (item) {
             let obj = {};
             obj["name"] = item.name;
@@ -84,7 +107,7 @@ export default {
       }
       if (this.outerSelect === "division") {
         this.$store.dispatch("getAllDivisionList").then((response) => {
-          console.log(response);
+         
           // for (let i = 0; i < response.d.results.length; i++) {
           //  // console.log(g.selectedSearchField[i])
           //   g.dropdown_data.push(response.d.results[i].externalCode) ;
@@ -100,7 +123,7 @@ export default {
       }
       if (this.outerSelect === "department") {
         this.$store.dispatch("getAllDepartmentList").then((response) => {
-          console.log(response);
+         
           // for (let i = 0; i < response.d.results.length; i++) {
           //  // console.log(g.selectedSearchField[i])
           //   g.dropdown_data.push(response.d.results[i].externalCode) ;
@@ -117,7 +140,7 @@ export default {
 
         if (this.outerSelect === "cluster") {
         this.$store.dispatch("getAllClusterList").then((response) => {
-          console.log(response);
+         
           // for (let i = 0; i < response.d.results.length; i++) {
           //  // console.log(g.selectedSearchField[i])
           //   g.dropdown_data.push(response.d.results[i].externalCode) ;
@@ -133,7 +156,7 @@ export default {
       }
       if (this.outerSelect === "location") {
         this.$store.dispatch("getLocationList").then((response) => {
-          console.log(response);
+
           // for (let i = 0; i < response.d.results.length; i++) {
           //  // console.log(g.selectedSearchField[i])
           //   g.dropdown_data.push(response.d.results[i].externalCode) ;
@@ -194,8 +217,8 @@ export default {
       // });
     },
     getOrgData() {
-      console.log(this.outerSelect);
-      console.log(this.innerSelect);
+     
+      
        let searchData = this.innerSelect;
        let userObj={}
      
@@ -209,7 +232,8 @@ export default {
         userObj["value"]=this.innerSelect
       }
         userObj["category"]=this.outerSelect
-      console.log(userObj);
+        userObj["template"]=this.outertemp
+      
        this.$emit("getUserData", userObj);
     },
   },
@@ -253,7 +277,7 @@ export default {
         return;
       }
       this.isLoading = true;
-      console.log(this.search);
+
 
       let data = val;
 
@@ -262,7 +286,7 @@ export default {
         .then((response) => {
           this.userList = response;
 
-          console.log(this.userList);
+         
         })
         .finally(() => (this.isLoading = false));
     },

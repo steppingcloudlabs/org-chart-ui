@@ -56,7 +56,7 @@ export default new Vuex.Store({
         },
         setallPaygradeData: (state, data) => {
             state.allPaygrade = data
-            console.log(state.allPaygrade)
+            
         },
         setuserPayGrade: (state, data) => {
             state.userPayGrade = data
@@ -187,7 +187,7 @@ export default new Vuex.Store({
             return state.showLoading
         },
         getProfileData: (state) => {
-            console.log(state.profileData)
+           
             return state.profileData
         },
         getshowNodeProfile: (state) => {
@@ -225,7 +225,7 @@ export default new Vuex.Store({
                 }).then((response) => {
                     resolve(response.data)
                     commit('setuserData', response.data)
-                    console.log(response)
+                    
                 })
             })
 
@@ -250,7 +250,7 @@ export default new Vuex.Store({
                 }).then((response) => {
                     resolve(response.data)
                     commit('setuserData', response.data)
-                    console.log(response)
+                    
                 })
             })
 
@@ -276,7 +276,7 @@ export default new Vuex.Store({
                 }).then((response) => {
                     resolve(response.data)
                     commit("setflag", "hello")
-                    console.log(response)
+        
                 })
             })
 
@@ -299,7 +299,7 @@ export default new Vuex.Store({
                 }).then((response) => {
                     resolve(response.data)
                     commit("setflag", "hello")
-                    console.log(response)
+                    
                 })
             })
         },
@@ -394,7 +394,7 @@ export default new Vuex.Store({
                     resolve(response.data)
                     //commit("setsearchField", response.data.d.results)
 
-                    console.log(response)
+            
                 })
             })
         },
@@ -412,7 +412,7 @@ export default new Vuex.Store({
                 }).then((response) => {
                     resolve(response.data)
                     //commit("setsearchField", response.data)
-                    console.log(response)
+                    
                 })
             })
         },
@@ -436,7 +436,7 @@ export default new Vuex.Store({
                 }).then((response) => {
                     resolve(response.data)
                     commit("setflag", "hello")
-                    console.log(response)
+                
                 })
             })
 
@@ -444,7 +444,7 @@ export default new Vuex.Store({
         getUserProfileData: ({
             commit
         }, data) => {
-            console.log(data)
+            
             return new Promise((resolve) => {
                 axios({
                     url: 'http://localhost:3000/srv/employeeProfile',
@@ -459,7 +459,7 @@ export default new Vuex.Store({
                 }).then((response) => {
                     resolve(response.data)
                     commit("setEmpProfileData", response.data)
-                    console.log(response)
+                    
                 })
             })
         }

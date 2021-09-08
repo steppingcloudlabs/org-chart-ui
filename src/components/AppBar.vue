@@ -2,15 +2,16 @@
   <div class="pb-5">
     <v-toolbar class="pt-1 pb-5"  color="grey lighten-4">
       <v-layout row wrap>
-        <v-flex xs3>
+        <v-flex xs3 >
           <!-- <img src="/assets/hdr_logo.png" style="height: 60px; width:120px; margin-left: 20px;margin-top: 10px;" /> -->
+        
         </v-flex>
-        <v-flex xs6 class="pr-5 pt-5">
+        <v-flex xs7 class="pr-5 pt-5">
           <!-- <SearchAlumni @getUserData="getUserData"></SearchAlumni> -->
           <search @getUserData="getUserData"></search>
         </v-flex>
 
-        <v-flex xs3 class="pt-5 pl-5" style="margin-top: 10px;">
+        <v-flex xs2 class="pt-5 pl-5" style="margin-top: 10px;">
           <v-menu
             ref="menu"
             v-model="menu"
@@ -77,6 +78,7 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     menu: false,
     search: "",
+    
   }),
 
   components: {
@@ -140,7 +142,14 @@ export default {
           if (response) {
             console.log("testing");
             this.showLoading = false;
-            this.$router.push({ path: "/orgchart" });
+           if(data.template=="temp1")
+            {
+              this.$router.push({ path: "/orgchart" });
+            }
+            else if(data.template=="temp2")
+            {
+              this.$router.push({path:"/temporgchart"});
+            }
           }
         });
       }
@@ -155,7 +164,15 @@ export default {
           if (response) {
             console.log("testing");
             this.showLoading = false;
-            this.$router.push({ path: "/orgchart" });
+            if(data.template=="temp1")
+            {
+              this.$router.push({ path: "/orgchart" });
+            }
+            else if(data.template=="temp2")
+            {
+              this.$router.push({path:"/temporgchart"});
+            }
+            
           }
         });
       }

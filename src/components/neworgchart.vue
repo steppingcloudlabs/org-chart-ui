@@ -808,10 +808,11 @@ export default {
     field2_binding(sender, node) {
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[0]] != null) {
-        var field =
-          '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="170" text-anchor="middle">' +
-          data[this.fieldToDisplay[0]] +
-          "</text>";
+        var field ='<text width="120" style="font-size: 10px;" fill="#757575" x="70" y="85" text-anchor="middle" font-weight="bold"> '+data[this.fieldToDisplay[0]] +'</text>';
+
+          // '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="170" text-anchor="middle">' +
+          // data[this.fieldToDisplay[0]] +
+          // "</text>";
         return field;
       }
 
@@ -821,10 +822,11 @@ export default {
     field3_binding(sender, node) {
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[1]] != null) {
-        var field =
-          '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="190" text-anchor="middle">' +
-          data[this.fieldToDisplay[1]] +
-          "</text>";
+        var field ='<text width="120" style="font-size: 10px;" fill="#757575" x="70" y="105" text-anchor="middle" font-weight="bold">' +
+          data[this.fieldToDisplay[1]] +'</text>'
+          // '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="190" text-anchor="middle">' +
+          // data[this.fieldToDisplay[1]] +
+          // "</text>";
         return field;
       }
       return null;
@@ -860,7 +862,11 @@ export default {
         // var ind=data.tags.indexOf("nonImage")
         //  ind > -1 ? data.tags.splice(ind, 1) : -1
         //console.log(data.img)
-       var field= '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `data:image/jpg;base64,${data.img}` ) + '" x="50" y="20"  width="80" height="80"></image>';
+       //var field= '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `data:image/jpg;base64,${data.img}` ) + '" x="50" y="20"  width="80" height="80"></image>';
+      
+      // var field='<clipPath id="{randId}"><rect  fill="#ffffff" stroke="#039BE5" stroke-width="5" x="10" y="10" rx="10" ry="10" width="80" height="100"></rect></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#{randId})" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `data:image/jpg;base64,${data.img}` ) + '" x="10" y="10"  width="80" height="100"></image><rect fill="none" stroke="#F57C00" stroke-width="2" x="10" y="10" rx="10" ry="10" width="80" height="100"></rect>';
+      // var field='<clipPath id="ulaImg"><circle cx="50" cy="60" r="35"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `data:image/jpg;base64,${data.img}` ) + '" x="10" y="20"  width="80" height="80"></image>';
+       var field='<clipPath id="ulaImg"><circle  cx="70" cy="20" r="30"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `data:image/jpg;base64,${data.img}` ) + '" x="40" y="-10" r="30"  width="60" height="60"></image>';
       //console.log(field)
       return field
       } else {
@@ -919,53 +925,56 @@ export default {
     },
 
     oc: function (domEl, x, orderBy) {
-      // alert(OrgChart.VERSION)
-      OrgChart.templates.myTemplate = Object.assign(
-        {},
-        OrgChart.templates.rony
-      );
-      //OrgChart.templates.myTemplate.size=[300, 180];
-      OrgChart.templates.myTemplate.field_0 =
-        '<text width="200" text-overflow="ellipsis" style="font-size: 11px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
-      OrgChart.templates.myTemplate.field_8 =
-        '<text text-overflow="ellipsis" style="font-size: 12px;" fill="white" x="155" y="130" text-anchor="middle">({val})</text>';
-      OrgChart.templates.myTemplate.field_1 =
-        '<text width="120" text-overflow="ellipsis" style="font-size: 16px;" fill="white" x="80" y="130" font-weight="BOLD" text-anchor="middle">{val}</text>';
+    OrgChart.templates.myTemplate = Object.assign({}, OrgChart.templates.isla);
+  OrgChart.templates.myTemplate.size = [140, 140];
+  OrgChart.templates.myTemplate.node = 
+    '<rect filter="url(#isla-shadow1)" x="0" y="20" rx="5" ry="5" height="110" width="140" fill="#FFF" stroke-width="1" stroke="#1EC9E8" ></rect> ' + 
+    '<circle cx="70" cy="20" fill="#ffffff" r="25" stroke="#757575" stroke-width="0.5"></circle>' +
+    '<circle stroke="#757575" stroke-width="3" fill="#757575" cx="70" cy="10" r="8"></circle> ' + 
+    '<path d="M55,34 C55,17 85,17 85,34" stroke="#757575" stroke-width="1" fill="#757575"></path>';
 
-      OrgChart.templates.myTemplate.field_3 = "{val}";
-      OrgChart.templates.myTemplate.field_4 = "{val}";
-      OrgChart.templates.myTemplate.field_5 = "{val}";
-      OrgChart.templates.myTemplate.field_7 = "{val}";
-      OrgChart.templates.myTemplate.field_6 =
-        '<g><rect x="0" y="220" width="180" height="40"  fill="#03BFCB" rx="5" ry="5"></rect> </g>';
-      OrgChart.templates.myTemplate.field_9 =
-        '<g><line x1="1" y1="1" x2="179" y2="1"  /> </g>';
-      // OrgChart.templates.myTemplate.field_11 =
-      //   '<g><line x1="1" y1="260" x2="179" y2="260"  /> </g>';
-       OrgChart.templates.myTemplate.img_0 ="{val}"
-      //   '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="50" y="20"  width="80" height="80"></image>';
-      // OrgChart.templates.myTemplate.webcallMe = '<g  transform="translate(35,230)" class="flag"><path d="M18.344,16.174l-7.98-12.856c-0.172-0.288-0.586-0.288-0.758,0L1.627,16.217c0.339-0.543-0.603,0.668,0.384,0.682h15.991C18.893,16.891,18.167,15.961,18.344,16.174 M2.789,16.008l7.196-11.6l7.224,11.6H2.789z M10.455,7.552v3.561c0,0.244-0.199,0.445-0.443,0.445s-0.443-0.201-0.443-0.445V7.552c0-0.245,0.199-0.445,0.443-0.445S10.455,7.307,10.455,7.552M10.012,12.439c-0.733,0-1.33,0.6-1.33,1.336s0.597,1.336,1.33,1.336c0.734,0,1.33-0.6,1.33-1.336S10.746,12.439,10.012,12.439M10.012,14.221c-0.244,0-0.443-0.199-0.443-0.445c0-0.244,0.199-0.445,0.443-0.445s0.443,0.201,0.443,0.445C10.455,14.021,10.256,14.221,10.012,14.221"></path></g>'
-      OrgChart.templates.myTemplate.field_10 = "{val}";
 
-      OrgChart.templates.myTemplate.plus =
-        '<rect x="3" y="0" width="22" height="22" rx="12" ry="12" fill="#2E2E2E" stroke="#aeaeae" stroke-width="1"></rect>' +
-        '<line x1="3" y1="12" x2="24" y2="12" stroke-width="1" stroke="#aeaeae"></line>' +
-        '<line x1="14" y1="0" x2="14" y2="22" stroke-width="1" stroke="#aeaeae"></line>';
+  
+  OrgChart.templates.myTemplate.defs = '<filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="isla-shadow1">' + 
+  '<feOffset dx="2" dy="2" in="SourceAlpha" result="shadowOffsetOuter1" /><feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1" />' + 
+  '<feColorMatrix values="0 0 0 1 0   0 0 0 1 0   0 0 0 1 0  0 0 0 0.5 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1" />' +
+  '<feMerge>' + 
+  '<feMergeNode in="shadowMatrixOuter1" /><feMergeNode in="SourceGraphic" /></feMerge></filter>';
 
-      OrgChart.templates.myTemplate.minus =
-        '<rect x="3" y="0" width="22" height="22" rx="12" ry="12" fill="#2E2E2E" stroke="#aeaeae" stroke-width="1"></rect>' +
-        '<line x1="3" y1="12" x2="24" y2="12" stroke-width="1" stroke="#aeaeae"></line>';
+  OrgChart.templates.myTemplate.ripple = {
+    radius: 0,
+    color: "#F57C00",
+    rect: { x: 0, y: 20, width: 140, height: 110 }
+  };
 
-      OrgChart.templates.myTemplate.exportMenuButton =
-        '<div class="tooltip" style="position:absolute;right:{p}px;top:{p}px; width:40px;height:50px;cursor:pointer;" control-export-menu="">' +
-        '<hr style="background-color: black; margin:10px 0;height:3px; border: none;">' +
-        '<hr style="background-color: black; margin:10px 0;height:3px; border: none;">' +
-        '<hr style="background-color: black; margin:10px 0;height:3px; border: none;">' +
-        "</div>";
-      OrgChart.templates.myTemplate.defs +=
-        '<filter id="f1" > \
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" /> \
-                    </filter>';
+
+
+  OrgChart.templates.myTemplate.img_0 ="{val}"
+
+  OrgChart.templates.myTemplate.field_0 = '<text width="160" style="font-size: 10px;" fill="#757575" x="70" y="65" text-anchor="middle" font-weight="bold">{val}</text>';
+  OrgChart.templates.myTemplate.field_1 = "{val}"
+  OrgChart.templates.myTemplate.field_2 = "{val}";
+
+  OrgChart.templates.myTemplate.link = 
+    '<path stroke-linejoin="round" stroke="red" stroke-width="1px" fill="none" d="M{xa},{ya} {xb},{yb} {xc},{yc} L{xd},{yd}" />';
+
+  OrgChart.templates.myTemplate.minus = 
+    '<circle cx="15" cy="5" r="13" fill="#fff" stroke="red" stroke-width="1"></circle>' + 
+    '<line x1="8" y1="5" x2="22" y2="5" stroke-width="1" stroke="red"></line>';
+  OrgChart.templates.myTemplate.plus = 
+    '<circle cx="15" cy="5" r="13" fill="#ffffff" stroke="red" stroke-width="1"></circle>' + 
+    '<line x1="8" y1="5" x2="22" y2="5" stroke-width="1" stroke="red"></line><line x1="15" y1="-2" x2="15" y2="12" stroke-width="1" stroke="red"></line>';
+
+  OrgChart.templates.myTemplate.nodeMenuButton = '<g style="cursor:pointer;" transform="matrix(1,0,0,1,225,105)" control-node-menu-id="{id}">' + 
+  '<rect x="-110" y="0" fill="red" fill-opacity="0" width="22" height="22"></rect>' + 
+  '<circle cx="-102" cy="15" r="1" fill="red"></circle><circle cx="-98" cy="15" r="1" fill="red"></circle><circle cx="-94" cy="15" r="1" fill="red"></circle></g>';
+
+  OrgChart.templates.myTemplate.linkAdjuster = {
+    fromX: 0,
+    fromY: -5,
+    toX: 0,
+    toY: 0
+  }
       
       this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
@@ -1096,18 +1105,14 @@ export default {
         nodes: x,
         orderBy: orderBy,
         nodeBinding: {
-          field_0: "positionTitle",
-          field_1: "userName",
-          field_3: this.field2_binding,
-          field_4: this.field3_binding,
-          field_5: this.field4_binding,
-          field_6: "positionVacant",
-          field_7: this.field5_binding,
-          field_8: "jobLevel",
-          field_9: "positionVacant",
-          // field_11: "positionVacant",
+          
+          field_0:'userName',
+          field_1: this.field2_binding,
+          field_2: this.field3_binding,
           img_0: this.img_binding,
-          field_10: this.binder,
+
+          
+       
         },
       });
      // this.chart.fit();

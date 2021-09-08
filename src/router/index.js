@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import orgchart from '../components/orgchart'
+import orgcharttemp from '../components/neworgchart'
 
 Vue.use(VueRouter)
 
@@ -13,6 +14,11 @@ const routes = [{
     path: 'orgchart',
     name: 'Orgchart',
     component: orgchart
+  },
+  {
+    path: 'temporgchart',
+    name: 'Orgcharttemp',
+    component: orgcharttemp
   },]
 },
 
@@ -43,7 +49,6 @@ const routes = [{
 ]
 
 const router = new VueRouter({
-  mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
