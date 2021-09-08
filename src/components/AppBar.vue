@@ -139,7 +139,7 @@ export default {
           date: date1,
         })
         .then((response) => {
-          if (response) {
+          if (response && !response["msg"]) {
             console.log("testing");
             this.showLoading = false;
            if(data.template=="temp1")
@@ -151,6 +151,15 @@ export default {
               this.$router.push({path:"/temporgchart"});
             }
           }
+          else if(response["msg"])
+            {
+               this.$store.commit("showSnackbar", {
+            message: "No Position mapped",
+            color: "Error",
+            heading: "Error",
+            duration: 3000,
+          });
+            }
         });
       }
       else{
@@ -161,10 +170,21 @@ export default {
           date: date1,
         })
         .then((response) => {
-          if (response) {
+          if (response ) {
             console.log("testing");
             this.showLoading = false;
-            if(data.template=="temp1")
+            console.log(response.response)
+            if(response.response=="No Data Available")
+            {
+               this.$store.commit("showSnackbar", {
+            message: "No Position mapped",
+            color: "Red",
+            heading: "Error",
+            duration: 3000,
+          });
+            }
+            else{
+                 if(data.template=="temp1")
             {
               this.$router.push({ path: "/orgchart" });
             }
@@ -172,8 +192,12 @@ export default {
             {
               this.$router.push({path:"/temporgchart"});
             }
+
+            }
+         
             
           }
+          
         });
       }
       

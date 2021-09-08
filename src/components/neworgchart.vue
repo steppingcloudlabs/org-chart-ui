@@ -614,11 +614,11 @@ export default {
         }
       
       }
-      if (nodes[3]) {
-        nodes[3].tags.push("Critical");
-        nodes[3].tags.push("MediumImpact");
-        nodes[3].tags.push("HighRisk");
-      }
+      // if (nodes[3]) {
+      //   nodes[3].tags.push("Critical");
+      //   nodes[3].tags.push("MediumImpact");
+      //   nodes[3].tags.push("HighRisk");
+      // }
       console.log(this.vacantCount);
       // if(this.intersectPay.length<10)
       // {
@@ -677,6 +677,12 @@ export default {
           this.userMasterData[nodeData.userId].length == 0
         ) {
           // alert("No Hierarchy for this Employee!");
+          this.$store.commit("showSnackbar", {
+            message: "No Hierarchy for Employee-"+nodeData.userId,
+            color: "Yellow",
+            heading: "Info",
+            duration: 3000,
+          });
           console.log("No Hierarchy for this Employee!")
         }
         for (var i = 0; i < bufferedChild.length; i++) {
@@ -687,8 +693,20 @@ export default {
       } else if (this.isbuffered[id] == false) {
        // alert("Data Processing!Please try again");
         console.log("Data Processing!Please try again")
+         this.$store.commit("showSnackbar", {
+            message: "Data Processing!Please try again",
+            color: "Yellow",
+            heading: "Info",
+            duration: 3000,
+          });
       } else {
         //alert("No Data!");
+        this.$store.commit("showSnackbar", {
+            message: "No Data!",
+            color: "Yellow",
+            heading: "Info",
+            duration: 3000,
+          });
          console.log("No Data!")
       }
       // var str = "";

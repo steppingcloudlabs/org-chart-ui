@@ -32,7 +32,12 @@ export default new Vuex.Store({
         showNodeProfile: false,
         empProfileData: {},
         imgRequire:true,
-        isEmployeeDataFetched: "Not Fetched"
+        isEmployeeDataFetched: "Not Fetched",
+        showSnackbar: false,
+        snackbarDuration: 3000,
+        snackbarMessage: "Hello",
+        snackbarHeading: "Error",
+        snackbarColor: "Red",
     },
     mutations: {
         setuserData: (state, data) => {
@@ -129,6 +134,32 @@ export default new Vuex.Store({
         setIsEmployeeDataFetched: (state, data) => {
             state.isEmployeeDataFetched = data
         },
+        setShowSnackbar: (state, data) => {
+            state.showSnackbar = data;
+          },
+          setSnackbarDuration: (state, data) => {
+            state.snackbarDuration = data;
+          },
+          setSnackbarMessage: (state, data) => {
+            state.snackbarMessage = data;
+          },
+          setSnackbarHeading: (state, data) => {
+            state.snackbarHeading = data;
+          },
+          setSnackbarColor: (state, data) => {
+            state.snackbarColor = data;
+          },
+          showSnackbar: (state, data) => {
+            state.showSnackbar = true;
+            state.snackbarColor = data.color;
+            state.snackbarDuration = data.duration;
+            state.snackbarHeading = data.heading;
+            state.snackbarMessage = data.message;
+          },
+          closeSnackbar: (state) => {
+            state.showSnackbar = false;
+      
+          },
 
     },
     getters: {
@@ -201,7 +232,23 @@ export default new Vuex.Store({
         },
         setIsEmployeeDataFetched: (state) => {
             return state.isEmployeeDataFetched
-        }
+        },
+        getShowSnackbar: (state) => {
+            return state.showSnackbar
+          },
+          getSnackbarDuration: (state) => {
+            return state.snackbarDuration
+          },
+          getSnackbarMessage: (state) => {
+            return state.snackbarMessage
+          },
+          getSnackbarHeading: (state) => {
+            return state.snackbarHeading
+          },
+          getSnackbarColor: (state) => {
+            return state.snackbarColor
+          },
+      
     },
     actions: {
         orgCategory:({

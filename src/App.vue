@@ -1,13 +1,16 @@
 <template>
   <v-app width="100%">
     <core-view></core-view>
+    <SnackbarComponent></SnackbarComponent>
   </v-app>
 </template>
 
 <script>
+import SnackbarComponent from "@/components/snackbar";
 export default {
   components: {
     CoreView: () => import("@/components/view"),
+    SnackbarComponent
   },
    methods:{
     getPaygrade()

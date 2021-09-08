@@ -84,7 +84,7 @@ export default {
     outerSelect: "",
     innerSelect: "",
     dropdown_data: [],
-    dropdown_font: [{text:"Business Unit",value:"businessUnit"},{text:"Department",value:"department"},{text:"Cluster",value:"cluster"},{text:"Location",value:"location"},{text:"People",value:"People"}],
+    dropdown_font: [{text:"Business Unit",value:"businessUnit"},{text:"Department",value:"department"},{text:"Cluster",value:"customString13"},{text:"Location",value:"location"},{text:"People",value:"People"}],
     dropdown_font1: [{text:"Template1",value:"temp1"},{text:"Template2",value:"temp2"}],
     outertemp:"temp1"
   }),
@@ -138,7 +138,7 @@ export default {
         });
       }
 
-        if (this.outerSelect === "cluster") {
+        if (this.outerSelect === "customString13") {
         this.$store.dispatch("getAllClusterList").then((response) => {
          
           // for (let i = 0; i < response.d.results.length; i++) {

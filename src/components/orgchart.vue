@@ -439,7 +439,7 @@ export default {
             date: date1,
           })
           .then((response) => {
-            if (response && response.length) {
+            if (response && response.length && !response["msg"]) {
               if (!node.isRoot) {
                 this.userMasterData[node.userId] = response.splice(
                   1,
@@ -471,6 +471,7 @@ export default {
                 );
               }
             }
+            
           });
       }
     },
@@ -614,11 +615,11 @@ export default {
         }
       
       }
-      if (nodes[3]) {
-        nodes[3].tags.push("Critical");
-        nodes[3].tags.push("MediumImpact");
-        nodes[3].tags.push("HighRisk");
-      }
+      // if (nodes[3]) {
+      //   nodes[3].tags.push("Critical");
+      //   nodes[3].tags.push("MediumImpact");
+      //   nodes[3].tags.push("HighRisk");
+      // }
       console.log(this.vacantCount);
       // if(this.intersectPay.length<10)
       // {
@@ -677,6 +678,12 @@ export default {
           this.userMasterData[nodeData.userId].length == 0
         ) {
           // alert("No Hierarchy for this Employee!");
+           this.$store.commit("showSnackbar", {
+            message: "No Hierarchy for this Employee "+ nodeData.userId,
+            color: "Yellow",
+            heading: "Info",
+            duration: 3000,
+          });
           console.log("No Hierarchy for this Employee!")
         }
         for (var i = 0; i < bufferedChild.length; i++) {
@@ -686,9 +693,21 @@ export default {
         //  this.subList("sublist", 0, this.userPayGrade);
       } else if (this.isbuffered[id] == false) {
        // alert("Data Processing!Please try again");
+        this.$store.commit("showSnackbar", {
+            message: "Data Processing!Please try again",
+            color: "Yellow",
+            heading: "Info",
+            duration: 3000,
+          });
         console.log("Data Processing!Please try again")
       } else {
         //alert("No Data!");
+         this.$store.commit("showSnackbar", {
+            message: "No Data!",
+            color: "Yellow",
+            heading: "Info",
+            duration: 3000,
+          });
          console.log("No Data!")
       }
       // var str = "";
