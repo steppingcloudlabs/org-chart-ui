@@ -864,13 +864,15 @@ export default {
 
     field5_binding(sender, node) {
       var data = sender.get(node.id);
-      if (data[this.fieldToDisplay[3]] != null) {
-        var field =
-          '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="120" y="210" text-anchor="middle">(' +
-          data[this.fieldToDisplay[3]] +
-          ")</text>";
+
+      if(this.fieldToDisplay.includes("experiencearray"))
+      {
+         var field ='<text width="100" style="font-size: 10px;" fill="#757575" x="30" y="35" text-anchor="middle" font-weight="bold"> '+data["experiencearray"] +'</text>';
+        
         return field;
       }
+
+    
       return null;
     },
 
@@ -972,6 +974,8 @@ export default {
   OrgChart.templates.myTemplate.field_0 = '<text width="160" style="font-size: 10px;" fill="#757575" x="70" y="65" text-anchor="middle" font-weight="bold">{val}</text>';
   OrgChart.templates.myTemplate.field_1 = "{val}"
   OrgChart.templates.myTemplate.field_2 = "{val}";
+  OrgChart.templates.myTemplate.field_3="{val}";
+  OrgChart.templates.myTemplate.field_4="{val}";
 
   OrgChart.templates.myTemplate.link = 
     '<path stroke-linejoin="round" stroke="red" stroke-width="1px" fill="none" d="M{xa},{ya} {xb},{yb} {xc},{yc} L{xd},{yd}" />';
@@ -1128,6 +1132,8 @@ export default {
           field_1: this.field2_binding,
           field_2: this.field3_binding,
           img_0: this.img_binding,
+          field_3:this.field5_binding,
+
 
           
        

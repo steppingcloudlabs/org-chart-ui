@@ -24,7 +24,9 @@
       <v-divider></v-divider>
 
       <v-container fluid style="font-size:12px">
+        
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
+        <v-treeview selectable selected-color="red" :items="itemsImage" v-model="selectedImage" @input="validate(selectedImage)"></v-treeview>
                 <!-- <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
                   <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
                      <v-treeview selectable selected-color="red" :items="itemsBU" v-model="selectedBUItem"></v-treeview>
@@ -34,7 +36,7 @@
           selected-color="red"
           :items="itemVacant"
           v-model="selectedVacantItem"
-          @input="validateVacant"
+          @input="validate(selectedVacantItem)"
         ></v-treeview>
         <v-treeview
           selectable
@@ -48,21 +50,21 @@
           selected-color="red"
           :items="sortBy"
           v-model="selectedSortItem"
-          @input="validateSort"
+          @input="validate(selectedSortItem)"
         ></v-treeview>
         <v-treeview
           selectable
           selected-color="red"
           :items="viewItem"
           v-model="selectedView"
-           @input="validateView"
+           @input="validate(selectedView)"
         ></v-treeview>
         <v-treeview
           selectable
           selected-color="red"
           :items="displayItem"
           v-model="selectedDisplay"
-           @input="validateDisplay"
+           @input="validate(selectedDisplay)"
         ></v-treeview>
       </v-container>
     
@@ -74,11 +76,12 @@ export default {
     return {
       drawer: false,
       mini: true,
+      selectedImage:[0],
       selectedView:[0],
       selectedItem: [],
       selecteddepItem: [],
       selecteddivItem: [],
-      selectedVacantItem: [],
+      selectedVacantItem: [2],
       selectedSortItem: [],
       selectedBUItem:[],
        selectedLocationItem:[],
@@ -94,6 +97,16 @@ export default {
         }
 
       ],
+       itemsImage:[
+          {
+          id: 999,
+          name: "Image filter",
+          children: [ { id: 0, name: "show Image", value: "image" },
+            { id: 1, name: "hide image", value: "hide" },]
+        }
+
+      ],
+
        displayItem:[
           {
           id: 999,
@@ -108,7 +121,7 @@ export default {
       items: [
         {
           id: 999,
-          name: "Pay Grade",
+          name: "Band",
           children: []
         }
       ],
@@ -147,7 +160,7 @@ export default {
           children: [
             { id: 0, name: "Vacant", value: "Vacant" },
             { id: 1, name: "Occupied", value: "Occupied" },
-            { id: 2, name: "Resigned", value: "Resigned" }
+            { id: 2, name: "Both", value: "Both" }
           ]
         }
       ],
@@ -161,8 +174,9 @@ export default {
             { id: 1, name: "Department", value: "userDepartmentName" },
             { id: 2, name: "Division", value: "userDivisionName" },
             { id: 3, name: "Business Unit", value: "businessUnit" },
-             { id: 4, name: "Profile image", value: "image" },
-            { id: 5, name: "Experience", value: "experiencearray" },
+           
+            { id: 4, name: "Experience", value: "totexp" },
+             { id: 5, name: "Band", value: "band" }
            
             
           
@@ -192,6 +206,15 @@ export default {
       },
       set(data) {
         this.$store.commit("setuserPayGrade", data);
+      }
+    },
+    userBand: {
+      get() {
+        return this.$store.getters.getuserBand;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setuserBand", data);
       }
     },
      imgRequire: {
@@ -290,61 +313,77 @@ export default {
   
 
   methods: {
-    validateView()
+    validate(item)
     {
-     var count = 0;
-      for (var i = 0; i < this.selectedView.length; i++) {
+      var count = 0;
+       for (var i = 0; i < item.length; i++) {
         count++;
       }
-      console.log(this.selectedView);
+      //console.log(this.selectedView);
       if (count > 1) {
-        let data=this.selectedView.pop();
-       this.selectedView.pop();
-       this.selectedView.push(data)
+        let data=item.pop();
+       item.pop();
+       item.push(data)
         // setTimeout(function() {
         //   alert("You can View by one field only");
         // }, 1000);
       }
     },
+    // validateView()
+    // {
+    //  var count = 0;
+    //   for (var i = 0; i < this.selectedView.length; i++) {
+    //     count++;
+    //   }
+    //   console.log(this.selectedView);
+    //   if (count > 1) {
+    //     let data=this.selectedView.pop();
+    //    this.selectedView.pop();
+    //    this.selectedView.push(data)
+    //     // setTimeout(function() {
+    //     //   alert("You can View by one field only");
+    //     // }, 1000);
+    //   }
+    // },
 
-     validateDisplay()
-    {
-     var count = 0;
-      for (var i = 0; i < this.selectedDisplay.length; i++) {
-        count++;
-      }
+    //  validateDisplay()
+    // {
+    //  var count = 0;
+    //   for (var i = 0; i < this.selectedDisplay.length; i++) {
+    //     count++;
+    //   }
      
-      if (count > 1) {
-        let data=this.selectedDisplay.pop();
-       this.selectedDisplay.pop();
-       this.selectedDisplay.push(data)
-      }
-    },
-    validateVacant() {
-      var count = 0;
-      for (var i = 0; i < this.selectedVacantItem.length; i++) {
-        count++;
-        console.log(count);
-      }
-      console.log(this.selectedVacantItem);
-      // if (count > 1) {
-      //  let data=this.selectedVacantItem.pop();
-      //  this.selectedVacantItem.pop();
-      //  this.selectedVacantItem.push(data)
-      // }
-    },
-    validateSort() {
-      var count = 0;
-      for (var i = 0; i < this.selectedSortItem.length; i++) {
-        count++;
-      }
+    //   if (count > 1) {
+    //     let data=this.selectedDisplay.pop();
+    //    this.selectedDisplay.pop();
+    //    this.selectedDisplay.push(data)
+    //   }
+    // },
+    // validateVacant() {
+    //   var count = 0;
+    //   for (var i = 0; i < this.selectedVacantItem.length; i++) {
+    //     count++;
+    //     console.log(count);
+    //   }
+    //   console.log(this.selectedVacantItem);
+    //   if (count > 1) {
+    //    let data=this.selectedVacantItem.pop();
+    //    this.selectedVacantItem.pop();
+    //    this.selectedVacantItem.push(data)
+    //   }
+    // },
+    // validateSort() {
+    //   var count = 0;
+    //   for (var i = 0; i < this.selectedSortItem.length; i++) {
+    //     count++;
+    //   }
 
-      if (count > 1) {
-        let data=this.selectedSortItem.pop();
-       this.selectedSortItem.pop();
-       this.selectedSortItem.push(data)
-      }
-    },
+    //   if (count > 1) {
+    //     let data=this.selectedSortItem.pop();
+    //    this.selectedSortItem.pop();
+    //    this.selectedSortItem.push(data)
+    //   }
+    // },
     validateFields() {
       var count = 0;
       for (var i = 0; i < this.fieldToDisplay.length; i++) {
@@ -360,7 +399,7 @@ export default {
 
     userGradeData() {
       console.log(this.items);
-      this.items[0].children = this.userPayGrade.map((data, index) => {
+      this.items[0].children = this.userBand.map((data, index) => {
         let item = {};
         if (data != undefined) {
           item["id"] = index;
@@ -550,13 +589,23 @@ export default {
        if(this.selectedView==1)
         {
           this.isLevel=true
+          console.log(this.levelPay)
           for(let i=0;i<filteredData.length;i++)
           {
              var indexpay = this.levelPay.findIndex(
-          (x) => x.externalCode == filteredData[i].userPayGrade
+          (x) => x.band == filteredData[i].band
         );
         console.log(indexpay);
-          filteredData[i].tags.push("subLevels" + indexpay);
+        
+         if(filteredData[i]["isRoot"]==true)
+         {
+            console.log("hi")
+         }
+         else
+         {
+             filteredData[i].tags.push("subLevels" + indexpay);
+         }
+         
           }
           
         }
@@ -616,7 +665,7 @@ export default {
         filteredData = this.filterapplied(
           filteredData,
           gradeFilter,
-          "userPayGrade"
+          "band"
         );
         console.log(filteredData);
       }
@@ -681,15 +730,30 @@ export default {
 
       if (this.selectedVacantItem.length) {
         for (i = 0; i < this.selectedVacantItem.length; i++) {
+           if(this.selectedVacantItem[i]!=2)
+          {
           vacantFilter.push(
             this.itemVacant[0].children[this.selectedVacantItem[i]]["value"]
           );
-        }
+       
         filteredData = this.filterappliedTags(
           filteredData,
           vacantFilter,
           "tags"
         );
+        }
+        else
+        {
+            vacantFilter=[]
+            vacantFilter.push("Vacant")
+            vacantFilter.push("Occupied")
+            filteredData = this.filterappliedTags(
+          filteredData,
+          vacantFilter,
+          "tags"
+        );
+        }
+      }
       }
       
       if (this.selectedDisplay.length) {
@@ -732,7 +796,7 @@ export default {
       
       this.selectedItem = [999];
       this.isLevel=false
-      this.selectedVacantItem = [];
+      this.selectedVacantItem = [2];
       this.selectedView=[0]
       this.selectedSortItem = [];
       this.fieldToDisplay = [0, 1, 2, 3,4];

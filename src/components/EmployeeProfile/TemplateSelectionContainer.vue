@@ -11,8 +11,8 @@
         <v-radio-group v-model="selectedTemplate" :mandatory="false">
           <v-radio label="Template 1" value="template-1"></v-radio>
           <v-radio label="Template 2" value="template-2"></v-radio>
-          <v-radio label="Template 3" value="template-3"></v-radio>
-          <v-radio label="Template 4" value="template-4"></v-radio>
+          <!-- <v-radio label="Template 3" value="template-3"></v-radio>
+          <v-radio label="Template 4" value="template-4"></v-radio> -->
         </v-radio-group>
       </v-col>
       <v-col col="9" class="pa-5 text-center">

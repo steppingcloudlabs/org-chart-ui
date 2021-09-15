@@ -13,14 +13,14 @@
             <v-tabs-items  v-model="tab" >
                   <v-tab-item >
                     <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
-                    <v-simple-table id="tabb" background-color="grey lighten-4" style="position: absolute;top: 10px;right: 50px;color:#231e39;visibility:hidden">
+                    <v-simple-table id="tabb" background-color="grey lighten-4" style="position: absolute;top: 10px;right: 50px;color:#231e39;visibility:hidden;border:1px solid">
                     <template v-slot:default>
                       <thead>
                         <tr>
-                          <th class="text-left">
+                          <th class="text-left" style="border-left:1px solid;border-bottom:1px solid">
                             Pay Grade
                           </th>
-                          <th class="text-left">
+                          <th class="text-left" style="border-left:1px solid;border-bottom:1px solid">
                             Head Count
                           </th>
                         </tr>
@@ -30,8 +30,8 @@
                           v-for="(item,i) in gradecount"
                           :key="i"
                         >
-                          <td>{{userPayGrade[i]}}</td>
-                          <td>{{item}}</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid">{{userPayGrade[i]}}</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid">{{item}}</td>
                         </tr>
                       </tbody>
                     </template>
@@ -178,6 +178,15 @@ export default {
         this.$store.commit("setuserPayGrade", data);
       },
     },
+    userBand: {
+      get() {
+        return this.$store.getters.getuserBand;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setuserBand", data);
+      }
+    },
     department: {
       get() {
         return this.$store.getters.getdepartment;
@@ -221,6 +230,15 @@ export default {
       },
       set(data) {
         this.$store.commit("setallPaygradeData", data);
+      },
+    },
+    allBand: {
+      get() {
+        return this.$store.getters.getallBand;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setallBand", data);
       },
     },
     showNavDrawer: {
@@ -297,12 +315,12 @@ export default {
          
         for (var i = 0; i < this.nodes.length; i++) {
           this.getChlidData(this.nodes[i]);
-          if(this.nodes[i].experiencearray)
-          {
-           let expyear=this.nodes[i].experiencearray.sort((a,b) => a.startDate - b.startDate);
-           this.nodes[i].experiencearray=new Number((new Date().getTime() - new Date(expyear[0].startDate).getTime()) / 31536000000).toFixed(0)+" years";
-           console.log(this.nodes[i].experiencearray)
-          }
+          // if(this.nodes[i].experiencearray)
+          // {
+          //  let expyear=this.nodes[i].experiencearray.sort((a,b) => a.startDate - b.startDate);
+          //  this.nodes[i].experiencearray=new Number((new Date().getTime() - new Date(expyear[0].startDate).getTime()) / 31536000000).toFixed(0)+" years";
+          //  console.log(this.nodes[i].experiencearray)
+          // }
            
         }
         console.log(this.nodes);
@@ -376,8 +394,11 @@ export default {
 
     redraw(data) {
       this.fieldToDisplay = data.fieldToDisplay;
-      this.oc(this.$refs.tree, data.output, data.orderBy);
-      
+      console.log(data.output)
+      var chartdata=data.output
+     
+      this.oc(this.$refs.tree, chartdata, data.orderBy);
+
     },
 
     reset() {
@@ -521,22 +542,32 @@ export default {
         if (this.location.indexOf(orgChartData[i].location) === -1) {
           this.location.push(orgChartData[i].location);
         }
+         if (this.userBand.indexOf(orgChartData[i].band) === -1) {
+          this.userBand.push(orgChartData[i].band);
+        }
       }
 
       console.log(this.userPayGrade);
 
-      this.userPayGrade.map(function (item) {
-        var test = g.allPaygrade.find(function (element) {
-          return element.externalCode == item;
+      // this.userPayGrade.map(function (item) {
+      //   var test = g.allPaygrade.find(function (element) {
+      //     return element.name == item;
+      //   });
+      //   if (test != undefined) {
+      //     g.intersectPay.push(test);
+      //   }
+      // });
+
+       this.userBand.map(function (item) {
+        var test = g.allBand.find(function (element) {
+          return element.band == item;
         });
         if (test != undefined) {
           g.intersectPay.push(test);
         }
       });
 
-      this.intersectPay.sort(
-        (a, b) => parseInt(b.paygradeLevel) - parseInt(a.paygradeLevel)
-      );
+      this.intersectPay.sort((a, b) => parseInt(a.level) - parseInt(b.level));
 
       let jsonObject = this.intersectPay.map(JSON.stringify);
       let uniqueSet = new Set(jsonObject);
@@ -552,7 +583,7 @@ export default {
         this.totalHeadCount++;
         var node = nodes[i];
         var indexpay = this.intersectPay.findIndex(
-          (x) => x.externalCode == node.userPayGrade
+          (x) => x.externalCode == node.band
         );
         console.log(indexpay);
 
@@ -579,6 +610,7 @@ export default {
             break;
         }
         node.tags.push(node.userPayGrade);
+        node.tags.push(node.band);
         switch (node.isRoot) {
           case true:
             node.tags.push("RootNode");
@@ -825,23 +857,25 @@ export default {
     },
 
     field2_binding(sender, node) {
+       if(node.id.includes("_"))
+       {
+         node.id=node.id.split("_")[0]
+       }
       var data = sender.get(node.id);
-      if (data[this.fieldToDisplay[0]] != null) {
+       
         var field =
-          '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="170" text-anchor="middle">' +
+          '<text text-overflow="multiline" style="font-size: 10px;" fill="white" x="90" y="170" text-anchor="middle">' +
           data[this.fieldToDisplay[0]] +
           "</text>";
         return field;
-      }
-
-      return null;
+     
     },
 
     field3_binding(sender, node) {
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[1]] != null) {
         var field =
-          '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="190" text-anchor="middle">' +
+          '<text text-overflow="multiline" style="font-size: 10px;" fill="white" x="90" y="190" text-anchor="middle">' +
           data[this.fieldToDisplay[1]] +
           "</text>";
         return field;
@@ -853,7 +887,7 @@ export default {
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[2]] != null) {
         var field =
-          '<text  text-overflow="multiline" style="font-size: 14px;" fill="white" x="60" y="210" text-anchor="middle">' +
+          '<text  text-overflow="multiline" style="font-size: 10px;" fill="white" x="60" y="210" text-anchor="middle">' +
           data[this.fieldToDisplay[2]] +
           "</text>";
         return field;
@@ -865,7 +899,7 @@ export default {
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[3]] != null) {
         var field =
-          '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="120" y="210" text-anchor="middle">(' +
+          '<text text-overflow="multiline" style="font-size: 10px;" fill="white" x="120" y="210" text-anchor="middle">(' +
           data[this.fieldToDisplay[3]] +
           ")</text>";
         return field;
@@ -945,11 +979,11 @@ export default {
       );
       //OrgChart.templates.myTemplate.size=[300, 180];
       OrgChart.templates.myTemplate.field_0 =
-        '<text width="200" text-overflow="ellipsis" style="font-size: 11px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
+        '<text width="120" text-overflow="ellipsis" style="font-size: 9px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
       OrgChart.templates.myTemplate.field_8 =
         '<text text-overflow="ellipsis" style="font-size: 12px;" fill="white" x="155" y="130" text-anchor="middle">({val})</text>';
       OrgChart.templates.myTemplate.field_1 =
-        '<text width="120" text-overflow="ellipsis" style="font-size: 16px;" fill="white" x="80" y="130" font-weight="BOLD" text-anchor="middle">{val}</text>';
+        '<text width="120" text-overflow="ellipsis" style="font-size: 11px;" fill="white" x="80" y="130" font-weight="BOLD" text-anchor="middle">{val}</text>';
 
       OrgChart.templates.myTemplate.field_3 = "{val}";
       OrgChart.templates.myTemplate.field_4 = "{val}";
@@ -1043,43 +1077,43 @@ export default {
 
         tags: {
           subLevels0: {
-            subLevels: 0,
-            levelSeparation: 10,
-          },
-          subLevels1: {
             subLevels: 1,
             levelSeparation: 10,
           },
-          subLevels2: {
+          subLevels1: {
             subLevels: 2,
             levelSeparation: 10,
           },
-          subLevels3: {
+          subLevels2: {
             subLevels: 3,
             levelSeparation: 10,
           },
-          subLevels4: {
+          subLevels3: {
             subLevels: 4,
             levelSeparation: 10,
           },
-          subLevels5: {
+          subLevels4: {
             subLevels: 5,
             levelSeparation: 10,
           },
-          subLevels6: {
+          subLevels5: {
             subLevels: 6,
             levelSeparation: 10,
           },
-          subLevels7: {
+          subLevels6: {
             subLevels: 7,
             levelSeparation: 10,
           },
-          subLevels8: {
+          subLevels7: {
             subLevels: 8,
             levelSeparation: 10,
           },
-          subLevels9: {
+          subLevels8: {
             subLevels: 9,
+            levelSeparation: 10,
+          },
+          subLevels9: {
+            subLevels: 10,
             levelSeparation: 10,
           },
           RootNode: {
@@ -1129,6 +1163,7 @@ export default {
           field_10: this.binder,
         },
       });
+     
      // this.chart.fit();
       this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);

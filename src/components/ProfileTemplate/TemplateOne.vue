@@ -40,9 +40,20 @@
                   id="emp-profile-dob"
                   style="width: 16%;"
                   class="table-value"
-                >{{profileBasicData.userPayGradeName}}</td>
-                <td style="width: 15%;" class="table-heading">Division</td>
+                >{{profileBasicData.userPayGrade}}</td>
+                <td style="width: 15%;" class="table-heading">Sector</td>
                 <td style="width: 16%;" class="table-value">{{profileBasicData.userDivisionName}}</td>
+              </tr>
+              <tr>
+                 <td style="width: 15%;" class="table-heading"></td>
+                <td style="width: 15%;" class="table-heading">Business Unit</td>
+                <td
+                  id="emp-profile-dob"
+                  style="width: 30%;"
+                  class="table-value"
+                >{{profileBasicData.businessUnitName}}</td>
+                <td style="width: 15%;" class="table-heading">Band</td>
+                <td style="width: 40%;" class="table-value">{{profileBasicData.band}}</td>
               </tr>
             </tbody>
           </table>
@@ -97,24 +108,53 @@
       </div>
       <div class="column">
         <div>
+          <div style="padding-top:2%">
+                  <v-simple-table class="performance-table" style="border:1px solid">
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left table-heading">
+                          Total Experience
+                        </th>
+                        <th class="text-left table-heading">
+                          Total Current Experience
+                        </th>
+                        <th class="text-left table-heading">
+                          Total Previous Experience
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                       
+                      >
+                        <td class="table-row">{{ profileBasicData.experiencearray }}</td>
+                        <td class="table-row">{{ profileBasicData.currentexp }}</td>
+                        <td class="table-row">{{ profileBasicData.prevexp }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+          </div>     
           <div style="padding-top:2%" >
-            <table class="performance-table">
+            <v-simple-table class="performance-table" style="border:1px solid">
               <tbody>
                 <tr>
                   <th class="table-heading text-left" style="width:63%">Competency</th>
                   <th class="text-left table-heading">Ratings</th>
                 </tr>
                 <tr v-for="(data, k) in competencyRating" :key="'competencyRating'+k">
-                  <td class="table-row" style="width:75%">{{data.source}}({{data.module}})</td>
-                  <td class="text-left">
-                    <v-rating v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                  <td class="table-row" style="width:75%">{{data.source}}({{getRatingYear(data.startDate, data.endDate)}})</td>
+                  <td class=" table-row">
+                    {{data.rating}}/{{data.max}}
+                   
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </v-simple-table>
           </div>
-          <div   style="padding-top:10%">
-            <table class="performance-table">
+          <div   style="padding-top:2%;padding-bottom:2%">
+            <v-simple-table class="performance-table" style="border:1px solid">
               <tbody>
                 <tr>
                   <th class="table-heading text-left" style="width:63%">Performance</th>
@@ -125,12 +165,13 @@
                     class="table-row"
                     style="width:75%"
                   >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
-                  <td class="text-left">
-                    <v-rating v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                  <td class=" table-row">
+                   {{data.rating}}/{{data.max}}
+                   
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </v-simple-table>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -536,6 +577,7 @@ export default {
   mounted() {
     this.printProfile();
     console.log(moment);
+    console.log(this.profileBasicData)
     if (
       this.empProfileData.performanceRating &&
       this.empProfileData.potentialRating
@@ -563,11 +605,7 @@ export default {
     competencyRating() {
       return this.empProfileData.competencyRating.filter(element => {
         element.rating = parseInt(element.rating);
-        if(parseInt(element.max)==20)
-        {
-           element.max=element.max/4
-           element.rating=element.rating/4
-        }
+        
         return element.rating > -1;
       });
     }
@@ -671,15 +709,15 @@ table tbody tr td {
 }
 
 .table-heading {
-  color: rgb(162, 145, 97);
-  font-weight: 700;
-  font-size: 14px;
+  color: rgb(162, 145, 97) !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
 }
 .table-row
 {
   color: rgb(162, 145, 97);
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 500 !important;
+  font-size: 10px !important;
 }
 .performance-table {
   line-height: 0.9;

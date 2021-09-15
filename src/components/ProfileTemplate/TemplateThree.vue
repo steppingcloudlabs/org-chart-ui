@@ -186,7 +186,8 @@
                       style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
                     >{{data.source}}({{data.module}})</td>
                     <td class="text-left">
-                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                      {{data.rating}}/{{data.max}}
+                   
                     </td>
                   </tr>
                 </tbody>
@@ -204,7 +205,8 @@
                       style="width:63%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
                     >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
                     <td class="text-left">
-                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                     {{data.rating}}/{{data.max}}
+                   
                     </td>
                   </tr>
                 </tbody>

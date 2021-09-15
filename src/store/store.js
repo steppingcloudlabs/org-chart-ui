@@ -18,6 +18,7 @@ export default new Vuex.Store({
         inputDate: new Date().toISOString().substr(0, 10),
         flag: "",
         userPayGrade: [],
+        userBand:[],
         department: [],
         division: [],
         BU: [],
@@ -38,10 +39,14 @@ export default new Vuex.Store({
         snackbarMessage: "Hello",
         snackbarHeading: "Error",
         snackbarColor: "Red",
+        allBand:[{"band":"M1","level":"0"},{"band":"M2","level":"1"},{"band":"M3","level":"2"},{"band":"M4","level":"3"},{"band":"M5","level":"4"},{"band":"M6","level":"5"}]
     },
     mutations: {
         setuserData: (state, data) => {
             state.userData = data
+        },
+        setallBand: (state, data) => {
+            state.allBand = data
         },
         setisLevel: (state, data) => {
             state.isLevel = data
@@ -65,6 +70,9 @@ export default new Vuex.Store({
         },
         setuserPayGrade: (state, data) => {
             state.userPayGrade = data
+        },
+        setuserBand: (state, data) => {
+            state.userBand = data
         },
         setdepartment: (state, data) => {
             state.department = data
@@ -166,6 +174,9 @@ export default new Vuex.Store({
         getuserData: (state) => {
             return state.userData
         },
+        getallBand: (state) => {
+            return state.allBand
+        },
         getisLevel: (state) => {
             return state.isLevel
         },
@@ -192,6 +203,9 @@ export default new Vuex.Store({
         },
         getuserPayGrade: (state) => {
             return state.userPayGrade
+        },
+        getuserBand: (state) => {
+            return state.userBand
         },
         getdepartment: (state) => {
             return state.department

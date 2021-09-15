@@ -44,7 +44,7 @@
                 </v-row>
                 <v-row style="line-height:12px">
                   <v-col>Pay Grade:</v-col>
-                  <v-col>{{profileBasicData.userPayGradeName}}</v-col>
+                  <v-col>{{profileBasicData.userPayGrade}}</v-col>
                 </v-row>
                 <v-row style="line-height:12px">
                   <v-col>Business Unit </v-col>
@@ -121,21 +121,48 @@
         <!-- Column two -->
         <v-col class="ml-5 mr-5">
           <v-card class="pa-2" style="box-shadow: none;">
-            <div v-if="this.empProfileData.competencyRating.length">
+             <div >
               <v-divider></v-divider>
               <p
                 class="pa-2 header"
                 style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
-              >RE Behaviours</p>
+              >Total Experience</p>
+              <v-divider></v-divider>
+              <table class="performance-table">
+               
+                <tbody>
+                  <tr>
+                       <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px" >Total Experience</td>
+                        <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px" >{{ profileBasicData.experiencearray }}</td>
+                        
+                  </tr>
+                  <tr>
+                    <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">Total Current Experience</td>
+                        <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">{{ profileBasicData.currentexp }}</td>
+                  </tr>
+                  <tr>
+                    <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">Total Previous Experience</td>
+                        <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">{{ profileBasicData.prevexp }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="padding-top:35px" v-if="this.empProfileData.competencyRating.length" >
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >Competency Behaviours</p>
               <v-divider></v-divider>
               <table class="performance-table">
                 <tbody>
                   <tr v-for="(data, k) in competencyRating" :key="'competencyRating'+k">
                     <td
                       style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
-                    >{{data.source}}({{data.module}})</td>
-                    <td class="text-left">
-                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                    >{{data.source}}({{getRatingYear(data.startDate, data.endDate)}})</td>
+                    <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">
+                      {{data.rating}}/{{data.max}}
+                   
                     </td>
                   </tr>
                 </tbody>
@@ -148,14 +175,34 @@
                 style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
               >Performance Behaviours</p>
               <v-divider></v-divider>
-              <table class="performance-table pt-5">
+              <table class="performance-table">
                 <tbody>
                   <tr v-for="(data, k) in performanceRating" :key="'performanceRating'+k">
                     <td
                       style="width:63%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
                     >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
-                    <td class="text-left">
-                      <v-rating small v-model="data.rating" dense readonly :length="data.max"></v-rating>
+                    <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">
+                      {{data.rating}}/{{data.max}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="padding-top:35px" v-if="this.empProfileData.potentialRating.length">
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >Potential Behaviours</p>
+              <v-divider></v-divider>
+              <table class="performance-table">
+                <tbody>
+                  <tr v-for="(data, k) in potentialRating" :key="'performanceRating'+k">
+                    <td
+                      style="width:63%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
+                    >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
+                    <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">
+                      {{data.rating}}/{{data.max}}
                     </td>
                   </tr>
                 </tbody>
