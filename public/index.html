@@ -15,30 +15,36 @@
     <link href="https://fonts.googleapis.com/css?family=Arvo:700|Raleway:400,500,600,700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js">
   <script type="text/javascript" src="https://unpkg.com/canvg@3.0.4/lib/umd.js"></script>
     
     <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
-    <style id="myStyles">
+     <style id="myStyles" title="orgchartStyle"> 
         #tree>svg {
-        background-color: white !important;
+        background-color: rgb(163, 156, 156) !important;
     }
 [node-id] rect {
   fill: white;
   filter: none;
-  stroke-width:1;
-  stroke:rgb(0,0,0)
+  
+}
+.node.Occupied rect {
+  fill: white;
+  filter: none;
+  /* stroke-width:1;
+  stroke:rgb(0,0,0) */
 }
 
 [node-id] text {
-  fill: rgb(8, 4, 58) !important;
+  fill: rgb(8, 4, 58) ;
   filter: none;
 }
 
 [node-id] g rect {
   fill: white;
   filter: none;
-  stroke-width:1;
-  stroke:rgb(5, 5, 5)
+  /* stroke-width:1;
+  stroke:rgb(5, 5, 5) */
 }
 
 [node-id] g line {
@@ -137,7 +143,7 @@
 }
 
 .node.Vacant rect {
-  fill:#a9a9aa !important;
+  fill:#a9a9aa ;
   cursor: pointer;
 }
 
@@ -218,7 +224,7 @@
           margin-right: 2px
     }
       
-</style>
+</style> 
   </head>
   <body>
     <noscript>

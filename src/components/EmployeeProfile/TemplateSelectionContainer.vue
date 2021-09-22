@@ -19,15 +19,16 @@
         <img
           class="proile-template-preview"
           v-if="selectedTemplate == 'template-1'"
-          src="/assets/template/template1.jpg"
+          src="https://i.ibb.co/jwmX2Gj/template1.jpg"
           alt="Template 1"
         />
         <img
           class="proile-template-preview"
           v-else-if="selectedTemplate == 'template-2'"
-          src="/assets/template/template2.jpg"
+          src="https://i.ibb.co/0YC3QHd/template2.jpg"
           alt="Template 2"
         />
+       
         <img
           class="proile-template-preview"
           v-else-if="selectedTemplate == 'template-3'"

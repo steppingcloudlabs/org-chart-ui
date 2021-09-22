@@ -10,6 +10,16 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         isLevel:false,
+        colors:{
+                    node: "#E65100",
+                vacant: "#7CB342",
+                text: "#689F38"
+            },
+        defaultColors:{
+                    node: "#E65100",
+                    vacant: "#7CB342",
+                    text: "#689F38"
+                    } ,  
         levelPay:[],
         selectedSearchField: [],
         allPaygrade:[],
@@ -35,6 +45,7 @@ export default new Vuex.Store({
         imgRequire:true,
         isEmployeeDataFetched: "Not Fetched",
         showSnackbar: false,
+        themeDialog:false,
         snackbarDuration: 3000,
         snackbarMessage: "Hello",
         snackbarHeading: "Error",
@@ -42,6 +53,21 @@ export default new Vuex.Store({
         allBand:[{"band":"M1","level":"0"},{"band":"M2","level":"1"},{"band":"M3","level":"2"},{"band":"M4","level":"3"},{"band":"M5","level":"4"},{"band":"M6","level":"5"}]
     },
     mutations: {
+        setShowTheme:(state,data)=>
+        {
+          state.themeDialog=data
+        },
+
+        setColor:(state,data)=>
+        {
+          state.colors=data
+        },
+
+        setDefaultColor:(state,data)=>
+        {
+          state.defaultColors=data
+        },
+
         setuserData: (state, data) => {
             state.userData = data
         },
@@ -171,6 +197,21 @@ export default new Vuex.Store({
 
     },
     getters: {
+        
+        getColor:(state)=>
+        {
+           return state.colors
+        },
+        getDefaultColor:(state)=>
+        {
+           return state.defaultColors
+        },
+
+
+        getshowThemeDialog:(state)=>
+        {
+           return state.themeDialog
+        },
         getuserData: (state) => {
             return state.userData
         },
@@ -404,11 +445,11 @@ export default new Vuex.Store({
         },
 
 
-        getAllClusterList: () => {
+        getAllClusterListFilter: ({commit},data) => {
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getClusterList?companyId=' + companyId,
+                    url: 'http://localhost:3000/srv/getClusterListFilter?companyId=' + companyId+'&bu=' +data.filter,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -416,6 +457,7 @@ export default new Vuex.Store({
 
                 }).then((response) => {
                     resolve(response.data)
+                    console.log(commit)
                     //commit("setsearchField", response.data.d.results)
 
                 })
@@ -439,6 +481,24 @@ export default new Vuex.Store({
                 })
             })
         },
+
+        getLocationListFilter: ({commit},data) => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getLocationListFilter?companyId=' + companyId +'&cluster=' + data.filter,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data)
+                   console.log(commit)
+                })
+            })
+        },
+
 
 
         getAllDivisionList: () => {

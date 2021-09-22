@@ -41,8 +41,9 @@
                   style="width: 16%;"
                   class="table-value"
                 >{{profileBasicData.userPayGrade}}</td>
-                <td style="width: 15%;" class="table-heading">Sector</td>
-                <td style="width: 16%;" class="table-value">{{profileBasicData.userDivisionName}}</td>
+                 <td style="width: 15%;" class="table-heading">Band</td>
+                <td style="width: 40%;" class="table-value">{{profileBasicData.band}}</td>
+                
               </tr>
               <tr>
                  <td style="width: 15%;" class="table-heading"></td>
@@ -52,8 +53,8 @@
                   style="width: 30%;"
                   class="table-value"
                 >{{profileBasicData.businessUnitName}}</td>
-                <td style="width: 15%;" class="table-heading">Band</td>
-                <td style="width: 40%;" class="table-value">{{profileBasicData.band}}</td>
+                <td style="width: 15%;" class="table-heading">Cluster</td>
+                <td style="width: 16%;" class="table-value">{{profileBasicData.cluster}}</td>
               </tr>
             </tbody>
           </table>
@@ -83,6 +84,20 @@
                   v-for="(data, k) in empProfileData.previousExperience"
                   :key="'previousExperience'+k"
                 >{{ getPreviousExperience(data) }}</li>
+              </ol>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="section-wrapper" v-if="empProfileData.certification.length">
+            <div class="heading-section">
+              <p class="table-heading">Certification/Training</p>
+            </div>
+            <div class="data-section">
+              <ol>
+                <li
+                  v-for="(data, k) in empProfileData.certification"
+                  :key="'certification'+k"
+                >{{ getCertification(data) }}</li>
               </ol>
             </div>
             <div class="clearfix"></div>
@@ -651,6 +666,21 @@ export default {
         moment
           .unix(preExp.endDate.substring(6, preExp.endDate.length - 5))
           .format("MM-YYYY")
+      );
+    },
+    getCertification(preExp) {
+      return (
+        preExp.name +
+        " from " +
+        preExp.institution +
+        " started on " +
+        moment
+          .unix(preExp.startDate.substring(6, preExp.startDate.length - 5))
+          .format("MM-YYYY")
+        // " to " +
+        // moment
+        //   .unix(preExp.endDate.substring(6, preExp.endDate.length - 5))
+        //   .format("MM-YYYY")
       );
     },
     getRatingYear(startDate, endDate) {

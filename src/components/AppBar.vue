@@ -6,9 +6,10 @@
           <!-- <img src="/assets/hdr_logo.png" style="height: 60px; width:120px; margin-left: 20px;margin-top: 10px;" /> -->
         
         </v-flex>
-        <v-flex xs7 class="pr-5 pt-5">
+        <v-flex xs5 class="pr-5 pt-5">
           <!-- <SearchAlumni @getUserData="getUserData"></SearchAlumni> -->
-          <search @getUserData="getUserData"></search>
+          <search   @getUserData="getUserData"></search>
+          <cascadedsearch v-if="$route.path!='/'"  @getUserData="getUserData"></cascadedsearch>
         </v-flex>
 
         <v-flex xs2 class="pt-5 pl-5" style="margin-top: 10px;">
@@ -36,23 +37,13 @@
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <!-- <v-flex xs2 class="pr-5">
-          <v-menu transition="scale-transition" offset-y>
-            <template v-slot:activator="{ attrs, on }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-icon v-on="on">mdi-view-dashboard</v-icon>
-                  </template>
-                  <span>Legends</span>
-                </v-tooltip>
+        <v-flex xs2 class="pr-5 pt-5">
+          
+              <v-btn color="primary" @click="showTheme=true">
+                Color Picker
               </v-btn>
-            </template>
-            <v-card dark max-width="250">
-              <v-img src="/assets/legendicon.png"></v-img>
-            </v-card>
-          </v-menu>
-        </v-flex>-->
+           
+        </v-flex>
       </v-layout>
     </v-toolbar>
     <v-layout row wrap>
@@ -65,6 +56,7 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </div>
+    <homepage></homepage>
   </div>
 </template>
 
@@ -73,6 +65,9 @@
 
 //import SearchAlumni from "@/components/SearchAlumni";
 import search from "@/components/search.vue";
+import homepage from '@/components/homepage.vue'
+import cascadedsearch from "@/components/cascadedSearch.vue"
+
 export default {
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
@@ -84,6 +79,9 @@ export default {
   components: {
     // SearchAlumni,
     search,
+    homepage,
+    cascadedsearch
+    
   },
     computed: {
       inputDate: {
@@ -95,6 +93,14 @@ export default {
           this.$store.commit("setinputDate", data);
         },
       },
+        showTheme: {
+      get() {
+        return this.$store.getters.getshowThemeDialog;
+      },
+      set(data) {
+        this.$store.commit("setShowTheme", data);
+      },
+    },
     showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
@@ -214,5 +220,10 @@ export default {
 
 #core-app-bar a {
   text-decoration: none;
+}
+.v-dialog
+{
+  -webkit-box-shadow:none;
+  box-shadow: none;
 }
 </style>

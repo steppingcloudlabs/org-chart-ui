@@ -46,16 +46,17 @@
       ></v-select>
     </v-col>
     <v-col cols="12" sm="4" v-else>
+     
       <v-autocomplete
         v-model="innerSelect"
         :loading="isLoading"
         :items="userList"
-        :append-icon="isLoading?'mdi-spin mdi-loading':'mdi-menu-down'"
         :search-input.sync="searchUser"
         label="Enter UserId"
         item-text="userNav.defaultFullName"
         item-value="userId"
-        @change="getData()"
+        @change="getOrgData"
+        
       >
         <template v-slot:item="data">
           <template>
@@ -65,7 +66,7 @@
             </v-list-item-content>
           </template>
         </template>
-      </v-autocomplete>
+      </v-autocomplete> 
     </v-col>
     <v-col cols="12" sm="2">
       <v-btn depressed color="primary" @click="getOrgData">Search</v-btn>
@@ -74,8 +75,11 @@
 </template>
 
 <script>
+
 export default {
   data: () => ({
+    searchQuery: "",
+    isTyping: false,
     userList: [],
     isLoading: false,
 
@@ -86,7 +90,8 @@ export default {
     dropdown_data: [],
     dropdown_font: [{text:"Business Unit",value:"businessUnit"},{text:"Department",value:"department"},{text:"Cluster",value:"customString13"},{text:"Location",value:"location"},{text:"People",value:"People"}],
     dropdown_font1: [{text:"Template1",value:"temp1"},{text:"Template2",value:"temp2"}],
-    outertemp:"temp1"
+    outertemp:"temp1",
+     timeout: null
   }),
   methods: {
     RefreshGrid() {
@@ -172,6 +177,7 @@ export default {
       }
 
       if (this.outerSelect === "People") {
+        this.isLoading=false
         // this.$store.dispatch("getAllUser").then((response) => {
         //   console.log(response);
         //   // for (let i = 0; i < response.d.results.length; i++) {
@@ -236,6 +242,35 @@ export default {
       
        this.$emit("getUserData", userObj);
     },
+
+    searchh(val)
+    {
+      
+                this.$store.dispatch("getAllUser", val).then((response) => {
+                 this.userList = response;
+                 })
+                
+           
+
+          },
+           clearEntries() {
+      
+      this.userList = []
+    },
+    
+    
+    
+    fetchEntriesDebounced(val) {
+      clearTimeout(this._searchTimerId)
+      this._searchTimerId = setTimeout(() => {
+        this.searchh(val)
+      }, 500) /* 500ms throttle */
+    },
+    
+    
+    
+   
+  
   },
   computed: {
     userPayGrade: {
@@ -267,18 +302,19 @@ export default {
     },
   },
   watch: {
+    
     searchUser(val) {
       if (!val || !val.trim()) {
         this.userList = [];
         this.search = "";
         return;
       }
-      if (this.isLoading) {
-        return;
+      if(this.isLoading)
+      {
+        return
       }
-      this.isLoading = true;
 
-
+      this.isLoading=true
       let data = val;
 
       this.$store

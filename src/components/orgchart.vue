@@ -33,6 +33,10 @@
                           <td style="border-left:1px solid;border-bottom:1px solid">{{userPayGrade[i]}}</td>
                           <td style="border-left:1px solid;border-bottom:1px solid">{{item}}</td>
                         </tr>
+                        <tr>
+                          <td style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid;font-weight:bold">Total Count</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid;font-weight:bold">{{totalhead}}</td>
+                        </tr>
                       </tbody>
                     </template>
                   </v-simple-table>
@@ -57,6 +61,10 @@
                         >
                           <td>{{userPayGrade[i]}}</td>
                           <td>{{item}}</td>
+                        </tr>
+                         <tr>
+                          <td style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid;font-weight:bold">Total Count</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid;border-top:1px solid;font-weight:bold">{{totalhead}}</td>
                         </tr>
                       </tbody>
                     </template>
@@ -86,13 +94,13 @@ import profile from "@/components/profileDialog";
 import nodeProfile from "@/components/NodeProfile";
 import $ from "jquery";
 import Canvg from "canvg";
-import {legendTable} from "@/mixins/legendTable.js"
+import {withoutImage} from "@/mixins/withoutimage.js"
 
 
 //import imageToBase64 from "image-to-base64";
 
 export default {
-  mixins:[legendTable],
+  mixins:[withoutImage],
   name: "tree",
   data() {
     return {
@@ -109,6 +117,7 @@ export default {
       maleCount: 0,
       femaleCount: 0,
       gradecount: [],
+      totalhead:0,
       gradeOccurence: [],
 
       fieldToDisplay: [
@@ -285,7 +294,15 @@ export default {
       set(data) {
         this.$store.commit("setisLevel", data);
       },
-    }
+    },
+    showColor: {
+      get() {
+        return this.$store.getters.getColor;
+      },
+      set(data) {
+        this.$store.commit("setColor", data);
+      },
+    },
   },
   watch: {
     userData() {
@@ -396,7 +413,7 @@ export default {
       this.fieldToDisplay = data.fieldToDisplay;
       console.log(data.output)
       var chartdata=data.output
-     
+       console.log(OrgChart.VERSION) 
       this.oc(this.$refs.tree, chartdata, data.orderBy);
 
     },
@@ -416,7 +433,7 @@ export default {
 });
           }
 
-       this.oc(this.$refs.tree, this.orgChartData, null);
+       this.newDesign(this.$refs.tree, this.orgChartData, null);
       
      
       //leg.style.border = "1px solid black";
@@ -517,6 +534,13 @@ export default {
         }).length;
         console.log(this.gradecount);
       }
+      this.totalhead=this.gradecount.reduce(this.totalCount,0)
+    },
+
+    totalCount(accumulator,a)
+    {
+       return accumulator + a;
+
     },
     getPayGrade(orgChartData) {
       let g = this;
@@ -1019,7 +1043,7 @@ export default {
         '<filter id="f1" > \
                     <feGaussianBlur in="SourceGraphic" stdDeviation="4" /> \
                     </filter>';
-      
+      var g=this
       this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
         levelSeparation: 30,
@@ -1181,13 +1205,15 @@ export default {
       });
 
       this.chart.on("exportstart", function (sender, args) {
+        
         document.getElementById("tabb").style.visibility="visible"
-        args.content +=
+        args.styles +=
           '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
-        args.content += document.getElementById("myStyles").outerHTML;
+        args.styles += document.getElementById("myStyles").outerHTML;
        args.content += document.getElementById("tabb").outerHTML;
         //args.content += document.getElementById("legTag").outerHTML;
         document.getElementById("tabb").style.visibility="hidden"
+        args.styles += "<style>.node.Occupied rect {fill: "+g.showColor.node+"!important;}[node-id] text {fill:"+g.showColor.text+"!important;}.node.Vacant rect {fill:"+g.showColor.vacant+"!important;}<style>";
       });
     },
     blur() {

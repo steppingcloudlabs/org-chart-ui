@@ -624,6 +624,7 @@ export default {
     },
     ApplyFilter() {
       var gradeFilter = [];
+      var imageFilter=[];
       var BUFilter=[];
       var divFilter=[];
       var depFilter=[];
@@ -639,7 +640,13 @@ export default {
         );
       }
       console.log(fields);
-      var indexImage=fields.indexOf("image")
+       if (this.selectedImage.length) {
+         for (i = 0; i < this.selectedImage.length; i++) {
+          imageFilter.push(
+            this.itemsImage[0].children[this.selectedImage[i]]["value"]
+          );
+        }
+      var indexImage=imageFilter.indexOf("image")
       indexImage > -1 ? fields.splice(indexImage, 1) : -1
 
       if(indexImage>-1)
@@ -650,6 +657,7 @@ export default {
       {
         this.imgRequire=false
       }
+       }
 
       console.log(fields);
       if (this.selectedItem.length) {

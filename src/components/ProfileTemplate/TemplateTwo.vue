@@ -115,6 +115,26 @@
                 </v-layout>
               </p>
             </div>
+            <div style="padding-top:35px" v-if="this.empProfileData.certification.length" >
+              <v-divider></v-divider>
+              <p
+                class="pa-2 header"
+                style="font-size:12px;font-weight:500;color:#166AB8;margin-bottom:-2px"
+              >Certification/Training</p>
+              <v-divider></v-divider>
+              <p class="pt-3" style="font-size:12px;font-weight:400;color:black;margin-bottom:-2px">
+                <v-layout row wrap class="ml-1">
+                  <v-row
+                    class="mt-2"
+                    v-for="(data, k) in empProfileData.certification"
+                    :key="'certification'+k"
+                    style="text-align:left;height: 33px;"
+                  >
+                    <p>{{ getCertification(data) }}</p>
+                  </v-row>
+                </v-layout>
+              </p>
+            </div>
           </v-card>
         </v-col>
 
@@ -551,6 +571,21 @@ export default {
     },
   },
   methods: {
+    getCertification(preExp) {
+      return (
+        preExp.name +
+        " from " +
+        preExp.institution +
+        " started on " +
+        moment
+          .unix(preExp.startDate.substring(6, preExp.startDate.length - 5))
+          .format("MM-YYYY")
+        // " to " +
+        // moment
+        //   .unix(preExp.endDate.substring(6, preExp.endDate.length - 5))
+        //   .format("MM-YYYY")
+      );
+    },
     getInsideExperience(insideExp) {
       return (
         insideExp.title +
