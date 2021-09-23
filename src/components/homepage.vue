@@ -39,6 +39,18 @@
                                 <colorpick :color.sync="colors.text"></colorpick>
                             </v-col>
                         </v-row>
+                        <v-row justify="center" align="center">
+                            <v-col md="4" class="shrink" >
+                               Show Image
+                            </v-col>
+                            <v-col md="7" class="shrink" >
+                                  <v-switch
+                                    v-model="image"
+                                    flat
+                                    :label="`Show image: ${image.toString()}`"
+                                  ></v-switch>
+                            </v-col>
+                        </v-row>
                          <v-card-actions>
                             <div class="flex-grow-1"></div>
                             <v-btn color="accent darken-1" text @click="resetDialog">Reset to Default</v-btn>
@@ -68,7 +80,15 @@ export default {
       colorpick,
     },
   computed: {
-    
+    image: {
+      get() {
+        return this.$store.getters.getimgRequire;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setimgRequire", data);
+      },
+    },
     showTheme: {
       get() {
         return this.$store.getters.getshowThemeDialog;
@@ -98,7 +118,7 @@ export default {
     return {
         tab: null,
         items: ['Color', 'Images', 'Director'],
-        
+     
       titleRules: [(v) => !!v || "Title is required"],
       bodyRules: [(v) => !!v || "Body is required"],
       date: new Date().toISOString().substr(0, 10),
@@ -157,25 +177,62 @@ export default {
             if (document.styleSheets[i].title==titulo) {
                 let y=0;
                 while (y<document.styleSheets[i].cssRules.length) {
-                    if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied rect") {                                               
+                    if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied > #head") {                                               
                         document.styleSheets[i].cssRules[y].style["fill"] = this.colors.node;                                                                       
                         // y = document.styleSheets[i].cssRules.length;
                     } 
-                   else if (document.styleSheets[i].cssRules[y].selectorText=="[node-id] text") {                                               
+                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied > #headline") {                                               
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.node;                                                                       
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied > #headRect") {                                               
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.node;                                                                       
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+                   else if (document.styleSheets[i].cssRules[y].selectorText==".node text") {                                               
                         document.styleSheets[i].cssRules[y].style["fill"] = this.colors.text;                                                                       
                         // y = document.styleSheets[i].cssRules.length;
                     } 
-                    else if (document.styleSheets[i].cssRules[y].selectorText==".node.Vacant rect") {                                               
+                    else if (document.styleSheets[i].cssRules[y].selectorText==".node.Vacant > #head") {                                               
                         document.styleSheets[i].cssRules[y].style["fill"] = this.colors.vacant;                                                                       
                         // y = document.styleSheets[i].cssRules.length;
                     } 
-                    else if (document.styleSheets[i].cssRules[y].selectorText==".node.female rect") {                                               
-                        document.styleSheets[i].cssRules[y].style["fill"] = this.colors.node;  
-                          console.log(document.getElementById("myStyles").outerHTML)                                                                     
+                    else if (document.styleSheets[i].cssRules[y].selectorText==".node.Vacant > #headline") {                                               
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.vacant;                                                                       
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+                    else if (document.styleSheets[i].cssRules[y].selectorText==".node.Vacant > #headRect") {                                               
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.vacant;                                                                       
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+                    else if (document.styleSheets[i].cssRules[y].selectorText==".node clippath") {  
+                      if(this.image)
+                      {
+                          document.styleSheets[i].cssRules[y].style["visibility"] = "visible"; 
+                      } 
+                      else{
+                         document.styleSheets[i].cssRules[y].style["visibility"] = "hidden"; 
+                      }                                            
+                         
+                                                                                           
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+                    else if (document.styleSheets[i].cssRules[y].selectorText==".node > #imgCircle") {  
+                      if(this.image)
+                      {
+                          document.styleSheets[i].cssRules[y].style["visibility"] = "visible"; 
+                      } 
+                      else{
+                         document.styleSheets[i].cssRules[y].style["visibility"] = "hidden"; 
+                      }                                            
+                         
+                                                                                           
                         // y = document.styleSheets[i].cssRules.length;
                     } 
                     y++;
-                }   
+                } 
+               
+               
                  i=document.styleSheets.length;      
             } 
             i++;

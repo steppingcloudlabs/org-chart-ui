@@ -23,20 +23,58 @@
         #tree>svg {
         background-color: rgb(163, 156, 156) !important;
     }
-[node-id] rect {
+/* [node-id] rect {
   fill: white;
   filter: none;
   
-}
-.node.Occupied rect {
-  fill: white;
+} */
+.node.Occupied >#head{
+  fill: rgb(236, 24, 24);
   filter: none;
+  stroke: red !important;
+  
   /* stroke-width:1;
   stroke:rgb(0,0,0) */
 }
 
-[node-id] text {
-  fill: rgb(8, 4, 58) ;
+.node.Occupied >#headRect
+{
+  stroke: red;
+}
+.node.Occupied >#headline
+{
+  stroke: red;
+}
+
+.node >#imgCircle
+{
+  visibility: visible;
+}
+
+.node clipPath
+{
+  visibility: visible;
+}
+.node.Vacant >#head{
+  fill: blue;
+  filter: none;
+  stroke: blue;
+  
+  /* stroke-width:1;
+  stroke:rgb(0,0,0) */
+}
+
+.node.Vacant >#headRect
+{
+  stroke: blue;
+}
+.node.Vacant >#headline
+{
+  stroke: blue;
+}
+.node text {
+  fill: yellow ;
+  font-family:sans-serif;
   filter: none;
 }
 

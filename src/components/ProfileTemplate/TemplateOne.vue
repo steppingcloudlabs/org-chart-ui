@@ -7,7 +7,7 @@
             <tbody>
               <tr>
                 <td rowspan="4" style="width: 20%;">
-                  <img id="emp-profile-img" :src="'data:image/jpg;base64,'+profileBasicData.img" class="avatar" />
+                  <img id="emp-profile-img" :src="profileBasicData.img" class="avatar" />
                 </td>
                 <td style="width: 15%;" class="table-heading">Name</td>
                 <td

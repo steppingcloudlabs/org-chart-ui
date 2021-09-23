@@ -174,7 +174,6 @@ export default {
             { id: 1, name: "Department", value: "userDepartmentName" },
             { id: 2, name: "Division", value: "userDivisionName" },
             { id: 3, name: "Business Unit", value: "businessUnit" },
-           
             { id: 4, name: "Experience", value: "totexp" },
              { id: 5, name: "Band", value: "band" }
            
@@ -646,17 +645,17 @@ export default {
             this.itemsImage[0].children[this.selectedImage[i]]["value"]
           );
         }
-      var indexImage=imageFilter.indexOf("image")
-      indexImage > -1 ? fields.splice(indexImage, 1) : -1
+      // var indexImage=imageFilter.indexOf("image")
+      // indexImage > -1 ? fields.splice(indexImage, 1) : -1
 
-      if(indexImage>-1)
-      {
-        this.imgRequire=true
-      }
-      else
-      {
-        this.imgRequire=false
-      }
+      // if(indexImage>-1)
+      // {
+      //   this.imgRequire=true
+      // }
+      // else
+      // {
+      //   this.imgRequire=false
+      // }
        }
 
       console.log(fields);

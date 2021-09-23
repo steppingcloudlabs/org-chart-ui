@@ -7,9 +7,9 @@ export const withoutImage={
             OrgChart.templates.greyTemplate = Object.assign({}, OrgChart.templates.ula);
             OrgChart.templates.greyTemplate.size = [350, 160]; // [250, 105] if you need plus-minus button
             OrgChart.templates.greyTemplate.node = 
-              '<rect x="0" y="5" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' + 
-              '<rect x="0" y="5" height="35" width="{w}" fill="#ccc" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' +
-              '<line x1="0" y1="40" x2="350" y2="40" stroke-width="5" stroke="#ccc"></line>'+
+              '<rect x="0" y="5" id="headRect" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' + 
+              '<rect x="0" y="5" id="head" height="35" width="{w}" fill="#ccc" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' +
+              '<line x1="0" y1="40" id="headline" x2="350" y2="40" stroke-width="5" stroke="#ccc"></line>'+
               '<circle cx="50" cy="60" r="43" fill="#ffffff"></circle>';
             
             // OrgChart.templates.greyTemplate.img_0 = 

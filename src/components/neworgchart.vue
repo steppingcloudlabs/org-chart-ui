@@ -13,14 +13,14 @@
             <v-tabs-items  v-model="tab" >
                   <v-tab-item >
                     <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
-                    <v-simple-table id="tabb" background-color="grey lighten-4" style="position: absolute;top: 10px;right: 50px;color:#231e39;visibility:hidden">
+                    <v-simple-table id="tabb" background-color="grey lighten-4" style="position: absolute;top: 10px;right: 50px;color:#231e39;visibility:hidden;border:1px solid">
                     <template v-slot:default>
                       <thead>
                         <tr>
-                          <th class="text-left">
+                          <th class="text-left" style="border-left:1px solid;border-bottom:1px solid">
                             Pay Grade
                           </th>
-                          <th class="text-left">
+                          <th class="text-left" style="border-left:1px solid;border-bottom:1px solid">
                             Head Count
                           </th>
                         </tr>
@@ -30,8 +30,12 @@
                           v-for="(item,i) in gradecount"
                           :key="i"
                         >
-                          <td>{{userPayGrade[i]}}</td>
-                          <td>{{item}}</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid">{{userPayGrade[i]}}</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid">{{item}}</td>
+                        </tr>
+                        <tr>
+                          <td style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid;font-weight:bold">Total Count</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid;font-weight:bold">{{totalhead}}</td>
                         </tr>
                       </tbody>
                     </template>
@@ -57,6 +61,10 @@
                         >
                           <td>{{userPayGrade[i]}}</td>
                           <td>{{item}}</td>
+                        </tr>
+                        <tr>
+                           <td style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid;font-weight:bold">Total Count</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid;border-top:1px solid;font-weight:bold">{{totalhead}}</td>
                         </tr>
                       </tbody>
                     </template>
@@ -110,12 +118,14 @@ export default {
       femaleCount: 0,
       gradecount: [],
       gradeOccurence: [],
+      totalhead:0,
 
       fieldToDisplay: [
         "userPayGrade",
         "userDepartmentName",
         "userDivisionName",
         "businessUnit",
+        "totexp"
       ],
       filter1: [],
       orgChartData: [],
@@ -267,7 +277,33 @@ export default {
       set(data) {
         this.$store.commit("setisLevel", data);
       },
-    }
+    },
+     showColor: {
+      get() {
+        return this.$store.getters.getColor;
+      },
+      set(data) {
+        this.$store.commit("setColor", data);
+      },
+    },
+    userBand: {
+      get() {
+        return this.$store.getters.getuserBand;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setuserBand", data);
+      }
+    },
+    allBand: {
+      get() {
+        return this.$store.getters.getallBand;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setallBand", data);
+      },
+    },
   },
   watch: {
     userData() {
@@ -297,12 +333,12 @@ export default {
          
         for (var i = 0; i < this.nodes.length; i++) {
           this.getChlidData(this.nodes[i]);
-          if(this.nodes[i].experiencearray)
-          {
-           let expyear=this.nodes[i].experiencearray.sort((a,b) => a.startDate - b.startDate);
-           this.nodes[i].experiencearray=new Number((new Date().getTime() - new Date(expyear[0].startDate).getTime()) / 31536000000).toFixed(0)+" years";
-           console.log(this.nodes[i].experiencearray)
-          }
+          // if(this.nodes[i].experiencearray)
+          // {
+          //  let expyear=this.nodes[i].experiencearray.sort((a,b) => a.startDate - b.startDate);
+          //  this.nodes[i].experiencearray=new Number((new Date().getTime() - new Date(expyear[0].startDate).getTime()) / 31536000000).toFixed(0)+" years";
+          //  console.log(this.nodes[i].experiencearray)
+          // }
            
         }
         console.log(this.nodes);
@@ -494,7 +530,13 @@ export default {
           return item === g.userPayGrade[i];
         }).length;
         console.log(this.gradecount);
+        this.totalhead=this.gradecount.reduce(this.totalCount,0)
       }
+    },
+    totalCount(accumulator,a)
+    {
+       return accumulator + a;
+
     },
     getPayGrade(orgChartData) {
       let g = this;
@@ -520,13 +562,16 @@ export default {
         if (this.location.indexOf(orgChartData[i].location) === -1) {
           this.location.push(orgChartData[i].location);
         }
+         if (this.userBand.indexOf(orgChartData[i].band) === -1) {
+          this.userBand.push(orgChartData[i].band);
+        }
       }
 
       console.log(this.userPayGrade);
 
-      this.userPayGrade.map(function (item) {
-        var test = g.allPaygrade.find(function (element) {
-          return element.externalCode == item;
+      this.userBand.map(function (item) {
+        var test = g.allBand.find(function (element) {
+          return element.band == item;
         });
         if (test != undefined) {
           g.intersectPay.push(test);
@@ -551,7 +596,7 @@ export default {
         this.totalHeadCount++;
         var node = nodes[i];
         var indexpay = this.intersectPay.findIndex(
-          (x) => x.externalCode == node.userPayGrade
+          (x) => x.externalCode == node.band
         );
         console.log(indexpay);
 
@@ -578,6 +623,7 @@ export default {
             break;
         }
         node.tags.push(node.userPayGrade);
+         node.tags.push(node.band);
         switch (node.isRoot) {
           case true:
             node.tags.push("RootNode");
@@ -598,13 +644,14 @@ export default {
           node.tags.push("Resigned");
           this.resignedCount++;
         }
-        if (node["positionVacant"] == false && node.img) {
-          console.log("hello")
-        } else if (node["positionVacant"] == false && !node.img) {
-          node["img"] = "https://i.ibb.co/zxjJ4TK/placeholder.png";
-        } else {
-          node["img"] = "https://i.ibb.co/LShM7dV/vacantposition.png";
-        }
+        // if (node["positionVacant"] == false && node.img) {
+        //   node["img"]=`data:image/jpg;base64,`+node['img']
+        //   console.log("hello")
+        // } else if (node["positionVacant"] == false && !node.img) {
+        //   node["img"] = "https://i.ibb.co/zxjJ4TK/placeholder.png";
+        // } else {
+        //   node["img"] = "https://i.ibb.co/LShM7dV/vacantposition.png";
+        // }
         if (node.userId == "poojas") {
           node.tags.push("assistant");
         }
@@ -824,13 +871,16 @@ export default {
     },
 
     field2_binding(sender, node) {
+      console.log(node)
+       if(node.id.includes("_"))
+       {
+         node.id=node.id.split("_")[0]
+       }
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[0]] != null) {
-        var field ='<text width="120" style="font-size: 10px;" fill="#757575" x="70" y="85" text-anchor="middle" font-weight="bold"> '+data[this.fieldToDisplay[0]] +'</text>';
-
-          // '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="170" text-anchor="middle">' +
-          // data[this.fieldToDisplay[0]] +
-          // "</text>";
+       
+        var field='<text width="300" style="font-size: 18px;" fill="#64696b" x="130" y="85" text-anchor="middle"> '+data[this.fieldToDisplay[0]] +'</text>'
+         
         return field;
       }
 
@@ -840,11 +890,11 @@ export default {
     field3_binding(sender, node) {
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[1]] != null) {
-        var field ='<text width="120" style="font-size: 10px;" fill="#757575" x="70" y="105" text-anchor="middle" font-weight="bold">' +
-          data[this.fieldToDisplay[1]] +'</text>'
+       // var field ='<text width="120" style="font-size: 10px;" fill="#757575" x="70" y="105" text-anchor="middle" font-weight="bold">' + data[this.fieldToDisplay[1]] +'</text>'
           // '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="190" text-anchor="middle">' +
           // data[this.fieldToDisplay[1]] +
           // "</text>";
+        var field='<text width="300" style="font-size: 18px;" fill="#64696b" x="230" y="85" text-anchor="middle"> '+ data[this.fieldToDisplay[1]] +'</text>'  
         return field;
       }
       return null;
@@ -853,10 +903,11 @@ export default {
     field4_binding(sender, node) {
       var data = sender.get(node.id);
       if (data[this.fieldToDisplay[2]] != null) {
-        var field =
-          '<text  text-overflow="multiline" style="font-size: 14px;" fill="white" x="60" y="210" text-anchor="middle">' +
-          data[this.fieldToDisplay[2]] +
-          "</text>";
+        var field ='<text width="300" style="font-size: 18px;" fill="#64696b" x="130" y="110" text-anchor="middle">' +
+          data[this.fieldToDisplay[2]] +'</text>'
+          // '<text  text-overflow="multiline" style="font-size: 14px;" fill="white" x="60" y="210" text-anchor="middle">' +
+          // data[this.fieldToDisplay[2]] +
+          // "</text>";
         return field;
       }
       return null;
@@ -865,15 +916,10 @@ export default {
     field5_binding(sender, node) {
       var data = sender.get(node.id);
 
-      if(this.fieldToDisplay.includes("experiencearray"))
-      {
-         var field ='<text width="100" style="font-size: 10px;" fill="#757575" x="30" y="35" text-anchor="middle" font-weight="bold"> '+data["experiencearray"] +'</text>';
-        
-        return field;
-      }
-
-    
-      return null;
+     
+         var field ='<text width="300" style="font-size: 18px;" fill="#64696b" x="230" y="110" text-anchor="middle">'+data[this.fieldToDisplay[3]]+'</text>';
+        return field
+     
     },
 
     img_binding(sender, node) {
@@ -897,107 +943,68 @@ export default {
     },
 
     binder(sender, node) {
-      var isResigned = false;
-      var isCritical = false;
+      
       var data = sender.get(node.id);
 
-      let resignedIndex = data.tags.findIndex((element) => {
-        return element == "Resigned";
-      });
-      let criticalIndex = data.tags.findIndex((element) => {
-        return element == "Critical";
-      });
-      console.log(resignedIndex + criticalIndex);
+      var field='<text width="300" style="font-size: 18px;" fill="#64696b" x="175" y="135" text-anchor="middle">'+data[this.fieldToDisplay[4]]+'</text>'
+      return field
 
-      var field =
-        '<image     xlink:href="https://i.ibb.co/rxM0SM2/caution-Copy.png" x="10" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
-      var flag_field =
-        '<image class="redflag" xlink:href="/assets/redflag.png" x="10" y="225" width="22" height="22"> <title>Resigned</title></image>';
-      if (resignedIndex > -1) {
-        isResigned = true;
-      }
-      if (criticalIndex > -1) {
-        isCritical = true;
-      }
-      if (isResigned && isCritical) {
-        field =
-          '<image   xlink:href="https://i.ibb.co/FWZTmXh/resign-Copy.png" x="35" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
-        flag_field =
-          '<image class="redflag" xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="10" y="230" width="22" height="22"> <title>Impact of loss</title></image>';
-
-        return field + flag_field;
-      } else if (isResigned) {
-        flag_field =
-          '<image class="redflag"  xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="10" y="225" width="22" height="22"> <title>Impact of Loss</title></image>';
-        var field1 =
-          '<image   xlink:href="https://i.ibb.co/wSZNKXY/yellowface.png" x="35" y="225" width="22" height="22"> <title>Risk of Loss</title></image>';
-        var field2 =
-          '<image  xlink:href="https://i.ibb.co/FWZTmXh/resign-Copy.png" x="65" y="225" width="22" height="22"> <title>Resigned</title></image>';
-
-        return flag_field + field1 + field2;
-      } else if (isCritical) {
-        var field5 =
-          '<image  xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="35" y="229" width="20" height="20"> <title>Risk of Loss</title></image>';
-        return field + field5;
-      } else {
-        return null;
-      }
+     
+      
     },
 
     oc: function (domEl, x, orderBy) {
-    OrgChart.templates.myTemplate = Object.assign({}, OrgChart.templates.isla);
-  OrgChart.templates.myTemplate.size = [140, 140];
-  OrgChart.templates.myTemplate.node = 
-    '<rect filter="url(#isla-shadow1)" x="0" y="20" rx="5" ry="5" height="110" width="140" fill="#FFF" stroke-width="1" stroke="#1EC9E8" ></rect> ' + 
-    '<circle cx="70" cy="20" fill="#ffffff" r="25" stroke="#757575" stroke-width="0.5"></circle>' +
-    '<circle stroke="#757575" stroke-width="3" fill="#757575" cx="70" cy="10" r="8"></circle> ' + 
-    '<path d="M55,34 C55,17 85,17 85,34" stroke="#757575" stroke-width="1" fill="#757575"></path>';
-
-
-  
-  OrgChart.templates.myTemplate.defs = '<filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="isla-shadow1">' + 
-  '<feOffset dx="2" dy="2" in="SourceAlpha" result="shadowOffsetOuter1" /><feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1" />' + 
-  '<feColorMatrix values="0 0 0 1 0   0 0 0 1 0   0 0 0 1 0  0 0 0 0.5 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1" />' +
-  '<feMerge>' + 
-  '<feMergeNode in="shadowMatrixOuter1" /><feMergeNode in="SourceGraphic" /></feMerge></filter>';
-
-  OrgChart.templates.myTemplate.ripple = {
-    radius: 0,
-    color: "#F57C00",
-    rect: { x: 0, y: 20, width: 140, height: 110 }
-  };
-
-
-
-  OrgChart.templates.myTemplate.img_0 ="{val}"
-
-  OrgChart.templates.myTemplate.field_0 = '<text width="160" style="font-size: 10px;" fill="#757575" x="70" y="65" text-anchor="middle" font-weight="bold">{val}</text>';
-  OrgChart.templates.myTemplate.field_1 = "{val}"
-  OrgChart.templates.myTemplate.field_2 = "{val}";
-  OrgChart.templates.myTemplate.field_3="{val}";
-  OrgChart.templates.myTemplate.field_4="{val}";
-
-  OrgChart.templates.myTemplate.link = 
-    '<path stroke-linejoin="round" stroke="red" stroke-width="1px" fill="none" d="M{xa},{ya} {xb},{yb} {xc},{yc} L{xd},{yd}" />';
-
-  OrgChart.templates.myTemplate.minus = 
-    '<circle cx="15" cy="5" r="13" fill="#fff" stroke="red" stroke-width="1"></circle>' + 
-    '<line x1="8" y1="5" x2="22" y2="5" stroke-width="1" stroke="red"></line>';
-  OrgChart.templates.myTemplate.plus = 
-    '<circle cx="15" cy="5" r="13" fill="#ffffff" stroke="red" stroke-width="1"></circle>' + 
-    '<line x1="8" y1="5" x2="22" y2="5" stroke-width="1" stroke="red"></line><line x1="15" y1="-2" x2="15" y2="12" stroke-width="1" stroke="red"></line>';
-
-  OrgChart.templates.myTemplate.nodeMenuButton = '<g style="cursor:pointer;" transform="matrix(1,0,0,1,225,105)" control-node-menu-id="{id}">' + 
-  '<rect x="-110" y="0" fill="red" fill-opacity="0" width="22" height="22"></rect>' + 
-  '<circle cx="-102" cy="15" r="1" fill="red"></circle><circle cx="-98" cy="15" r="1" fill="red"></circle><circle cx="-94" cy="15" r="1" fill="red"></circle></g>';
-
-  OrgChart.templates.myTemplate.linkAdjuster = {
-    fromX: 0,
-    fromY: -5,
-    toX: 0,
-    toY: 0
-  }
-      
+   
+   OrgChart.templates.greyTemplate = Object.assign({}, OrgChart.templates.ula);
+            OrgChart.templates.greyTemplate.size = [350, 160]; // [250, 105] if you need plus-minus button
+            OrgChart.templates.greyTemplate.node = 
+              '<rect x="0" y="5" id="headRect" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' + 
+              '<rect x="0" y="5" id="head" height="35" width="{w}" fill="#ccc" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' +
+              '<line x1="0" y1="40" id="headline" x2="350" y2="40" stroke-width="5" stroke="#ccc"></line>';
+              // '<circle id="imgCircle" cx="50" cy="60" r="43" fill="#ffffff"></circle>';
+            
+            // OrgChart.templates.greyTemplate.img_0 = 
+            //     '<clipPath id="ulaImg">'
+            //     + '<circle cx="100" cy="100" r="30"></circle>'
+            //     + '</clipPath>' 
+            //     + '<image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="60" y="110" width="60" height="60">'
+            //     + '</image>';
+            OrgChart.templates.greyTemplate.link = '<path stroke-linejoin="round" stroke="#616161" stroke-width="1px" fill="none" d="{edge}" />';
+            OrgChart.templates.greyTemplate.field_0 = '<text width="200" text-overflow="ellipsis" font-weight="bold" style="font-size: 14px;" fill="#64696b" x="195" y="30" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_1 = '<text width="300" style="font-size: 14px;"  fill="#64696b" x="205" y="60" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_2 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="150" y="85" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_3 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="240" y="85" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_4 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="150" y="110" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_5 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="240" y="110" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_6 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="195" y="135" text-anchor="middle">{val}</text>';
+            
+//             OrgChart.templates.greyTemplate.exportMenuButton = 
+//  '<div class="tooltip" style="position:absolute;right:{p}px;top:{p}px; width:40px;height:50px;cursor:pointer;" control-export-menu="">' +
+//         '<hr style="background-color: black; margin:10px 0;height:3px; border: none;">' +
+//         '<hr style="background-color: black; margin:10px 0;height:3px; border: none;">' +
+//         '<hr style="background-color: black; margin:10px 0;height:3px; border: none;">' +
+//         "</div>";
+            OrgChart.templates.greyTemplate.nodeMenuButton = 
+                '<g style="cursor:pointer;" transform="matrix(1,0,0,1,93,15)" data-ctrl-n-menu-id="{id}">'
+                + '<rect x="230" y="-10" fill="#000000" fill-opacity="0" width="22" height="22">'
+                + '</rect>'
+                + '<circle cx="235" cy="10" r="3" fill="#232423"/>'
+                + '<circle cx="244" cy="10" r="3" fill="#232423"/>'
+                + '</g>';
+        
+            OrgChart.templates.redTemplate = Object.assign({}, OrgChart.templates.greyTemplate);
+            OrgChart.templates.redTemplate.node = 
+              '<rect x="0" y="5" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#e53835" rx="5" ry="5"></rect>' + 
+              '<rect x="0" y="5" height="35" width="{w}" fill="#e53835" stroke-width="1" stroke="#e53835" rx="5" ry="5"></rect>' +
+              '<line x1="0" y1="40" x2="350" y2="40" stroke-width="5" stroke="#e53835"></line>'+'<circle cx="50" cy="60" r="43" fill="#ffffff"></circle>';
+            OrgChart.templates.redTemplate.field_0 = '<text width="300" style="font-size: 18px;" fill="white" x="175" y="30" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greenTemplate = Object.assign({}, OrgChart.templates.redTemplate);
+            OrgChart.templates.greenTemplate.node = 
+              '<rect x="0" y="5" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#009933" rx="5" ry="5"></rect>' + 
+              '<rect x="0" y="5" height="35" width="{w}" fill="#009933" stroke-width="1" stroke="#009933" rx="5" ry="5"></rect>' +
+              '<line x1="0" y1="40" x2="350" y2="40" stroke-width="5" stroke="#009933"></line>'+'<circle cx="50" cy="60" r="43" fill="#ffffff"></circle>';
+            
+      var g=this
       this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
         levelSeparation: 30,
@@ -1013,6 +1020,7 @@ export default {
         mouseScrool: OrgChart.action.none,
 
         enableSearch: false,
+        layout: OrgChart.normal,  
 
         menu: {
           Export: {
@@ -1123,23 +1131,28 @@ export default {
           },
         },
 
-        template: "myTemplate",
+        template: "greyTemplate",
         nodes: x,
+        
         orderBy: orderBy,
         nodeBinding: {
           
           field_0:'userName',
-          field_1: this.field2_binding,
-          field_2: this.field3_binding,
-          img_0: this.img_binding,
-          field_3:this.field5_binding,
+          field_1: 'positionTitle',
+          field_2: this.fieldToDisplay[0],
+          field_3:this.fieldToDisplay[1],
+          field_4:this.fieldToDisplay[2],
+          field_5:this.fieldToDisplay[3],
+          img_0: "img",
+          field_6:this.fieldToDisplay[4],
 
 
           
        
         },
       });
-     // this.chart.fit();
+    
+      this.layout()
       this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);
         
@@ -1159,11 +1172,26 @@ export default {
         document.getElementById("tabb").style.visibility="visible"
         args.content +=
           '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
-        args.content += document.getElementById("myStyles").outerHTML;
+        args.styles += document.getElementById("myStyles").outerHTML;
        args.content += document.getElementById("tabb").outerHTML;
         //args.content += document.getElementById("legTag").outerHTML;
         document.getElementById("tabb").style.visibility="hidden"
+        args.styles += "<style>.node.Occupied >#head {fill: "+g.showColor.node+"!important; stroke: "+g.showColor.node+"!important;}.node.Occupied >#headline { stroke: "+g.showColor.node+"!important;}.node.Occupied >#headRect {stroke: "+g.showColor.node+"!important;}.node text {fill:"+g.showColor.text+"!important;}.node.Vacant >#head {fill: "+g.showColor.vacant+"!important; stroke: "+g.showColor.vacant+"!important;}.node.Occupied >#headline { stroke: "+g.showColor.vacant+"!important;}.node.Occupied >#headRect {stroke: "+g.showColor.vacant+"!important;}<style>";
+        if(!g.imgRequire)
+        {
+          args.styles+="<style>.node circle{ visibility: hidden;}.node image{visibility: hidden;}</style>"
+        }
       });
+    },
+    layout()
+    { console.log(OrgChart.VERSION)
+      console.log(OrgChart.events.on)
+       
+      OrgChart.events.on('layout', (args)=>{
+       if (args.childrenIds.length>4){
+         args.layout= OrgChart.tree;
+         }
+         });
     },
     blur() {
       if (this.selectedId == null) {

@@ -11,7 +11,7 @@
             <!-- Profile with title -->
             <div style="text-align:center">
               <v-avatar class="profile" color="grey" size="100" tile>
-                <v-img style="border:2px" :src="'data:image/jpg;base64,'+profileBasicData.img"></v-img>
+                <v-img style="border:2px" :src="profileBasicData.img"></v-img>
               </v-avatar>
               <p
                 class="pt-2 name"
