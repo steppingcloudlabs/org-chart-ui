@@ -9,16 +9,21 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        selectedFilter:"simple",
         isLevel:false,
         colors:{
-                    node: "#E65100",
-                vacant: "#7CB342",
-                text: "#689F38"
+                node: "red",
+                vacant: "grey",
+                text: "black",
+                vacantbg:"grey",
+                nodebg:"white"
             },
         defaultColors:{
-                    node: "#E65100",
-                    vacant: "#7CB342",
-                    text: "#689F38"
+                    node: "red",
+                    vacant: "grey",
+                    text: "black",
+                    vacantbg:"grey",
+                    nodebg:"white"
                     } ,  
         levelPay:[],
         selectedSearchField: [],
@@ -56,6 +61,11 @@ export default new Vuex.Store({
         setShowTheme:(state,data)=>
         {
           state.themeDialog=data
+        },
+
+        setSelectedFilter:(state,data)=>
+        {
+          state.selectedFilter=data
         },
 
         setColor:(state,data)=>
@@ -206,7 +216,10 @@ export default new Vuex.Store({
         {
            return state.defaultColors
         },
-
+        getSelectedFilter:(state)=>
+        {
+           return state.selectedFilter
+        },
 
         getshowThemeDialog:(state)=>
         {

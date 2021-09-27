@@ -38,7 +38,7 @@
       ></v-select>
     </v-col>
     <v-col cols="12" sm="2">
-      <v-btn depressed color="primary" @click="getOrgData">Search</v-btn>
+      <v-btn depressed color="primary" @click="getOrgData"><v-icon>search</v-icon></v-btn>
     </v-col>
   </v-row>
 </template>

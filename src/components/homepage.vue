@@ -3,12 +3,9 @@
     
      
              <v-layout row wrap class="dialogClass">
-    <v-dialog v-model="showTheme" persistent max-width="600px">    
+    <v-dialog v-model="showTheme" persistent width="600px">    
               
-                        <v-card
-                           
-                           
-                            max-width="374"
+                        <v-card  
                         >
                         <v-toolbar class="mb-5 primary">
                         <v-toolbar-title class="ml-5 white--text " >Change Theme</v-toolbar-title>
@@ -17,7 +14,7 @@
        
                         <v-row justify="center" align="center">
                             <v-col md="4" class="shrink" >
-                                Default Node Color
+                                Node Color
                             </v-col>
                             <v-col md="7" class="shrink" style="min-width: 220px;">
                                 <colorpick :color.sync="colors.node"></colorpick>
@@ -37,6 +34,22 @@
                             </v-col>
                             <v-col md="7" class="shrink" style="min-width: 220px;">
                                 <colorpick :color.sync="colors.text"></colorpick>
+                            </v-col>
+                        </v-row>
+                        <v-row justify="center" align="center">
+                            <v-col md="4" class="shrink" >
+                               Node Background Color
+                            </v-col>
+                            <v-col md="7" class="shrink" style="min-width: 220px;">
+                                <colorpick :color.sync="colors.nodebg"></colorpick>
+                            </v-col>
+                        </v-row>
+                        <v-row justify="center" align="center">
+                            <v-col md="4" class="shrink" >
+                               Vacant node Background Color
+                            </v-col>
+                            <v-col md="7" class="shrink" style="min-width: 220px;">
+                                <colorpick :color.sync="colors.vacantbg"></colorpick>
                             </v-col>
                         </v-row>
                         <v-row justify="center" align="center">
@@ -124,9 +137,11 @@ export default {
       date: new Date().toISOString().substr(0, 10),
       menu2: false,
        colors: {
-          node: "#E65100",
-          vacant: "#7CB342",
-          text: "#689F38"
+          node: "red",
+          vacant: "grey",
+          text: "black",
+          nodebg:"white",
+          vacantbg:"grey"
           
         },
          defaultcolors: {
@@ -186,7 +201,8 @@ export default {
                         // y = document.styleSheets[i].cssRules.length;
                     } 
                     else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied > #headRect") {                                               
-                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.node;                                                                       
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.node;
+                        document.styleSheets[i].cssRules[y].style["fill"] = this.colors.nodebg;                                                                        
                         // y = document.styleSheets[i].cssRules.length;
                     } 
                    else if (document.styleSheets[i].cssRules[y].selectorText==".node text") {                                               
@@ -202,7 +218,8 @@ export default {
                         // y = document.styleSheets[i].cssRules.length;
                     } 
                     else if (document.styleSheets[i].cssRules[y].selectorText==".node.Vacant > #headRect") {                                               
-                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.vacant;                                                                       
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.vacant;  
+                        document.styleSheets[i].cssRules[y].style["fill"] = this.colors.vacantbg;                                                                       
                         // y = document.styleSheets[i].cssRules.length;
                     } 
                     else if (document.styleSheets[i].cssRules[y].selectorText==".node clippath") {  

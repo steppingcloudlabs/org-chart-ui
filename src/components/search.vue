@@ -1,27 +1,10 @@
 <template>
   <v-row>
-     <v-col cols="12" sm="2" v-if="$route.path == '/'">
-       <v-select
-        :items="dropdown_font1"
-        item-text="text"
-        item-value="value"
-        label="Select template"
-        v-model="outertemp"
-      ></v-select>
-    </v-col>
-    <v-col cols="12" sm="4" v-if="$route.path == '/'">
-      <v-select
-        :items="dropdown_font"
-        item-text="text"
-        item-value="value"
-       
-        @change="RefreshGrid"
-        label="Select Category"
-        v-model="outerSelect"
-      ></v-select>
-    </v-col>
+   
+  
 
-     <v-col cols="12" sm="5" v-else>
+
+     <v-col cols="12" sm="5" >
       <v-select
         :items="dropdown_font"
         item-text="text"
@@ -69,7 +52,7 @@
       </v-autocomplete> 
     </v-col>
     <v-col cols="12" sm="2">
-      <v-btn depressed color="primary" @click="getOrgData">Search</v-btn>
+      <v-btn depressed color="primary" @click="getOrgData"><v-icon>search</v-icon></v-btn>
     </v-col>
   </v-row>
 </template>

@@ -249,7 +249,7 @@
                   id="text31"
                   fill="black"
                   font-size="12"
-                >Rough Diamond</text>
+                >B-</text>
               </g>
               <g>
                 <rect
@@ -269,7 +269,7 @@
                   id="text32"
                   fill="black"
                   font-size="12"
-                >Future Star</text>
+                >A-</text>
               </g>
               <g>
                 <rect
@@ -289,7 +289,7 @@
                   id="text33"
                   fill="black"
                   font-size="12"
-                >ConsistentStar</text>
+                >A+</text>
               </g>
               <g>
                 <rect
@@ -309,7 +309,7 @@
                   id="text21"
                   fill="black"
                   font-size="12"
-                >Inconsitent performer</text>
+                >C</text>
               </g>
               <g>
                 <rect
@@ -329,7 +329,7 @@
                   id="text22"
                   fill="black"
                   font-size="12"
-                >Key Player</text>
+                >B</text>
               </g>
               <g>
                 <rect
@@ -349,7 +349,7 @@
                   id="text23"
                   fill="black"
                   font-size="12"
-                >Current Star</text>
+                >A</text>
               </g>
               <g>
                 <rect
@@ -369,7 +369,7 @@
                   id="text11"
                   fill="black"
                   font-size="12"
-                >Talent Risk</text>
+                >C-</text>
               </g>
               <g>
                 <rect
@@ -389,7 +389,7 @@
                   id="text12"
                   fill="black"
                   font-size="12"
-                >Solid performer</text>
+                >C+</text>
               </g>
               <g>
                 <rect
@@ -409,7 +409,7 @@
                   id="text13"
                   fill="black"
                   font-size="12"
-                >Consistent Performer</text>
+                >B+</text>
               </g>
               <line x1="85" y1="0" x2="85" y2="230" stroke="rgb(217,217,217)" stroke-width="2" />
               <line x1="75" y1="0" x2="95" y2="0" stroke="rgb(217,217,217)" stroke-width="3" />
@@ -424,8 +424,8 @@
                   fill="black"
                   font-size="10"
                   transform="rotate(90 20,40)"
-                >Continue</text>
-                <text
+                >Potential</text>
+                <!-- <text
                   x="100"
                   y="2"
                   text-anchor="middle"
@@ -433,8 +433,8 @@
                   fill="black"
                   font-size="10"
                   transform="rotate(90 20,40)"
-                >Grow</text>
-                <text
+                >Grow</text> -->
+                <!-- <text
                   x="22"
                   y="2"
                   text-anchor="middle"
@@ -442,7 +442,7 @@
                   fill="black"
                   font-size="10"
                   transform="rotate(90 20,40)"
-                >High Potential</text>
+                >High Potential</text> -->
               </g>
               <g>
                 <text
@@ -452,8 +452,8 @@
                   id="text4"
                   fill="black"
                   font-size="10"
-                >Partially meets expectation</text>
-                <text
+                >Performance</text>
+                <!-- <text
                   x="320"
                   y="250"
                   text-anchor="middle"
@@ -468,7 +468,7 @@
                   id="text6"
                   fill="black"
                   font-size="10"
-                >Exceed expectation</text>
+                >Exceed expectation</text> -->
               </g>
             </svg>
           </div>

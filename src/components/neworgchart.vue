@@ -5,20 +5,22 @@
       v-model="drawer"
       app
       permanent
+     color="grey lighten-4"
+     
     >
               <v-tabs grow  v-model="tab" background-color="grey lighten-4" >
              <v-tab   >Filters</v-tab>
              <v-tab  v-if="gradecount.length" >Head Count</v-tab>
             </v-tabs>
-            <v-tabs-items  v-model="tab" >
-                  <v-tab-item >
+            <v-tabs-items  v-model="tab"   >
+                  <v-tab-item height="100vh" >
                     <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
                     <v-simple-table id="tabb" background-color="grey lighten-4" style="position: absolute;top: 10px;right: 50px;color:#231e39;visibility:hidden;border:1px solid">
                     <template v-slot:default>
                       <thead>
                         <tr>
                           <th class="text-left" style="border-left:1px solid;border-bottom:1px solid">
-                            Pay Grade
+                             Band
                           </th>
                           <th class="text-left" style="border-left:1px solid;border-bottom:1px solid">
                             Head Count
@@ -27,10 +29,10 @@
                       </thead>
                       <tbody>
                         <tr
-                          v-for="(item,i) in gradecount"
+                          v-for="(item,i) in bandcount"
                           :key="i"
                         >
-                          <td style="border-left:1px solid;border-bottom:1px solid">{{userPayGrade[i]}}</td>
+                          <td style="border-left:1px solid;border-bottom:1px solid">{{userBand[i]}}</td>
                           <td style="border-left:1px solid;border-bottom:1px solid">{{item}}</td>
                         </tr>
                         <tr>
@@ -41,13 +43,13 @@
                     </template>
                   </v-simple-table>
                   </v-tab-item>
-                  <v-tab-item v-if="gradecount.length" >
+                  <v-tab-item v-if="bandcount.length" >
                     <v-simple-table  background-color="grey lighten-4" style="top: 10px;left: 20px;">
                     <template v-slot:default>
                       <thead>
                         <tr>
                           <th class="text-left">
-                            Pay Grade
+                            Band
                           </th>
                           <th class="text-left">
                             Head Count
@@ -56,10 +58,10 @@
                       </thead>
                       <tbody>
                         <tr
-                          v-for="(item,i) in gradecount"
+                          v-for="(item,i) in bandcount"
                           :key="i"
                         >
-                          <td>{{userPayGrade[i]}}</td>
+                          <td>{{userBand[i]}}</td>
                           <td>{{item}}</td>
                         </tr>
                         <tr>
@@ -123,9 +125,9 @@ export default {
       fieldToDisplay: [
         "userPayGrade",
         "userDepartmentName",
-        "userDivisionName",
         "businessUnit",
-        "totexp"
+        "band",
+        "userDivisionName",
       ],
       filter1: [],
       orgChartData: [],
@@ -134,6 +136,8 @@ export default {
 
       selectedId: null,
       temp: {},
+      bandcount:[],
+      bandOccurence:[]
     };
   },
   components: {
@@ -310,6 +314,12 @@ export default {
       this.temp = this.userData;
     },
   },
+  beforeDestroy()
+  {
+    this.gradecount=[]
+    this.totalhead=0
+    this.userPayGrade=[]
+  },
   methods: {
     getbase64(file) {
       var canvas = document.createElement("CANVAS");
@@ -346,7 +356,7 @@ export default {
         this.getPayGrade(this.nodes);
         this.nodes = this.addTags(this.nodes);
         this.orgChartData = this.nodes;
-        this.oc(this.$refs.tree, this.orgChartData, null);
+        this.oc(this.$refs.tree, this.orgChartData, null,OrgChart.normal);
         //var str = "";
         // let intersectPay = [];
           this.gradeCounting()
@@ -412,7 +422,7 @@ export default {
 
     redraw(data) {
       this.fieldToDisplay = data.fieldToDisplay;
-      this.oc(this.$refs.tree, data.output, data.orderBy);
+      this.oc(this.$refs.tree, data.output, data.orderBy,data.layout);
       
     },
 
@@ -422,6 +432,7 @@ export default {
         "userDepartmentName",
         "userDivisionName",
         "businessUnit",
+        "totexp"
       ]),
        this.isLevel=false
           for(let i=0;i<this.orgChartData.length;i++)
@@ -431,7 +442,7 @@ export default {
 });
           }
 
-       this.oc(this.$refs.tree, this.orgChartData, null);
+       this.oc(this.$refs.tree, this.orgChartData, null,OrgChart.normal);
       
      
       //leg.style.border = "1px solid black";
@@ -532,7 +543,16 @@ export default {
         console.log(this.gradecount);
         this.totalhead=this.gradecount.reduce(this.totalCount,0)
       }
+       for ( i = 0; i < this.userBand.length; i++) {
+         g = this;
+        this.bandcount[i] = this.bandOccurence.filter(function (item) {
+          return item === g.userBand[i];
+        }).length;
+        console.log(this.bandcount);
+        this.totalhead=this.bandcount.reduce(this.totalCount,0)
+      }
     },
+
     totalCount(accumulator,a)
     {
        return accumulator + a;
@@ -543,6 +563,7 @@ export default {
       for (var i = 0; i < orgChartData.length; i++) {
         console.log(orgChartData[i].userPayGrade);
         this.gradeOccurence.push(orgChartData[i].userPayGrade);
+        this.bandOccurence.push(orgChartData[i].band);
         if (this.userPayGrade.indexOf(orgChartData[i].userPayGrade) === -1) {
           this.userPayGrade.push(orgChartData[i].userPayGrade);
         }
@@ -814,6 +835,12 @@ export default {
     },
 
     download() {
+      // console.log(this.chart.config.layout)
+      // this.chart.on('redraw', function (sender) {
+      //      console.log(sender)
+      //      this.chart.config.layout=OrgChart.tree
+      //    });  
+     
       this.test();
       $("#tree svg").makeCssInline();
       var svg = document.getElementById("tree").innerHTML;
@@ -953,7 +980,7 @@ export default {
       
     },
 
-    oc: function (domEl, x, orderBy) {
+    oc: function (domEl, x, orderBy,layout) {
    
    OrgChart.templates.greyTemplate = Object.assign({}, OrgChart.templates.ula);
             OrgChart.templates.greyTemplate.size = [350, 160]; // [250, 105] if you need plus-minus button
@@ -1020,7 +1047,7 @@ export default {
         mouseScrool: OrgChart.action.none,
 
         enableSearch: false,
-        layout: OrgChart.normal,  
+        layout: layout,  
 
         menu: {
           Export: {
@@ -1143,15 +1170,15 @@ export default {
           field_3:this.fieldToDisplay[1],
           field_4:this.fieldToDisplay[2],
           field_5:this.fieldToDisplay[3],
-          img_0: "img",
           field_6:this.fieldToDisplay[4],
+          img_0: "img",
 
 
           
        
         },
       });
-    
+       this.chart.fit();
       this.layout()
       this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);
@@ -1176,7 +1203,7 @@ export default {
        args.content += document.getElementById("tabb").outerHTML;
         //args.content += document.getElementById("legTag").outerHTML;
         document.getElementById("tabb").style.visibility="hidden"
-        args.styles += "<style>.node.Occupied >#head {fill: "+g.showColor.node+"!important; stroke: "+g.showColor.node+"!important;}.node.Occupied >#headline { stroke: "+g.showColor.node+"!important;}.node.Occupied >#headRect {stroke: "+g.showColor.node+"!important;}.node text {fill:"+g.showColor.text+"!important;}.node.Vacant >#head {fill: "+g.showColor.vacant+"!important; stroke: "+g.showColor.vacant+"!important;}.node.Occupied >#headline { stroke: "+g.showColor.vacant+"!important;}.node.Occupied >#headRect {stroke: "+g.showColor.vacant+"!important;}<style>";
+        args.styles += "<style>.node.Occupied >#head {fill: "+g.showColor.node+"!important; stroke: "+g.showColor.node+"!important;}.node.Occupied >#headline { stroke: "+g.showColor.node+"!important;}.node.Occupied >#headRect {stroke: "+g.showColor.node+"!important;fill: "+g.showColor.nodebg+"!important;}.node text {fill:"+g.showColor.text+"!important;}.node.Vacant >#head {fill: "+g.showColor.vacant+"!important; stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headline { stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headRect {stroke: "+g.showColor.vacant+"!important;fill: "+g.showColor.vacantbg+"!important;}<style>";
         if(!g.imgRequire)
         {
           args.styles+="<style>.node circle{ visibility: hidden;}.node image{visibility: hidden;}</style>"
@@ -1187,11 +1214,17 @@ export default {
     { console.log(OrgChart.VERSION)
       console.log(OrgChart.events.on)
        
-      OrgChart.events.on('layout', (args)=>{
-       if (args.childrenIds.length>4){
-         args.layout= OrgChart.tree;
-         }
-         });
+      OrgChart.events.on('layout', function (args) {   
+
+                                      if (args.pnode.childrenIds.length > 4){
+
+                                        args.layout = OrgChart.tree;
+
+                                    }     
+
+ 
+
+                            });
     },
     blur() {
       if (this.selectedId == null) {
@@ -1236,3 +1269,6 @@ export default {
   },
 };
 </script>
+<style scoped>
+
+</style>

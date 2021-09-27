@@ -26,7 +26,7 @@
       <v-container fluid style="font-size:12px">
         
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
-        <v-treeview selectable selected-color="red" :items="itemsImage" v-model="selectedImage" @input="validate(selectedImage)"></v-treeview>
+        <!-- <v-treeview selectable selected-color="red" :items="itemsImage" v-model="selectedImage" @input="validate(selectedImage)"></v-treeview> -->
                 <!-- <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
                   <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
                      <v-treeview selectable selected-color="red" :items="itemsBU" v-model="selectedBUItem"></v-treeview>
@@ -71,6 +71,7 @@
   </div>
 </template>
 <script>
+import OrgChart from '@balkangraph/orgchart.js';
 export default {
   data() {
     return {
@@ -93,19 +94,20 @@ export default {
           id: 999,
           name: "View",
           children: [ { id: 0, name: "Regular", value: "Regular" },
-            { id: 1, name: "Level Wise", value: "LevelWise" },]
+            { id: 1, name: "Level Wise", value: "LevelWise" },
+            { id: 2, name: "Tree View", value: "tree" },]
         }
 
       ],
-       itemsImage:[
-          {
-          id: 999,
-          name: "Image filter",
-          children: [ { id: 0, name: "show Image", value: "image" },
-            { id: 1, name: "hide image", value: "hide" },]
-        }
+      //  itemsImage:[
+      //     {
+      //     id: 999,
+      //     name: "Image filter",
+      //     children: [ { id: 0, name: "show Image", value: "image" },
+      //       { id: 1, name: "hide image", value: "hide" },]
+      //   }
 
-      ],
+      // ],
 
        displayItem:[
           {
@@ -172,10 +174,10 @@ export default {
           children: [
             { id: 0, name: "Pay Grade", value: "userPayGrade" },
             { id: 1, name: "Department", value: "userDepartmentName" },
-            { id: 2, name: "Division", value: "userDivisionName" },
-            { id: 3, name: "Business Unit", value: "businessUnit" },
-            { id: 4, name: "Experience", value: "totexp" },
-             { id: 5, name: "Band", value: "band" }
+            { id: 2, name: "Business Unit", value: "businessUnit" },
+             { id: 3, name: "Band", value: "band" },
+              { id: 4, name: "Experience", value: "totexp" },
+              { id: 5, name: "Division", value: "userDivisionName" },
            
             
           
@@ -188,7 +190,8 @@ export default {
           name: "Sort By",
           children: [{ id: 0, name: "Pay Grade", value: "userPayGrade" }]
         }
-      ]
+      ],
+      layout:OrgChart.normal
     };
   },
   props: {
@@ -587,6 +590,7 @@ export default {
       var filteredData=this.chartData
        if(this.selectedView==1)
         {
+          this.layout=OrgChart.normal
           this.isLevel=true
           console.log(this.levelPay)
           for(let i=0;i<filteredData.length;i++)
@@ -608,13 +612,26 @@ export default {
           }
           
         }
-        else{
+        else if(this.selectedView==0){
+          this.layout=OrgChart.normal
           this.isLevel=false
           for(let i=0;i<filteredData.length;i++)
           {
             filteredData[i].tags = filteredData[i].tags.filter(function (item) {
              return item.indexOf("subLevels") !== 0;
-});
+              });
+          }
+
+        }
+        else if(this.selectedView==2)
+        {
+           this.layout=OrgChart.tree
+          this.isLevel=false
+          for(let i=0;i<filteredData.length;i++)
+          {
+            filteredData[i].tags = filteredData[i].tags.filter(function (item) {
+             return item.indexOf("subLevels") !== 0;
+              });
           }
 
         }
@@ -623,7 +640,7 @@ export default {
     },
     ApplyFilter() {
       var gradeFilter = [];
-      var imageFilter=[];
+     // var imageFilter=[];
       var BUFilter=[];
       var divFilter=[];
       var depFilter=[];
@@ -639,24 +656,24 @@ export default {
         );
       }
       console.log(fields);
-       if (this.selectedImage.length) {
-         for (i = 0; i < this.selectedImage.length; i++) {
-          imageFilter.push(
-            this.itemsImage[0].children[this.selectedImage[i]]["value"]
-          );
-        }
-      // var indexImage=imageFilter.indexOf("image")
-      // indexImage > -1 ? fields.splice(indexImage, 1) : -1
+      //  if (this.selectedImage.length) {
+      //    for (i = 0; i < this.selectedImage.length; i++) {
+      //     imageFilter.push(
+      //       this.itemsImage[0].children[this.selectedImage[i]]["value"]
+      //     );
+      //   }
+      // // var indexImage=imageFilter.indexOf("image")
+      // // indexImage > -1 ? fields.splice(indexImage, 1) : -1
 
-      // if(indexImage>-1)
-      // {
-      //   this.imgRequire=true
-      // }
-      // else
-      // {
-      //   this.imgRequire=false
-      // }
-       }
+      // // if(indexImage>-1)
+      // // {
+      // //   this.imgRequire=true
+      // // }
+      // // else
+      // // {
+      // //   this.imgRequire=false
+      // // }
+      //  }
 
       console.log(fields);
       if (this.selectedItem.length) {
@@ -793,6 +810,7 @@ export default {
 
       // var finalData = this.applySort(sortValue, filteredData)
       this.$emit("redraw", {
+        layout:this.layout,
         output: filteredData,
         orderBy: sortValue,
         fieldToDisplay: fields

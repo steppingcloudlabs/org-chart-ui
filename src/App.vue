@@ -1,5 +1,5 @@
 <template>
-  <v-app width="100%">
+  <v-app width="100%" class="app" >
     <core-view></core-view>
     <SnackbarComponent></SnackbarComponent>
   </v-app>
@@ -32,5 +32,6 @@ this.getPaygrade()
 .body #tree > svg {
   background-color: white !important;
 }
+
 </style>
 

@@ -21,7 +21,7 @@
     <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
      <style id="myStyles" title="orgchartStyle"> 
         #tree>svg {
-        background-color: rgb(163, 156, 156) !important;
+        background-color: white !important;
     }
 /* [node-id] rect {
   fill: white;
@@ -56,9 +56,9 @@
   visibility: visible;
 }
 .node.Vacant >#head{
-  fill: blue;
+  fill: grey;
   filter: none;
-  stroke: blue;
+  stroke: grey;
   
   /* stroke-width:1;
   stroke:rgb(0,0,0) */
@@ -66,14 +66,14 @@
 
 .node.Vacant >#headRect
 {
-  stroke: blue;
+  stroke: grey;
 }
 .node.Vacant >#headline
 {
-  stroke: blue;
+  stroke: grey;
 }
 .node text {
-  fill: yellow ;
+  fill: black ;
   font-family:sans-serif;
   filter: none;
 }
@@ -95,6 +95,11 @@
   stroke-width: 3;
 }
 
+/* .bg-toolbar-container{
+  top: 30px;
+  bottom: initial !important;
+  left: 30px;
+} */
 .node.UC g line {
   stroke: rgb(255, 0, 0);
   stroke-width: 3;
