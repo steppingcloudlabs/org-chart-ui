@@ -30,6 +30,14 @@
                         </v-row>
                         <v-row justify="center" align="center">
                             <v-col md="4" class="shrink" >
+                               Indirect Color
+                            </v-col>
+                            <v-col md="7" class="shrink" style="min-width: 220px;">
+                                <colorpick :color.sync="colors.indirect"></colorpick>
+                            </v-col>
+                        </v-row>
+                        <v-row justify="center" align="center">
+                            <v-col md="4" class="shrink" >
                                Text Color
                             </v-col>
                             <v-col md="7" class="shrink" style="min-width: 220px;">
@@ -50,6 +58,15 @@
                             </v-col>
                             <v-col md="7" class="shrink" style="min-width: 220px;">
                                 <colorpick :color.sync="colors.vacantbg"></colorpick>
+                            </v-col>
+                        </v-row>
+                        <v-row justify="center" align="center">
+                            <v-col md="4" class="shrink" >
+                               Font Size
+                            </v-col>
+                            
+                            <v-col md="7" class="shrink">
+                                <v-text-field v-model="colors.fontsize" solo  label="Font Size" ></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row justify="center" align="center">
@@ -129,6 +146,7 @@ export default {
   },
   data() {
     return {
+       
         tab: null,
         items: ['Color', 'Images', 'Director'],
      
@@ -141,7 +159,9 @@ export default {
           vacant: "grey",
           text: "black",
           nodebg:"white",
-          vacantbg:"grey"
+          vacantbg:"grey",
+          fontsize: '14px',
+          indirect:"blueviolet"
           
         },
          defaultcolors: {
@@ -170,6 +190,12 @@ export default {
     
   },
   methods: {
+    increment () {
+      this.foo = parseInt(this.foo,10) + 1
+    },
+    decrement () {
+      this.foo = parseInt(this.foo,10) - 1
+    },
       resetDialog()
       {
            this.showTheme=false
@@ -192,21 +218,40 @@ export default {
             if (document.styleSheets[i].title==titulo) {
                 let y=0;
                 while (y<document.styleSheets[i].cssRules.length) {
-                    if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied > #head") {                                               
+                    if (document.styleSheets[i].cssRules[y].selectorText==".node.Direct > #head") {                                               
                         document.styleSheets[i].cssRules[y].style["fill"] = this.colors.node;                                                                       
                         // y = document.styleSheets[i].cssRules.length;
                     } 
-                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied > #headline") {                                               
+                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Direct > #headline") {                                               
                         document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.node;                                                                       
                         // y = document.styleSheets[i].cssRules.length;
                     } 
-                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Occupied > #headRect") {                                               
+                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Direct > #headRect") {                                               
                         document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.node;
                         document.styleSheets[i].cssRules[y].style["fill"] = this.colors.nodebg;                                                                        
                         // y = document.styleSheets[i].cssRules.length;
                     } 
+
+                     if (document.styleSheets[i].cssRules[y].selectorText==".node.Indirect > #head") {                                               
+                        document.styleSheets[i].cssRules[y].style["fill"] = this.colors.indirect;                                                                       
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Indirect > #headline") {                                               
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.indirect;                                                                       
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+                    else  if (document.styleSheets[i].cssRules[y].selectorText==".node.Indirect > #headRect") {                                               
+                        document.styleSheets[i].cssRules[y].style["stroke"] = this.colors.indirect;
+                        document.styleSheets[i].cssRules[y].style["fill"] = this.colors.nodebg;                                                                        
+                        // y = document.styleSheets[i].cssRules.length;
+                    } 
+
                    else if (document.styleSheets[i].cssRules[y].selectorText==".node text") {                                               
-                        document.styleSheets[i].cssRules[y].style["fill"] = this.colors.text;                                                                       
+                        document.styleSheets[i].cssRules[y].style["fill"] = this.colors.text;
+                        console.log(document.styleSheets[i].cssRules[y].style["font-size"])
+                         document.styleSheets[i].cssRules[y].style["font-size"] =this.colors.fontsize;                                                                       
+                         console.log(document.styleSheets[i].cssRules[y].style["font-size"])
+                         console.log(this.colors.fontsize)
                         // y = document.styleSheets[i].cssRules.length;
                     } 
                     else if (document.styleSheets[i].cssRules[y].selectorText==".node.Vacant > #head") {                                               

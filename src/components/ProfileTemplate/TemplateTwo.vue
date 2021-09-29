@@ -630,8 +630,8 @@ export default {
     },
     getRatingYear(startDate, endDate) {
       return (
-        moment.unix(startDate.substring(6, startDate.length - 5)).format("YY") +
-        "-" +
+        // moment.unix(startDate.substring(6, startDate.length - 5)).format("YY") +
+        // "-" +
         moment.unix(endDate.substring(6, endDate.length - 5)).format("YY")
       );
     },

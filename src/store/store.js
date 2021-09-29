@@ -16,14 +16,18 @@ export default new Vuex.Store({
                 vacant: "grey",
                 text: "black",
                 vacantbg:"grey",
-                nodebg:"white"
+                nodebg:"white",
+                fontsize:'14px',
+                indirect:"blueviolet"
             },
         defaultColors:{
                     node: "red",
                     vacant: "grey",
                     text: "black",
                     vacantbg:"grey",
-                    nodebg:"white"
+                    nodebg:"white",
+                    fontsize:'14px',
+                    indirect:"blueviolet"
                     } ,  
         levelPay:[],
         selectedSearchField: [],

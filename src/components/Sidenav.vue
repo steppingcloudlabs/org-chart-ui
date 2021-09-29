@@ -45,13 +45,13 @@
           v-model="fieldToDisplay"
           @input="validateFields"
         ></v-treeview>
-        <v-treeview
+        <!-- <v-treeview
           selectable
           selected-color="red"
           :items="sortBy"
           v-model="selectedSortItem"
           @input="validate(selectedSortItem)"
-        ></v-treeview>
+        ></v-treeview> -->
         <v-treeview
           selectable
           selected-color="red"
@@ -66,6 +66,14 @@
           v-model="selectedDisplay"
            @input="validate(selectedDisplay)"
         ></v-treeview>
+        <!-- <v-radio-group v-model="selectedDisplay">
+      <v-radio
+        v-for="n in displayItem"
+        :key="n"
+        :label="n.name"
+        :value="n.value"
+      ></v-radio>
+        </v-radio-group> -->
       </v-container>
     
   </div>
@@ -172,10 +180,10 @@ export default {
           id: 999,
           name: " Display Fields",
           children: [
-            { id: 0, name: "Pay Grade", value: "userPayGrade" },
-            { id: 1, name: "Department", value: "userDepartmentName" },
-            { id: 2, name: "Business Unit", value: "businessUnit" },
-             { id: 3, name: "Band", value: "band" },
+             { id: 0, name: "Business Unit", value: "businessUnit" },
+             { id: 1, name: "Department", value: "userDepartmentName" },
+             { id: 2, name: "Band", value: "band" },
+            { id: 3, name: "Pay Grade", value: "userPayGrade" },
               { id: 4, name: "Experience", value: "totexp" },
               { id: 5, name: "Division", value: "userDivisionName" },
            
@@ -554,7 +562,7 @@ export default {
         
         for (var i = 0; i < item[filterType].length; i++) {
           if (
-            filterArray.indexOf(item[filterType][i]) > -1) {
+            filterArray.indexOf(item[filterType][i]) > -1 || item["isRoot"] == true) {
               test.push(item)
            
           }
@@ -771,6 +779,7 @@ export default {
             vacantFilter=[]
             vacantFilter.push("Vacant")
             vacantFilter.push("Occupied")
+           
             filteredData = this.filterappliedTags(
           filteredData,
           vacantFilter,

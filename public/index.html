@@ -28,20 +28,40 @@
   filter: none;
   
 } */
-.node.Occupied >#head{
+.node.Direct >#head{
   fill: rgb(236, 24, 24);
   filter: none;
-  stroke: red !important;
+  stroke: red ;
   
   /* stroke-width:1;
   stroke:rgb(0,0,0) */
 }
 
-.node.Occupied >#headRect
+.node.Indirect >#head{
+  fill: blueviolet !important;
+  filter: none;
+  stroke: blueviolet !important;
+  
+  /* stroke-width:1;
+  stroke:rgb(0,0,0) */
+}
+
+.node.Indirect >#headRect
+{
+  stroke: blueviolet !important
+  ;
+}
+.node.Indirect >#headline
+{
+  stroke: blueviolet !important;
+}
+
+
+.node.Direct >#headRect
 {
   stroke: red;
 }
-.node.Occupied >#headline
+.node.Direct >#headline
 {
   stroke: red;
 }
@@ -76,6 +96,7 @@
   fill: black ;
   font-family:sans-serif;
   filter: none;
+  font-size:14px !important;
 }
 
 [node-id] g rect {
