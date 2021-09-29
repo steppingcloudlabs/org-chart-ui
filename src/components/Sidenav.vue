@@ -45,13 +45,13 @@
           v-model="fieldToDisplay"
           @input="validateFields"
         ></v-treeview>
-        <!-- <v-treeview
+        <v-treeview
           selectable
           selected-color="red"
           :items="sortBy"
           v-model="selectedSortItem"
           @input="validate(selectedSortItem)"
-        ></v-treeview> -->
+        ></v-treeview>
         <v-treeview
           selectable
           selected-color="red"

@@ -174,7 +174,7 @@ export default {
     },
     getUserData(data) {
       this.showFilter = false;
-      this.$router.push({path:"search"});
+      this.$router.push({path:"/"});
       var date1 = new Date(this.inputDate).getTime();
       this.showLoading = true;
       if(data.category=="People")

@@ -305,9 +305,14 @@ export default {
       },
       saveDialog()
       {
+          if(!this.colors.fontsize.includes("px"))
+        {
+          this.colors.fontsize=this.colors.fontsize+"px"
+          console.log(this.colors.fontsize)
+        }
          this.showColor=this.colors
           this.cssupdtae("orgchartStyle")
-          
+      
        let data={payload:this.colors}   
        console.log(data)
         this.showTheme=false

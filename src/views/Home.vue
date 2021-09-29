@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <CoreAppBar v-if="$route.path!='/'"></CoreAppBar>
+    <CoreAppBar></CoreAppBar>
     <core-view></core-view>
   </div>
 </template>

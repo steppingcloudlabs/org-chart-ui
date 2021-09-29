@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import search from '../views/About.vue'
 import orgchart from '../components/orgchart'
-import landing from '../components/landingPage'
+// import landing from '../components/landingPage'
 import orgcharttemp from '../components/neworgchart'
 
 
@@ -16,11 +16,6 @@ const routes = [{
   children: [
     {
       path: '/',
-      name: 'landing',
-      component: landing
-    },
-    {
-      path: '/search',
       name: 'search',
       component: search,
       children:[ ]

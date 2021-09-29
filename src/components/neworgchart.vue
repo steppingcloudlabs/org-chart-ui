@@ -423,6 +423,7 @@ export default {
 
     redraw(data) {
       this.fieldToDisplay = data.fieldToDisplay;
+      console.log(data.output)
       this.oc(this.$refs.tree, data.output, data.orderBy,data.layout);
       
     },
@@ -1039,7 +1040,7 @@ export default {
       var g=this
       this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
-        levelSeparation: 30,
+        levelSeparation: 10,
         subtreeSeparation: 30,
         nodeMouseClick: OrgChart.action.none,
         toolbar: {
@@ -1096,43 +1097,43 @@ export default {
         tags: {
           subLevels0: {
             subLevels: 0,
-            levelSeparation: 10,
+
           },
           subLevels1: {
             subLevels: 1,
-            levelSeparation: 10,
+           
           },
           subLevels2: {
             subLevels: 2,
-            levelSeparation: 10,
+           
           },
           subLevels3: {
             subLevels: 3,
-            levelSeparation: 10,
+           
           },
           subLevels4: {
             subLevels: 4,
-            levelSeparation: 10,
+            
           },
           subLevels5: {
             subLevels: 5,
-            levelSeparation: 10,
+            
           },
           subLevels6: {
             subLevels: 6,
-            levelSeparation: 10,
+            
           },
           subLevels7: {
             subLevels: 7,
-            levelSeparation: 10,
+           
           },
           subLevels8: {
             subLevels: 8,
-            levelSeparation: 10,
+           
           },
           subLevels9: {
             subLevels: 9,
-            levelSeparation: 10,
+           
           },
           RootNode: {
             nodeMenu: {
@@ -1166,10 +1167,10 @@ export default {
         template: "greyTemplate",
         nodes: x,
         
-        orderBy:{
-          field:"userPayGrade",
-          desc:true
-        },
+        // orderBy:{
+        //   field:orderBy,
+        //   desc:true
+        // },
         nodeBinding: {
           
           field_0:'userName',
@@ -1186,7 +1187,7 @@ export default {
        
         },
       });
-       this.chart.fit();
+      // this.chart.fit();
       //this.layout()
       this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);
