@@ -45,13 +45,13 @@
           v-model="fieldToDisplay"
           @input="validateFields"
         ></v-treeview>
-        <v-treeview
+        <!-- <v-treeview
           selectable
           selected-color="red"
           :items="sortBy"
           v-model="selectedSortItem"
           @input="validate(selectedSortItem)"
-        ></v-treeview>
+        ></v-treeview> -->
         <v-treeview
           selectable
           selected-color="red"
@@ -171,11 +171,11 @@ export default {
         {
           id: 999,
           name: " Display Fields",
-          children: [
-            { id: 0, name: "Pay Grade", value: "userPayGrade" },
-            { id: 1, name: "Department", value: "userDepartmentName" },
-            { id: 2, name: "Business Unit", value: "businessUnit" },
-             { id: 3, name: "Band", value: "band" },
+           children: [
+             { id: 0, name: "Business Unit", value: "businessUnit" },
+             { id: 1, name: "Department", value: "userDepartmentName" },
+             { id: 2, name: "Band", value: "band" },
+            { id: 3, name: "Pay Grade", value: "userPayGrade" },
               { id: 4, name: "Experience", value: "totexp" },
               { id: 5, name: "Division", value: "userDivisionName" },
            
@@ -549,17 +549,34 @@ export default {
 
      filterappliedDisplay(orgChartData, filterArray, filterType) {
       var test = [];
-     
+       var hasMatch=false
+       var root={}
       orgChartData.filter(function(item) {
-        
+        if(item["isRoot"])
+        {
+          root=item
+        }
         for (var i = 0; i < item[filterType].length; i++) {
           if (
             filterArray.indexOf(item[filterType][i]) > -1) {
               test.push(item)
            
-          }
-           
+          }         
         }
+        for (var index = 0; index < test.length; ++index) {
+
+            var animal = test[index];
+
+            if(animal['isRoot'] ==true){
+              hasMatch = true;
+              break;
+            }
+            }
+        if(hasMatch==false)
+        {
+          test.push(root)
+        }    
+        
         
        
         

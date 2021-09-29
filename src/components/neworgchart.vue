@@ -123,11 +123,11 @@ export default {
       totalhead:0,
 
       fieldToDisplay: [
-        "userPayGrade",
-        "userDepartmentName",
         "businessUnit",
+        "userDepartmentName",
         "band",
-        "userDivisionName",
+        "userPayGrade",
+        "totexp"  
       ],
       filter1: [],
       orgChartData: [],
@@ -318,7 +318,8 @@ export default {
   {
     this.gradecount=[]
     this.totalhead=0
-    this.userPayGrade=[]
+    this.userBand=[]
+    this.bandcount=[]
   },
   methods: {
     getbase64(file) {
@@ -600,7 +601,7 @@ export default {
       });
 
       this.intersectPay.sort(
-        (a, b) => parseInt(b.paygradeLevel) - parseInt(a.paygradeLevel)
+        (a, b) => parseInt(a.level) - parseInt(b.level)
       );
 
       let jsonObject = this.intersectPay.map(JSON.stringify);
@@ -657,14 +658,18 @@ export default {
             node.tags.push("Direct");
             break;
           case "Indirect":
-            node.tags.push("Indirect");
+            {
+              //node.tags.splice(node.tags.indexOf("Occupied"), 1);
+               node.tags.push("Indirect");
             break;
+            }
+           
         }
-        if (node.resignationStatus == "On Notice Period") {
-          node.tags.splice(node.tags.indexOf("Occupied"), 1);
-          node.tags.push("Resigned");
-          this.resignedCount++;
-        }
+        // if (node.type == "On Notice Period") {
+        //   node.tags.splice(node.tags.indexOf("Occupied"), 1);
+        //   node.tags.push("Resigned");
+        //   this.resignedCount++;
+        // }
         // if (node["positionVacant"] == false && node.img) {
         //   node["img"]=`data:image/jpg;base64,`+node['img']
         //   console.log("hello")
@@ -997,13 +1002,13 @@ export default {
             //     + '<image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="60" y="110" width="60" height="60">'
             //     + '</image>';
             OrgChart.templates.greyTemplate.link = '<path stroke-linejoin="round" stroke="#616161" stroke-width="1px" fill="none" d="{edge}" />';
-            OrgChart.templates.greyTemplate.field_0 = '<text width="200" text-overflow="ellipsis" font-weight="bold" style="font-size: 14px;" fill="#64696b" x="195" y="30" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_1 = '<text width="300" style="font-size: 14px;"  fill="#64696b" x="205" y="60" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_2 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="150" y="85" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_3 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="240" y="85" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_4 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="150" y="110" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_5 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="240" y="110" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_6 = '<text width="300" style="font-size: 14px;" fill="#64696b" x="195" y="135" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_0 = '<text width="200" text-overflow="ellipsis" font-weight="bold" style="" fill="#64696b" x="195" y="30" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_1 = '<text width="100" text-overflow="ellipsis" style=""  fill="#64696b" x="205" y="60" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_2 = '<text width="300" style="" fill="#64696b" x="150" y="85" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_3 = '<text width="300" style="" fill="#64696b" x="240" y="85" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_4 = '<text width="300" style="" fill="#64696b" x="150" y="110" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_5 = '<text width="300" style="" fill="#64696b" x="240" y="110" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_6 = '<text width="300" style="" fill="#64696b" x="195" y="135" text-anchor="middle">{val}</text>';
             
 //             OrgChart.templates.greyTemplate.exportMenuButton = 
 //  '<div class="tooltip" style="position:absolute;right:{p}px;top:{p}px; width:40px;height:50px;cursor:pointer;" control-export-menu="">' +
@@ -1050,11 +1055,11 @@ export default {
         layout: layout,  
 
         menu: {
-          Export: {
-            text: "Export Chart",
-            icon: OrgChart.icon.svg(18, 18),
-            onClick: this.download,
-          },
+          // Export: {
+          //   text: "Export Chart",
+          //   icon: OrgChart.icon.svg(18, 18),
+          //   onClick: this.download,
+          // },
           pdf: {
             text: "Export PDF",
            
@@ -1071,13 +1076,13 @@ export default {
             icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
             onClick: this.addChildDataToChart,
           },
-          allLevel:
-          {
-            text:"Expand all siblings",
-            onClick:this.expandLevelChild,
-            icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
+          // allLevel:
+          // {
+          //   text:"Expand all siblings",
+          //   onClick:this.expandLevelChild,
+          //   icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
 
-          },
+          // },
           exportProfile: {
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
@@ -1161,7 +1166,10 @@ export default {
         template: "greyTemplate",
         nodes: x,
         
-        orderBy: orderBy,
+        orderBy:{
+          field:"userPayGrade",
+          desc:true
+        },
         nodeBinding: {
           
           field_0:'userName',
@@ -1179,7 +1187,7 @@ export default {
         },
       });
        this.chart.fit();
-      this.layout()
+      //this.layout()
       this.chart.on("click", (sender, args) => {
         var data = sender.get(args.node.id);
         
@@ -1203,7 +1211,7 @@ export default {
        args.content += document.getElementById("tabb").outerHTML;
         //args.content += document.getElementById("legTag").outerHTML;
         document.getElementById("tabb").style.visibility="hidden"
-        args.styles += "<style>.node.Occupied >#head {fill: "+g.showColor.node+"!important; stroke: "+g.showColor.node+"!important;}.node.Occupied >#headline { stroke: "+g.showColor.node+"!important;}.node.Occupied >#headRect {stroke: "+g.showColor.node+"!important;fill: "+g.showColor.nodebg+"!important;}.node text {fill:"+g.showColor.text+"!important;}.node.Vacant >#head {fill: "+g.showColor.vacant+"!important; stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headline { stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headRect {stroke: "+g.showColor.vacant+"!important;fill: "+g.showColor.vacantbg+"!important;}<style>";
+        args.styles += "<style>.node.Direct >#head {fill: "+g.showColor.node+"!important; stroke: "+g.showColor.node+"!important;}.node.Direct >#headline { stroke: "+g.showColor.node+"!important;}.node.Direct >#headRect {stroke: "+g.showColor.node+"!important;fill: "+g.showColor.nodebg+"!important;}.node text {fill:"+g.showColor.text+"!important;font-size:"+g.showColor.fontsize+"}.node.Vacant >#head {fill: "+g.showColor.vacant+"!important; stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headline { stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headRect {stroke: "+g.showColor.vacant+"!important;fill: "+g.showColor.vacantbg+"!important;}.node.Indirect >#head {fill: "+g.showColor.indirect+"!important; stroke: "+g.showColor.indirect+"!important;}.node.Indirect >#headRect {fill: "+g.showColor.nodebg+"!important; stroke: "+g.showColor.indirect+"!important;}.node.Indirect >#headline { stroke: "+g.showColor.indirect+"!important;}<style>";
         if(!g.imgRequire)
         {
           args.styles+="<style>.node circle{ visibility: hidden;}.node image{visibility: hidden;}</style>"
