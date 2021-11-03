@@ -26,7 +26,7 @@
       <v-container fluid style="font-size:12px">
         
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
-        <!-- <v-treeview selectable selected-color="red" :items="itemsImage" v-model="selectedImage" @input="validate(selectedImage)"></v-treeview> -->
+        <v-treeview selectable selected-color="red" :items="itemsImage" v-model="selectedImage" @input="validate(selectedImage)"></v-treeview>
                 <!-- <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
                   <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
                      <v-treeview selectable selected-color="red" :items="itemsBU" v-model="selectedBUItem"></v-treeview>
@@ -99,15 +99,15 @@ export default {
         }
 
       ],
-      //  itemsImage:[
-      //     {
-      //     id: 999,
-      //     name: "Image filter",
-      //     children: [ { id: 0, name: "show Image", value: "image" },
-      //       { id: 1, name: "hide image", value: "hide" },]
-      //   }
+       itemsImage:[
+          {
+          id: 999,
+          name: "Image filter",
+          children: [ { id: 0, name: "show Image", value: "image" },
+           ]
+        }
 
-      // ],
+      ],
 
        displayItem:[
           {
@@ -657,7 +657,7 @@ export default {
     },
     ApplyFilter() {
       var gradeFilter = [];
-     // var imageFilter=[];
+     var imageFilter=[];
       var BUFilter=[];
       var divFilter=[];
       var depFilter=[];
@@ -673,24 +673,24 @@ export default {
         );
       }
       console.log(fields);
-      //  if (this.selectedImage.length) {
-      //    for (i = 0; i < this.selectedImage.length; i++) {
-      //     imageFilter.push(
-      //       this.itemsImage[0].children[this.selectedImage[i]]["value"]
-      //     );
-      //   }
-      // // var indexImage=imageFilter.indexOf("image")
-      // // indexImage > -1 ? fields.splice(indexImage, 1) : -1
+       if (this.selectedImage.length) {
+         for (i = 0; i < this.selectedImage.length; i++) {
+          imageFilter.push(
+            this.itemsImage[0].children[this.selectedImage[i]]["value"]
+          );
+        }
+      var indexImage=imageFilter.indexOf("image")
+      indexImage > -1 ? fields.splice(indexImage, 1) : -1
 
-      // // if(indexImage>-1)
-      // // {
-      // //   this.imgRequire=true
-      // // }
-      // // else
-      // // {
-      // //   this.imgRequire=false
-      // // }
-      //  }
+      if(indexImage>-1)
+      {
+        this.imgRequire=true
+      }
+      else
+      {
+        this.imgRequire=false
+      }
+       }
 
       console.log(fields);
       if (this.selectedItem.length) {
@@ -835,7 +835,7 @@ export default {
     },
 
     reset() {
-      
+     
       this.selectedItem = [999];
       this.isLevel=false
       this.selectedVacantItem = [2];
@@ -843,7 +843,9 @@ export default {
       this.selectedSortItem = [];
       this.fieldToDisplay = [0, 1, 2, 3,4];
       this.selectedDisplay=[2]
-      
+      this.selectedImage=[0]
+       this.imgRequire=true
+     
       this.$emit("reset");
     }
   },

@@ -94,6 +94,7 @@ export default {
   },
   beforeMount()
   {
+   
     if(this.searchfilter=="simple")
     {
       this.switch1=false
@@ -102,6 +103,50 @@ export default {
     {
       this.switch1=true
     }
+  },
+
+  mounted()
+  {
+    // var date1 = new Date().getTime();
+    // this.$store
+    //     .dispatch("orgCategory",{
+    //       type: "department",
+    //       typeValue: this.showloggedUser,
+    //       date: date1,
+    //     })
+    //     .then((response) => {
+    //       if (response ) {
+    //         console.log("testing");
+    //         this.showLoading = false;
+    //         console.log(response.response)
+    //         if(response.response=="No Data Available")
+    //         {
+    //            this.$store.commit("showSnackbar", {
+    //         message: "No Position mapped",
+    //         color: "Red",
+    //         heading: "Error",
+    //         duration: 3000,
+    //       });
+    //         }
+    //         else{
+    //           this.$router.push({path:"/temporgchart"});
+          
+
+    //         }
+         
+            
+    //       }
+          
+    //     }).catch((error) => {
+    //         this.$store.commit("closeProgressBar", {});
+    //        this.$store.commit("showSnackbar", {
+    //       color: "error",
+    //       duration: 1000,
+    //       message: error,
+    //       heading: "Error",
+    //     });
+    //       });
+      
   },
 
     computed: {
@@ -158,6 +203,15 @@ export default {
         this.$store.commit("setshowFilter", data);
       },
     },
+    showloggedUser: {
+      get() {
+        return this.$store.getters.getloggedUser;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setloggedUser", data);
+      },
+    },
   },
 
   methods: {
@@ -172,9 +226,10 @@ export default {
         this.searchfilter="simple"
       }
     },
+  
     getUserData(data) {
       this.showFilter = false;
-      this.$router.push({path:"search"});
+      this.$router.push({path:"/"});
       var date1 = new Date(this.inputDate).getTime();
       this.showLoading = true;
       if(data.category=="People")

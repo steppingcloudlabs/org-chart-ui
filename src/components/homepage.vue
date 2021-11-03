@@ -20,12 +20,12 @@
                                 <colorpick :color.sync="colors.node"></colorpick>
                             </v-col>
                         </v-row>
-                        <v-row justify="center" align="center">
+                         <v-row justify="center" align="center">
                             <v-col md="4" class="shrink" >
-                                Vacant Node Color
+                               Node Background Color
                             </v-col>
                             <v-col md="7" class="shrink" style="min-width: 220px;">
-                                <colorpick :color.sync="colors.vacant"></colorpick>
+                                <colorpick :color.sync="colors.nodebg"></colorpick>
                             </v-col>
                         </v-row>
                         <v-row justify="center" align="center">
@@ -44,12 +44,27 @@
                                 <colorpick :color.sync="colors.text"></colorpick>
                             </v-col>
                         </v-row>
-                        <v-row justify="center" align="center">
+                           <v-row justify="center" align="center">
                             <v-col md="4" class="shrink" >
-                               Node Background Color
+                               Font Size
+                            </v-col>
+                            
+                            <v-col md="7" class="shrink">
+                              <v-autocomplete
+                                  v-model="colors.fontsize"
+                                  :items="items"
+                                 solo
+                                  label="Font Size"
+                                ></v-autocomplete>
+                                <!-- <v-text-field v-model="colors.fontsize" solo  label="Font Size" ></v-text-field> -->
+                            </v-col>
+                        </v-row>
+                          <v-row justify="center" align="center">
+                            <v-col md="4" class="shrink" >
+                                Vacant Node Color
                             </v-col>
                             <v-col md="7" class="shrink" style="min-width: 220px;">
-                                <colorpick :color.sync="colors.nodebg"></colorpick>
+                                <colorpick :color.sync="colors.vacant"></colorpick>
                             </v-col>
                         </v-row>
                         <v-row justify="center" align="center">
@@ -60,16 +75,8 @@
                                 <colorpick :color.sync="colors.vacantbg"></colorpick>
                             </v-col>
                         </v-row>
-                        <v-row justify="center" align="center">
-                            <v-col md="4" class="shrink" >
-                               Font Size
-                            </v-col>
-                            
-                            <v-col md="7" class="shrink">
-                                <v-text-field v-model="colors.fontsize" solo  label="Font Size" ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row justify="center" align="center">
+                      
+                        <!-- <v-row justify="center" align="center">
                             <v-col md="4" class="shrink" >
                                Show Image
                             </v-col>
@@ -80,7 +87,7 @@
                                     :label="`Show image: ${image.toString()}`"
                                   ></v-switch>
                             </v-col>
-                        </v-row>
+                        </v-row> -->
                          <v-card-actions>
                             <div class="flex-grow-1"></div>
                             <v-btn color="accent darken-1" text @click="resetDialog">Reset to Default</v-btn>
@@ -148,7 +155,7 @@ export default {
     return {
        
         tab: null,
-        items: ['Color', 'Images', 'Director'],
+        items: ['10px','11px','12px', '13px', '14px','15px','16px','17px'],
      
       titleRules: [(v) => !!v || "Title is required"],
       bodyRules: [(v) => !!v || "Body is required"],
@@ -267,30 +274,30 @@ export default {
                         document.styleSheets[i].cssRules[y].style["fill"] = this.colors.vacantbg;                                                                       
                         // y = document.styleSheets[i].cssRules.length;
                     } 
-                    else if (document.styleSheets[i].cssRules[y].selectorText==".node clippath") {  
-                      if(this.image)
-                      {
-                          document.styleSheets[i].cssRules[y].style["visibility"] = "visible"; 
-                      } 
-                      else{
-                         document.styleSheets[i].cssRules[y].style["visibility"] = "hidden"; 
-                      }                                            
+                    // else if (document.styleSheets[i].cssRules[y].selectorText==".node clippath") {  
+                    //   if(this.image)
+                    //   {
+                    //       document.styleSheets[i].cssRules[y].style["visibility"] = "visible"; 
+                    //   } 
+                    //   else{
+                    //      document.styleSheets[i].cssRules[y].style["visibility"] = "hidden"; 
+                    //   }                                            
                          
                                                                                            
-                        // y = document.styleSheets[i].cssRules.length;
-                    } 
-                    else if (document.styleSheets[i].cssRules[y].selectorText==".node > #imgCircle") {  
-                      if(this.image)
-                      {
-                          document.styleSheets[i].cssRules[y].style["visibility"] = "visible"; 
-                      } 
-                      else{
-                         document.styleSheets[i].cssRules[y].style["visibility"] = "hidden"; 
-                      }                                            
+                    //     // y = document.styleSheets[i].cssRules.length;
+                    // } 
+                    // else if (document.styleSheets[i].cssRules[y].selectorText==".node > #imgCircle") {  
+                    //   if(this.image)
+                    //   {
+                    //       document.styleSheets[i].cssRules[y].style["visibility"] = "visible"; 
+                    //   } 
+                    //   else{
+                    //      document.styleSheets[i].cssRules[y].style["visibility"] = "hidden"; 
+                    //   }                                            
                          
                                                                                            
-                        // y = document.styleSheets[i].cssRules.length;
-                    } 
+                    //     // y = document.styleSheets[i].cssRules.length;
+                    // } 
                     y++;
                 } 
                
@@ -310,7 +317,9 @@ export default {
           
        let data={payload:this.colors}   
        console.log(data)
+       
         this.showTheme=false
+
         // var Nodeelem=document.getElementsByClassName('[node-id] rect')
         // var vacelem=document.querySelectorAll('.node.Vacant rect')
         // var textelem=document.querySelectorAll('[node-id] text')

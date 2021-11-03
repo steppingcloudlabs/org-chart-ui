@@ -313,6 +313,9 @@ export default {
     userData() {
       this.temp = this.userData;
     },
+   
+  
+ 
   },
   beforeDestroy()
   {
@@ -436,6 +439,7 @@ export default {
         "totexp"
       ]),
        this.isLevel=false
+       this.imgRequire=true
           for(let i=0;i<this.orgChartData.length;i++)
           {
             this.orgChartData[i].tags = this.orgChartData[i].tags.filter(function (item) {
@@ -987,28 +991,27 @@ export default {
 
     oc: function (domEl, x, orderBy,layout) {
    
-   OrgChart.templates.greyTemplate = Object.assign({}, OrgChart.templates.ula);
+        OrgChart.templates.greyTemplate = Object.assign({}, OrgChart.templates.ula);
             OrgChart.templates.greyTemplate.size = [350, 160]; // [250, 105] if you need plus-minus button
             OrgChart.templates.greyTemplate.node = 
               '<rect x="0" y="5" id="headRect" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' + 
               '<rect x="0" y="5" id="head" height="35" width="{w}" fill="#ccc" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' +
-              '<line x1="0" y1="40" id="headline" x2="350" y2="40" stroke-width="5" stroke="#ccc"></line>';
-              // '<circle id="imgCircle" cx="50" cy="60" r="43" fill="#ffffff"></circle>';
+              '<line x1="0" y1="40" id="headline" x2="350" y2="40" stroke-width="5" stroke="#ccc"></line>'+'<circle id="imgCircle" cx="50" cy="60" r="43" fill="#ffffff"></circle>';
             
             // OrgChart.templates.greyTemplate.img_0 = 
             //     '<clipPath id="ulaImg">'
             //     + '<circle cx="100" cy="100" r="30"></circle>'
             //     + '</clipPath>' 
-            //     + '<image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="60" y="110" width="60" height="60">'
+            //     + '<image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="60" y="100" width="60" height="60">'
             //     + '</image>';
             OrgChart.templates.greyTemplate.link = '<path stroke-linejoin="round" stroke="#616161" stroke-width="1px" fill="none" d="{edge}" />';
             OrgChart.templates.greyTemplate.field_0 = '<text width="200" text-overflow="ellipsis" font-weight="bold" style="" fill="#64696b" x="195" y="30" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_1 = '<text width="100" text-overflow="ellipsis" style=""  fill="#64696b" x="205" y="60" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_2 = '<text width="300" style="" fill="#64696b" x="150" y="85" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_3 = '<text width="300" style="" fill="#64696b" x="240" y="85" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_4 = '<text width="300" style="" fill="#64696b" x="150" y="110" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_5 = '<text width="300" style="" fill="#64696b" x="240" y="110" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greyTemplate.field_6 = '<text width="300" style="" fill="#64696b" x="195" y="135" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_1 = '<text data-width="200" data-text-overflow="multiline" style=""  fill="#64696b" x="200" y="60" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_2 = '<text width="300" style="" fill="#64696b" x="150" y="95" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_3 = '<text width="300" style="" fill="#64696b" x="240" y="95" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_4 = '<text width="300" style="" fill="#64696b" x="150" y="120" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_5 = '<text width="300" style="" fill="#64696b" x="240" y="120" text-anchor="middle">{val}</text>';
+            OrgChart.templates.greyTemplate.field_6 = '<text width="300" style="" fill="#64696b" x="195" y="145" text-anchor="middle">{val}</text>';
             
 //             OrgChart.templates.greyTemplate.exportMenuButton = 
 //  '<div class="tooltip" style="position:absolute;right:{p}px;top:{p}px; width:40px;height:50px;cursor:pointer;" control-export-menu="">' +
@@ -1024,20 +1027,34 @@ export default {
                 + '<circle cx="244" cy="10" r="3" fill="#232423"/>'
                 + '</g>';
         
-            OrgChart.templates.redTemplate = Object.assign({}, OrgChart.templates.greyTemplate);
-            OrgChart.templates.redTemplate.node = 
-              '<rect x="0" y="5" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#e53835" rx="5" ry="5"></rect>' + 
-              '<rect x="0" y="5" height="35" width="{w}" fill="#e53835" stroke-width="1" stroke="#e53835" rx="5" ry="5"></rect>' +
-              '<line x1="0" y1="40" x2="350" y2="40" stroke-width="5" stroke="#e53835"></line>'+'<circle cx="50" cy="60" r="43" fill="#ffffff"></circle>';
-            OrgChart.templates.redTemplate.field_0 = '<text width="300" style="font-size: 18px;" fill="white" x="175" y="30" text-anchor="middle">{val}</text>';
-            OrgChart.templates.greenTemplate = Object.assign({}, OrgChart.templates.redTemplate);
-            OrgChart.templates.greenTemplate.node = 
-              '<rect x="0" y="5" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#009933" rx="5" ry="5"></rect>' + 
-              '<rect x="0" y="5" height="35" width="{w}" fill="#009933" stroke-width="1" stroke="#009933" rx="5" ry="5"></rect>' +
-              '<line x1="0" y1="40" x2="350" y2="40" stroke-width="5" stroke="#009933"></line>'+'<circle cx="50" cy="60" r="43" fill="#ffffff"></circle>';
-            
+       //Without Image Section
+      OrgChart.templates.NoImageTemplate = Object.assign({}, OrgChart.templates.ula);
+       OrgChart.templates.NoImageTemplate.size = [350, 160];
+      OrgChart.templates.NoImageTemplate.node = 
+      '<rect id="headRect" x="0" y="5" height="155" width="{w}" fill="#ffffff" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' + 
+      '<rect  id="head" x="0" y="5" height="35" width="{w}" fill="#ccc" stroke-width="1" stroke="#ccc" rx="5" ry="5"></rect>' +
+      '<line id="headline" x1="0" y1="40" x2="350" y2="40" stroke-width="5" stroke="#ccc"></line>';
+
+    OrgChart.templates.NoImageTemplate.link = '<path stroke-linejoin="round" stroke="#616161" stroke-width="1px" fill="none" d="{edge}" />';
+    OrgChart.templates.NoImageTemplate.field_0 = '<text width="350" style=""  font-weight="bold" fill="#64696b" x="175" y="30" text-anchor="middle">{val}</text>';
+    OrgChart.templates.NoImageTemplate.field_1 = '<text width="350" data-text-overflow="multiline" style=""  fill="#64696b" x="175" y="60" text-anchor="middle">{val}</text>';
+    OrgChart.templates.NoImageTemplate.field_2 = '<text width="350" style="" fill="#64696b" x="100" y="85" text-anchor="middle">{val}</text>';
+    OrgChart.templates.NoImageTemplate.field_3 = '<text width="350" style="" fill="#64696b" x="250" y="85" text-anchor="middle">{val}</text>';
+    OrgChart.templates.NoImageTemplate.field_4 = '<text width="350" style="" fill="#64696b" x="100" y="110" text-anchor="middle">{val}</text>';
+    OrgChart.templates.NoImageTemplate.field_5 = '<text width="350" style="" fill="#64696b" x="250" y="110" text-anchor="middle">{val}</text>';
+    OrgChart.templates.NoImageTemplate.field_6 = '<text width="350" style="" fill="#64696b" x="175" y="135" text-anchor="middle">{val}</text>';
+    
+     OrgChart.templates.NoImageTemplate.nodeMenuButton = 
+                '<g style="cursor:pointer;" transform="matrix(1,0,0,1,93,15)" data-ctrl-n-menu-id="{id}">'
+                + '<rect x="230" y="-10" fill="#000000" fill-opacity="0" width="22" height="22">'
+                + '</rect>'
+                + '<circle cx="235" cy="10" r="3" fill="#232423"/>'
+                + '<circle cx="244" cy="10" r="3" fill="#232423"/>'
+                + '</g>';            
       var g=this
-      this.chart = new OrgChart(domEl, {
+      if(this.imgRequire)
+      {
+        this.chart = new OrgChart(domEl, {
         enableDragDrop: true,
         levelSeparation: 30,
         subtreeSeparation: 30,
@@ -1186,6 +1203,156 @@ export default {
        
         },
       });
+      }
+      else
+      {
+        this.chart = new OrgChart(domEl, {
+        enableDragDrop: true,
+        levelSeparation: 30,
+        subtreeSeparation: 30,
+        nodeMouseClick: OrgChart.action.none,
+        toolbar: {
+          zoom: true,
+          fit: true,
+          expandAll: false,
+        },
+        showXScroll: OrgChart.scroll.visible,
+        showYScroll: OrgChart.scroll.visible,
+        mouseScrool: OrgChart.action.none,
+
+        enableSearch: false,
+        layout: layout,  
+
+        menu: {
+          // Export: {
+          //   text: "Export Chart",
+          //   icon: OrgChart.icon.svg(18, 18),
+          //   onClick: this.download,
+          // },
+          pdf: {
+            text: "Export PDF",
+           
+            icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
+           
+          },
+          png: {
+            text: "Export PNG",
+          },
+        },
+        nodeMenu: {
+          levelDown: {
+            text: "Level Down",
+            icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
+            onClick: this.addChildDataToChart,
+          },
+          // allLevel:
+          // {
+          //   text:"Expand all siblings",
+          //   onClick:this.expandLevelChild,
+          //   icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
+
+          // },
+          exportProfile: {
+            text: "View Profile",
+            icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
+            onClick: this.exportUserProfile,
+          },
+          edit: {
+            text: "Edit",
+          },
+        },
+
+        tags: {
+          subLevels0: {
+            subLevels: 0,
+            levelSeparation: 10,
+          },
+          subLevels1: {
+            subLevels: 1,
+            levelSeparation: 10,
+          },
+          subLevels2: {
+            subLevels: 2,
+            levelSeparation: 10,
+          },
+          subLevels3: {
+            subLevels: 3,
+            levelSeparation: 10,
+          },
+          subLevels4: {
+            subLevels: 4,
+            levelSeparation: 10,
+          },
+          subLevels5: {
+            subLevels: 5,
+            levelSeparation: 10,
+          },
+          subLevels6: {
+            subLevels: 6,
+            levelSeparation: 10,
+          },
+          subLevels7: {
+            subLevels: 7,
+            levelSeparation: 10,
+          },
+          subLevels8: {
+            subLevels: 8,
+            levelSeparation: 10,
+          },
+          subLevels9: {
+            subLevels: 9,
+            levelSeparation: 10,
+          },
+          RootNode: {
+            nodeMenu: {
+              levelUp: {
+                text: "Level Up",
+                icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
+                onClick: this.addChildDataToChart,
+              },
+              exportProfile: {
+                text: "View Profile",
+                icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
+                onClick: this.exportUserProfile,
+              },
+              edit: {
+                text: "Edit",
+              },
+            },
+          },
+          assistant: {
+            template: "belinda",
+          },
+           nonImage: {
+            template: "ula",
+          },
+          dummy: {
+            template: "deborah",
+            nodeMenu: {},
+          },
+        },
+
+        template: "NoImageTemplate",
+        nodes: x,
+        
+        orderBy:{
+          field:"userPayGrade",
+          desc:true
+        },
+        nodeBinding: {
+          
+          field_0:'userName',
+          field_1: 'positionTitle',
+          field_2: this.fieldToDisplay[0],
+          field_3:this.fieldToDisplay[1],
+          field_4:this.fieldToDisplay[2],
+          field_5:this.fieldToDisplay[3],
+          field_6:this.fieldToDisplay[4],
+         
+        },
+      });
+      }
+      
        this.chart.fit();
       //this.layout()
       this.chart.on("click", (sender, args) => {
@@ -1212,10 +1379,10 @@ export default {
         //args.content += document.getElementById("legTag").outerHTML;
         document.getElementById("tabb").style.visibility="hidden"
         args.styles += "<style>.node.Direct >#head {fill: "+g.showColor.node+"!important; stroke: "+g.showColor.node+"!important;}.node.Direct >#headline { stroke: "+g.showColor.node+"!important;}.node.Direct >#headRect {stroke: "+g.showColor.node+"!important;fill: "+g.showColor.nodebg+"!important;}.node text {fill:"+g.showColor.text+"!important;font-size:"+g.showColor.fontsize+"}.node.Vacant >#head {fill: "+g.showColor.vacant+"!important; stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headline { stroke: "+g.showColor.vacant+"!important;}.node.Vacant >#headRect {stroke: "+g.showColor.vacant+"!important;fill: "+g.showColor.vacantbg+"!important;}.node.Indirect >#head {fill: "+g.showColor.indirect+"!important; stroke: "+g.showColor.indirect+"!important;}.node.Indirect >#headRect {fill: "+g.showColor.nodebg+"!important; stroke: "+g.showColor.indirect+"!important;}.node.Indirect >#headline { stroke: "+g.showColor.indirect+"!important;}<style>";
-        if(!g.imgRequire)
-        {
-          args.styles+="<style>.node circle{ visibility: hidden;}.node image{visibility: hidden;}</style>"
-        }
+        // if(!g.imgRequire)
+        // {
+        //   args.styles+="<style>.node circle{ visibility: hidden;}.node image{visibility: hidden;}</style>"
+        // }
       });
     },
     layout()
