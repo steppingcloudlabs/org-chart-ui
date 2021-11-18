@@ -673,7 +673,7 @@ export default {
         );
       }
       console.log(fields);
-       if (this.selectedImage.length) {
+      //  if (this.selectedImage.length) {
          for (i = 0; i < this.selectedImage.length; i++) {
           imageFilter.push(
             this.itemsImage[0].children[this.selectedImage[i]]["value"]
@@ -690,7 +690,7 @@ export default {
       {
         this.imgRequire=false
       }
-       }
+      // }
 
       console.log(fields);
       if (this.selectedItem.length) {

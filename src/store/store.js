@@ -338,7 +338,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getOrgChartData/all',
+                    url:  '/srv/getOrgChartData/all',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -364,7 +364,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getOrgChartData', //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
+                    url:  '/srv/getOrgChartData', //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -390,7 +390,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getOrgChartData',
+                    url:  '/srv/getOrgChartData',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -415,7 +415,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getAllUsers',
+                    url:  '/srv/getAllUsers',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -438,7 +438,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getPayGrade?companyId=' + companyId,
+                    url:  '/srv/getPayGrade?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -456,7 +456,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getBusinessUnitList?companyId=' + companyId,
+                    url:  '/srv/getBusinessUnitList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -475,7 +475,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getClusterListFilter?companyId=' + companyId+'&bu=' +data.filter,
+                    url:  '/srv/getClusterListFilter?companyId=' + companyId+'&bu=' +data.filter,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -494,7 +494,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/user',
+                    url:  '/srv/user',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -514,7 +514,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getLoggedUserDept?companyId='+companyId+'&userId='+data.userid,
+                    url:  '/srv/getLoggedUserDept?companyId='+companyId+'&userId='+data.userid,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -534,7 +534,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getLocationList?companyId=' + companyId,
+                    url:  '/srv/getLocationList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -552,7 +552,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getLocationListFilter?companyId=' + companyId +'&cluster=' + data.filter,
+                    url:  '/srv/getLocationListFilter?companyId=' + companyId +'&cluster=' + data.filter,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -571,7 +571,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getDivisionList?companyId=' + companyId,
+                    url:  '/srv/getDivisionList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -590,7 +590,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getDepartmentList?companyId=' + companyId,
+                    url:  '/srv/getDepartmentList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -611,7 +611,7 @@ export default new Vuex.Store({
         }, data) => {
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getPosReqData',
+                    url:  '/srv/getPosReqData',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -634,7 +634,7 @@ export default new Vuex.Store({
             
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/employeeProfile',
+                    url:  '/srv/employeeProfile',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
