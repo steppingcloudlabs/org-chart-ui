@@ -45,7 +45,7 @@
             <td style="font-weight:400">{{nodeData.positionTitle}}</td>
           </tr>
            <tr>
-            <td style="font-weight:600">Division:</td>
+            <td style="font-weight:600">Sector:</td>
             <td style="font-weight:400">{{nodeData.userDivisionName}}</td>
           </tr>
            <tr>

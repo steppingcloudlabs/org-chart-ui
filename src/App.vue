@@ -31,6 +31,15 @@ export default {
         this.$store.commit("setshowLoading", data);
       },
     },
+    showDept: {
+      get() {
+        return this.$store.getters.getshowDeptView;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setShowDeptView", data);
+      },
+    },
   
   },
    methods:{
@@ -81,6 +90,7 @@ export default {
                     }
                     
                   }).catch((error) => {
+                     this.showLoading = false;
                       this.$store.commit("closeProgressBar", {});
                     this.$store.commit("showSnackbar", {
                     color: "error",
@@ -90,6 +100,15 @@ export default {
                   });
                     });
               }
+          }).catch((error) => {
+                     this.showLoading = false;
+                      this.$store.commit("closeProgressBar", {});
+                    this.$store.commit("showSnackbar", {
+                    color: "error",
+                    duration: 1000,
+                    message: error,
+                    heading: "Error",
+                  });
           })
     },
   },
@@ -97,12 +116,30 @@ export default {
 
   
   beforeMount()
-  {
-     this.showLoading=true
-     this.$store.dispatch("getUserInfo").then((response) => {
+  { 
+    if(this.showDept==true)
+    {
+       this.showLoading=true
+    //  this.getuserDept("hi")
+    //   this.getPaygrade()
+        this.$store.dispatch("getUserInfo").then((response) => {
            this.getuserDept(response.data.id)
              this.getPaygrade()  
+          }).catch((error) => {
+                     this.showLoading = false;
+                      this.$store.commit("closeProgressBar", {});
+                    this.$store.commit("showSnackbar", {
+                    color: "error",
+                    duration: 1000,
+                    message: error,
+                    heading: "Error",
+                  });
           })
+    this.showDept=false
+    }
+    
+     
+   
        
   }
 };
@@ -111,6 +148,12 @@ export default {
 .body #tree > svg {
   background-color: white !important;
 }
+
+.v-progress-circular--indeterminate:not(.v-progress-circular--visible) .v-progress-circular__overlay, .v-progress-circular--indeterminate:not(.v-progress-circular--visible)>svg {
+    -webkit-animation-play-state: running !important;
+    animation-play-state: running !important;
+}
+
 
 </style>
 

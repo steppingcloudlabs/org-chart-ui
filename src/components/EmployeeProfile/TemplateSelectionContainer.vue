@@ -116,7 +116,16 @@ export default {
       this.$store.dispatch("getUserProfileData", userId).then((response) => {
         this.showLoading=false
         console.log(response);
-      });
+      }).catch((error) => {
+                      
+                      this.showLoading=false
+                        this.$store.commit("showSnackbar", {
+                    color: "error",
+                    duration: 1000,
+                    message: error,
+                    heading: "Error",
+                  });
+                    });
     },
     nextClicked() {
       this.$emit("next", this.selectedTemplate);

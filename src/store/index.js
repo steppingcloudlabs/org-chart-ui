@@ -10,6 +10,7 @@ export default new Vuex.Store({
     snackbarMessage: "Hello",
     snackbarHeading: "Error",
     snackbarColor: "Red",
+    showDepView:true,
   },
   mutations: {
   },

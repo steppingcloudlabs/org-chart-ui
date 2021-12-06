@@ -241,6 +241,7 @@ export default {
           date: date1,
         })
         .then((response) => {
+           this.showLoading = false;
           if (response && !response["msg"]) {
             console.log("testing");
             this.showLoading = false;
@@ -258,6 +259,7 @@ export default {
           });
             }
         }).catch((error) => {
+           this.showLoading = false;
             this.$store.commit("closeProgressBar", {});
            this.$store.commit("showSnackbar", {
           color: "error",
