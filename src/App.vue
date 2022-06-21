@@ -58,7 +58,8 @@ export default {
        this.$store.dispatch("getUserDept",{"userid":data}).then((response) => {
           if(response.status==200)
           {
-           this.showloggedUser=response.data[0].departmentNav.externalCode
+          // this.showloggedUser=response.data[0].departmentNav.externalCode
+          this.showloggedUser="JMC_HRD"
             var date1 = new Date().getTime();
             this.$store
                 .dispatch("orgCategory",{
@@ -117,26 +118,26 @@ export default {
   
   beforeMount()
   { 
-    if(this.showDept==true)
-    {
-       this.showLoading=true
-    //  this.getuserDept("hi")
-    //   this.getPaygrade()
-        this.$store.dispatch("getUserInfo").then((response) => {
-           this.getuserDept(response.data.id)
-             this.getPaygrade()  
-          }).catch((error) => {
-                     this.showLoading = false;
-                      this.$store.commit("closeProgressBar", {});
-                    this.$store.commit("showSnackbar", {
-                    color: "error",
-                    duration: 1000,
-                    message: error,
-                    heading: "Error",
-                  });
-          })
-    this.showDept=false
-    }
+    // if(this.showDept==true)
+    // {
+    //    this.showLoading=true
+    // //  this.getuserDept("hi")
+    // //   this.getPaygrade()
+    //     this.$store.dispatch("getUserInfo").then((response) => {
+    //        this.getuserDept(response.data.id)
+    //          this.getPaygrade()  
+    //       }).catch((error) => {
+    //                  this.showLoading = false;
+    //                   this.$store.commit("closeProgressBar", {});
+    //                 this.$store.commit("showSnackbar", {
+    //                 color: "error",
+    //                 duration: 1000,
+    //                 message: error,
+    //                 heading: "Error",
+    //               });
+    //       })
+    // this.showDept=false
+    // }
     
      
    

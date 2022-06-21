@@ -347,7 +347,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getOrgChartData/all',
+                    url: 'http://localhost:3000/srv/getOrgChartData/all',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -375,7 +375,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getOrgChartData', //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
+                    url: 'http://localhost:3000/srv/getOrgChartData', //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -403,7 +403,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getOrgChartData',
+                    url: 'http://localhost:3000/srv/getOrgChartData',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -430,7 +430,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getAllUsers',
+                    url: 'http://localhost:3000/srv/getAllUsers',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -455,7 +455,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getPayGrade?companyId=' + companyId,
+                    url: 'http://localhost:3000/srv/getPayGrade?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -475,7 +475,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getBusinessUnitList?companyId=' + companyId,
+                    url: 'http://localhost:3000/srv/getBusinessUnitList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -496,7 +496,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getClusterListFilter?companyId=' + companyId+'&bu=' +data.filter,
+                    url: 'http://localhost:3000/srv/getClusterListFilter?companyId=' + companyId+'&bu=' +data.filter,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -517,7 +517,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/user',
+                    url: 'http://localhost:3000/srv/user',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -539,7 +539,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve,reject) => {
                 axios({
-                    url: '/srv/getLoggedUserDept?companyId='+companyId+'&userId='+data.userid,
+                    url: 'http://localhost:3000/srv/getLoggedUserDept?companyId='+companyId+'&userId='+data.userid,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -561,7 +561,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getLocationList?companyId=' + companyId,
+                    url: 'http://localhost:3000/srv/getLocationList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -579,7 +579,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getLocationListFilter?companyId=' + companyId +'&cluster=' + data.filter,
+                    url: 'http://localhost:3000/srv/getLocationListFilter?companyId=' + companyId +'&cluster=' + data.filter,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -598,7 +598,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getDivisionList?companyId=' + companyId,
+                    url: 'http://localhost:3000/srv/getDivisionList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -617,7 +617,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getDepartmentList?companyId=' + companyId,
+                    url: 'http://localhost:3000/srv/getDepartmentList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -638,7 +638,7 @@ export default new Vuex.Store({
         }, data) => {
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/getPosReqData',
+                    url: 'http://localhost:3000/srv/getPosReqData',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -661,7 +661,7 @@ export default new Vuex.Store({
             
             return new Promise((resolve) => {
                 axios({
-                    url: '/srv/employeeProfile',
+                    url: 'http://localhost:3000/srv/employeeProfile',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"

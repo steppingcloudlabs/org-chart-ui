@@ -680,7 +680,7 @@ export default {
           );
         }
       var indexImage=imageFilter.indexOf("image")
-      indexImage > -1 ? fields.splice(indexImage, 1) : -1
+      indexImage > -1 ? 0 : -1
 
       if(indexImage>-1)
       {
@@ -826,6 +826,7 @@ export default {
       }
 
       // var finalData = this.applySort(sortValue, filteredData)
+      console.log(fields)
       this.$emit("redraw", {
         layout:this.layout,
         output: filteredData,

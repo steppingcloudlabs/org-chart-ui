@@ -50,6 +50,10 @@
                   <v-col>Business Unit </v-col>
                   <v-col>{{profileBasicData.businessUnitName}}</v-col>
                 </v-row>
+                 <v-row style="line-height:12px">
+                  <v-col>DOJ </v-col>
+                  <v-col>{{doj}}</v-col>
+                </v-row>
               </p>
             </div>
             <div style="padding-top:35px" v-if="this.empProfileData.bgEducation.length">
@@ -167,7 +171,7 @@
                 </tbody>
               </table>
             </div>
-            <div style="padding-top:35px" v-if="this.empProfileData.competencyRating.length" >
+            <!-- <div style="padding-top:35px" v-if="this.empProfileData.competencyRating.length" >
               <v-divider></v-divider>
               <p
                 class="pa-2 header"
@@ -180,14 +184,15 @@
                     <td
                       style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
                     >{{data.source}}({{getRatingYear(data.startDate, data.endDate)}})</td>
-                    <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">
-                      {{data.rating}}/{{data.max}}
+                    <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px" >
+                      {{data.label.replace(/[^a-zA-Z ]/g, '')}}
                    
                     </td>
+                    
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div> -->
             <div style="padding-top:35px" v-if="this.empProfileData.performanceRating.length">
               <v-divider></v-divider>
               <p
@@ -202,7 +207,7 @@
                       style="width:63%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
                     >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
                     <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">
-                      {{data.rating}}/{{data.max}}
+                      {{data.label.replace(/[^a-zA-Z ]/g, '')}}
                     </td>
                   </tr>
                 </tbody>
@@ -222,7 +227,7 @@
                       style="width:63%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px"
                     >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
                     <td style="width:73%;font-size:12px;font-weight:500;color:black;margin-bottom:-2px">
-                      {{data.rating}}/{{data.max}}
+                      {{data.label.replace(/[^a-zA-Z ]/g, '')}}
                     </td>
                   </tr>
                 </tbody>
@@ -520,6 +525,7 @@ export default {
   data() {
     return {
       rating: 3,
+      doj:null
     };
   },
   props: {
@@ -528,11 +534,18 @@ export default {
       type: Object,
     },
   },
-
+beforeMount()
+{
+console.log(this.profileBasicData.doj)
+    this.doj=this.profileBasicData.doj.substring(6, this.profileBasicData.doj.length - 5)
+    console.log(this.profileBasicData.doj)
+    this.doj=moment.unix(this.doj).format("DD-MMM-YYYY")
+    
+},
   mounted() {
     //this.createSvg();
     this.printProfile();
-    console.log(moment);
+    
     if (
       this.empProfileData.performanceRating &&
       this.empProfileData.potentialRating

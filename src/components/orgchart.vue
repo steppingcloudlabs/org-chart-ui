@@ -121,10 +121,11 @@ export default {
       gradeOccurence: [],
 
       fieldToDisplay: [
+        "band",
         "userPayGrade",
-        "userDepartmentName",
-        "userDivisionName",
         "businessUnit",
+        "userDepartmentName",
+        "totexp"  
       ],
       filter1: [],
       orgChartData: [],
@@ -337,7 +338,7 @@ export default {
           //  let expyear=this.nodes[i].experiencearray.sort((a,b) => a.startDate - b.startDate);
           //  this.nodes[i].experiencearray=new Number((new Date().getTime() - new Date(expyear[0].startDate).getTime()) / 31536000000).toFixed(0)+" years";
           //  console.log(this.nodes[i].experiencearray)
-          // }
+          // }gradecount
            
         }
         console.log(this.nodes);
@@ -532,7 +533,7 @@ export default {
         this.gradecount[i] = this.gradeOccurence.filter(function (item) {
           return item === g.userPayGrade[i];
         }).length;
-        console.log(this.gradecount);
+        console.log(this.gradecount +"user"+ g.userPayGrade[i] );
       }
       this.totalhead=this.gradecount.reduce(this.totalCount,0)
     },

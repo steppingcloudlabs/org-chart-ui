@@ -58,11 +58,11 @@
                       </thead>
                       <tbody>
                         <tr
-                          v-for="(item,i) in bandcount"
+                          v-for="(item,i) in NavCount"
                           :key="i"
                         >
-                          <td>{{userBand[i]}}</td>
-                          <td>{{item}}</td>
+                          <td>{{item.band}}</td>
+                          <td>{{item.count}}</td>
                         </tr>
                         <tr>
                            <td style="border-left:1px solid;border-top:1px solid;border-bottom:1px solid;font-weight:bold">Total Count</td>
@@ -121,12 +121,13 @@ export default {
       gradecount: [],
       gradeOccurence: [],
       totalhead:0,
+      NavCount:[],
 
       fieldToDisplay: [
-        "businessUnit",
-        "userDepartmentName",
         "band",
         "userPayGrade",
+        "businessUnit",
+        "userDepartmentName",
         "totexp"  
       ],
       filter1: [],
@@ -425,6 +426,7 @@ export default {
     },
 
     redraw(data) {
+      
       this.fieldToDisplay = data.fieldToDisplay;
       this.oc(this.$refs.tree, data.output, data.orderBy,data.layout);
       
@@ -545,7 +547,7 @@ export default {
         this.gradecount[i] = this.gradeOccurence.filter(function (item) {
           return item === g.userPayGrade[i];
         }).length;
-        console.log(this.gradecount);
+       // console.log(this.gradecount +"user"+ g.userPayGrade[i] );
         this.totalhead=this.gradecount.reduce(this.totalCount,0)
       }
        for ( i = 0; i < this.userBand.length; i++) {
@@ -553,9 +555,23 @@ export default {
         this.bandcount[i] = this.bandOccurence.filter(function (item) {
           return item === g.userBand[i];
         }).length;
-        console.log(this.bandcount);
+        console.log(this.bandcount[i] +"user"+ g.userBand[i]);
+        this.NavCount[i]={count:this.bandcount[i],band:g.userBand[i]}
+        
         this.totalhead=this.bandcount.reduce(this.totalCount,0)
+        console.log(this.totalhead)
       }
+      this.NavCount.sort((a, b) => 
+      { 
+        if (a.band < b.band) {
+        return -1;
+        }
+    if (a.band > b.band) {
+        return 1;
+    }
+    return 0;
+    });
+      console.log(this.NavCount)
     },
 
     totalCount(accumulator,a)

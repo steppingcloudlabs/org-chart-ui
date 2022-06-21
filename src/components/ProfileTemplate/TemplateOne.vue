@@ -34,6 +34,7 @@
                   colspan="3"
                 >{{profileBasicData.userManagerName}}</td>
               </tr>
+              
               <tr>
                 <td style="width: 15%;" class="table-heading">Pay Grade</td>
                 <td
@@ -55,11 +56,28 @@
                 >{{profileBasicData.businessUnitName}}</td>
                 <td style="width: 15%;" class="table-heading">Cluster</td>
                 <td style="width: 16%;" class="table-value">{{profileBasicData.cluster}}</td>
+                
+               
+              
               </tr>
+             
+              
             </tbody>
           </table>
+          
+             
+           
         </div>
         <div class="acad-exp-container">
+           <div class="section-wrapper">
+            <div class="heading-section">
+              <p class="table-heading">Date of Joining</p>
+            </div>
+            <div class="data-section" style="min-height:15px">
+              {{doj}}
+            </div>
+            <div class="clearfix"></div>
+          </div>
           <div class="section-wrapper">
             <div class="heading-section">
               <p class="table-heading">Academics</p>
@@ -151,7 +169,7 @@
                   </template>
                 </v-simple-table>
           </div>     
-          <div style="padding-top:2%" >
+          <!-- <div style="padding-top:2%" >
             <v-simple-table class="performance-table" style="border:1px solid">
               <tbody>
                 <tr>
@@ -161,13 +179,13 @@
                 <tr v-for="(data, k) in competencyRating" :key="'competencyRating'+k">
                   <td class="table-row" style="width:75%">{{data.source}}({{getRatingYear(data.startDate, data.endDate)}})</td>
                   <td class=" table-row">
-                    {{data.rating}}/{{data.max}}
+                    {{data.label.replace(/[^a-zA-Z ]/g, '')}}
                    
                   </td>
                 </tr>
               </tbody>
             </v-simple-table>
-          </div>
+          </div> -->
           <div   style="padding-top:2%;padding-bottom:2%">
             <v-simple-table class="performance-table" style="border:1px solid">
               <tbody>
@@ -181,7 +199,7 @@
                     style="width:75%"
                   >Perf Rating FY {{getRatingYear(data.startDate, data.endDate)}}</td>
                   <td class=" table-row">
-                   {{data.rating}}/{{data.max}}
+                   {{data.label.replace(/[^a-zA-Z ]/g, '')}}
                    
                   </td>
                 </tr>
@@ -580,7 +598,8 @@ export default {
   name: "TemplateOne",
   data() {
     return {
-      rating: 3
+      rating: 3,
+      doj:null
     };
   },
   props: {
@@ -589,6 +608,14 @@ export default {
       type: Object
     }
   },
+  beforeMount()
+{
+console.log(this.profileBasicData.doj)
+    this.doj=this.profileBasicData.doj.substring(6, this.profileBasicData.doj.length - 5)
+    console.log(this.profileBasicData.doj)
+    this.doj=moment.unix(this.doj).format("DD-MMM-YYYY")
+    
+},
   mounted() {
     this.printProfile();
     console.log(moment);
