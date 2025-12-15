@@ -33,11 +33,11 @@
           </tr>
            <tr>
             <td style="font-weight:600">Department:</td>
-            <td style="font-weight:400">{{nodeData.userDepartmentName}}</td>
+            <td style="font-weight:400">{{nodeData.userDepartmentId}}</td>
           </tr>
             <tr>
             <td style="font-weight:600">Business Unit:</td>
-            <td style="font-weight:400">{{nodeData.businessUnitName}}</td>
+            <td style="font-weight:400">{{nodeData.businessUnit}}</td>
           </tr>
            
             <tr>
@@ -46,7 +46,7 @@
           </tr>
            <tr>
             <td style="font-weight:600">Division:</td>
-            <td style="font-weight:400">{{nodeData.userDivisionName}}</td>
+            <td style="font-weight:400">{{nodeData.userDivision}}</td>
           </tr>
            <tr>
             <td style="font-weight:600">Manager:</td>

@@ -140,7 +140,7 @@ export default {
           if (response) {
             console.log("testing");
             this.showLoading = false;
-            this.$router.push({ path: "/orgchart" });
+            this.$router.push({ path: "/orgchart2" });
           }
         });
       }
@@ -155,7 +155,7 @@ export default {
           if (response) {
             console.log("testing");
             this.showLoading = false;
-            this.$router.push({ path: "/orgchart" });
+            this.$router.push({ path: "/orgchart2" });
           }
         });
       }

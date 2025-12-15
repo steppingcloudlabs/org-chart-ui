@@ -10,7 +10,8 @@
 export default {
   name: "Home",
   components: {
-    CoreAppBar: () => import("@/components/AppBar"),
+    
+     CoreAppBar: () => import("@/components/AppBar"),
     // CoreDrawer: () => import("@/components/Drawer")
     
     CoreView: () => import("@/components/view")

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 // const companyId = "SFPART041835"
-const companyId = "kalpatarugrp"
+const companyId = "SFCPART000443"
 // const companyId = "SFPART041835"
 
 Vue.use(Vuex)
@@ -32,11 +32,31 @@ export default new Vuex.Store({
         showNodeProfile: false,
         empProfileData: {},
         imgRequire:true,
-        isEmployeeDataFetched: "Not Fetched"
+        isEmployeeDataFetched: "Not Fetched",
+        selectedDeptartmentUsers:{},
+        departmentList:[],
+        selectedDepartment:{},
+        showsplitDialog:false,
+        showinactivatedialog:false,
+        showmergedialog:false,
+        showupdatedialog:false,
+        overlay: false,
     },
     mutations: {
         setuserData: (state, data) => {
             state.userData = data
+        },
+        setshowoverlay:(state,data)=>
+        {
+            state.overlay=data
+        },
+        setdeptUserData: (state, data) => {
+            console.log("store",data)
+            state.selectedDeptartmentUsers[data.deptid]=data.users
+        },
+        setSelectedDept: (state, data) => {
+            
+            state.selectedDepartment=data
         },
         setisLevel: (state, data) => {
             state.isLevel = data
@@ -91,6 +111,21 @@ export default new Vuex.Store({
         showFilter: (state) => {
             state.showFilter = true
         },
+        setshowsplitdialog: (state,data) => {
+            state.showsplitDialog = data
+        },
+        setshowinactivatedialog:(state,data)=>
+        {
+          state.showinactivatedialog=data
+        },
+        setshowupdatedialog:(state,data)=>
+        {
+          state.showupdatedialog=data
+        },
+        setshowmergedialog:(state,data)=>
+        {
+          state.showmergedialog=data
+        },
         setShowProfileDialog: (state, data) => {
             state.showProfileDialog = data
         },
@@ -129,11 +164,38 @@ export default new Vuex.Store({
         setIsEmployeeDataFetched: (state, data) => {
             state.isEmployeeDataFetched = data
         },
+        setDepartmentList:(state,data)=>
+        {
+         state.departmentList=data
+        },
+       
 
     },
     getters: {
+        getshowoverlay:(state)=>
+        {
+           return state.overlay
+        },
+        getshowsplitdialog: (state) => {
+           return state.showsplitDialog
+        },
+        getshowupdatedialog: (state) => {
+            return state.showupdatedialog
+         },
+        getshowmergedialog: (state) => {
+            return state.showmergedialog
+         },
+        getshowinactivatedialog: (state) => {
+            return state.showinactivatedialog
+         },
         getuserData: (state) => {
             return state.userData
+        },
+        getdeptUserData: (state) => {
+            return state.selectedDeptartmentUsers
+        },
+        getSelectedDept: (state) => {
+            return state.selectedDepartment
         },
         getisLevel: (state) => {
             return state.isLevel
@@ -169,6 +231,7 @@ export default new Vuex.Store({
             return state.division
         },
         getuserMasterData: (state) => {
+            console.log(state.userMasterData)
             return state.userMasterData
         },
         getinputDate: (state) => {
@@ -201,6 +264,10 @@ export default new Vuex.Store({
         },
         setIsEmployeeDataFetched: (state) => {
             return state.isEmployeeDataFetched
+        },
+        getDepartmentList:(state)=>
+        {
+            return state.departmentList
         }
     },
     actions: {
@@ -304,6 +371,30 @@ export default new Vuex.Store({
             })
         },
 
+        getDepUser: ({
+            commit
+        }, data) => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getEmpListView',
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    params: {
+                        "companyId": companyId,
+                        "dept":data.details.description
+                    }
+                }).then((response) => {
+                    resolve(response.data)
+                    commit("setflag", "hello")
+                    // commit("setdeptUserData", {"deptid":data,"users":response.data})
+                    console.log(response)
+                })
+            })
+        },
+
         getAllPaygradeList: ({
             commit
         }) => {
@@ -374,6 +465,25 @@ export default new Vuex.Store({
 
                 }).then((response) => {
                     resolve(response.data)
+                    //commit("setsearchField", response.data)
+                    console.log(response)
+                })
+            })
+        },
+
+        getAllDepartmentView: () => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getDepartmentView?companyId=' + companyId,
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data.d.results)
+                   
                     //commit("setsearchField", response.data)
                     console.log(response)
                 })

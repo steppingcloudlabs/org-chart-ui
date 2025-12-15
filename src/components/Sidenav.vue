@@ -8,7 +8,7 @@
 
         <v-list-item-title>Filter</v-list-item-title>
       </v-list-item>
-      <div class="text-center">
+      <div class="">
         <v-btn
           class="mr-2 mb-2"
           style="font-size:10px"

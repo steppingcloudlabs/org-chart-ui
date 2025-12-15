@@ -2,11 +2,11 @@
   <div class="mt-5">
     <v-card  width="100%" color="white" elevation="0">
       <v-layout row wrap>
-        <v-flex xs2>
+        <!-- <v-flex xs2>
           <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
-        </v-flex>
-        <v-flex xs10>
-          <div id="tree" ref="tree"></div>
+        </v-flex> -->
+        <v-flex xs12>
+          <div id="tree" ref="tree" ></div>
         </v-flex>
       </v-layout>
     </v-card>
@@ -16,8 +16,9 @@
 </template>
 
 <script>
-import OrgChart from "@balkangraph/orgchart.js/orgchart";
-import Sidenav from "@/components/Sidenav";
+import OrgChart from "../assets/orgchart";
+//import OrgChart from "@balkangraph/orgchart.js/orgchart";
+//import Sidenav from "@/components/Sidenav";
 import profile from "@/components/profileDialog";
 import nodeProfile from "@/components/NodeProfile";
 import $ from "jquery";
@@ -56,7 +57,7 @@ export default {
     };
   },
   components: {
-    Sidenav,
+    // Sidenav,
     profile,
     nodeProfile,
   },
@@ -217,6 +218,82 @@ export default {
       };
       return base;
     },
+    getdepartmentnode(data)
+    {
+      data = data.filter(item => !item.tags.includes("dep"));
+      data=data.filter(item => item.userDepartmentId != null);
+      var uniqueIds = [...new Set(data.map(item => item.userDepartmentId))];
+      console.log(uniqueIds)
+      let parentnode={"id":"top-management",tags:["top-management","dep"]}
+      let newNodes=[]
+      newNodes.push(parentnode)
+      uniqueIds.forEach(function(department) {
+        var newElement = {
+          id: department,
+          positionTitle:department,
+          tags: [department, "department","dep"],
+          pid:"top-management",
+         
+        };
+        newNodes.push(newElement)
+      
+    });
+    console.log("testing department")
+      console.log(newNodes)
+     let updateddata= this.gettoplevelunit(data)
+     updateddata.push(...newNodes)
+     console.log(updateddata)
+      return updateddata
+    },
+    gettoplevelunit(data)
+    {
+      var groupedByDepartment = data.reduce(function (acc, obj) {
+    var department = obj.userDepartmentId;
+    if (!acc[department]) {
+      acc[department] = [];
+     }
+     acc[department].push(obj);
+    return acc;
+    }, {});
+
+    // Find top-level nodes for each department
+
+
+for (var department in groupedByDepartment) {
+
+  var allParentIds = new Set(groupedByDepartment[department].map(obj => obj.parentId));
+  var allIds = new Set(groupedByDepartment[department].map(obj => obj.id));
+  var topLevelNodes = groupedByDepartment[department].filter(obj => !allParentIds.has(obj.id) && obj.parentId !== null && !allIds.has(obj.parentId));
+
+  // Replace original nodes with modified nodes
+  groupedByDepartment[department] = groupedByDepartment[department].map(obj => {
+    if (topLevelNodes.find(node => node.id === obj.id)) {
+      return { ...obj, stpid: obj.userDepartmentId };
+    } else {
+      return obj;
+    }
+  });
+
+}
+var modifiedJsonArray = Object.values(groupedByDepartment).flat();
+
+var rootNode = modifiedJsonArray.findIndex(node => Array.isArray(node.tags) && node.tags.includes('RootNode')); 
+console.log(rootNode)
+
+var TagIndex=modifiedJsonArray[rootNode].tags.findIndex(item=>item==modifiedJsonArray[rootNode].userDepartmentId)
+    
+modifiedJsonArray[rootNode].tags[TagIndex]="seo-menu"
+modifiedJsonArray[rootNode].stpid="top-management"
+
+// Display the modified JSON array
+console.log(modifiedJsonArray);
+
+return modifiedJsonArray
+
+ 
+
+    },
+
     getData() {
       if (this.userData) {
         console.log(this.userData);
@@ -226,11 +303,13 @@ export default {
           this.getChlidData(this.nodes[i]);
         }
         console.log(this.nodes);
-
+       
         this.getPayGrade(this.nodes);
         this.nodes = this.addTags(this.nodes);
+        //this.nodes= this.getdepartmentnode(this.nodes)
         this.orgChartData = this.nodes;
-        this.oc(this.$refs.tree, this.orgChartData, null);
+        console.log ("ORGCHAT DATA",this.orgChartData)
+        this.oc(this.$refs.tree, this.orgChartData);
         var str = "";
         // let intersectPay = [];
 
@@ -515,6 +594,7 @@ export default {
       }
     },
     getPayGrade(orgChartData) {
+
       let g = this;
       for (var i = 0; i < orgChartData.length; i++) {
         console.log(orgChartData[i].userPayGrade);
@@ -596,6 +676,7 @@ export default {
             break;
         }
         node.tags.push(node.userPayGrade);
+        node.tags.push(node.userDepartmentId)
         switch (node.isRoot) {
           case true:
             node.tags.push("RootNode");
@@ -691,7 +772,9 @@ export default {
         for (var i = 0; i < bufferedChild.length; i++) {
           this.getChlidData(bufferedChild[i]);
         }
+        //this.orgChartData= this.getdepartmentnode(this.orgChartData)
         this.chart.load(this.orgChartData);
+        
         //  this.subList("sublist", 0, this.userPayGrade);
       } else if (this.isbuffered[id] == false) {
         alert("Data Processing!Please try again");
@@ -854,7 +937,7 @@ export default {
         // var ind=data.tags.indexOf("nonImage")
         //  ind > -1 ? data.tags.splice(ind, 1) : -1
         //console.log(data.img)
-       var field= '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `data:image/jpg;base64,${data.img}` ) + '" x="50" y="20"  width="80" height="80"></image>';
+       var field= '<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="'+ (data.img && data.img.indexOf('https') > -1 ? data.img : `${data.img}` ) + '" x="50" y="20"  width="80" height="80"></image>';
       //console.log(field)
       return field
       } else {
@@ -868,15 +951,21 @@ export default {
       var isResigned = false;
       var isCritical = false;
       var data = sender.get(node.id);
-
-      let resignedIndex = data.tags.findIndex((element) => {
+      console.log(data)
+      let resignedIndex
+      let criticalIndex
+      if(data.tags)
+      {
+        resignedIndex = data.tags.findIndex((element) => {
         return element == "Resigned";
       });
-      let criticalIndex = data.tags.findIndex((element) => {
+      criticalIndex = data.tags.findIndex((element) => {
         return element == "Critical";
       });
       console.log(resignedIndex + criticalIndex);
 
+      }
+      
       var field =
         '<image     xlink:href="https://i.ibb.co/rxM0SM2/caution-Copy.png" x="10" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
       var flag_field =
@@ -961,8 +1050,9 @@ export default {
                     <feGaussianBlur in="SourceGraphic" stdDeviation="4" /> \
                     </filter>';
       this.chart = new OrgChart(domEl, {
+        filterBy: ["positionTitle","userId","userDepartmentId"],
         enableDragDrop: true,
-
+        undoRedoStorageName: 'myStorageName',
         levelSeparation: 30,
         subtreeSeparation: 30,
         nodeMouseClick: OrgChart.action.none,
@@ -1005,10 +1095,41 @@ export default {
           },
           edit: {
             text: "Edit",
+           
           },
+          add:
+          {
+            text:"Add child"
+          },
+          remove:
+          {
+            text:"Remove"
+          }
         },
 
         tags: {
+          "top-management": {
+            template: "invisibleGroup",
+            subTreeConfig: {
+                orientation: OrgChart.orientation.bottom,
+                collapse: {
+                    level: 1
+                }
+            }
+        },
+        
+          "department": {
+            template: "group",
+            nodeMenu: {
+                addManager: { text: "Add new manager", icon: OrgChart.icon.add(24, 24, "#7A7A7A"), onClick: this.addManager },
+                remove: { text: "Remove department" },
+                edit: { text: "Edit department" },
+                nodePdfPreview: { text: "Export department to PDF", icon: OrgChart.icon.pdf(24, 24, "#7A7A7A") }
+            }
+          },
+          filter: {
+                template: 'dot'
+            },
           subLevels0: {
             subLevels: 0,
             levelSeparation: 10,
@@ -1063,7 +1184,9 @@ export default {
               },
               edit: {
                 text: "Edit",
+               
               },
+              addDepartment: { text: "Add new department", icon: OrgChart.icon.add(24, 24, "#7A7A7A"), onClick: this.addDepartment }
             },
           },
           assistant: {
@@ -1073,7 +1196,7 @@ export default {
             template: "ula",
           },
           dummy: {
-            template: "deborah",
+            template: "dot",
             nodeMenu: {},
           },
         },
@@ -1111,6 +1234,26 @@ export default {
           this.showNodeProfile = !this.showNodeProfile;
         }
       });
+
+      this.chart.on("edit", function () {
+       OrgChart.action.edit
+        //args.content += document.getElementById("legTag").outerHTML;
+      });
+
+      this.chart.on('drop', function (sender, draggedNodeId, droppedNodeId) {
+    var draggedNode = sender.getNode(draggedNodeId);
+    var droppedNode = sender.getNode(droppedNodeId);
+    if (droppedNode != undefined) {
+        if (droppedNode.tags.indexOf("department") != -1 && draggedNode.tags.indexOf("department") == -1) {
+            var draggedNodeData = sender.get(draggedNode.id);
+            draggedNodeData.pid = null;
+            draggedNodeData.stpid = droppedNode.id;
+            sender.updateNode(draggedNodeData);
+            return false;
+        }
+    }
+
+});
 
       this.chart.on("exportstart", function (sender, args) {
         args.content +=
@@ -1155,6 +1298,16 @@ export default {
           linksElements[i].setAttribute("filter", "url(#f1)");
       }
     },
+
+    addDepartment(nodeId) {
+    var node = this.chart.getNode(nodeId);
+    var data = { id: OrgChart.randomId(), pid: node.stParent.id, tags: ["department"] };
+    this.chart.addNode(data);
+},
+
+    addManager(nodeId) {
+    this.chart.addNode({ id: OrgChart.randomId(), stpid: nodeId });
+}
   },
 
   mounted() {

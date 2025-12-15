@@ -1,5 +1,5 @@
 <template>
-  <v-content class="red lighten-3">
+  <v-content id="mainpage">
     <div id="core-view">
       <v-fade-transition mode="out-in">
         <router-view />
@@ -20,3 +20,11 @@ export default {
  
 };
 </script>
+
+<style>
+#mainpage
+{
+  background-color: #E8E8E8 !important;
+}
+
+</style>

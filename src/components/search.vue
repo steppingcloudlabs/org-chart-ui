@@ -30,6 +30,7 @@
         label="Enter UserId"
         item-text="userNav.defaultFullName"
         item-value="userId"
+        return-object
         @change="getData()"
       >
         <template v-slot:item="data">
@@ -59,13 +60,13 @@ export default {
     outerSelect: "",
     innerSelect: "",
     dropdown_data: [],
-    dropdown_font: [{text:"Business Unit",value:"businessunit"},{text:"Division",value:"division"} ,{text:"Department",value:"department"},{text:"People",value:"People"}],
+    dropdown_font: [{text:"Business Unit",value:"businessUnit"},{text:"Division",value:"division"} ,{text:"Department",value:"department"},{text:"People",value:"People"}],
   }),
   methods: {
     RefreshGrid() {
       let g = this;
       g.dropdown_data = [];
-      if (this.outerSelect === "businessunit") {
+      if (this.outerSelect === "businessUnit") {
         this.$store.dispatch("getAllBusinessUnitList").then((response) => {
           console.log(response);
           g.dropdown_data = response.d.results.map(function (item) {
@@ -107,19 +108,19 @@ export default {
         });
       }
       if (this.outerSelect === "People") {
-        // this.$store.dispatch("getAllUser").then((response) => {
-        //   console.log(response);
-        //   // for (let i = 0; i < response.d.results.length; i++) {
-        //   //  // console.log(g.selectedSearchField[i])
-        //   //   g.dropdown_data.push(response.d.results[i].externalCode) ;
-        //   // }
-        //   g.dropdown_data=response.d.results.map(function(item){
-        //     let obj={}
-        //     obj["name"]=item.name
-        //     obj["id"]=item.externalCode
-        //     return obj
-        //   })
-        // });
+        this.$store.dispatch("getAllUser").then((response) => {
+          console.log(response);
+          // for (let i = 0; i < response.d.results.length; i++) {
+          //  // console.log(g.selectedSearchField[i])
+          //   g.dropdown_data.push(response.d.results[i].externalCode) ;
+          // }
+          g.dropdown_data=response.d.results.map(function(item){
+            let obj={}
+            obj["name"]=item.name
+            obj["id"]=item.externalCode
+            return obj
+          })
+        });
       }
     },
     getData() {
@@ -158,7 +159,7 @@ export default {
        let userObj={}
      
       if (this.outerSelect == "People") {
-         userObj = this.userList.find((element) => {
+         userObj["userid"] = this.userList.find((element) => {
           return searchData == element.userId;
         });
       } else {
@@ -200,6 +201,7 @@ export default {
   },
   watch: {
     searchUser(val) {
+      let g=this
       if (!val || !val.trim()) {
         this.userList = [];
         this.search = "";
@@ -212,13 +214,11 @@ export default {
       console.log(this.search);
 
       let data = val;
-
+     
       this.$store
         .dispatch("getAllUser", data)
         .then((response) => {
-          this.userList = response;
-
-          console.log(this.userList);
+          g.userList = response;
         })
         .finally(() => (this.isLoading = false));
     },
