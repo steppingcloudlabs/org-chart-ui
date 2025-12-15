@@ -104,6 +104,7 @@
             let index=this.showdeptView.findIndex(item => item.id === this.showselecteddept.id);
             if(this.showdeptView[index].users.length<=0)
             {
+              console.log("deptttt",this.showselecteddept)
               this.$store
               .dispatch("getDepUser",this.showselecteddept)
               .then((response) => {
