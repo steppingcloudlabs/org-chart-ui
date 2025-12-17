@@ -1,6 +1,7 @@
 <template>
      <v-layout row wrap class="mt-5">
           <v-flex xs2 >
+           
             <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
           </v-flex>
           <v-flex xs10>
@@ -383,6 +384,7 @@ intersectPay: [],
         let g = this;
         for (var i = 0; i < orgChartData.length; i++) {
           console.log(orgChartData[i].userPayGrade);
+          console.log("orgChartData[i].userDepartmentName==",orgChartData[i].userDepartmentName);
           this.gradeOccurence.push(orgChartData[i].userPayGrade);
           if (this.userPayGrade.indexOf(orgChartData[i].userPayGrade) === -1) {
             this.userPayGrade.push(orgChartData[i].userPayGrade);
@@ -391,10 +393,15 @@ intersectPay: [],
             this.division.push(orgChartData[i].userDivisionName);
           }
           if (
-            this.department.indexOf(orgChartData[i].userDepartmentName) === -1
+            this.department.indexOf(orgChartData[i].department) === -1
           ) {
-            this.department.push(orgChartData[i].userDepartmentName);
+            this.department.push(orgChartData[i].department);
           }
+          // if (
+          //   this.department.indexOf(orgChartData[i].userDepartmentName) === -1
+          // ) {
+          //   this.department.push(orgChartData[i].userDepartmentName);
+          // }
           if (
             this.businessunit.indexOf(orgChartData[i].businessUnitName) === -1
           ) {
@@ -732,6 +739,7 @@ intersectPay: [],
         }, 3000);
       },
         getData() {
+          console.log("Inside getdataaaaaaaaaaaaaaaa",this.userData)
         if (this.userData) {
             
         this.nodes = this.userData;

@@ -31,6 +31,7 @@
 
       <v-container fluid style="font-size:12px">
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
+              
                 <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
                   <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
                      <v-treeview selectable selected-color="red" :items="itemsBU" v-model="selectedBUItem"></v-treeview>
@@ -332,7 +333,7 @@ export default {
     },
 
     userGradeData() {
-      console.log(this.items);
+      console.log("this.items",this.items);
       this.items[0].children = this.userPayGrade.map((data, index) => {
         let item = {};
         if (data != undefined) {
@@ -386,7 +387,7 @@ export default {
       console.log(this.selectedLocationItem);
     },
      depData() {
-      console.log(this.itemsdepartment);
+      console.log("this.itemsdepartment hii hello",this.itemsdepartment);
       this.itemsdepartment[0].children = this.department.map((data, index) => {
         let item = {};
         if (data != undefined) {
@@ -670,6 +671,7 @@ export default {
   },
   mounted() {
     this.userGradeData();
+    console.log("chartData=====>>>",this.chartData)
   }
 };
 </script>
