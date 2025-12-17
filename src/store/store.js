@@ -136,9 +136,9 @@ export default new Vuex.Store({
         setshowLoading: (state, data) => {
             state.showLoading = data
         },
-        showLoading: (state) => {
-            state.showLoading = true
-        },
+        // showLoading: (state) => {
+        //     state.showLoading = true
+        // },
         setProfileData: (state, data) => {
             state.profileData = data
         },

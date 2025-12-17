@@ -59,11 +59,13 @@
         <v-divider color="rgba(0,0,0,.12)"></v-divider>
       </v-flex>
     </v-layout>
-    <div v-if="showLoading">
-      <v-overlay>
-        <v-progress-circular indeterminate size="64"></v-progress-circular>
+    <!-- <div v-if="showLoading">
+      <v-overlay :value="showLoading" z-index="9999">
+        <v-progress-circular indeterminate size="64"  style="z-index: 10000"></v-progress-circular>
       </v-overlay>
-    </div>
+    </div> -->
+ 
+
   </div>
 </template>
 

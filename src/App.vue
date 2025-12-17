@@ -1,28 +1,42 @@
 <template>
   <v-app>
+    
     <core-view></core-view>
+<div  v-if="showLoading">
+    <LoaderOverlay></LoaderOverlay></div>
     <!-- <overlayloader></overlayloader> -->
   </v-app>
 </template>
 
 <script>
 //import overlayloader from './components/overlayloader.vue';
+import LoaderOverlay from './components/LoaderOverlay.vue';
 export default {
 
   components: {
     CoreView: () => import("@/components/view"),
+    LoaderOverlay
     // overlayloader
   },
   computed: {
-   showoverlay: {
+     showLoading: {
       get() {
-        return this.$store.getters.getshowoverlay;
+        return this.$store.getters.getshowLoading;
         // return true;
       },
       set(data) {
-        this.$store.commit("setshowoverlay", data);
-      }
+        this.$store.commit("setshowLoading", data);
+      },
     },
+  //  showoverlay: {
+  //     get() {
+  //       return this.$store.getters.getshowoverlay;
+  //       // return true;
+  //     },
+  //     set(data) {
+  //       this.$store.commit("setshowoverlay", data);
+  //     }
+  //   },
 
 },
    methods:{
