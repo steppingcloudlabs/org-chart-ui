@@ -389,27 +389,48 @@ intersectPay: [],
           if (this.userPayGrade.indexOf(orgChartData[i].userPayGrade) === -1) {
             this.userPayGrade.push(orgChartData[i].userPayGrade);
           }
-          if (this.division.indexOf(orgChartData[i].userDivisionName) === -1) {
-            this.division.push(orgChartData[i].userDivisionName);
-          }
-          if (
-            this.department.indexOf(orgChartData[i].department) === -1
-          ) {
-            this.department.push(orgChartData[i].department);
-          }
+          // if (this.division.indexOf(orgChartData[i].userDivisionName) === -1) {
+          //   this.division.push(orgChartData[i].userDivisionName);
+          // }
+          const divisionValue = orgChartData[i].userDivision;
+
+if (divisionValue && !this.division.includes(divisionValue)) {
+  this.division.push(divisionValue);
+}
+
+          // if (this.division.indexOf(orgChartData[i].userDivision) === -1) {
+          //   this.division.push(orgChartData[i].userDivision);
+          // }
+          // if (
+          //   this.department.indexOf(orgChartData[i].department) === -1
+          // ) {
+          //   this.department.push(orgChartData[i].department);
+          // }
+          const deptValue = orgChartData[i].userDepartmentName || orgChartData[i].department; 
+          if (deptValue && !this.department.includes(deptValue)) 
+          { this.department.push(deptValue); }
           // if (
           //   this.department.indexOf(orgChartData[i].userDepartmentName) === -1
           // ) {
           //   this.department.push(orgChartData[i].userDepartmentName);
           // }
-          if (
-            this.businessunit.indexOf(orgChartData[i].businessUnitName) === -1
-          ) {
-            this.businessunit.push(orgChartData[i].businessUnitName);
+          // if (
+          //   this.businessunit.indexOf(orgChartData[i].businessUnitName) === -1
+          // ) {
+          //   this.businessunit.push(orgChartData[i].businessUnitName);
+          // }
+          const businessUnitValue = orgChartData[i].businessUnit;
+          if (businessUnitValue && !this.businessunit.includes(businessUnitValue)) {
+            this.businessunit.push(businessUnitValue);
           }
-          if (this.location.indexOf(orgChartData[i].location) === -1) {
-            this.location.push(orgChartData[i].location);
+          const locationValue = orgChartData[i].location;
+          if (locationValue && !this.location.includes(locationValue)) {
+            this.location.push(locationValue);
           }
+
+          // if (this.location.indexOf(orgChartData[i].location) === -1) {
+          //   this.location.push(orgChartData[i].location);
+          // }
         }
   
         console.log(this.userPayGrade);
