@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    
-    <core-view></core-view>
+    <v-main>
+    <core-view></core-view></v-main>
 <div  v-if="showLoading">
     <LoaderOverlay></LoaderOverlay></div>
     <!-- <overlayloader></overlayloader> -->

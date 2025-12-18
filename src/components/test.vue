@@ -1,5 +1,5 @@
 <template>
-     <v-layout row wrap class="mt-5">
+     <v-layout row wrap class="pt-5">
           <v-flex xs2 >
            
             <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>

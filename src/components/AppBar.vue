@@ -127,7 +127,7 @@ export default {
   methods: {
     getUserData(data) {
       this.showFilter = false;
-      this.$router.push({ path: "/" });
+      // this.$router.push({ path: "/" });
       var date1 = new Date(this.inputDate).getTime();
       this.showLoading = true;
       if(data.category=="People")

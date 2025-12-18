@@ -1,17 +1,20 @@
 <template>
   <v-overlay
     :value="showLoading"
-    app
+    
     z-index="2000"
-  
+  class="d-flex justify-center align-center"
     opacity="0.5"
   >
-    <v-progress-circular
-   
-      indeterminate
-      size="64"
-      color="amber"
-    />
+  <div style="width: 200px; text-align: center;">
+      <v-progress-linear
+        indeterminate
+        color="amber"
+        size="38"
+      ></v-progress-linear>
+      <!-- <div class="mt-2">Loading...</div> -->
+    </div>
+  
   </v-overlay>
 </template>
 
