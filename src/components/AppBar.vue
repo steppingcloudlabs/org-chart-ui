@@ -1,16 +1,70 @@
 <template>
-  <div class="mb-4">
-    <v-toolbar class="pt-1 pb-5">
+  <div class="">
+    <!-- <v-toolbar class="pt-1 pb-5">
       <v-layout row wrap>
         <v-flex xs3>
           <img src="/assets/hdr_logo.png" style="height: 50px; width:80px; margin-left: 20px;margin-top: 10px;" />
         </v-flex>
-        <v-flex xs6 class="pr-5 pt-5">
+        <v-toolbar-title
+      class="text-center flex-grow-1"
+      v-if="hideAppBar"
+    >
+      Department List
+    </v-toolbar-title>
+
+
+    <v-btn
+      v-if="hideAppBar"
+      text
+      outlined
+      class="ml-auto"
+      @click="openDialog()"
+    >
+      <span>Merge Departments</span>
+      <v-icon right>mdi-merge</v-icon>
+    </v-btn> -->
+    <v-app-bar app flat height="60">
+  <!-- Left: Logo -->
+  <!-- <v-img
+    src="/assets/hdr_logo.png"
+    contain
+    max-height="50"
+    max-width="150"
+    class="ml-4"
+  /> -->
+            <img src="/assets/hdr_logo.png" style="height: 50px; width:100px; margin-left: 5px;margin-top: 2px;" />
+
+
+  <!-- Center: Title -->
+  <v-toolbar-title
+    class="absolute-center font-weight-medium"
+    v-if="hideAppBar"
+  
+  >
+    Department List
+  </v-toolbar-title>
+
+  <v-spacer></v-spacer>
+
+  <!-- Right: Button -->
+  <v-btn
+    color="primary"
+    v-if="hideAppBar"
+    outlined
+    class="mr-4"
+    @click="openDialog()"
+  >
+    MERGE DEPARTMENTS
+    <v-icon right>mdi-merge</v-icon>
+  </v-btn>
+
+
+        <v-flex xs6 class="pr-5 pt-5" v-if="!hideAppBar">
           <!-- <SearchAlumni @getUserData="getUserData"></SearchAlumni> -->
           <search @getUserData="getUserData"></search>
         </v-flex>
 
-        <v-flex xs3 class="pt-5 pl-5" style="margin-top: 10px;">
+        <v-flex xs3 class="pt-5 pl-5" style="margin-top: 10px;" v-if="!hideAppBar">
           <v-menu
             ref="menu"
             v-model="menu"
@@ -52,13 +106,13 @@
             </v-card>
           </v-menu>
         </v-flex>-->
-      </v-layout>
-    </v-toolbar>
-    <v-layout row wrap>
+      <!-- </v-layout> -->
+  </v-app-bar>
+    <!-- <v-layout row wrap>
       <v-flex xs12>
         <v-divider color="rgba(0,0,0,.12)"></v-divider>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
     <!-- <div v-if="showLoading">
       <v-overlay :value="showLoading" z-index="9999">
         <v-progress-circular indeterminate size="64"  style="z-index: 10000"></v-progress-circular>
@@ -86,6 +140,10 @@ export default {
     search,
   },
     computed: {
+       
+    hideAppBar() {
+      return this.$route.meta.hideAppBar === true
+    },
       inputDate: {
         get() {
           return this.$store.getters.getinputDate;
@@ -122,9 +180,24 @@ export default {
         this.$store.commit("setshowFilter", data);
       },
     },
+    showmergedialog:
+    {
+        get() {
+        return this.$store.getters.getshowmergedialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowmergedialog", data);
+      }
+
+    },
   },
 
   methods: {
+      openDialog()
+        {
+          this.showmergedialog=true
+        },
     getUserData(data) {
       this.showFilter = false;
       // this.$router.push({ path: "/" });
@@ -172,7 +245,16 @@ export default {
 #core-app-bar {
   width: auto;
 }
+.absolute-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #1976D2;
+}
 
+.v-main {
+  padding: 17px 0px 0px !important;
+}
 #core-app-bar a {
   text-decoration: none;
 }

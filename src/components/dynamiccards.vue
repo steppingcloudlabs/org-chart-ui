@@ -1,8 +1,8 @@
 <template>
-    <v-container>
-      <v-toolbar
+    <v-container fluid class="px-6">
+      <!-- <v-toolbar
       color='primary accent-4'
-      dark >
+      dark flat class="px-6" >
       
       <v-toolbar-title>
         Department List
@@ -13,8 +13,8 @@
         <span>Merge Departments</span>
         <v-icon>mdi-merge</v-icon>
       </v-btn>
-    </v-toolbar>
-      <v-row class="mt-3">
+    </v-toolbar> -->
+      <v-row class="pt-5" dense>
         <!-- Loop through cardsData and create Vuetify cards dynamically -->
         <v-col v-for="(card, index) in showdeptView" :key="index" cols="12" md="4">
           <v-card color="grey" v-if="card.details.status=='I'">
@@ -25,9 +25,22 @@
             <v-card-text v-else>
               No Head of Department ({{ card.details.externalCode }})
             </v-card-text>
+               <v-spacer></v-spacer>
+
+          <!-- Action -->
+          <v-divider></v-divider>
+          <v-card-actions class="justify-end">
+            <v-btn
+              text
+              color="primary"
+              @click="getUserListView(card)"
+            >
+              {{ card.details.headOfUnitNav ? 'Update' : 'Start Planning' }}
+            </v-btn>
+          </v-card-actions>
 
              <!-- Colored text strip at the bottom of the card -->
-          <v-card-actions v-if="card.details.headOfUnitNav" class="color-strip-green">
+          <!-- <v-card-actions v-if="card.details.headOfUnitNav" class="color-strip-green">
             <v-spacer></v-spacer>
             <v-btn  text @click="getUserListView(card)">Update</v-btn>
           </v-card-actions>
@@ -35,7 +48,7 @@
           <v-card-actions v-else class="color-strip-red">
             <v-spacer></v-spacer>
             <v-btn color="white" text @click="getUserListView(card)">Start Planning</v-btn>
-          </v-card-actions>
+          </v-card-actions> -->
           </v-card>
           <v-card  v-else>
             <v-card-title>{{ card.details.name }}</v-card-title>
@@ -47,7 +60,7 @@
             </v-card-text>
 
              <!-- Colored text strip at the bottom of the card -->
-          <v-card-actions v-if="card.details.headOfUnitNav" class="color-active-green">
+          <!-- <v-card-actions v-if="card.details.headOfUnitNav" class="color-active-green">
             <v-spacer></v-spacer>
             <v-btn  text @click="getUserListView(card)">Update</v-btn>
           </v-card-actions>
@@ -55,6 +68,19 @@
           <v-card-actions v-else class="color-active-red">
             <v-spacer></v-spacer>
             <v-btn color="white" text @click="getUserListView(card)">Start Planning</v-btn>
+          </v-card-actions> -->
+             <v-spacer></v-spacer>
+
+          <!-- Action -->
+          <v-divider></v-divider>
+          <v-card-actions class="justify-end">
+            <v-btn
+              text
+              color="primary"
+              @click="getUserListView(card)"
+            >
+              {{ card.details.headOfUnitNav ? 'Update' : 'Start Planning' }}
+            </v-btn>
           </v-card-actions>
           </v-card>
          </v-col>

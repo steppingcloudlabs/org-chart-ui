@@ -31,7 +31,10 @@ const routes = [{
   {
     path: 'plan',
     name: 'plan',
-    component: dynamiccards
+    component: dynamiccards,
+     meta: {
+    hideAppBar: true
+  }
   },
   {
     path: 'detailplan',
