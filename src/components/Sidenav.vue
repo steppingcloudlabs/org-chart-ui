@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer permanent height="650px" style="border-right:5px;width: 100%;">
+    <v-navigation-drawer permanent  height="650px" style="border-right:5px;width: 100%;">
       <v-list-item class="px-2">
         <v-list-item-avatar>
           <v-icon>mdi-filter</v-icon>
@@ -32,10 +32,10 @@
       <v-container fluid style="font-size:12px">
         <v-treeview selectable selected-color="red" :items="items" v-model="selectedItem"></v-treeview>
               
-                <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
+              <!-- <v-treeview selectable selected-color="red" :items="itemsdepartment" v-model="selecteddepItem"></v-treeview>
                   <v-treeview selectable selected-color="red" :items="itemsdivision" v-model="selecteddivItem"></v-treeview>
                      <v-treeview selectable selected-color="red" :items="itemsBU" v-model="selectedBUItem"></v-treeview>
-                      <v-treeview selectable selected-color="red" :items="itemsLocation" v-model="selectedLocationItem"></v-treeview>
+                      <v-treeview selectable selected-color="red" :items="itemsLocation" v-model="selectedLocationItem"></v-treeview> --> 
         <v-treeview
           selectable
           selected-color="red"
@@ -43,7 +43,7 @@
           v-model="selectedVacantItem"
           @input="validateVacant"
         ></v-treeview>
-        <v-treeview
+      <!--  <v-treeview
           selectable
           selected-color="red"
           :items="fieldItems"
@@ -56,7 +56,7 @@
           :items="sortBy"
           v-model="selectedSortItem"
           @input="validateSort"
-        ></v-treeview>
+        ></v-treeview>-->
         <v-treeview
           selectable
           selected-color="red"
@@ -527,10 +527,10 @@ export default {
     },
     ApplyFilter() {
       var gradeFilter = [];
-      var BUFilter=[];
+     /* var BUFilter=[];
       var divFilter=[];
       var depFilter=[];
-      var locFilter=[];
+      var locFilter=[];*/
       var vacantFilter = [];
       var filteredData = this.chartData;
       var fields = [];
@@ -572,7 +572,7 @@ export default {
         console.log(filteredData);
       }
 
-      if (this.selecteddepItem.length) {
+   /* if (this.selecteddepItem.length) {
         for (i = 0; i < this.selecteddepItem.length; i++) {
           depFilter.push(
             this.itemsdepartment[0].children[this.selecteddepItem[i]]["name"]
@@ -582,7 +582,7 @@ export default {
         filteredData = this.filterapplied(
           filteredData,
          depFilter,
-          "userDepartmentName"
+          "userDepartmentId"
         );
         console.log(filteredData);
       }
@@ -595,7 +595,7 @@ export default {
         filteredData = this.filterapplied(
           filteredData,
          BUFilter,
-          "businessUnitName"
+          "businessUnit"
         );
         console.log(filteredData);
       }
@@ -627,7 +627,7 @@ export default {
           "location"
         );
         console.log(filteredData);
-      }
+      } */
 
 
       if (this.selectedVacantItem.length) {

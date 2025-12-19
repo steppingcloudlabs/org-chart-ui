@@ -106,7 +106,7 @@
             {
               console.log("deptttt",this.showselecteddept)
               this.$store
-              .dispatch("getDepUser",this.showselecteddept)
+              .dispatch("getDepUser",this.showselecteddept.details.externalCode)
               .then((response) => {
               
                 this.showdeptView[index].users = response;
