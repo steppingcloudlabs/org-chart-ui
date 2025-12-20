@@ -1,10 +1,10 @@
 <template>
      <v-layout row wrap class="pt-5">
-          <v-flex xs2 >
+        <!--<v-flex xs2 >
            
-            <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
-          </v-flex>
-          <v-flex xs10>
+           <Sidenav :chartData="orgChartData" @redraw="redraw" @reset="reset"></Sidenav>
+         </v-flex>-->
+          <v-flex xs12>
             <div id="tree" ref="tree"></div>
           </v-flex>
          
@@ -19,7 +19,7 @@
 <script>
 
 import OrgChart from "../assets/orgchart";
-import Sidenav from "@/components/Sidenav";
+//import Sidenav from "@/components/Sidenav";
 // import profile from "@/components/profileDialog";
 import nodeProfile from "@/components/NodeProfile";
   import $ from "jquery";
@@ -32,7 +32,7 @@ import nodeProfile from "@/components/NodeProfile";
             return {
                 nodes:  []  ,
 intersectPay: [],
-        
+selectedView:true,
         chart: {},
         isbuffered: [],
         totalHeadCount: 0,
@@ -60,7 +60,7 @@ intersectPay: [],
         },
 
         components:{
-            Sidenav,
+          //  Sidenav,
             nodeProfile
         },
       
@@ -244,7 +244,8 @@ intersectPay: [],
         
             redraw(data) {
         this.fieldToDisplay = data.fieldToDisplay;
-        this.mytree(this.$refs.tree, data.output);
+        var view = !this.selectedView
+        this.mytree(this.$refs.tree, data,view);
         var legent = document.createElement("div");
         legent.setAttribute("id", "legendd");
         legent.style.position = "absolute";
@@ -760,7 +761,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
         }, 3000);
       },
         getData() {
-          console.log("Inside getdataaaaaaaaaaaaaaaa",this.userData)
+          
         if (this.userData) {
             
         this.nodes = this.userData;
@@ -774,6 +775,9 @@ if (divisionValue && !this.division.includes(divisionValue)) {
         this.orgChartData = this.nodes;
         console.log("BYEEE", this.nodes);
         this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
+        setTimeout(() => {
+          this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
+        }, 10)
         var str= ""
         for (var j = 0; j < this.gradecount.length; j = j + 3) {
             str +=
@@ -801,7 +805,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           var legent = document.createElement("div");
           legent.setAttribute("id", "legendd");
           legent.style.position = "absolute";
-          legent.style.top = "20px";
+          legent.style.top = "150px";
           legent.style.left = "50px";
           legent.style.color = "#2B81D6";
           legent.style.width = "150px";
@@ -830,13 +834,43 @@ if (divisionValue && !this.division.includes(divisionValue)) {
             '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
           this.chart.element.appendChild(leg);
           // this.gradeCounting()
-          setTimeout(() => {
-          this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
-        }, 1000)
+         
          
     }
         
     
+    },
+
+    changeView()
+    {
+        var filteredData=this.orgChartData
+       
+       if(this.selectedView)
+        {
+          this.isLevel=true
+          for(let i=0;i<filteredData.length;i++)
+          {
+             var indexpay = this.levelPay.findIndex(
+          (x) => x.externalCode == filteredData[i].userPayGrade
+        );
+        console.log(indexpay);
+          filteredData[i].tags.push("subLevels" + indexpay);
+          }
+          this.selectedView = !this.selectedView
+          
+        }
+        else{
+          this.isLevel=false
+          for(let i=0;i<filteredData.length;i++)
+          {
+            filteredData[i].tags = filteredData[i].tags.filter(function (item) {
+             return item.indexOf("subLevels") !== 0;
+});
+          }
+          this.selectedView = !this.selectedView
+
+        }
+       this.redraw(filteredData)
     },
 
     field2_binding(sender, node) {
@@ -951,7 +985,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           return null;
         }
       },
-            mytree: function(domEl, x) {
+            mytree: function(domEl, x,test=false) {
                 // alert(OrgChart.VERSION)
         OrgChart.templates.myTemplate = Object.assign(
           {},
@@ -998,9 +1032,21 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           '<filter id="f1" > \
                       <feGaussianBlur in="SourceGraphic" stdDeviation="4" /> \
                       </filter>';
-                this.chart = new OrgChart (domEl, {
+        
+        
+        OrgChart.templates.myTemplate.min = Object.assign({}, OrgChart.templates.ana);
+        OrgChart.templates.myTemplate.min.size = [250, 60];
+OrgChart.templates.myTemplate.min.img_0 = "";
+OrgChart.templates.myTemplate.min.field_0 = '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="40" text-anchor="middle">{val}</text>';
+OrgChart.templates.myTemplate.min.field_1 = "";
+
+
+
+                      this.chart = new OrgChart (domEl, {
                     nodes: x,
                     enableDragDrop: true,
+                    min: test,
+                    scaleInitial: OrgChart.match.boundary,
                     levelSeparation: 30,
                     subtreeSeparation: 30,
                     nodeMouseClick: OrgChart.action.none,
@@ -1012,7 +1058,20 @@ if (divisionValue && !this.division.includes(divisionValue)) {
                     showXScroll: OrgChart.scroll.visible,
                     showYScroll: OrgChart.scroll.visible,
                     mouseScrool: OrgChart.action.none,
-            
+                    filterBy: {
+                            businessUnit:{},
+                            positionTitle:{},
+                            department:{},
+                            userPayGrade:{},
+                            positionVacant:{}
+                    },
+                    editForm: {
+        generateElementsFromFields: false,
+        elements: [
+            { type: 'textbox', label: 'Position Title', binding: 'positionTitle' },
+            { type: 'textbox', label: 'Position Code', binding: 'position' }        
+        ]
+    },
                     enableSearch: false,
                     menu: {
             Export: {
@@ -1020,14 +1079,11 @@ if (divisionValue && !this.division.includes(divisionValue)) {
               icon: OrgChart.icon.svg(18, 18),
               onClick: this.download,
             },
-            pdf: {
-              text: "Export PDF",
-              icon: OrgChart.icon.pdf(24, 24, "#7A7A7A"),
-             
-            },
-            png: {
-              text: "Export PNG",
-            },
+            View:{
+                text: "Change View",
+                icon:OrgChart.icon.visio(24, 24, "#7A7A7A"),
+                onClick:this.changeView
+            }
           },
           nodeMenu: {
             levelDown: {
@@ -1043,6 +1099,8 @@ if (divisionValue && !this.division.includes(divisionValue)) {
             edit: {
               text: "Edit",
             },
+           add: {text:"Add"},
+           remove: {text:"Remove"}
           },
           tags:{
             subLevels0: {
@@ -1100,8 +1158,13 @@ if (divisionValue && !this.division.includes(divisionValue)) {
                 edit: {
                   text: "Edit",
                 },
+                add: {text:"Add"},
+                remove: {text:"Remove"}
               },
             },
+            filter: {
+            template: 'dot'
+        }
 
           },
             template :"myTemplate",
@@ -1134,6 +1197,13 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           } else {
             this.showNodeProfile = !this.showNodeProfile;
           }
+          if (args.node.min) {
+        sender.maximize(args.node.id);
+    }
+    else {
+        sender.minimize(args.node.id);
+    }
+    return false;
         });
   
         this.chart.on("exportstart", function (sender, args) {
@@ -1142,7 +1212,80 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           args.content += document.getElementById("myStyles").outerHTML;
          // args.content += document.getElementById("legendd").outerHTML;
           //args.content += document.getElementById("legTag").outerHTML;
-        });    
+        });  
+        
+        this.chart.filterUI.on('add-filter', function(sender, args){
+    var names = Object.keys(sender.filterBy);
+    var index = names.indexOf(args.name);
+    if (index == names.length - 1) {
+        args.html += `<div data-btn-reset style="color: #039BE5;">reset</div>`;
+    }  
+});
+
+this.chart.filterUI.on('add-item', function(sender, args){
+    var count = 0;
+    var totalCount = 0;
+    for (var i = 0; i < sender.instance.config.nodes.length; i++){
+        var data = sender.instance.config.nodes[i];      
+        if (data[args.name] != undefined){
+            totalCount++;
+
+            if (data[args.name] == args.value){            
+                count++;    
+            }            
+        }
+    }
+
+    var dataAllAttr = '';
+    if (args.text == '[All]'){
+        count = totalCount;
+        dataAllAttr = 'data-all';
+    }
+    args.html = `<div class="filter-item">
+                    <input ${dataAllAttr} type="checkbox" id="${args.value}" name="${args.value}" ${args.checked ? 'checked' : ''}>
+                    <label for="${args.value}">${args.text} (${count})</label>
+                </div>`;
+});
+this.chart.filterUI.on('update', function(sender, args){
+    var btnResetElement = sender.element.querySelector('[data-btn-reset]');
+    btnResetElement.addEventListener('click', function(e){
+        console.log(e,args)
+        sender.filterBy = null;
+        sender.update();
+        sender.instance.draw();
+    });
+});
+
+this.chart.filterUI.on('show-items', function(sender, args){
+    var filterItemElements = sender.element.querySelectorAll('.filter-item');
+    for(var i = 0; i < filterItemElements.length; i++){        
+        filterItemElements[i].addEventListener('mouseenter', function(e){
+            var val = e.target.querySelector('input').id;           
+            if (val != args.name){//[All]
+                for(var j = 0; j < sender.instance.config.nodes.length; j++){
+                    var data = sender.instance.config.nodes[j];
+                    if (data[args.name] == val){
+                        var nodeElement = sender.instance.getNodeElement(data.id);
+                        nodeElement.classList.add('filter-item-hovered');
+                    }
+                }
+            }
+        });
+        
+        filterItemElements[i].addEventListener('mouseleave', function(e){
+            var val = e.target.querySelector('input').id;           
+            if (val != args.name){//[All]
+                for(var j = 0; j < sender.instance.config.nodes.length; j++){
+                    var data = sender.instance.config.nodes[j];
+                    if (data[args.name] == val){
+                        var nodeElement = sender.instance.getNodeElement(data.id);
+                        nodeElement.classList.remove('filter-item-hovered');
+                    }
+                }
+            }
+        });
+    }
+});
                     
             },
         
