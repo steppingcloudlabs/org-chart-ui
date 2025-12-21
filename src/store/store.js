@@ -9,7 +9,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+         departmentSearchText: "",      // what user types
         isDetailPlanPage: false,
+        isorgChartPage: false,
+        filterDrawer: false,
         isLevel:false,
         levelPay:[],
         selectedSearchField: [],
@@ -64,6 +67,9 @@ export default new Vuex.Store({
         },
         setisDetailPlanPage: (state, data) => {
             state.isDetailPlanPage = data
+        },
+        setfilterDrawer: (state, data) => {
+            state.filterDrawer = data
         },
         setlevelPay: (state, data) => {
             state.levelPay= data
@@ -172,10 +178,18 @@ export default new Vuex.Store({
         {
          state.departmentList=data
         },
+
+
+setDepartmentSearchText(state,value) {
+  state.departmentSearchText = value
+},
+
        
 
     },
     getters: {
+        getDepartmentSearchText: state => state.departmentSearchText,
+
         getshowoverlay:(state)=>
         {
            return state.overlay
@@ -206,6 +220,12 @@ export default new Vuex.Store({
         },
         getisDetailPlanPage: (state) => {
             return state.isDetailPlanPage
+        },
+        getisorgChartPage: (state) => {
+            return state.isorgChartPage
+        },
+        getfilterDrawer: (state) => {
+            return state.filterDrawer
         },
         getlevelPay: (state) => {
             return state.levelPay

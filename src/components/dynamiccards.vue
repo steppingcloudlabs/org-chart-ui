@@ -15,10 +15,17 @@
       </v-btn>
     </v-toolbar> -->
       <v-row class="pt-5" dense>
+          <!-- {{departmentSearchText}}
+          {{HII}} -->
+        <!-- {{showdeptView}} -->
+      
         <!-- Loop through cardsData and create Vuetify cards dynamically -->
-        <v-col v-for="(card, index) in showdeptView" :key="index" cols="12" md="4">
+        <v-col v-for="(card, index) in filteredDeptCards" :key="index" cols="12" md="4">
+        <!-- <v-col v-for="(card, index) in showdeptView" :key="index" cols="12" md="4"> -->
           <v-card color="grey" v-if="card.details.status=='I'">
-            <v-card-title>{{ card.details.name }}</v-card-title>
+            <v-card-title> <v-icon color="primary" class="mr-2">
+      mdi-domain
+    </v-icon>{{ card.details.name }}</v-card-title>
             <v-card-text v-if="card.details.headOfUnitNav">
               {{ card.details.headOfUnitNav.defaultFullName }}({{ card.details.externalCode }})
             </v-card-text>
@@ -28,14 +35,21 @@
                <v-spacer></v-spacer>
 
           <!-- Action -->
-          <v-divider></v-divider>
-          <v-card-actions class="justify-end">
+          <!-- <v-divider></v-divider> -->
+          <v-card-actions class="">
             <v-btn
               text
               color="primary"
               @click="getUserListView(card)"
             >
               {{ card.details.headOfUnitNav ? 'Update' : 'Start Planning' }}
+            </v-btn>
+            <v-btn
+              text
+              color="primary"
+             
+            >
+              View Saved Plan
             </v-btn>
           </v-card-actions>
 
@@ -51,7 +65,9 @@
           </v-card-actions> -->
           </v-card>
           <v-card  v-else>
-            <v-card-title>{{ card.details.name }}</v-card-title>
+            <v-card-title> <v-icon color="primary" class="mr-2">
+      mdi-domain
+    </v-icon>{{ card.details.name }}</v-card-title>
             <v-card-text v-if="card.details.headOfUnitNav">
               {{ card.details.headOfUnitNav.defaultFullName }}({{ card.details.externalCode }})
             </v-card-text>
@@ -72,14 +88,21 @@
              <v-spacer></v-spacer>
 
           <!-- Action -->
-          <v-divider></v-divider>
-          <v-card-actions class="justify-end">
+          <!-- <v-divider></v-divider> -->
+          <v-card-actions class="">
             <v-btn
               text
               color="primary"
               @click="getUserListView(card)"
             >
               {{ card.details.headOfUnitNav ? 'Update' : 'Start Planning' }}
+            </v-btn>
+            <v-btn
+              text
+              color="primary"
+           
+            >
+           View Saved Plan
             </v-btn>
           </v-card-actions>
           </v-card>
@@ -103,13 +126,37 @@ import mergedialog from './updates/mergedialog.vue';
       };
     },
     computed: {
-    isDetailPlanPage: {
+     
+  filteredDeptCards() {
+    const selectedCode = this.$store.getters.getDepartmentSearchText
+
+    // If nothing selected → show all cards
+    if (!selectedCode) {
+      return this.showdeptView
+    }
+
+    // Match by externalCode
+    return this.showdeptView.filter(card =>
+      card.details.externalCode === selectedCode
+    )
+  },
+
+       departmentSearchText: {
+    get() {
+      return this.$store.getters.getDepartmentSearchText
+    },
+    set(data) {
+      this.$store.commit("setDepartmentSearchText", data)
+    }
+  },
+
+    isorgChartPage: {
       get() {
-        return this.$store.getters.getisDetailPlanPage;
+        return this.$store.getters.getisorgChartPage;
         // return true;
       },
       set(data) {
-        this.$store.commit("setisDetailPlanPage", data);
+        this.$store.commit("setisorgChartPage", data);
       }
     },
     showdeptUser: {
@@ -189,27 +236,11 @@ import mergedialog from './updates/mergedialog.vue';
         },
         getUserListView(data)
         {
-          this.isDetailPlanPage = true;
+          this.isorgChartPage = true;
             console.log(data)
-            let index=this.showdeptView.findIndex(item => item.id === data.id);
-            this.showselecteddept=this.showdeptView[index]
-        //     if(this.showdeptView[index].users.length<=0)
-        //     {
-        //       this.$store
-        //       .dispatch("getDepUser",data)
-        //       .then((response) => {
-              
-        //         this.showdeptView[index].users = response;
-        //         this.showselecteddept=this.showdeptView[index]
-        //         console.log(this.showdeptView[index])
-               
-        // })
-        //     }
-        //     else{
-        //       this.showselecteddept=this.showdeptView[index]
-        //     }
+         
            
-            this.$router.push({ path: "/detailplan" })
+            this.$router.push({ path: "/orgchart2" })
           
         },
        

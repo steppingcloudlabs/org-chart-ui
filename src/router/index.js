@@ -16,7 +16,10 @@ const routes = [{
   children: [{
     path: 'orgchart',
     name: 'Orgchart',
-    component: orgchart
+    component: orgchart,
+     meta: {
+    isorgChartPage: true
+  }
   },
   {
     path: 'orgchart1',
@@ -26,14 +29,17 @@ const routes = [{
   {
     path: 'orgchart2',
     name: 'Orgchart2',
-    component: orgchart2
+    component: orgchart2,
+     meta: {
+    isorgChartPage: true
+  }
   },
   {
     path: 'plan',
     name: 'plan',
     component: dynamiccards,
-     meta: {
-    hideAppBar: true
+       meta: {
+    isorgChartPage: false
   }
   },
   {
@@ -75,10 +81,13 @@ const routes = [{
 }
 ]
 
+
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
+
 
 export default router

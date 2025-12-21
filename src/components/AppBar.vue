@@ -24,146 +24,157 @@
       <v-icon right>mdi-merge</v-icon>
     </v-btn> -->
     <v-app-bar app flat height="60">
-  <!-- Left: Logo -->
-  <!-- <v-img
+      <!-- Left: Logo -->
+      <!-- <v-img
     src="/assets/hdr_logo.png"
     contain
     max-height="50"
     max-width="150"
     class="ml-4"
   /> -->
-            <img src="/assets/hdr_logo.png" style="height: 50px; width:100px; margin-left: 5px;margin-top: 2px;" />
+      <img
+        src="/assets/hdr_logo.png"
+        style="height: 50px; width: 100px; margin-left: 5px; margin-top: 2px"
+      />
+
+      <!-- Center: Title -->
+      <v-toolbar-title class="absolute-center font-weight-medium">
+        Re-Org
+      </v-toolbar-title>
+
+      <v-spacer></v-spacer>
+      <!-- {{departmentList}} -->
+      <!-- {{departmentSearchText}} -->
+    <v-autocomplete
+  v-if="!isorgChartPage"
+  v-model="departmentSearchText"
+  :items="filteredDepartments"
+  item-text="name"
+  item-value="externalCode"
+  placeholder="Search departments"
+  outlined
+  dense
+  hide-details
+  clearable
+  class="mr-3"
+  style="max-width: 260px"
+  append-icon="mdi-magnify"
+  @click:append="applySearch()"
+/>
+<!-- <v-text-field
+  v-if="!isorgChartPage"
+  v-model="departmentSearchText"
+  placeholder="Search departments"
+  outlined
+  dense
+  hide-details
+  clearable
+  class="mr-3"
+  style="max-width: 260px"
+  append-icon="mdi-magnify"
+  @click:append="applySearch"
+/> -->
 
 
-  <!-- Center: Title -->
-  <v-toolbar-title
-    class="absolute-center font-weight-medium"
-    v-if="hideAppBar"
-  
-  >
-    Department List
-  </v-toolbar-title>
- 
-
-  <v-spacer></v-spacer>
-
-  <!-- Right: Button -->
-  <v-btn
-    color="primary"
-    v-if="hideAppBar"
-    outlined
-    class="mr-4"
-    @click="openDialog()"
-  
-  >
-    MERGE DEPARTMENTS
-    <v-icon right>mdi-merge</v-icon>
-  </v-btn>
-
-
-        <v-flex xs6 class="pr-5 pt-5" v-if="!hideAppBar">
-          <!-- <SearchAlumni @getUserData="getUserData"></SearchAlumni> -->
-          <search @getUserData="getUserData"></search>
-        </v-flex>
-
-        <v-flex xs3 class="pt-5 pl-5" style="margin-top: 10px;" v-if="!hideAppBar">
-          <v-menu
-            ref="menu"
-            v-model="menu"
-            :close-on-content-click="false"
-            :return-value.sync="date"
-            transition="scale-transition"
-            offset-y
+      <!-- Right: Button -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-if="!isorgChartPage"
+            icon
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+            @click="openDialog()"
           >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="inputDate"
-                label="Effective Date"
-                prepend-icon="event"
-                v-on="on"
-                style="width:70%"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="inputDate" no-title scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.menu.save(inputDate)">OK</v-btn>
-            </v-date-picker>
-          </v-menu>
-        </v-flex>
-        <!-- <v-flex xs2 class="pr-5">
-          <v-menu transition="scale-transition" offset-y>
-            <template v-slot:activator="{ attrs, on }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-icon v-on="on">mdi-view-dashboard</v-icon>
-                  </template>
-                  <span>Legends</span>
-                </v-tooltip>
-              </v-btn>
-            </template>
-            <v-card dark max-width="250">
-              <v-img src="/assets/legendicon.png"></v-img>
-            </v-card>
-          </v-menu>
-        </v-flex>-->
-      <!-- </v-layout> -->
-  </v-app-bar>
-    <!-- <v-layout row wrap>
-      <v-flex xs12>
-        <v-divider color="rgba(0,0,0,.12)"></v-divider>
-      </v-flex>
-    </v-layout> -->
-    <!-- <div v-if="showLoading">
-      <v-overlay :value="showLoading" z-index="9999">
-        <v-progress-circular indeterminate size="64"  style="z-index: 10000"></v-progress-circular>
-      </v-overlay>
-    </div> -->
- 
+            <v-icon>mdi-merge</v-icon>
+          </v-btn>
+        </template>
 
+        <span>Merge Departments</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-if="!isorgChartPage"
+            icon
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+           @click="$emit('open-filter')"
+          >
+            <v-icon>mdi-filter</v-icon>
+          </v-btn>
+        </template>
+
+        <span>Filter Departments</span>
+      </v-tooltip>
+    </v-app-bar>
   </div>
 </template>
 
 <script>
-// Utilities
-
-//import SearchAlumni from "@/components/SearchAlumni";
-import search from "@/components/search.vue";
 export default {
   data: () => ({
-    date: new Date().toISOString().substr(0, 10),
-    menu: false,
-    search: "",
+    // date: new Date().toISOString().substr(0, 10),
+    // menu: false,
+    // search: "",
+    departmentList: [],
+    searchText: "",
+  selectedDepartment: null
   }),
 
-  components: {
-    // SearchAlumni,
-    search,
+  components: {},
+  computed: {
+     departmentSearchText: {
+    get() {
+      return this.$store.getters.getDepartmentSearchText
+    },
+    set(data) {
+      this.$store.commit("setDepartmentSearchText", data)
+    }
   },
-    computed: {
-       isDetailPlanPage: {
+    filteredDepartments() {
+    if (!this.searchText) return this.departmentList
+
+    return this.departmentList.filter(dep =>
+      dep.name
+        .toLowerCase()
+        .startsWith(this.searchText.toLowerCase())
+    )
+  },
+    isorgChartPage: {
       get() {
-        return this.$store.getters.getisDetailPlanPage;
+        return this.$store.getters.getisorgChartPage;
         // return true;
       },
       set(data) {
-        this.$store.commit("setisDetailPlanPage", data);
-      }
-    },
-       
-    hideAppBar() {
-      return this.$route.meta.hideAppBar === true
-    },
-      inputDate: {
-        get() {
-          return this.$store.getters.getinputDate;
-          // return true;
-        },
-        set(data) {
-          this.$store.commit("setinputDate", data);
-        },
+        this.$store.commit("setisorgChartPage", data);
       },
+    },
+  
+    filterDrawer: {
+      get() {
+        return this.$store.getters.getfilterDrawer;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setfilterDrawer", data);
+      },
+    },
+
+    hideAppBar() {
+      return this.$route.meta.hideAppBar === true;
+    },
+    inputDate: {
+      get() {
+        return this.$store.getters.getinputDate;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setinputDate", data);
+      },
+    },
     showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
@@ -191,63 +202,77 @@ export default {
         this.$store.commit("setshowFilter", data);
       },
     },
-    showmergedialog:
-    {
-        get() {
+    showmergedialog: {
+      get() {
         return this.$store.getters.getshowmergedialog;
         // return true;
       },
       set(data) {
         this.$store.commit("setshowmergedialog", data);
-      }
-
+      },
     },
   },
 
   methods: {
-      openDialog()
-        {
-          this.showmergedialog=true
-        },
+  
+    applyFilter() {
+      console.log("inside applyfilter");
+      this.filterDrawer = true;
+    },
+    openDialog() {
+      this.showmergedialog = true;
+    },
+    getDepartment() {
+
+  this.$store.dispatch("getAllDepartmentList").then((response) => {
+          console.log("response.d.results",response.d.results);
+          this.departmentList = response.d.results;
+          // for (let i = 0; i < response.d.results.length; i++) {
+          //  // console.log(g.selectedSearchField[i])
+          //   g.dropdown_data.push(response.d.results[i].externalCode) ;
+          // }
+         
+        });
+    },
     getUserData(data) {
       this.showFilter = false;
       // this.$router.push({ path: "/" });
       var date1 = new Date(this.inputDate).getTime();
       this.showLoading = true;
-      if(data.category=="People")
-      {
+      if (data.category == "People") {
         this.$store
-        .dispatch("testcall", {
-          userid: data.userId,
-          position: data.position,
-          date: date1,
-        })
-        .then((response) => {
-          if (response) {
-            console.log("testing");
-            this.showLoading = false;
-            this.$router.push({ path: "/orgchart2" });
-          }
-        });
-      }
-      else{
+          .dispatch("testcall", {
+            userid: data.userId,
+            position: data.position,
+            date: date1,
+          })
+          .then((response) => {
+            if (response) {
+              console.log("testing");
+              this.showLoading = false;
+              this.$router.push({ path: "/orgchart2" });
+            }
+          });
+      } else {
         this.$store
-        .dispatch("orgCategory",{
-          type: data.category,
-          typeValue: data.value,
-          date: date1,
-        })
-        .then((response) => {
-          if (response) {
-            console.log("testing");
-            this.showLoading = false;
-            this.$router.push({ path: "/orgchart2" });
-          }
-        });
+          .dispatch("orgCategory", {
+            type: data.category,
+            typeValue: data.value,
+            date: date1,
+          })
+          .then((response) => {
+            if (response) {
+              console.log("testing");
+              this.showLoading = false;
+              this.$router.push({ path: "/orgchart2" });
+            }
+          });
       }
-      
     },
   },
+  mounted(){
+    this.getDepartment();
+  }
 };
 </script>
 
@@ -260,7 +285,7 @@ export default {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: #1976D2;
+  color: #1976d2;
 }
 
 .v-main {

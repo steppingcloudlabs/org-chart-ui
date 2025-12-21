@@ -1,20 +1,27 @@
 <template>
   <div class="home">
-    <CoreAppBar></CoreAppBar>
+    <CoreAppBar @open-filter="openFilter"></CoreAppBar>
+ <FilterDrawer v-model="showFilter" />
     <core-view></core-view>
   </div>
 </template>
 
 <script>
+import FilterDrawer from '../components/FilterDrawer.vue'
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
-    
+    FilterDrawer,
      CoreAppBar: () => import("@/components/AppBar"),
     // CoreDrawer: () => import("@/components/Drawer")
     
     CoreView: () => import("@/components/view")
+  },
+    data() {
+    return {
+      showFilter: false
+    }
   },
    computed: {
     userMasterData: {
@@ -27,6 +34,11 @@ export default {
       }
     }
   },
+  methods:{
+     openFilter() {
+      this.showFilter = true
+    }
+  }
 };
 </script>
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer permanent  height="650px" style="border-right:5px;width: 100%;">
+    <v-navigation-drawer permanent right  height="650px" style="border-right:5px;width: 100%;">
       <v-list-item class="px-2">
         <v-list-item-avatar>
           <v-icon>mdi-filter</v-icon>
@@ -173,6 +173,7 @@ export default {
     }
   },
   computed: {
+    
     userPayGrade: {
       get() {
         return this.$store.getters.getuserPayGrade;
@@ -670,8 +671,8 @@ export default {
     }
   },
   mounted() {
-    this.userGradeData();
-    console.log("chartData=====>>>",this.chartData)
+    // this.userGradeData();
+    console.log("sidenav mounted")
   }
 };
 </script>

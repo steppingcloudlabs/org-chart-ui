@@ -3,7 +3,10 @@
     <v-main>
     <core-view></core-view></v-main>
 <div  v-if="showLoading">
-    <LoaderOverlay></LoaderOverlay></div>
+    <LoaderOverlay></LoaderOverlay>
+
+<!-- <Filter v-model="filterDrawer"></Filter> -->
+    </div>
     <!-- <overlayloader></overlayloader> -->
   </v-app>
 </template>
@@ -11,14 +14,25 @@
 <script>
 //import overlayloader from './components/overlayloader.vue';
 import LoaderOverlay from './components/LoaderOverlay.vue';
+// import Filter from './components/Sidenav.vue';
 export default {
 
   components: {
     CoreView: () => import("@/components/view"),
-    LoaderOverlay
+    LoaderOverlay,
+    // Filter
     // overlayloader
   },
   computed: {
+       filterDrawer: {
+      get() {
+        return this.$store.getters.getfilterDrawer;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setfilterDrawer", data);
+      },
+    },
      showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
