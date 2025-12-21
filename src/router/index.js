@@ -39,7 +39,10 @@ const routes = [{
   {
     path: 'detailplan',
     name: 'detailplan',
-    component: listView
+    component: listView,
+       meta: {
+    hideAppBar: true
+  }
   },
 
 

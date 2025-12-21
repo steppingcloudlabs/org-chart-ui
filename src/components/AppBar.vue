@@ -43,6 +43,7 @@
   >
     Department List
   </v-toolbar-title>
+ 
 
   <v-spacer></v-spacer>
 
@@ -53,6 +54,7 @@
     outlined
     class="mr-4"
     @click="openDialog()"
+  
   >
     MERGE DEPARTMENTS
     <v-icon right>mdi-merge</v-icon>
@@ -140,6 +142,15 @@ export default {
     search,
   },
     computed: {
+       isDetailPlanPage: {
+      get() {
+        return this.$store.getters.getisDetailPlanPage;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisDetailPlanPage", data);
+      }
+    },
        
     hideAppBar() {
       return this.$route.meta.hideAppBar === true

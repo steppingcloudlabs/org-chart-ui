@@ -9,6 +9,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        isDetailPlanPage: false,
         isLevel:false,
         levelPay:[],
         selectedSearchField: [],
@@ -60,6 +61,9 @@ export default new Vuex.Store({
         },
         setisLevel: (state, data) => {
             state.isLevel = data
+        },
+        setisDetailPlanPage: (state, data) => {
+            state.isDetailPlanPage = data
         },
         setlevelPay: (state, data) => {
             state.levelPay= data
@@ -199,6 +203,9 @@ export default new Vuex.Store({
         },
         getisLevel: (state) => {
             return state.isLevel
+        },
+        getisDetailPlanPage: (state) => {
+            return state.isDetailPlanPage
         },
         getlevelPay: (state) => {
             return state.levelPay

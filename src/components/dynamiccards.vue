@@ -103,6 +103,15 @@ import mergedialog from './updates/mergedialog.vue';
       };
     },
     computed: {
+    isDetailPlanPage: {
+      get() {
+        return this.$store.getters.getisDetailPlanPage;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisDetailPlanPage", data);
+      }
+    },
     showdeptUser: {
       get() {
         return this.$store.getters.getdeptUserData;
@@ -180,7 +189,7 @@ import mergedialog from './updates/mergedialog.vue';
         },
         getUserListView(data)
         {
-          
+          this.isDetailPlanPage = true;
             console.log(data)
             let index=this.showdeptView.findIndex(item => item.id === data.id);
             this.showselecteddept=this.showdeptView[index]
