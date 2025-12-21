@@ -126,6 +126,15 @@ import mergedialog from './updates/mergedialog.vue';
       };
     },
     computed: {
+       showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
+      },
+    },
      
   filteredDeptCards() {
     const selectedCode = this.$store.getters.getDepartmentSearchText
@@ -219,6 +228,7 @@ import mergedialog from './updates/mergedialog.vue';
             this.$store
         .dispatch("getAllDepartmentView")
         .then((response) => {
+          this.showLoading= false;
           var  dept=[]
           for (var i = 0; i < response.length; i++)
           {
@@ -252,6 +262,7 @@ import mergedialog from './updates/mergedialog.vue';
     },
     mounted()
     {  
+      this.showLoading= true;
         if(this.showdeptView.length<=0)
         {
           this.getdepartmentView()
