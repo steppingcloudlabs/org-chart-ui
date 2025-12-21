@@ -391,7 +391,7 @@ export default new Vuex.Store({
                     },
                     params: {
                         "companyId": companyId,
-                        "dept":data.details.description
+                        "dept":data
                     }
                 }).then((response) => {
                     resolve(response.data)
