@@ -42,7 +42,8 @@ selectedView:true,
         femaleCount: 0,
         gradecount: [],
         gradeOccurence: [],
-  
+        originalMasterData:[],
+        finalPlan:{},
         fieldToDisplay: [
           "userPayGrade",
           "userDepartmentName",
@@ -53,7 +54,7 @@ selectedView:true,
         orgChartData: [],
         field: "true",
         field1: "true",
-  
+        str:"",
         selectedId: null,
         temp: {},
             }
@@ -254,9 +255,9 @@ selectedView:true,
         legent.style.color = "#2B81D6";
         legent.style.width = "150px";
         legent.style.border = "2px solid black";
-        var str = "";
+        this.str = ""
         for (var j = 0; j < this.gradecount.length; j = j + 3) {
-          str +=
+          this.str +=
             "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
             this.userPayGrade[j] +
             "-" +
@@ -267,14 +268,14 @@ selectedView:true,
             this.gradecount[j + 1] +
             "</span>";
           if (this.gradecount[j + 3]) {
-            str +=
+            this.str +=
               "<span class='ml-2'>" +
               this.userPayGrade[j + 2] +
               "-" +
               this.gradecount[j + 2] +
               "</span></p>";
           } else {
-            str += "</p>";
+            this.str += "</p>";
           }
         }
         legent.innerHTML =
@@ -287,7 +288,7 @@ selectedView:true,
           ":" +
           this.femaleCount +
           "</p>" +
-          str;
+          this.str;
         this.chart.element.appendChild(legent);
         //this.gradeCounting();
         var leg = document.createElement("div");
@@ -318,9 +319,9 @@ selectedView:true,
             }
   
           this.mytree(this.$refs.tree, this.orgChartData);
-        var str = "";
+        this.str = "";
         for (var j = 0; j < this.gradecount.length; j = j + 3) {
-          str +=
+          this.str +=
             "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
             this.userPayGrade[j] +
             "-" +
@@ -331,14 +332,14 @@ selectedView:true,
             this.gradecount[j + 1] +
             "</span>";
           if (this.gradecount[j + 3]) {
-            str +=
+            this.str +=
               "<span class='ml-2'>" +
               this.userPayGrade[j + 2] +
               "-" +
               this.gradecount[j + 2] +
               "</span></p>";
           } else {
-            str += "</p>";
+            this.str += "</p>";
           }
         }
         var legent = document.createElement("div");
@@ -360,7 +361,7 @@ selectedView:true,
           ":" +
           this.femaleCount +
           "</p>" +
-          str;
+          this.str;
         this.chart.element.appendChild(legent);
         var leg = document.createElement("div");
         leg.setAttribute("id", "legTag");
@@ -622,6 +623,9 @@ if (divisionValue && !this.division.includes(divisionValue)) {
               this.orgChartData = this.orgChartData.concat(
                 this.userMasterData[nodeData.userManagerId]
               );
+              this.originalMasterData = this.originalMasterData.concat(
+              this.userMasterData[nodeData.userManagerId]
+            );
               this.orgChartData = JSON.parse(JSON.stringify(this.orgChartData));
               console.log(JSON.stringify(this.orgChartData));
             }
@@ -633,6 +637,9 @@ if (divisionValue && !this.division.includes(divisionValue)) {
             bufferedChild = this.userMasterData[nodeData.userId];
   
             this.orgChartData = this.orgChartData.concat(
+              this.userMasterData[nodeData.userId]
+            );
+            this.originalMasterData = this.originalMasterData.concat(
               this.userMasterData[nodeData.userId]
             );
           }
@@ -653,9 +660,9 @@ if (divisionValue && !this.division.includes(divisionValue)) {
         } else {
           alert("No Data!");
         }
-        var str = "";
+        this.str = "";
         for (var j = 0; j < this.gradecount.length; j = j + 3) {
-          str +=
+          this.str +=
             "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
             this.userPayGrade[j] +
             "-" +
@@ -666,14 +673,14 @@ if (divisionValue && !this.division.includes(divisionValue)) {
             this.gradecount[j + 1] +
             "</span>";
           if (this.gradecount[j + 3]) {
-            str +=
+            this.str +=
               "<span class='ml-2'>" +
               this.userPayGrade[j + 2] +
               "-" +
               this.gradecount[j + 2] +
               "</span></p>";
           } else {
-            str += "</p>";
+            this.str += "</p>";
           }
         }
         var legent = document.getElementById("legendd");
@@ -688,7 +695,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           ":" +
           this.femaleCount +
           "</p>" +
-          str;
+          this.str;
         this.chart.element.appendChild(legent);
       },
       
@@ -760,6 +767,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           dl.click();
         }, 3000);
       },
+     
         getData() {
           
         if (this.userData) {
@@ -773,14 +781,15 @@ if (divisionValue && !this.division.includes(divisionValue)) {
         // this.nodes = this.addTags(this.nodes);
         this.nodes=this.addTags(this.nodes);
         this.orgChartData = this.nodes;
+        this.originalMasterData = this.nodes;
         console.log("BYEEE", this.nodes);
         this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
         setTimeout(() => {
           this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
         }, 10)
-        var str= ""
+        
         for (var j = 0; j < this.gradecount.length; j = j + 3) {
-            str +=
+            this.str +=
               "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
               this.userPayGrade[j] +
               "-" +
@@ -792,14 +801,14 @@ if (divisionValue && !this.division.includes(divisionValue)) {
               "</span>";
   
             if (this.gradecount[j + 3]) {
-              str +=
+              this.str +=
                 "<span class='ml-2'>" +
                 this.userPayGrade[j + 2] +
                 "-" +
                 this.gradecount[j + 2] +
                 "</span></p>";
             } else {
-              str += "</p>";
+              this.str += "</p>";
             }
           }
           var legent = document.createElement("div");
@@ -820,7 +829,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
             ":" +
             this.femaleCount +
             "</p>" +
-            str;
+            this.str;
           this.chart.element.appendChild(legent);
   
           var leg = document.createElement("div");
@@ -834,11 +843,20 @@ if (divisionValue && !this.division.includes(divisionValue)) {
             '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
           this.chart.element.appendChild(leg);
           // this.gradeCounting()
-         
+          console.log("Versin",OrgChart.VERSION)
          
     }
         
     
+    },
+
+    saveData()
+    {
+       var currentNodes= this.chart?.config?.nodes || []
+       this.finalPlan["currentData"] = currentNodes,
+       this.finalPlan["originalData"] = this.originalMasterData
+       console.log(this.finalPlan)
+       
     },
 
     changeView()
@@ -999,9 +1017,9 @@ if (divisionValue && !this.division.includes(divisionValue)) {
         OrgChart.templates.myTemplate.field_1 =
           '<text width="120" text-overflow="ellipsis" style="font-size: 16px;" fill="white" x="80" y="130" font-weight="BOLD" text-anchor="middle">{val}</text>';
   
-        OrgChart.templates.myTemplate.field_3 = "{val}";
-        OrgChart.templates.myTemplate.field_4 = "{val}";
-        OrgChart.templates.myTemplate.field_5 = "{val}";
+        OrgChart.templates.myTemplate.field_3 = '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="190" text-anchor="middle">{val}</text>';
+        OrgChart.templates.myTemplate.field_4 =  '<text  text-overflow="multiline" style="font-size: 14px;" fill="white" x="60" y="210" text-anchor="middle">{val}</text>';
+        OrgChart.templates.myTemplate.field_5 =  '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="120" y="210" text-anchor="middle">({val})</text>';
         OrgChart.templates.myTemplate.field_7 = "{val}";
         OrgChart.templates.myTemplate.field_6 =
           '<g><rect x="0" y="220" width="180" height="40"  fill="#03BFCB" rx="5" ry="5"></rect> </g>';
@@ -1036,9 +1054,9 @@ if (divisionValue && !this.division.includes(divisionValue)) {
         
         OrgChart.templates.myTemplate.min = Object.assign({}, OrgChart.templates.ana);
         OrgChart.templates.myTemplate.min.size = [250, 60];
-OrgChart.templates.myTemplate.min.img_0 = "";
-OrgChart.templates.myTemplate.min.field_0 = '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="40" text-anchor="middle">{val}</text>';
-OrgChart.templates.myTemplate.min.field_1 = "";
+      OrgChart.templates.myTemplate.min.img_0 = "";
+      OrgChart.templates.myTemplate.min.field_0 = '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="40" text-anchor="middle">{val}</text>';
+      OrgChart.templates.myTemplate.min.field_1 = "";
 
 
 
@@ -1063,7 +1081,7 @@ OrgChart.templates.myTemplate.min.field_1 = "";
                             positionTitle:{},
                             department:{},
                             userPayGrade:{},
-                            positionVacant:{}
+                            postionType:{}
                     },
                     editForm: {
         generateElementsFromFields: false,
@@ -1083,7 +1101,10 @@ OrgChart.templates.myTemplate.min.field_1 = "";
                 text: "Change View",
                 icon:OrgChart.icon.visio(24, 24, "#7A7A7A"),
                 onClick:this.changeView
-            }
+            },
+            pdf_export: { text: "Export PDF" },
+            pp_export: { text: "Export PowerPoint" },
+            json_export: { text: "Export JSON" },
           },
           nodeMenu: {
             levelDown: {
@@ -1099,8 +1120,8 @@ OrgChart.templates.myTemplate.min.field_1 = "";
             edit: {
               text: "Edit",
             },
-           add: {text:"Add"},
-           remove: {text:"Remove"}
+           add: {text:"Add New Position"},
+           remove: {text:"Remove Position"}
           },
           tags:{
             subLevels0: {
@@ -1158,8 +1179,8 @@ OrgChart.templates.myTemplate.min.field_1 = "";
                 edit: {
                   text: "Edit",
                 },
-                add: {text:"Add"},
-                remove: {text:"Remove"}
+                add: {text:"Add New Position"},
+                remove: {text:"Remove Position"}
               },
             },
             filter: {
@@ -1184,7 +1205,7 @@ OrgChart.templates.myTemplate.min.field_1 = "";
           }
                 });
             
-                this.chart.on("click", (sender, args) => {
+          this.chart.on("click", (sender, args) => {
           var data = sender.get(args.node.id);
           
           var data1 = sender.get(args.node.pid);
@@ -1205,14 +1226,45 @@ OrgChart.templates.myTemplate.min.field_1 = "";
     }
     return false;
         });
+
+        this.chart.onExportStart((args) => {
+          this.saveData()
+
+          
+      args.styles += document.getElementById('myStyles').outerHTML;
+    
+
+   
+});
+
+this.chart.onRedraw(() => {
+  var legent = document.createElement("div");
+          legent.setAttribute("id", "legendd");
+          legent.style.position = "absolute";
+          legent.style.top = "150px";
+          legent.style.left = "50px";
+          legent.style.color = "#2B81D6";
+          legent.style.width = "150px";
+          legent.style.border = "1px solid black";
+          legent.innerHTML =
+            "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
+            this.totalHeadCount +
+            "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
+            this.vacantCount +
+            "</p>" 
+            
+          this.chart.element.appendChild(legent);
+
+
+});
   
-        this.chart.on("exportstart", function (sender, args) {
-          args.content +=
-            '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
-          args.content += document.getElementById("myStyles").outerHTML;
-         // args.content += document.getElementById("legendd").outerHTML;
-          //args.content += document.getElementById("legTag").outerHTML;
-        });  
+        // this.chart.on("exportstart", function (sender, args) {
+        //   args.content +=
+        //     '<link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">';
+        //   args.content += document.getElementById("myStyles").outerHTML;
+        //  // args.content += document.getElementById("legendd").outerHTML;
+        //   //args.content += document.getElementById("legTag").outerHTML;
+        // });  
         
         this.chart.filterUI.on('add-filter', function(sender, args){
     var names = Object.keys(sender.filterBy);
