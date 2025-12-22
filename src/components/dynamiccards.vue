@@ -47,6 +47,7 @@
             <v-btn
               text
               color="primary"
+              @click="OpenViewPlanPage()"
              
             >
               View Saved Plan
@@ -100,7 +101,7 @@
             <v-btn
               text
               color="primary"
-           
+            @click="OpenViewPlanPage()"
             >
            View Saved Plan
             </v-btn>
@@ -121,11 +122,38 @@ import mergedialog from './updates/mergedialog.vue';
   },
     data() {
       return {
-        // Sample data for cards
+    
         cardsData: [],
       };
     },
     computed: {
+       selectedBusinessUnit: {
+      get() {
+        return this.$store.getters.getselectedBusinessUnit;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedBusinessUnit", data);
+      },
+    },
+    selectedDivision: {
+      get() {
+        return this.$store.getters.getselectedDivision;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedDivision", data);
+      },
+    },
+     selectedLocation: {
+      get() {
+        return this.$store.getters.getselectedLocation;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedLocation", data);
+      },
+    },
        showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
@@ -137,18 +165,44 @@ import mergedialog from './updates/mergedialog.vue';
     },
      
   filteredDeptCards() {
-    const selectedCode = this.$store.getters.getDepartmentSearchText
+  const selectedDeptCode = this.$store.getters.getDepartmentSearchText
+  const selectedBU = this.selectedBusinessUnit
+  const selectedDiv = this.selectedDivision
 
-    // If nothing selected → show all cards
-    if (!selectedCode) {
-      return this.showdeptView
-    }
-
-    // Match by externalCode
+  // 1️⃣ Department search has priority
+  if (selectedDeptCode) {
     return this.showdeptView.filter(card =>
-      card.details.externalCode === selectedCode
+      card.details.externalCode === selectedDeptCode
     )
-  },
+  }
+
+  // 2️⃣ Business Unit filter
+if (selectedBU) {
+  return this.showdeptView.filter(card => {
+    const division = card.details.cust_toDivision?.results || []
+
+    return division.some(div =>
+      div.cust_toBusinessUnit?.results?.some(bu =>
+        bu.externalCode === selectedBU
+      )
+    )
+  })
+}
+if (selectedDiv) {
+  return this.showdeptView.filter(card => {
+    const divisions = card.details.cust_toDivision?.results || []
+
+    return divisions.some(div =>
+       div.externalCode === selectedDiv
+    )
+  })
+}
+
+
+  // 3️⃣ No filter → show all
+  return this.showdeptView
+},
+
 
        departmentSearchText: {
     get() {
@@ -218,6 +272,14 @@ import mergedialog from './updates/mergedialog.vue';
     
 },
     methods:{
+        OpenViewPlanPage()
+        {
+           this.isorgChartPage = true;
+            console.log("HII");
+         
+           
+            this.$router.push({ path: "/viewSavedPlan" })
+        },
         openDialog()
         {
           this.showmergedialog=true

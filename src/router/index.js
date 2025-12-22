@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import orgchart from '../components/orgchart'
 import orgchart1 from '../components/oldOrg'
 import orgchart2 from '../components/test'
+import viewSavedPlan from '../components/viewSavedPlan'
 import dynamiccards from '../components/dynamiccards'
 import listView from '../components/updates/mainpage'
 
@@ -30,6 +31,14 @@ const routes = [{
     path: 'orgchart2',
     name: 'Orgchart2',
     component: orgchart2,
+     meta: {
+    isorgChartPage: true
+  }
+  },
+  {
+    path: 'viewSavedPlan',
+    name: 'viewSavedPlan',
+    component: viewSavedPlan,
      meta: {
     isorgChartPage: true
   }

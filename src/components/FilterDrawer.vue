@@ -26,6 +26,7 @@
     <!-- YOUR FILTER CONTENT -->
     <v-container>
       <v-autocomplete
+       v-model="selectedBusinessUnit"
         item-text="name"
         item-value="externalCode"
         :items="businessUnitList"
@@ -37,15 +38,19 @@
       />
 
       <v-autocomplete
-        items=""
+      v-model="selectedLocation"
+      item-text="name"
+      item-value="externalCode"
+        :items="locationList"
         label="Location"
         dense
         outlined
         clearable
         class="mb-3"
       />
-<!-- {{divisionList}} -->
+{{selectedDivision}}
       <v-autocomplete
+      v-model="selectedDivision"
         item-text="name"
         item-value="externalCode"
         :items="divisionList"
@@ -75,8 +80,38 @@ export default {
   data: () => ({
     businessUnitList: [],
     divisionList: [],
+    locationList: [],
+
+    //   selectedBusinessUnit: null, 
   }),
   computed: {
+     selectedBusinessUnit: {
+      get() {
+        return this.$store.getters.getselectedBusinessUnit;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedBusinessUnit", data);
+      },
+    },
+     selectedDivision: {
+      get() {
+        return this.$store.getters.getselectedDivision;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedDivision", data);
+      },
+    },
+     selectedLocation: {
+      get() {
+        return this.$store.getters.getselectedLocation;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedLocation", data);
+      },
+    },
     internalDrawer: {
       get() {
         return this.value;
@@ -87,6 +122,18 @@ export default {
     },
   },
   methods: {
+     applyFilter() {
+        this.internalDrawer= false;
+        // this.resetFilter();
+  
+  },
+
+  resetFilter() {
+    this.selectedBusinessUnit = null
+    this.selectedLocation = null
+    this.selectedDivision = null
+   
+  },
     getBusinessUnit() {
       this.$store.dispatch("getAllBusinessUnitList").then((response) => {
         console.log("response.d.results", response.d.results);
@@ -107,10 +154,21 @@ export default {
         // }
       });
     },
+    getLocation() {
+      this.$store.dispatch("getAllLocation").then((response) => {
+        console.log("response.d.results getAllLocation", response.d.results);
+        this.locationList = response.d.results;
+        // for (let i = 0; i < response.d.results.length; i++) {
+        //  // console.log(g.selectedSearchField[i])
+        //   g.dropdown_data.push(response.d.results[i].externalCode) ;
+        // }
+      });
+    },
   },
   mounted() {
     this.getBusinessUnit();
     this.getDivision();
+    this.getLocation();
   },
 };
 </script>

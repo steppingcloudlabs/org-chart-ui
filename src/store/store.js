@@ -9,6 +9,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+         selectedBusinessUnit: null, 
+         selectedDivision: null, 
+         selectedLocation: null, 
          departmentSearchText: "",      // what user types
         isDetailPlanPage: false,
         isorgChartPage: false,
@@ -183,12 +186,24 @@ export default new Vuex.Store({
 setDepartmentSearchText(state,value) {
   state.departmentSearchText = value
 },
+setselectedBusinessUnit(state,value) {
+  state.selectedBusinessUnit = value
+},
+setselectedDivision(state,value) {
+  state.selectedDivision = value
+},
+setselectedLocation(state,value) {
+  state.selectedLocation = value
+},
 
        
 
     },
     getters: {
         getDepartmentSearchText: state => state.departmentSearchText,
+        getselectedBusinessUnit: state => state.selectedBusinessUnit,
+        getselectedDivision: state => state.selectedDivision,
+        getselectedLocation: state => state.selectedLocation,
 
         getshowoverlay:(state)=>
         {
@@ -442,6 +457,24 @@ setDepartmentSearchText(state,value) {
             })
         },
 
+        getAllLocation: () => {
+
+            return new Promise((resolve) => {
+                axios({
+                    url: 'http://localhost:3000/srv/getLocationList?companyId=' + companyId,
+                   
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                }).then((response) => {
+                    resolve(response.data)
+                    //commit("setsearchField", response.data.d.results)
+
+                })
+            })
+        },
         getAllBusinessUnitList: () => {
 
             return new Promise((resolve) => {
