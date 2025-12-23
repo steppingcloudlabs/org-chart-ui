@@ -100,7 +100,25 @@ export default {
         set(data) {
           this.$store.commit("setuserData", data);
         },
+      },
+      showdeptView: {
+      get() {
+        return this.$store.getters.getDepartmentList;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setDepartmentList", data);
       }
+    },
+    showselecteddept: {
+      get() {
+        return this.$store.getters.getselectedDept;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedDept", data);
+      }
+    }
   },
   methods: {
     onPlanClick(data) {
@@ -120,6 +138,36 @@ this.userData = currentData ["currentData"]
      
 
     },
+    getUserListView()
+        {
+          
+          this.showoverlay=true
+            let index=this.showdeptView.findIndex(item => item.id === this.showselecteddept.id);
+            if(this.showdeptView[index].users.length<=0)
+            {
+              console.log("deptttt",this.showselecteddept)
+              this.$store
+              .dispatch("getDepUser",this.showselecteddept.details.externalCode)
+              .then((response) => {
+              
+                this.showdeptView[index].users = response;
+                this.showselecteddept=this.showdeptView[index]
+                console.log(this.showdeptView[index])
+               
+        })
+            }
+            else{
+              this.showselecteddept=this.showdeptView[index]
+            }
+           this.showoverlay=false
+            // this.$router.push({ path: "/detailplan" })
+          
+        },
   },
+  mounted(){
+
+    this.getUserListView()
+  
+  }
 };
 </script>

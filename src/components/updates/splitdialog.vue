@@ -69,11 +69,28 @@
                 >
                   <v-autocomplete
                     :items="this.showselecteddept.users"
-                    label=" Move Employees"
-                    item-text="title"
+                    label=" Move Positions"
+                    item-text="positionTitle"
+                    item-value="positionId"
                    return-object
                     v-model="userList"
-                    multiple
+                    multiple>
+                    <!-- Dropdown items -->
+                    <template v-slot:item="data">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{ data.item.positionTitle }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle class="text--secondary">
+                          {{ data.item.positionId }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </template>
+
+                    <!-- Selected values (chips / text) -->
+                    <template v-slot:selection="data">
+                      <span>{{ data.item.positionTitle }}</span>
+                    </template>
                   ></v-autocomplete>
                 </v-col>
                 <v-col
@@ -135,11 +152,11 @@ export default {
     },
     showselecteddept: {
       get() {
-        return this.$store.getters.getSelectedDept;
+        return this.$store.getters.getselectedDept;
         // return true;
       },
       set(data) {
-        this.$store.commit("setSelectedDept", data);
+        this.$store.commit("setselectedDept", data);
       }
     },
     showdeptView: {

@@ -258,11 +258,11 @@ export default {
     },
     showselecteddept: {
       get() {
-        return this.$store.getters.getSelectedDept;
+        return this.$store.getters.getselectedDept;
         // return true;
       },
       set(data) {
-        this.$store.commit("setSelectedDept", data);
+        this.$store.commit("setselectedDept", data);
       },
     },
     showmergedialog: {
