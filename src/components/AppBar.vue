@@ -23,7 +23,7 @@
       <span>Merge Departments</span>
       <v-icon right>mdi-merge</v-icon>
     </v-btn> -->
-    <v-app-bar app flat height="60">
+    <v-app-bar app flat height="60" style="background: #1976d2;">
       <!-- Left: Logo -->
       <!-- <v-img
     src="/assets/hdr_logo.png"
@@ -32,17 +32,17 @@
     max-width="150"
     class="ml-4"
   /> -->
-  <v-btn class="ma-3" icon  @click="navigateBack()">
+  <v-btn v-if="$route.path !== '/plan'" class="ma-3" icon  @click="navigateBack()">
         
-        <v-icon>mdi-backburger</v-icon>
+        <v-icon color="white">mdi-backburger</v-icon>
       </v-btn>
-      <!-- <img
-        src="/assets/hdr_logo.png"
+      <img v-if="$route.path == '/plan'"
+        src="/assets/logoSC.png" 
         style="height: 50px; width: 100px; margin-left: 5px; margin-top: 2px"
-      /> -->
+      />
 
       <!-- Center: Title -->
-      <v-toolbar-title class="absolute-center font-weight-medium">
+      <v-toolbar-title class="absolute-center font-weight-medium" color="white">
         Re-Org
       </v-toolbar-title>
 
@@ -61,8 +61,9 @@
         hide-details
         clearable
         class="mr-3"
-        style="max-width: 260px"
+        style="max-width: 260px;background: white;"
         append-icon="mdi-magnify"
+        
         @click:append="applySearch()"
       />
       <!-- <v-text-field
@@ -85,7 +86,7 @@
           <v-btn
             v-if="!isorgChartPage"
             icon
-            color="primary"
+            color="white"
             v-bind="attrs"
             v-on="on"
             @click="openDialog()"
@@ -101,7 +102,7 @@
           <v-btn
             v-if="!isorgChartPage"
             icon
-            color="primary"
+            color="white"
             v-bind="attrs"
             v-on="on"
             @click="$emit('open-filter')"
@@ -114,7 +115,7 @@
       </v-tooltip>
       <v-tooltip bottom v-if="!isorgChartPage && isSavedPlanpage">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon color="primary" v-bind="attrs" v-on="on">
+          <v-btn icon color="white" v-bind="attrs" v-on="on">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
@@ -452,7 +453,7 @@ export default {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: #1976d2;
+  color: white;
 }
 
 .v-main {

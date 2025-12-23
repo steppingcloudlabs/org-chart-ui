@@ -34,12 +34,28 @@
                 >
                   <v-autocomplete
                     :items="this.showdeptView"
-                    label=" Select department 1 to merge"
-                    item-text="id"
+                    label=" Select first department to merge"
+                    item-text="details.name"
+                    item-id ="id"
                     return-object
-                    v-model="Department1"
-                  
-                  ></v-autocomplete>
+                    v-model="Department1">
+                 <!-- Dropdown items -->
+                 <template v-slot:item="data">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{ data.item.details.name }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle class="text--secondary">
+                          {{ data.item.id }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </template>
+
+                    <!-- Selected values (chips / text) -->
+                    <template v-slot:selection="data">
+                      <span>{{ data.item.details.name }}</span>
+                    </template>
+                </v-autocomplete>
                 </v-col>
                 <v-col
                   cols="6"
@@ -48,12 +64,30 @@
                 >
                   <v-autocomplete
                     :items="this.showdeptView"
-                    label=" Select department 2 to merge"
-                    item-text="id"
+                    label=" Select second department  to merge"
+                    item-text="details.name"
+                    item-id ="id"
                     return-object
                     v-model="Department2"
                   
-                  ></v-autocomplete>
+                  >
+                   <!-- Dropdown items -->
+                 <template v-slot:item="data">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{ data.item.details.name }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle class="text--secondary">
+                          {{ data.item.id }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </template>
+
+                    <!-- Selected values (chips / text) -->
+                    <template v-slot:selection="data">
+                      <span>{{ data.item.details.name }}</span>
+                      </template>
+                </v-autocomplete>
                 </v-col>
                 <v-col
                   cols="12"

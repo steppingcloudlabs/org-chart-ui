@@ -9,7 +9,7 @@
   <div style="width: 200px; text-align: center;">
       <v-progress-linear
         indeterminate
-        color="amber"
+        color="#1976d2"
         size="38"
       ></v-progress-linear>
       <!-- <div class="mt-2">Loading...</div> -->
