@@ -295,6 +295,7 @@ export default {
   },
   methods: {
     OpenViewPlanPage(card) {
+      this.showLoading = true;
       this.selectedDept = card;
       this.loadingCardId = true;
       this.isorgChartPage = true;
@@ -312,6 +313,7 @@ export default {
           console.log("response from savedpalnapi==", response);
           this.allSavedPlans = response;
           this.isSavedPlanpage = true;
+          this.showLoading = false;
           this.$router.push({ path: "/viewSavedPlan" });
           this.loadingCardId = false;
         })
@@ -341,6 +343,7 @@ export default {
       });
     },
     getUserListView(data) {
+      this.showLoading = true;
       // current date (YYYY-MM-DD)
       this.selectedDept = data;
       var date1 = new Date().getTime();
