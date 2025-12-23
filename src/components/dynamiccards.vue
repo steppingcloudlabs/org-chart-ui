@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid class="px-6">
-      <!-- <v-toolbar
+  <v-container fluid class="px-6">
+    <!-- <v-toolbar
       color='primary accent-4'
       dark flat class="px-6" >
       
@@ -14,47 +14,46 @@
         <v-icon>mdi-merge</v-icon>
       </v-btn>
     </v-toolbar> -->
-      <v-row class="pt-5" dense>
-          <!-- {{departmentSearchText}}
+    <v-row class="pt-5" dense>
+      <!-- {{departmentSearchText}}
           {{HII}} -->
-        <!-- {{showdeptView}} -->
-      
-        <!-- Loop through cardsData and create Vuetify cards dynamically -->
-        <v-col v-for="(card, index) in filteredDeptCards" :key="index" cols="12" md="4">
+      <!-- {{showdeptView}} -->
+
+      <!-- Loop through cardsData and create Vuetify cards dynamically -->
+      <v-col
+        v-for="(card, index) in filteredDeptCards"
+        :key="index"
+        cols="12"
+        md="4"
+      >
         <!-- <v-col v-for="(card, index) in showdeptView" :key="index" cols="12" md="4"> -->
-          <v-card color="grey" v-if="card.details.status=='I'">
-            <v-card-title> <v-icon color="primary" class="mr-2">
-      mdi-domain
-    </v-icon>{{ card.details.name }}</v-card-title>
-            <v-card-text v-if="card.details.headOfUnitNav">
-              {{ card.details.headOfUnitNav.defaultFullName }}({{ card.details.externalCode }})
-            </v-card-text>
-            <v-card-text v-else>
-              No Head of Department ({{ card.details.externalCode }})
-            </v-card-text>
-               <v-spacer></v-spacer>
+        <v-card color="grey" v-if="card.details.status == 'I'">
+          <v-card-title>
+            <v-icon color="primary" class="mr-2"> mdi-domain </v-icon
+            >{{ card.details.name }}</v-card-title
+          >
+          <v-card-text v-if="card.details.headOfUnitNav">
+            {{ card.details.headOfUnitNav.defaultFullName }}({{
+              card.details.externalCode
+            }})
+          </v-card-text>
+          <v-card-text v-else>
+            No Head of Department ({{ card.details.externalCode }})
+          </v-card-text>
+          <v-spacer></v-spacer>
 
           <!-- Action -->
           <!-- <v-divider></v-divider> -->
           <v-card-actions class="">
-            <v-btn
-              text
-              color="primary"
-              @click="getUserListView(card)"
-            >
-              {{ card.details.headOfUnitNav ? 'Update' : 'Start Planning' }}
+            <v-btn text color="primary" @click="getUserListView(card)">
+              {{ card.details.headOfUnitNav ? "Update" : "Start Planning" }}
             </v-btn>
-            <v-btn
-              text
-              color="primary"
-              @click="OpenViewPlanPage()"
-             
-            >
+            <v-btn text color="primary" @click="OpenViewPlanPage(card)">
               View Saved Plan
             </v-btn>
           </v-card-actions>
 
-             <!-- Colored text strip at the bottom of the card -->
+          <!-- Colored text strip at the bottom of the card -->
           <!-- <v-card-actions v-if="card.details.headOfUnitNav" class="color-strip-green">
             <v-spacer></v-spacer>
             <v-btn  text @click="getUserListView(card)">Update</v-btn>
@@ -64,19 +63,22 @@
             <v-spacer></v-spacer>
             <v-btn color="white" text @click="getUserListView(card)">Start Planning</v-btn>
           </v-card-actions> -->
-          </v-card>
-          <v-card  v-else>
-            <v-card-title> <v-icon color="primary" class="mr-2">
-      mdi-domain
-    </v-icon>{{ card.details.name }}</v-card-title>
-            <v-card-text v-if="card.details.headOfUnitNav">
-              {{ card.details.headOfUnitNav.defaultFullName }}({{ card.details.externalCode }})
-            </v-card-text>
-            <v-card-text v-else>
-              No Head of Department ({{ card.details.externalCode }})
-            </v-card-text>
+        </v-card>
+        <v-card v-else>
+          <v-card-title>
+            <v-icon color="primary" class="mr-2"> mdi-domain </v-icon
+            >{{ card.details.name }}</v-card-title
+          >
+          <v-card-text v-if="card.details.headOfUnitNav">
+            {{ card.details.headOfUnitNav.defaultFullName }}({{
+              card.details.externalCode
+            }})
+          </v-card-text>
+          <v-card-text v-else>
+            No Head of Department ({{ card.details.externalCode }})
+          </v-card-text>
 
-             <!-- Colored text strip at the bottom of the card -->
+          <!-- Colored text strip at the bottom of the card -->
           <!-- <v-card-actions v-if="card.details.headOfUnitNav" class="color-active-green">
             <v-spacer></v-spacer>
             <v-btn  text @click="getUserListView(card)">Update</v-btn>
@@ -86,48 +88,56 @@
             <v-spacer></v-spacer>
             <v-btn color="white" text @click="getUserListView(card)">Start Planning</v-btn>
           </v-card-actions> -->
-             <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
 
           <!-- Action -->
           <!-- <v-divider></v-divider> -->
           <v-card-actions class="">
-            <v-btn
-              text
-              color="primary"
-              @click="getUserListView(card)"
-            >
-              {{ card.details.headOfUnitNav ? 'Update' : 'Start Planning' }}
+            <v-btn text color="primary" @click="getUserListView(card)">
+              {{ card.details.headOfUnitNav ? "Update" : "Start Planning" }}
             </v-btn>
-            <v-btn
-              text
-              color="primary"
-            @click="OpenViewPlanPage()"
-            >
-           View Saved Plan
+            <v-btn text color="primary" @click="OpenViewPlanPage(card)">
+              View Saved Plan
             </v-btn>
           </v-card-actions>
-          </v-card>
-         </v-col>
-      </v-row>
-      <mergedialog></mergedialog>
-    </v-container>
-  </template>
-  
-  <script>
-import mergedialog from './updates/mergedialog.vue';
-  export default {
-    components:
-  {
-    mergedialog
+        </v-card>
+      </v-col>
+    </v-row>
+    <mergedialog></mergedialog>
+  </v-container>
+</template>
+
+<script>
+import mergedialog from "./updates/mergedialog.vue";
+export default {
+  components: {
+    mergedialog,
   },
-    data() {
-      return {
-    
-        cardsData: [],
-      };
+  data() {
+    return {
+      cardsData: [],
+    };
+  },
+  computed: {
+    isSavedPlanpage: {
+      get() {
+        return this.$store.getters.getisSavedPlanpage;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisSavedPlanpage", data);
+      },
     },
-    computed: {
-       selectedBusinessUnit: {
+    allSavedPlans: {
+      get() {
+        return this.$store.getters.getallSavedPlans;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setallSavedPlans", data);
+      },
+    },
+    selectedBusinessUnit: {
       get() {
         return this.$store.getters.getselectedBusinessUnit;
         // return true;
@@ -145,7 +155,7 @@ import mergedialog from './updates/mergedialog.vue';
         this.$store.commit("setselectedDivision", data);
       },
     },
-     selectedLocation: {
+    selectedLocation: {
       get() {
         return this.$store.getters.getselectedLocation;
         // return true;
@@ -154,7 +164,7 @@ import mergedialog from './updates/mergedialog.vue';
         this.$store.commit("setselectedLocation", data);
       },
     },
-       showLoading: {
+    showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
         // return true;
@@ -163,55 +173,51 @@ import mergedialog from './updates/mergedialog.vue';
         this.$store.commit("setshowLoading", data);
       },
     },
-     
-  filteredDeptCards() {
-  const selectedDeptCode = this.$store.getters.getDepartmentSearchText
-  const selectedBU = this.selectedBusinessUnit
-  const selectedDiv = this.selectedDivision
 
-  // 1️⃣ Department search has priority
-  if (selectedDeptCode) {
-    return this.showdeptView.filter(card =>
-      card.details.externalCode === selectedDeptCode
-    )
-  }
+    filteredDeptCards() {
+      const selectedDeptCode = this.$store.getters.getDepartmentSearchText;
+      const selectedBU = this.selectedBusinessUnit;
+      const selectedDiv = this.selectedDivision;
 
-  // 2️⃣ Business Unit filter
-if (selectedBU) {
-  return this.showdeptView.filter(card => {
-    const division = card.details.cust_toDivision?.results || []
+      // 1️⃣ Department search has priority
+      if (selectedDeptCode) {
+        return this.showdeptView.filter(
+          (card) => card.details.externalCode === selectedDeptCode
+        );
+      }
 
-    return division.some(div =>
-      div.cust_toBusinessUnit?.results?.some(bu =>
-        bu.externalCode === selectedBU
-      )
-    )
-  })
-}
-if (selectedDiv) {
-  return this.showdeptView.filter(card => {
-    const divisions = card.details.cust_toDivision?.results || []
+      // 2️⃣ Business Unit filter
+      if (selectedBU) {
+        return this.showdeptView.filter((card) => {
+          const division = card.details.cust_toDivision?.results || [];
 
-    return divisions.some(div =>
-       div.externalCode === selectedDiv
-    )
-  })
-}
+          return division.some((div) =>
+            div.cust_toBusinessUnit?.results?.some(
+              (bu) => bu.externalCode === selectedBU
+            )
+          );
+        });
+      }
+      if (selectedDiv) {
+        return this.showdeptView.filter((card) => {
+          const divisions = card.details.cust_toDivision?.results || [];
 
+          return divisions.some((div) => div.externalCode === selectedDiv);
+        });
+      }
 
-  // 3️⃣ No filter → show all
-  return this.showdeptView
-},
-
-
-       departmentSearchText: {
-    get() {
-      return this.$store.getters.getDepartmentSearchText
+      // 3️⃣ No filter → show all
+      return this.showdeptView;
     },
-    set(data) {
-      this.$store.commit("setDepartmentSearchText", data)
-    }
-  },
+
+    departmentSearchText: {
+      get() {
+        return this.$store.getters.getDepartmentSearchText;
+      },
+      set(data) {
+        this.$store.commit("setDepartmentSearchText", data);
+      },
+    },
 
     isorgChartPage: {
       get() {
@@ -220,7 +226,7 @@ if (selectedDiv) {
       },
       set(data) {
         this.$store.commit("setisorgChartPage", data);
-      }
+      },
     },
     showdeptUser: {
       get() {
@@ -229,7 +235,7 @@ if (selectedDiv) {
       },
       set(data) {
         this.$store.commit("setdeptUserData", data);
-      }
+      },
     },
     showdeptView: {
       get() {
@@ -238,7 +244,7 @@ if (selectedDiv) {
       },
       set(data) {
         this.$store.commit("setDepartmentList", data);
-      }
+      },
     },
     showselecteddept: {
       get() {
@@ -247,18 +253,16 @@ if (selectedDiv) {
       },
       set(data) {
         this.$store.commit("setSelectedDept", data);
-      }
+      },
     },
-    showmergedialog:
-    {
-        get() {
+    showmergedialog: {
+      get() {
         return this.$store.getters.getshowmergedialog;
         // return true;
       },
       set(data) {
         this.$store.commit("setshowmergedialog", data);
-      }
-
+      },
     },
     showoverlay: {
       get() {
@@ -267,80 +271,103 @@ if (selectedDiv) {
       },
       set(data) {
         this.$store.commit("setshowoverlay", data);
-      }
+      },
     },
-    
-},
-    methods:{
-        OpenViewPlanPage()
-        {
-           this.isorgChartPage = true;
-            console.log("HII");
-         
-           
-            this.$router.push({ path: "/viewSavedPlan" })
-        },
-        openDialog()
-        {
-          this.showmergedialog=true
-        },
-        getdepartmentView()
-        {
-          this.showoverlay=true
-            this.$store
-        .dispatch("getAllDepartmentView")
+  },
+  methods: {
+    OpenViewPlanPage(card) {
+      this.isorgChartPage = true;
+      console.log("HII");
+      const departmentId = card?.details?.externalCode;
+      const params = {
+        userId: "",
+        departmentId: departmentId,
+        status: "",
+      };
+      console.log("params==", params);
+      this.$store
+        .dispatch("getSavedPlan", params)
         .then((response) => {
-          this.showLoading= false;
-          var  dept=[]
-          for (var i = 0; i < response.length; i++)
-          {
-            var newObj = {
-                  id: response[i].externalCode,
-                  details: response[i],
-                  users: []
-              }; 
-            dept.push(newObj)
-          }    
-          this.showoverlay=false         
-          this.showdeptView = dept;
-         
+          console.log("response from savedpalnapi==", response);
+          this.allSavedPlans = response;
+          this.isSavedPlanpage = true;
+          this.$router.push({ path: "/viewSavedPlan" });
         })
-        },
-        getUserListView(data)
-        {
-          this.isorgChartPage = true;
-            console.log(data)
-         
-           
-            this.$router.push({ path: "/orgchart2" })
-          
-        },
-       
-        getDetails()
-        {
-
-            this.$router.push({ path: "/detailplan" })
-        }
+        .catch((err) => {
+          console.error("Failed to load saved plan", err);
+        });
     },
-    mounted()
-    {  
-      this.showLoading= true;
-        if(this.showdeptView.length<=0)
-        {
-          this.getdepartmentView()
+
+    openDialog() {
+      this.showmergedialog = true;
+    },
+    getdepartmentView() {
+      this.showoverlay = true;
+      this.$store.dispatch("getAllDepartmentView").then((response) => {
+        this.showLoading = false;
+        var dept = [];
+        for (var i = 0; i < response.length; i++) {
+          var newObj = {
+            id: response[i].externalCode,
+            details: response[i],
+            users: [],
+          };
+          dept.push(newObj);
         }
-       
+        this.showoverlay = false;
+        this.showdeptView = dept;
+      });
+    },
+    getUserListView(data) {
+      // current date (YYYY-MM-DD)
+      const date1 = new Date().toISOString().split("T")[0];
+      this.isorgChartPage = true;
+      console.log(data);
+      this.$store
+        .dispatch("orgCategory", {
+          type: "department",
+          typeValue: data.details.externalCode,
+          date: date1,
+        })
+        .then((response) => {
+          if (response) {
+            console.log("testing");
+            this.showLoading = false;
+            this.$router.push({ path: "/orgchart2" });
+          }
+        });
+
+      this.$router.push({ path: "/orgchart2" });
+    },
+
+    getDetails() {
+      this.$router.push({ path: "/detailplan" });
+    },
+  },
+  mounted() {
+    this.showLoading = true;
+    if (this.showdeptView.length <= 0) {
+      this.getdepartmentView();
     }
-  };
-  </script>
-  
-  <style scoped>
-  .color-strip-green {
+    else{
+          this.showLoading = false;
+
+    }
+  },
+};
+</script>
+
+<style scoped>
+.color-strip-green {
   background-color: #172017; /* Change the color as per your preference */
   color: white;
 }
 .color-strip-red {
-  background-color: rgb(63, 59, 59); /* Change the color as per your preference */
+  background-color: rgb(
+    63,
+    59,
+    59
+  ); /* Change the color as per your preference */
   color: white;
 }
 
@@ -352,6 +379,5 @@ if (selectedDiv) {
   background-color: rgb(71, 3, 3); /* Change the color as per your preference */
   color: white;
 }
-  /* Add your component-specific styles here if needed */
-  </style>
-  
+/* Add your component-specific styles here if needed */
+</style>

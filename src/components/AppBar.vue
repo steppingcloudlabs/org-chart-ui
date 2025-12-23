@@ -109,6 +109,22 @@
 
         <span>Filter Departments</span>
       </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-if="!isorgChartPage && isSavedPlanpage"
+            icon
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+           
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </template>
+
+        <span>Create Plan</span>
+      </v-tooltip>
     </v-app-bar>
   </div>
 </template>
@@ -126,6 +142,15 @@ export default {
 
   components: {},
   computed: {
+     isSavedPlanpage: {
+      get() {
+        return this.$store.getters.getisSavedPlanpage;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisSavedPlanpage", data);
+      },
+    },
      departmentSearchText: {
     get() {
       return this.$store.getters.getDepartmentSearchText
@@ -256,9 +281,9 @@ export default {
       } else {
         this.$store
           .dispatch("orgCategory", {
-            type: data.category,
-            typeValue: data.value,
-            date: date1,
+            type: data.category,       //department- hard code
+            typeValue: data.value,     //deptId
+            date: date1,               //currentDate
           })
           .then((response) => {
             if (response) {
