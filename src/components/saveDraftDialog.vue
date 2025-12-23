@@ -194,8 +194,8 @@ export default {
       this.saveDraftDialog = false;
     },
     saveFormData() {
-      this.form.departmentId = this?.selectedDept?.details?.externalCode;
-      this.form.departmentName = this?.selectedDept?.details?.name;
+      this.form.departmentId = this.selectedDept.details.externalCode;
+      this.form.departmentName = this.selectedDept.details.name;
       // attach chart data
       this.form.chartData = this.finalPlanData;
 

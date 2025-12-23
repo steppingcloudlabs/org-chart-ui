@@ -295,6 +295,7 @@ export default {
   },
   methods: {
     OpenViewPlanPage(card) {
+      this.selectedDept = card;
       this.loadingCardId = true;
       this.isorgChartPage = true;
       console.log("HII");

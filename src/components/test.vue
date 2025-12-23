@@ -722,7 +722,11 @@ if (divisionValue && !this.division.includes(divisionValue)) {
       saveData()
     {
        var currentNodes= this.chart?.config?.nodes || []
-       this.finalPlan["currentData"] = currentNodes,
+       /* eslint-disable no-unused-vars */
+       const nodesWithoutImg = currentNodes.map(({ img, ...rest }) => rest);
+       /* eslint-enable no-unused-vars */
+       this.finalPlan["currentData"] = nodesWithoutImg,
+       
        this.finalPlan["originalData"] = this.originalMasterData
        console.log(this.finalPlan);
        

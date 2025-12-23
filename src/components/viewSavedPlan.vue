@@ -105,7 +105,8 @@ export default {
   methods: {
     onPlanClick(data) {
       console.log("data=", data);
-this.userData = JSON.parse(JSON.stringify(data?.chartData?.currentData));
+var currentData = JSON.parse((data?.chartData));
+this.userData = currentData ["currentData"]
       this.$router.push({ path: "/orgchart2" });
          this.selectedPlan=data;
          this.planOrgChart = true;
