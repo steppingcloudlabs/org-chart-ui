@@ -4,9 +4,9 @@
     <v-dialog v-model="saveDraftDialog" max-width="400px" persistent>
       <v-card>
         <!-- Title -->
-        <v-card-title class="headline"> save draft </v-card-title>
-<!-- {{selectedPlan}} -->
-<!-- {{finalPlanData}} -->
+        <v-card-title class="headline"> Save Plan </v-card-title>
+        <!-- {{selectedPlan}} -->
+        <!-- {{finalPlanData}} -->
         <!-- Content -->
         <v-card-text>
           <v-form ref="form">
@@ -51,7 +51,7 @@
               />
             </v-menu>
             <!-- From Date -->
-            <span>From</span>
+            <!-- <span>From</span>
             <v-menu
               v-model="fromMenu"
               :close-on-content-click="false"
@@ -75,10 +75,10 @@
                 v-model="form.fromDate"
                 @input="fromMenu = false"
               />
-            </v-menu>
+            </v-menu> -->
 
             <!-- To Date -->
-            <span>To</span>
+            <!-- <span>To</span>
             <v-menu
               v-model="toMenu"
               :close-on-content-click="false"
@@ -103,7 +103,7 @@
                 :min="form.fromDate"
                 @input="toMenu = false"
               />
-            </v-menu>
+            </v-menu> -->
           </v-form>
         </v-card-text>
 
@@ -125,7 +125,7 @@ export default {
       dateMenu: false,
       fromMenu: false,
       toMenu: false,
-      statusOptions: ["draft","Pending for Approval", "approved"],
+      statusOptions: ["draft", "pending approval", "approved"],
       form: {
         planId: "",
         planName: "",
@@ -135,15 +135,14 @@ export default {
         deptName: "",
         fromDate: null,
         toDate: null,
-
       },
     };
   },
   computed: {
-     finalPlanData() {
-    return this.$store.getters.getFinalPlanData
-  },
-      selectedPlan: {
+    finalPlanData() {
+      return this.$store.getters.getFinalPlanData;
+    },
+    selectedPlan: {
       get() {
         return this.$store.getters.getselectedPlan;
         // return true;
@@ -172,23 +171,23 @@ export default {
     },
   },
   watch: {
-  selectedPlan: {
-    immediate: true, // runs when dialog opens or page reloads
-    handler(plan) {
-      if (!plan) return;
+    selectedPlan: {
+      immediate: true, // runs when dialog opens or page reloads
+      handler(plan) {
+        if (!plan) return;
 
-      this.form = {
-        ...this.form, // keep defaults if some fields are missing
-        planId: plan.planId || "",
-        planName: plan.planName || "",
-        status: plan.planStatus || "",
-        effectiveDate: plan.planEffectiveDate || null,
-        fromDate: plan.planPeriod.from || null,
-        toDate: plan.planPeriod.to || null,
-      };
+        this.form = {
+          ...this.form, // keep defaults if some fields are missing
+          planId: plan.planId || "",
+          planName: plan.planName || "",
+          status: plan.planStatus || "",
+          effectiveDate: plan.planEffectiveDate || null,
+          fromDate: plan.planPeriod.from || null,
+          toDate: plan.planPeriod.to || null,
+        };
+      },
     },
   },
-},
 
   methods: {
     closeDialog() {
@@ -197,11 +196,20 @@ export default {
     saveFormData() {
       this.form.departmentId = this?.selectedDept?.details?.externalCode;
       this.form.departmentName = this?.selectedDept?.details?.name;
-       // attach chart data 
-  this.form.chartData = this.finalPlanData;
+      // attach chart data
+      this.form.chartData = this.finalPlanData;
+
+   
+      // ✅ isUpdate logic
+  const isUpdate = !!this.selectedPlan?.planId; 
+
+  console.log("isUpdate:", isUpdate);
       console.log("Form Data:", this.form);
       this.$store
-        .dispatch("CreatePlan", this.form)
+        .dispatch("CreatePlan",  {
+      form: this.form,
+      isUpdate: isUpdate,
+    })
         .then(() => {
           this.saveDraftDialog = false;
         })

@@ -3,6 +3,9 @@
     <CoreAppBar @open-filter="openFilter"></CoreAppBar>
  <FilterDrawer v-model="showFilter" />
  <SaveDraftDialog v-model="saveDraftDialog" />
+ <ApprovalDialog v-model="approvalDialog" />
+ <MergeDialog v-model="approvalDialog" />
+ <SplitDialog v-model="showsplitdialog" />
     <core-view></core-view>
   </div>
 </template>
@@ -10,12 +13,18 @@
 <script>
 import FilterDrawer from '../components/FilterDrawer.vue'
 import SaveDraftDialog from '../components/saveDraftDialog.vue'
+import ApprovalDialog from '../components/SendForApprovalDialog.vue'
+import MergeDialog from '../components/updates/mergedialog.vue'
+import SplitDialog from '../components/updates/splitdialog.vue'
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
+    SplitDialog,
+    ApprovalDialog,
     FilterDrawer,
     SaveDraftDialog,
+    MergeDialog,
      CoreAppBar: () => import("@/components/AppBar"),
     // CoreDrawer: () => import("@/components/Drawer")
     
@@ -27,6 +36,33 @@ export default {
     }
   },
    computed: {
+      showsplitdialog: {
+      get() {
+        return this.$store.getters.getshowsplitdialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowsplitdialog", data);
+      }
+    },
+     showmergedialog: {
+      get() {
+        return this.$store.getters.getshowmergedialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowmergedialog", data);
+      },
+    },
+     approvalDialog: {
+      get() {
+        return this.$store.getters.getapprovalDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setapprovalDialog", data);
+      },
+    },
      saveDraftDialog: {
       get() {
         return this.$store.getters.getsaveDraftDialog;

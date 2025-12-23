@@ -45,23 +45,23 @@
       <v-spacer></v-spacer>
       <!-- {{departmentList}} -->
       <!-- {{departmentSearchText}} -->
-    <v-autocomplete
-  v-if="!isorgChartPage"
-  v-model="departmentSearchText"
-  :items="filteredDepartments"
-  item-text="name"
-  item-value="externalCode"
-  placeholder="Search departments"
-  outlined
-  dense
-  hide-details
-  clearable
-  class="mr-3"
-  style="max-width: 260px"
-  append-icon="mdi-magnify"
-  @click:append="applySearch()"
-/>
-<!-- <v-text-field
+      <v-autocomplete
+        v-if="!isorgChartPage"
+        v-model="departmentSearchText"
+        :items="filteredDepartments"
+        item-text="name"
+        item-value="externalCode"
+        placeholder="Search departments"
+        outlined
+        dense
+        hide-details
+        clearable
+        class="mr-3"
+        style="max-width: 260px"
+        append-icon="mdi-magnify"
+        @click:append="applySearch()"
+      />
+      <!-- <v-text-field
   v-if="!isorgChartPage"
   v-model="departmentSearchText"
   placeholder="Search departments"
@@ -74,7 +74,6 @@
   append-icon="mdi-magnify"
   @click:append="applySearch"
 /> -->
-
 
       <!-- Right: Button -->
       <v-tooltip bottom>
@@ -101,7 +100,7 @@
             color="primary"
             v-bind="attrs"
             v-on="on"
-           @click="$emit('open-filter')"
+            @click="$emit('open-filter')"
           >
             <v-icon>mdi-filter</v-icon>
           </v-btn>
@@ -109,16 +108,9 @@
 
         <span>Filter Departments</span>
       </v-tooltip>
-      <v-tooltip bottom v-if="!isorgChartPage && isSavedPlanpage"
->
+      <v-tooltip bottom v-if="!isorgChartPage && isSavedPlanpage">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            color="primary"
-            v-bind="attrs"
-            v-on="on"
-           
-          >
+          <v-btn icon color="primary" v-bind="attrs" v-on="on">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
@@ -126,8 +118,7 @@
         <span>Create Plan</span>
       </v-tooltip>
       <!-- {{isMainOrgChartPage}} -->
-      <v-tooltip bottom             v-if="isMainOrgChartPage"
->
+      <v-tooltip bottom v-if="isMainOrgChartPage">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
@@ -135,7 +126,6 @@
             v-bind="attrs"
             v-on="on"
             @click="saveplan()"
-           
           >
             <v-icon>mdi-content-save</v-icon>
           </v-btn>
@@ -143,40 +133,73 @@
 
         <span>Save Draft</span>
       </v-tooltip>
-      <v-tooltip bottom             v-if="isPlanOrgChart"
->
+      <v-menu v-if="isPlanOrgChart" offset-y left>
+        <!-- Three-dot button with tooltip -->
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            color="primary"
-            v-bind="attrs"
-            v-on="on"
-            @click="saveplan()"
-           
-          >
-            <v-icon>mdi-content-save</v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
+              <v-btn
+                icon
+                color="primary"
+                v-bind="{ ...attrs, ...tooltipAttrs }"
+                v-on="{ ...on, ...tooltipOn }"
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <span>Actions</span>
+          </v-tooltip>
         </template>
 
-        <span>Save Plan</span>
-      </v-tooltip>
-      <v-tooltip bottom             v-if="isPlanOrgChart"
->
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            color="primary"
-            v-bind="attrs"
-            v-on="on"
-            @click="sendForApproval()"
-           
-          >
-            <v-icon>mdi-comment-account</v-icon>
-          </v-btn>
-        </template>
+        <!-- Vertical list of actions -->
+        <v-list dense>
+          <!-- Save Plan -->
+          <!-- <v-tooltip right>
+      <template v-slot:activator="{ on, attrs }"> -->
+          <v-list-item v-bind="attrs" v-on="on" @click="saveplan">
+            <v-list-item-icon>
+              <v-icon color="primary">mdi-content-save</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Save Plan</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <!-- </template>
+      <span>Save Plan</span>
+    </v-tooltip> -->
 
-        <span>Send For approval</span>
-      </v-tooltip>
+          <!-- Send for Approval -->
+          <!-- <v-tooltip right>
+      <template v-slot:activator="{ on, attrs }"> -->
+          <v-list-item v-bind="attrs" v-on="on" @click="sendForApproval">
+            <v-list-item-icon>
+              <v-icon color="primary">mdi-comment-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Send for Approval</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-bind="attrs" v-on="on" @click="openSplitdialog()">
+            <v-list-item-icon>
+              <v-icon color="primary">mdi-content-cut</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Split Department</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-bind="attrs" v-on="on" @click="openDialog()">
+            <v-list-item-icon>
+              <v-icon color="primary">mdi-merge</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Merge Departments</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <!-- </template>
+      <span>Send for Approval</span>
+    </v-tooltip> -->
+        </v-list>
+      </v-menu>
     </v-app-bar>
   </div>
 </template>
@@ -189,12 +212,39 @@ export default {
     // search: "",
     departmentList: [],
     searchText: "",
-  selectedDepartment: null
+    selectedDepartment: null,
   }),
 
   components: {},
   computed: {
-     isPlanOrgChart: {
+      showsplitdialog: {
+      get() {
+        return this.$store.getters.getshowsplitdialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowsplitdialog", data);
+      }
+    },
+    showmergedialog: {
+      get() {
+        return this.$store.getters.getshowmergedialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowmergedialog", data);
+      },
+    },
+    approvalDialog: {
+      get() {
+        return this.$store.getters.getapprovalDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setapprovalDialog", data);
+      },
+    },
+    isPlanOrgChart: {
       get() {
         return this.$store.getters.getisPlanOrgChart;
         // return true;
@@ -203,7 +253,7 @@ export default {
         this.$store.commit("setisPlanOrgChart", data);
       },
     },
-     saveDraftDialog: {
+    saveDraftDialog: {
       get() {
         return this.$store.getters.getsaveDraftDialog;
         // return true;
@@ -212,7 +262,7 @@ export default {
         this.$store.commit("setsaveDraftDialog", data);
       },
     },
-     isMainOrgChartPage: {
+    isMainOrgChartPage: {
       get() {
         return this.$store.getters.getisMainOrgChartPage;
         // return true;
@@ -221,7 +271,7 @@ export default {
         this.$store.commit("setisMainOrgChartPage", data);
       },
     },
-     isSavedPlanpage: {
+    isSavedPlanpage: {
       get() {
         return this.$store.getters.getisSavedPlanpage;
         // return true;
@@ -230,23 +280,21 @@ export default {
         this.$store.commit("setisSavedPlanpage", data);
       },
     },
-     departmentSearchText: {
-    get() {
-      return this.$store.getters.getDepartmentSearchText
+    departmentSearchText: {
+      get() {
+        return this.$store.getters.getDepartmentSearchText;
+      },
+      set(data) {
+        this.$store.commit("setDepartmentSearchText", data);
+      },
     },
-    set(data) {
-      this.$store.commit("setDepartmentSearchText", data)
-    }
-  },
     filteredDepartments() {
-    if (!this.searchText) return this.departmentList
+      if (!this.searchText) return this.departmentList;
 
-    return this.departmentList.filter(dep =>
-      dep.name
-        .toLowerCase()
-        .startsWith(this.searchText.toLowerCase())
-    )
-  },
+      return this.departmentList.filter((dep) =>
+        dep.name.toLowerCase().startsWith(this.searchText.toLowerCase())
+      );
+    },
     isorgChartPage: {
       get() {
         return this.$store.getters.getisorgChartPage;
@@ -256,7 +304,7 @@ export default {
         this.$store.commit("setisorgChartPage", data);
       },
     },
-  
+
     filterDrawer: {
       get() {
         return this.$store.getters.getfilterDrawer;
@@ -306,45 +354,42 @@ export default {
         this.$store.commit("setshowFilter", data);
       },
     },
-    showmergedialog: {
-      get() {
-        return this.$store.getters.getshowmergedialog;
-        // return true;
-      },
-      set(data) {
-        this.$store.commit("setshowmergedialog", data);
-      },
-    },
   },
 
   methods: {
-  
+      openSplitdialog()
+    {
+     
+        this.showsplitdialog=true
+      },
+    openDialog() {
+      this.showmergedialog = true;
+    },
     applyFilter() {
       console.log("inside applyfilter");
       this.filterDrawer = true;
     },
-    saveplan(){
- this.$store.commit("TRIGGER_SAVE");
- this.openSaveDraftDialog();
+    saveplan() {
+      this.$store.commit("TRIGGER_SAVE");
+      this.openSaveDraftDialog();
     },
     openSaveDraftDialog() {
       console.log(" this.saveDraftDialog=", this.saveDraftDialog);
       this.saveDraftDialog = true;
     },
-    openDialog() {
-      this.showmergedialog = true;
+    sendForApproval() {
+      this.approvalDialog = true;
     },
-    getDepartment() {
 
-  this.$store.dispatch("getAllDepartmentList").then((response) => {
-          console.log("response.d.results",response.d.results);
-          this.departmentList = response.d.results;
-          // for (let i = 0; i < response.d.results.length; i++) {
-          //  // console.log(g.selectedSearchField[i])
-          //   g.dropdown_data.push(response.d.results[i].externalCode) ;
-          // }
-         
-        });
+    getDepartment() {
+      this.$store.dispatch("getAllDepartmentList").then((response) => {
+        console.log("response.d.results", response.d.results);
+        this.departmentList = response.d.results;
+        // for (let i = 0; i < response.d.results.length; i++) {
+        //  // console.log(g.selectedSearchField[i])
+        //   g.dropdown_data.push(response.d.results[i].externalCode) ;
+        // }
+      });
     },
     getUserData(data) {
       this.showFilter = false;
@@ -368,9 +413,9 @@ export default {
       } else {
         this.$store
           .dispatch("orgCategory", {
-            type: data.category,       //department- hard code
-            typeValue: data.value,     //deptId
-            date: date1,               //currentDate
+            type: data.category, //department- hard code
+            typeValue: data.value, //deptId
+            date: date1, //currentDate
           })
           .then((response) => {
             if (response) {
@@ -382,9 +427,9 @@ export default {
       }
     },
   },
-  mounted(){
+  mounted() {
     this.getDepartment();
-  }
+  },
 };
 </script>
 

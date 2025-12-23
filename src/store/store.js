@@ -9,9 +9,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-     isPlanOrgChart: false,
-     triggerSavePlan: false,
-  finalPlanData: null,
+    isPlanOrgChart: false,
+    triggerSavePlan: false,
+    finalPlanData: null,
     allSavedPlans: [],
     selectedBusinessUnit: null,
     selectedDept: null,
@@ -23,6 +23,7 @@ export default new Vuex.Store({
     isorgChartPage: false,
     isMainOrgChartPage: false,
     saveDraftDialog: false,
+    approvalDialog: false,
     isSavedPlanpage: false,
     filterDrawer: false,
     isLevel: false,
@@ -60,14 +61,14 @@ export default new Vuex.Store({
   },
   mutations: {
     TRIGGER_SAVE(state) {
-    state.triggerSavePlan = true
-  },
-  RESET_TRIGGER_SAVE(state) {
-    state.triggerSavePlan = false
-  },
-  SET_FINAL_PLAN_DATA(state, payload) {
-    state.finalPlanData = payload
-  },
+      state.triggerSavePlan = true;
+    },
+    RESET_TRIGGER_SAVE(state) {
+      state.triggerSavePlan = false;
+    },
+    SET_FINAL_PLAN_DATA(state, payload) {
+      state.finalPlanData = payload;
+    },
     setuserData: (state, data) => {
       state.userData = data;
     },
@@ -222,13 +223,16 @@ export default new Vuex.Store({
     setsaveDraftDialog(state, value) {
       state.saveDraftDialog = value;
     },
+    setapprovalDialog(state, value) {
+      state.approvalDialog = value;
+    },
     setisSavedPlanpage(state, value) {
       state.isSavedPlanpage = value;
     },
   },
   getters: {
-    getTriggerSavePlan: state => state.triggerSavePlan,
-  getFinalPlanData: state => state.finalPlanData,
+    getTriggerSavePlan: (state) => state.triggerSavePlan,
+    getFinalPlanData: (state) => state.finalPlanData,
     getDepartmentSearchText: (state) => state.departmentSearchText,
     getallSavedPlans: (state) => state.allSavedPlans,
     getselectedBusinessUnit: (state) => state.selectedBusinessUnit,
@@ -272,6 +276,9 @@ export default new Vuex.Store({
     },
     getsaveDraftDialog: (state) => {
       return state.saveDraftDialog;
+    },
+    getapprovalDialog: (state) => {
+      return state.approvalDialog;
     },
     getisorgChartPage: (state) => {
       return state.isorgChartPage;
@@ -562,7 +569,7 @@ export default new Vuex.Store({
         });
       });
     },
-    getSavedPlan: (data,sampledata) => {
+    getSavedPlan: (data, sampledata) => {
       return new Promise((resolve) => {
         axios({
           url: "http://localhost:3000/srv/getSavedPlan",
@@ -572,7 +579,6 @@ export default new Vuex.Store({
           },
           params: {
             companyId: companyId,
-            userId: sampledata.userId,
             departmentId: sampledata.departmentId,
             status: sampledata.status,
           },
@@ -584,33 +590,42 @@ export default new Vuex.Store({
         });
       });
     },
-    CreatePlan: (data,sampledata) => {
-                console.log("data from store=",sampledata);
-                  return axios({
+    CreatePlan: (data, sampledata,isUpdate) => {
+      console.log("data from store=", sampledata);
+      const payload =  {
+          companyId: companyId, // ✅ make sure this exists
+          planId: sampledata.form.planId,
+          planName: sampledata.form.planName,
+
+          departmentId: sampledata.form.departmentId,
+          // departmentName: sampledata.departmentName,
+
+          planEffectiveStartDate: sampledata.form.effectiveDate,
+          // planPeriod: {
+          //   from: sampledata.fromDate,
+          //   to: sampledata.toDate,
+          // },
+
+          chartData: sampledata.form.chartData,
+          // chartBase64: "",
+
+          // userId: "",
+        };
+          // Inline version increment logic
+if (isUpdate && sampledata.form.planVersion) {
+  payload.planVersion =
+    'V' + (Number(sampledata.form.planVersion.slice(1)) + 0.1).toFixed(1);
+}
+
+
+      return axios({
         url: "http://localhost:3000/srv/plan",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        data: {
-          companyId: companyId, // ✅ make sure this exists
-          planId: sampledata.planId,
-          planName: sampledata.planName,
-
-          departmentId: sampledata.departmentId,
-          departmentName: sampledata.departmentName,
-
-          planEffectiveDate: sampledata.planEffectiveDate,
-          planPeriod: {
-            from: sampledata.fromDate,
-            to: sampledata.toDate,
-          },
-
-          chartData:sampledata.chartData,
-          chartBase64: "",
-
-          userId: "",
-        },
+        data:payload,
+        
       })
         .then((response) => {
           console.log("getSavedPlan response:", response);
@@ -620,10 +635,8 @@ export default new Vuex.Store({
           console.error("getSavedPlan error:", error);
           throw error;
         });
-
-    
     },
-    SubmitPlanForApproval: (data) => {
+    SubmitPlanForApproval: (data, sampledata) => {
       return axios({
         url: "http://localhost:3000/srv/submitPlanForApproval",
         method: "POST",
@@ -631,18 +644,19 @@ export default new Vuex.Store({
           "Content-Type": "application/json",
         },
         data: {
-          planId: data.planId,
-          companyId: data.companyId,
+          planId: sampledata.planId,
+          planName: sampledata.planName,
+          companyId: companyId,
 
-          departmentId: data.departmentId,
+          departmentId: sampledata.departmentId,
+          version: sampledata.planVersion,
+          planEffectiveStartDate: sampledata.planEffectiveDate,
+          // approver: {
+          //   userId: sampledata.userId,
+          //   userName: sampledata.userName,
+          // },
 
-          planEffectiveDate: data.planEffectiveDate,
-          approver: {
-            userId: data.userId,
-            userName: data.userName,
-          },
-
-          userId: "",
+          // userId: "",
         },
       })
         .then((response) => {
