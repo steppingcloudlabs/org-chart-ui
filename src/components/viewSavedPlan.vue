@@ -1,32 +1,31 @@
 <template>
-   <v-container fluid class="px-6">
- 
-      <v-row class="pt-5" dense>
-       
-      
-        <!-- Loop through cardsData and create Vuetify cards dynamically -->
-        <v-col v-for="(card, index) in allSavedPlans" :key="index" cols="12" md="4">
+  <v-container fluid class="px-6">
+    <v-row class="pt-5" dense>
+      <!-- Loop through cardsData and create Vuetify cards dynamically -->
+      <v-col
+        v-for="(card, index) in allSavedPlans"
+        :key="index"
+        cols="12"
+        md="4"
+      >
         <!-- <v-col v-for="(card, index) in showdeptView" :key="index" cols="12" md="4"> -->
-          <v-card @click="onPlanClick(card)">
-            <v-card-title> <v-icon color="primary" class="mr-2">
-      mdi-domain
-    </v-icon>{{ card.planName }} ({{card.planId}})</v-card-title>
-            <v-card-text>
-              {{card.planStatus}}
-            </v-card-text>
-          
-               <v-spacer></v-spacer>
+        <v-card @click="onPlanClick(card)">
+          <v-card-title>
+            <v-icon color="primary" class="mr-2"> mdi-domain </v-icon
+            >{{ card.planName }} ({{ card.planId }})</v-card-title
+          >
+          <v-card-text>
+            {{ card.planStatus }}
+          </v-card-text>
+
+          <v-spacer></v-spacer>
 
           <!-- Action -->
           <!-- <v-divider></v-divider> -->
           <v-card-actions class="">
-            <!-- <v-btn
-              text
-              color="primary"
-              @click="getUserListView(card)"
-            >
-              View Plan
-            </v-btn> -->
+            <v-btn text color="primary" @click="openUpdateDialog(card)">
+              Edit Plan
+            </v-btn>
             <!-- <v-btn
               text
               color="primary"
@@ -36,25 +35,19 @@
               View Saved Plan
             </v-btn> -->
           </v-card-actions>
-
-             
-          </v-card>
-          
-         </v-col>
-      </v-row>
-     
-    </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-     
-    }
+  data() {
+    return {};
   },
-   computed: {
-       allSavedPlans: {
+  computed: {
+    allSavedPlans: {
       get() {
         return this.$store.getters.getallSavedPlans;
         // return true;
@@ -63,7 +56,7 @@ export default {
         this.$store.commit("setallSavedPlans", data);
       },
     },
-       isSavedPlanpage: {
+    isSavedPlanpage: {
       get() {
         return this.$store.getters.getisSavedPlanpage;
         // return true;
@@ -72,13 +65,37 @@ export default {
         this.$store.commit("setisSavedPlanpage", data);
       },
     },
+     saveDraftDialog: {
+      get() {
+        return this.$store.getters.getsaveDraftDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setsaveDraftDialog", data);
+      },
     },
-    methods:{
-            onPlanClick(data){
-              console.log("data=",data);
-              this.$router.push({ path: "/deptOrgChart" });},
+     selectedPlan: {
+      get() {
+        return this.$store.getters.getselectedPlan;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedPlan", data);
+      },
+    },
+  },
+  methods: {
+    onPlanClick(data) {
+      console.log("data=", data);
+      this.$router.push({ path: "/deptOrgChart" });
+    },
+    openUpdateDialog(card) {
+      console.log("card data in openUpdateDialog=", card);
+      this.selectedPlan=card;
+      this.saveDraftDialog= true;
+     
 
-    }
-}
-
+    },
+  },
+};
 </script>

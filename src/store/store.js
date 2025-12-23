@@ -11,6 +11,8 @@ export default new Vuex.Store({
   state: {
     allSavedPlans: [],
     selectedBusinessUnit: null,
+    selectedDept: null,
+    selectedPlan: null,
     selectedDivision: null,
     selectedLocation: null,
     departmentSearchText: "", // what user types
@@ -187,6 +189,12 @@ export default new Vuex.Store({
     setselectedDivision(state, value) {
       state.selectedDivision = value;
     },
+    setselectedDept(state, value) {
+      state.selectedDept = value;
+    },
+    setselectedPlan(state, value) {
+      state.selectedPlan = value;
+    },
     setselectedLocation(state, value) {
       state.selectedLocation = value;
     },
@@ -208,6 +216,8 @@ export default new Vuex.Store({
     getallSavedPlans: (state) => state.allSavedPlans,
     getselectedBusinessUnit: (state) => state.selectedBusinessUnit,
     getselectedDivision: (state) => state.selectedDivision,
+    getselectedDept: (state) => state.selectedDept,
+    getselectedPlan: (state) => state.selectedPlan,
     getselectedLocation: (state) => state.selectedLocation,
 
     getshowoverlay: (state) => {
@@ -532,7 +542,7 @@ export default new Vuex.Store({
         });
       });
     },
-    getSavedPlan: (data) => {
+    getSavedPlan: (data,sampledata) => {
       return new Promise((resolve) => {
         axios({
           url: "http://localhost:3000/srv/getSavedPlan",
@@ -542,9 +552,9 @@ export default new Vuex.Store({
           },
           params: {
             companyId: companyId,
-            userId: data.userId,
-            departmentId: data.departmentId,
-            status: data.status,
+            userId: sampledata.userId,
+            departmentId: sampledata.departmentId,
+            status: sampledata.status,
           },
         }).then((response) => {
           resolve(response.data);
@@ -554,28 +564,29 @@ export default new Vuex.Store({
         });
       });
     },
-    CreatePlan: (data) => {
-      return axios({
+    CreatePlan: (data,sampledata) => {
+                console.log("data from store=",sampledata);
+                  return axios({
         url: "http://localhost:3000/srv/plan",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         data: {
-          companyId: data.companyId, // ✅ make sure this exists
-          planId: data.planId,
-          planName: data.planName,
+          companyId: companyId, // ✅ make sure this exists
+          planId: sampledata.planId,
+          planName: sampledata.planName,
 
-          departmentId: data.departmentId,
-          departmentName: data.departmentName,
+          departmentId: sampledata.departmentId,
+          departmentName: sampledata.departmentName,
 
-          planEffectiveDate: data.planEffectiveDate,
+          planEffectiveDate: sampledata.planEffectiveDate,
           planPeriod: {
-            from: data.from,
-            to: data.to,
+            from: sampledata.fromDate,
+            to: sampledata.toDate,
           },
 
-          chartData: { text: data.chartData },
+          chartData: { text: sampledata.chartData },
           chartBase64: "",
 
           userId: "",
@@ -589,6 +600,8 @@ export default new Vuex.Store({
           console.error("getSavedPlan error:", error);
           throw error;
         });
+
+    
     },
     SubmitPlanForApproval: (data) => {
       return axios({

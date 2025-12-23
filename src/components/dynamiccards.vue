@@ -283,6 +283,15 @@ export default {
         this.$store.commit("setshowoverlay", data);
       },
     },
+     selectedDept: {
+      get() {
+        return this.$store.getters.getselectedDept;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedDept", data);
+      },
+    },
   },
   methods: {
     OpenViewPlanPage(card) {
@@ -291,7 +300,7 @@ export default {
       console.log("HII");
       const departmentId = card?.details?.externalCode;
       const params = {
-        userId: "",
+        userId: "Admin",
         departmentId: departmentId,
         status: "",
       };
@@ -332,6 +341,7 @@ export default {
     },
     getUserListView(data) {
       // current date (YYYY-MM-DD)
+      this.selectedDept = data;
       var date1 = new Date().getTime();
       this.isorgChartPage = true;
       this.isMainOrgChartPage = true;

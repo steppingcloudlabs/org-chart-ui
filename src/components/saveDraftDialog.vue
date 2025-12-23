@@ -1,65 +1,116 @@
 <template>
   <div>
- 
-
     <!-- Dialog -->
     <v-dialog v-model="saveDraftDialog" max-width="400px" persistent>
       <v-card>
         <!-- Title -->
-        <v-card-title class="headline">
-          save draft
-        </v-card-title>
-
+        <v-card-title class="headline"> save draft </v-card-title>
+<!-- {{selectedPlan}} -->
         <!-- Content -->
         <v-card-text>
           <v-form ref="form">
             <span>Plan Id</span>
-            <v-text-field
-              v-model="form.planId"
-              outlined
-              dense
-              required
-            />
+            <v-text-field v-model="form.planId" outlined dense required />
             <span>Plan Name</span>
 
-            <v-text-field
-              v-model="form.planName"
-              
-              outlined
-              dense
-              required
-            />
+            <v-text-field v-model="form.planName" outlined dense required />
             <span>Plan Status</span>
 
-              <v-text-field
+            <v-autocomplete
               v-model="form.status"
-              
+              :items="statusOptions"
               outlined
               dense
             />
 
             <span>Effective Date</span>
 
-            <v-text-field
-              v-model="form.effectiveDate"
-             
-              outlined
-              dense
-            />
+            <v-menu
+              v-model="dateMenu"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="form.effectiveDate"
+                  outlined
+                  dense
+                  readonly
+                  append-icon="mdi-calendar"
+                  v-bind="attrs"
+                  v-on="on"
+                />
+              </template>
 
-          
+              <v-date-picker
+                v-model="form.effectiveDate"
+                @input="dateMenu = false"
+              />
+            </v-menu>
+            <!-- From Date -->
+            <span>From</span>
+            <v-menu
+              v-model="fromMenu"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="form.fromDate"
+                  outlined
+                  dense
+                  readonly
+                  append-icon="mdi-calendar"
+                  v-bind="attrs"
+                  v-on="on"
+                />
+              </template>
+
+              <v-date-picker
+                v-model="form.fromDate"
+                @input="fromMenu = false"
+              />
+            </v-menu>
+
+            <!-- To Date -->
+            <span>To</span>
+            <v-menu
+              v-model="toMenu"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="form.toDate"
+                  outlined
+                  dense
+                  readonly
+                  append-icon="mdi-calendar"
+                  v-bind="attrs"
+                  v-on="on"
+                />
+              </template>
+
+              <v-date-picker
+                v-model="form.toDate"
+                :min="form.fromDate"
+                @input="toMenu = false"
+              />
+            </v-menu>
           </v-form>
         </v-card-text>
 
         <!-- Actions -->
         <v-card-actions class="justify-end">
-          <v-btn text @click="closeDialog">
-            Close
-          </v-btn>
+          <v-btn text @click="closeDialog"> Close </v-btn>
 
-          <v-btn color="primary" @click="saveData()">
-            Save
-          </v-btn>
+          <v-btn color="primary" @click="saveData()"> Save </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -70,17 +121,43 @@
 export default {
   data() {
     return {
-     
+      dateMenu: false,
+      fromMenu: false,
+      toMenu: false,
+      statusOptions: ["Pending for Approval", "approved"],
       form: {
-        field1: "",
-        field2: "",
-        field3: "",
-        field4: "",
+        planId: "",
+        planName: "",
+        status: "",
+        effectiveDate: null,
+        deptId: null,
+        deptName: "",
+        fromDate: null,
+        toDate: null,
+
       },
     };
   },
-  computed:{
- saveDraftDialog: {
+  computed: {
+      selectedPlan: {
+      get() {
+        return this.$store.getters.getselectedPlan;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedPlan", data);
+      },
+    },
+    selectedDept: {
+      get() {
+        return this.$store.getters.getselectedDept;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedDept", data);
+      },
+    },
+    saveDraftDialog: {
       get() {
         return this.$store.getters.getsaveDraftDialog;
         // return true;
@@ -90,23 +167,41 @@ export default {
       },
     },
   },
+  watch: {
+  selectedPlan: {
+    immediate: true, // runs when dialog opens or page reloads
+    handler(plan) {
+      if (!plan) return;
+
+      this.form = {
+        ...this.form, // keep defaults if some fields are missing
+        planId: plan.planId || "",
+        planName: plan.planName || "",
+        status: plan.planStatus || "",
+        effectiveDate: plan.planEffectiveDate || null,
+        fromDate: plan.planPeriod.from || null,
+        toDate: plan.planPeriod.to || null,
+      };
+    },
+  },
+},
+
   methods: {
     closeDialog() {
       this.saveDraftDialog = false;
     },
     saveData() {
+      this.form.deptId = this.selectedDept.details.externalCode;
+      this.form.deptName = this.selectedDept.details.name;
       console.log("Form Data:", this.form);
-        this.$store
+      this.$store
         .dispatch("CreatePlan", this.form)
         .then(() => {
-                this.saveDraftDialog = false;
-          
+          this.saveDraftDialog = false;
         })
         .catch((err) => {
           console.error("Failed to load saved plan", err);
         });
-
-
     },
   },
 };
