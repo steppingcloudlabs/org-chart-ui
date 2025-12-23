@@ -110,7 +110,7 @@
         <v-card-actions class="justify-end">
           <v-btn text @click="closeDialog"> Close </v-btn>
 
-          <v-btn color="primary" @click="saveData()"> Save </v-btn>
+          <v-btn color="primary" @click="saveFormData()"> Save </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -190,9 +190,9 @@ export default {
     closeDialog() {
       this.saveDraftDialog = false;
     },
-    saveData() {
-      this.form.deptId = this.selectedDept.details.externalCode;
-      this.form.deptName = this.selectedDept.details.name;
+    saveFormData() {
+      this.form.deptId = this?.selectedDept?.details?.externalCode;
+      this.form.deptName = this?.selectedDept?.details?.name;
       console.log("Form Data:", this.form);
       this.$store
         .dispatch("CreatePlan", this.form)

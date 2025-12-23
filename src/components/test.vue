@@ -33,6 +33,7 @@ import nodeProfile from "@/components/NodeProfile";
                 nodes:  []  ,
 intersectPay: [],
 selectedView:true,
+  finalPlan:{},
         chart: {},
         isbuffered: [],
         totalHeadCount: 0,
@@ -715,6 +716,14 @@ if (divisionValue && !this.division.includes(divisionValue)) {
           console.warn("Could not inline image:", href, e);
         }
       }
+    },
+      saveData()
+    {
+       var currentNodes= this.chart?.config?.nodes || []
+       this.finalPlan["currentData"] = currentNodes,
+       this.finalPlan["originalData"] = this.originalMasterData
+       console.log(this.finalPlan);
+       
     },
 
 
