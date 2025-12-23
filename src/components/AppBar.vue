@@ -146,7 +146,7 @@
             <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
               <v-btn
                 icon
-                color="primary"
+                color="white"
                 v-bind="{ ...attrs, ...tooltipAttrs }"
                 v-on="{ ...on, ...tooltipOn }"
               >
