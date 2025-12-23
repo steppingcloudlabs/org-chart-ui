@@ -1081,7 +1081,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
                             positionTitle:{},
                             department:{},
                             userPayGrade:{},
-                            postionType:{}
+                            positionType:{}
                     },
                     editForm: {
         generateElementsFromFields: false,
@@ -1228,7 +1228,7 @@ if (divisionValue && !this.division.includes(divisionValue)) {
         });
 
         this.chart.onExportStart((args) => {
-          this.saveData()
+          
 
           
       args.styles += document.getElementById('myStyles').outerHTML;
@@ -1241,8 +1241,8 @@ this.chart.onRedraw(() => {
   var legent = document.createElement("div");
           legent.setAttribute("id", "legendd");
           legent.style.position = "absolute";
-          legent.style.top = "150px";
-          legent.style.left = "50px";
+          legent.style.top = "100px";
+          legent.style.right = "70px";
           legent.style.color = "#2B81D6";
           legent.style.width = "150px";
           legent.style.border = "1px solid black";

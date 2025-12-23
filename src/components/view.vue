@@ -24,7 +24,7 @@ export default {
 <style>
 #mainpage
 {
-  background-color: #E8E8E8 !important;
+  background-color: white !important;
 }
 
 </style>
