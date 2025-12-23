@@ -134,7 +134,7 @@
             color="primary"
             v-bind="attrs"
             v-on="on"
-            @click="openSaveDraftDialog()"
+            @click="saveplan()"
            
           >
             <v-icon>mdi-content-save</v-icon>
@@ -142,6 +142,40 @@
         </template>
 
         <span>Save Draft</span>
+      </v-tooltip>
+      <v-tooltip bottom             v-if="isPlanOrgChart"
+>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+            @click="saveplan()"
+           
+          >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
+        </template>
+
+        <span>Save Plan</span>
+      </v-tooltip>
+      <v-tooltip bottom             v-if="isPlanOrgChart"
+>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+            @click="sendForApproval()"
+           
+          >
+            <v-icon>mdi-comment-account</v-icon>
+          </v-btn>
+        </template>
+
+        <span>Send For approval</span>
       </v-tooltip>
     </v-app-bar>
   </div>
@@ -160,6 +194,15 @@ export default {
 
   components: {},
   computed: {
+     isPlanOrgChart: {
+      get() {
+        return this.$store.getters.getisPlanOrgChart;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisPlanOrgChart", data);
+      },
+    },
      saveDraftDialog: {
       get() {
         return this.$store.getters.getsaveDraftDialog;
@@ -279,6 +322,10 @@ export default {
     applyFilter() {
       console.log("inside applyfilter");
       this.filterDrawer = true;
+    },
+    saveplan(){
+ this.$store.commit("TRIGGER_SAVE");
+ this.openSaveDraftDialog();
     },
     openSaveDraftDialog() {
       console.log(" this.saveDraftDialog=", this.saveDraftDialog);

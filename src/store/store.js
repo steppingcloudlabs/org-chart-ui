@@ -9,6 +9,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+     isPlanOrgChart: false,
+     triggerSavePlan: false,
+  finalPlanData: null,
     allSavedPlans: [],
     selectedBusinessUnit: null,
     selectedDept: null,
@@ -56,6 +59,15 @@ export default new Vuex.Store({
     overlay: false,
   },
   mutations: {
+    TRIGGER_SAVE(state) {
+    state.triggerSavePlan = true
+  },
+  RESET_TRIGGER_SAVE(state) {
+    state.triggerSavePlan = false
+  },
+  SET_FINAL_PLAN_DATA(state, payload) {
+    state.finalPlanData = payload
+  },
     setuserData: (state, data) => {
       state.userData = data;
     },
@@ -201,6 +213,9 @@ export default new Vuex.Store({
     setisorgChartPage(state, value) {
       state.isorgChartPage = value;
     },
+    setisPlanOrgChart(state, value) {
+      state.isPlanOrgChart = value;
+    },
     setisMainOrgChartPage(state, value) {
       state.isMainOrgChartPage = value;
     },
@@ -212,6 +227,8 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    getTriggerSavePlan: state => state.triggerSavePlan,
+  getFinalPlanData: state => state.finalPlanData,
     getDepartmentSearchText: (state) => state.departmentSearchText,
     getallSavedPlans: (state) => state.allSavedPlans,
     getselectedBusinessUnit: (state) => state.selectedBusinessUnit,
@@ -258,6 +275,9 @@ export default new Vuex.Store({
     },
     getisorgChartPage: (state) => {
       return state.isorgChartPage;
+    },
+    getisPlanOrgChart: (state) => {
+      return state.isPlanOrgChart;
     },
     getisSavedPlanpage: (state) => {
       return state.isSavedPlanpage;
@@ -586,7 +606,7 @@ export default new Vuex.Store({
             to: sampledata.toDate,
           },
 
-          chartData: { text: sampledata.chartData },
+          chartData:sampledata.chartData,
           chartBase64: "",
 
           userId: "",

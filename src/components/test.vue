@@ -65,7 +65,9 @@ selectedView:true,
             nodeProfile
         },
       
-        computed: {
+        computed: { triggerSavePlan() {
+    return this.$store.getters.getTriggerSavePlan
+  },
       showNodeProfile: {
         get() {
           return this.$store.getters.getshowNodeProfile;
@@ -724,6 +726,8 @@ if (divisionValue && !this.division.includes(divisionValue)) {
        this.finalPlan["originalData"] = this.originalMasterData
        console.log(this.finalPlan);
        
+  this.$store.commit("SET_FINAL_PLAN_DATA", this.finalPlan)
+       
     },
 
 
@@ -1344,7 +1348,16 @@ this.chart.filterUI.on('show-items', function(sender, args){
      //  this.mytree(this.$refs.tree, this.nodes)  
     //    console.log("After mounted",this.userData) 
        
-        }
+        },
+        watch: {
+  triggerSavePlan(val) {
+    if (val) {
+      this.saveData()
+      this.$store.commit("RESET_TRIGGER_SAVE")
+    }
+  }
+}
+
     }
 </script>
 

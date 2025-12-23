@@ -6,6 +6,7 @@
         <!-- Title -->
         <v-card-title class="headline"> save draft </v-card-title>
 <!-- {{selectedPlan}} -->
+<!-- {{finalPlanData}} -->
         <!-- Content -->
         <v-card-text>
           <v-form ref="form">
@@ -124,7 +125,7 @@ export default {
       dateMenu: false,
       fromMenu: false,
       toMenu: false,
-      statusOptions: ["Pending for Approval", "approved"],
+      statusOptions: ["draft","Pending for Approval", "approved"],
       form: {
         planId: "",
         planName: "",
@@ -139,6 +140,9 @@ export default {
     };
   },
   computed: {
+     finalPlanData() {
+    return this.$store.getters.getFinalPlanData
+  },
       selectedPlan: {
       get() {
         return this.$store.getters.getselectedPlan;
@@ -191,8 +195,10 @@ export default {
       this.saveDraftDialog = false;
     },
     saveFormData() {
-      this.form.deptId = this?.selectedDept?.details?.externalCode;
-      this.form.deptName = this?.selectedDept?.details?.name;
+      this.form.departmentId = this?.selectedDept?.details?.externalCode;
+      this.form.departmentName = this?.selectedDept?.details?.name;
+       // attach chart data 
+  this.form.chartData = this.finalPlanData;
       console.log("Form Data:", this.form);
       this.$store
         .dispatch("CreatePlan", this.form)

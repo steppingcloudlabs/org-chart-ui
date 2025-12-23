@@ -47,6 +47,15 @@ export default {
     return {};
   },
   computed: {
+     isPlanOrgChart: {
+      get() {
+        return this.$store.getters.getisPlanOrgChart;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisPlanOrgChart", data);
+      },
+    },
     allSavedPlans: {
       get() {
         return this.$store.getters.getallSavedPlans;
@@ -83,16 +92,30 @@ export default {
         this.$store.commit("setselectedPlan", data);
       },
     },
+     userData: {
+        get() {
+          return this.$store.getters.getuserData;
+          // return true;
+        },
+        set(data) {
+          this.$store.commit("setuserData", data);
+        },
+      }
   },
   methods: {
     onPlanClick(data) {
       console.log("data=", data);
-      this.$router.push({ path: "/deptOrgChart" });
+this.userData = JSON.parse(JSON.stringify(data.chartData.currentData));
+      this.$router.push({ path: "/orgchart2" });
+         this.selectedPlan=data;
+         this.planOrgChart = true;
+         this.isPlanOrgChart=true;
+      // this.$router.push({ path: "/orgchart2" });
     },
     openUpdateDialog(card) {
       console.log("card data in openUpdateDialog=", card);
       this.selectedPlan=card;
-      this.saveDraftDialog= true;
+      // this.saveDraftDialog= true;
      
 
     },
