@@ -32,10 +32,14 @@
     max-width="150"
     class="ml-4"
   /> -->
-      <img
+  <v-btn class="ma-3" icon  @click="navigateBack()">
+        
+        <v-icon>mdi-backburger</v-icon>
+      </v-btn>
+      <!-- <img
         src="/assets/hdr_logo.png"
         style="height: 50px; width: 100px; margin-left: 5px; margin-top: 2px"
-      />
+      /> -->
 
       <!-- Center: Title -->
       <v-toolbar-title class="absolute-center font-weight-medium">
@@ -135,6 +139,7 @@
       </v-tooltip>
       <v-menu v-if="isPlanOrgChart" offset-y left>
         <!-- Three-dot button with tooltip -->
+       
         <template v-slot:activator="{ on, attrs }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
@@ -357,6 +362,11 @@ export default {
   },
 
   methods: {
+
+    navigateBack() {
+      // Navigate to the previous page
+      this.$router.go(-1);
+    },
       openSplitdialog()
     {
      
