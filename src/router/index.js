@@ -33,7 +33,9 @@ const routes = [{
     name: 'Orgchart2',
     component: orgchart2,
      meta: {
-    isorgChartPage: true
+    isorgChartPage: true,
+    isMainOrgChartPage: true,
+
   }
   },
   {
@@ -58,8 +60,8 @@ const routes = [{
     name: 'plan',
     component: dynamiccards,
        meta: {
-    isorgChartPage: false
-  }
+ isorgChartPage: false,
+    isSavedPlanpage: false  }
   },
   {
     path: 'detailplan',

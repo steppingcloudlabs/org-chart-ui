@@ -45,7 +45,7 @@
           <!-- Action -->
           <!-- <v-divider></v-divider> -->
           <v-card-actions class="">
-            <v-btn text color="primary" @click="getUserListView(card)">
+            <v-btn text color="primary" @click="getUserListView(card)" :loading="loadingCardId">
               {{ card.details.headOfUnitNav ? "Update" : "Start Planning" }}
             </v-btn>
             <v-btn text color="primary" @click="OpenViewPlanPage(card)">
@@ -93,7 +93,7 @@
           <!-- Action -->
           <!-- <v-divider></v-divider> -->
           <v-card-actions class="">
-            <v-btn text color="primary" @click="getUserListView(card)">
+            <v-btn text color="primary" @click="getUserListView(card)" :loading="loadingCardId">
               {{ card.details.headOfUnitNav ? "Update" : "Start Planning" }}
             </v-btn>
             <v-btn text color="primary" @click="OpenViewPlanPage(card)">
@@ -115,10 +115,20 @@ export default {
   },
   data() {
     return {
+      loadingCardId: false,
       cardsData: [],
     };
   },
   computed: {
+      isMainOrgChartPage: {
+      get() {
+        return this.$store.getters.getisMainOrgChartPage;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisMainOrgChartPage", data);
+      },
+    },
     isSavedPlanpage: {
       get() {
         return this.$store.getters.getisSavedPlanpage;
@@ -276,6 +286,7 @@ export default {
   },
   methods: {
     OpenViewPlanPage(card) {
+      this.loadingCardId = true;
       this.isorgChartPage = true;
       console.log("HII");
       const departmentId = card?.details?.externalCode;
@@ -292,6 +303,7 @@ export default {
           this.allSavedPlans = response;
           this.isSavedPlanpage = true;
           this.$router.push({ path: "/viewSavedPlan" });
+          this.loadingCardId = false;
         })
         .catch((err) => {
           console.error("Failed to load saved plan", err);
@@ -320,8 +332,9 @@ export default {
     },
     getUserListView(data) {
       // current date (YYYY-MM-DD)
-      const date1 = new Date().toISOString().split("T")[0];
+      var date1 = new Date().getTime();
       this.isorgChartPage = true;
+      this.isMainOrgChartPage = true;
       console.log(data);
       this.$store
         .dispatch("orgCategory", {
@@ -336,8 +349,13 @@ export default {
             this.$router.push({ path: "/orgchart2" });
           }
         });
+        //  this.$store
+        // .dispatch("getSavedPlan", params)
+        // .then((response) => {
+        //   console.log("response from savedpalnapi==", response);
+        //   this.allSavedPlans = response;})
 
-      this.$router.push({ path: "/orgchart2" });
+      // this.$router.push({ path: "/orgchart2" });
     },
 
     getDetails() {

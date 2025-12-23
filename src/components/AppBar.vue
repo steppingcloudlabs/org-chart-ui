@@ -109,10 +109,10 @@
 
         <span>Filter Departments</span>
       </v-tooltip>
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="!isorgChartPage && isSavedPlanpage"
+>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            v-if="!isorgChartPage && isSavedPlanpage"
             icon
             color="primary"
             v-bind="attrs"
@@ -124,6 +124,24 @@
         </template>
 
         <span>Create Plan</span>
+      </v-tooltip>
+      <!-- {{isMainOrgChartPage}} -->
+      <v-tooltip bottom             v-if="isMainOrgChartPage"
+>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+            @click="openSaveDraftDialog()"
+           
+          >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
+        </template>
+
+        <span>Save Draft</span>
       </v-tooltip>
     </v-app-bar>
   </div>
@@ -142,6 +160,24 @@ export default {
 
   components: {},
   computed: {
+     saveDraftDialog: {
+      get() {
+        return this.$store.getters.getsaveDraftDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setsaveDraftDialog", data);
+      },
+    },
+     isMainOrgChartPage: {
+      get() {
+        return this.$store.getters.getisMainOrgChartPage;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisMainOrgChartPage", data);
+      },
+    },
      isSavedPlanpage: {
       get() {
         return this.$store.getters.getisSavedPlanpage;
@@ -243,6 +279,10 @@ export default {
     applyFilter() {
       console.log("inside applyfilter");
       this.filterDrawer = true;
+    },
+    openSaveDraftDialog() {
+      console.log(" this.saveDraftDialog=", this.saveDraftDialog);
+      this.saveDraftDialog = true;
     },
     openDialog() {
       this.showmergedialog = true;

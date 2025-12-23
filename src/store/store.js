@@ -16,6 +16,8 @@ export default new Vuex.Store({
     departmentSearchText: "", // what user types
     isDetailPlanPage: false,
     isorgChartPage: false,
+    isMainOrgChartPage: false,
+    saveDraftDialog: false,
     isSavedPlanpage: false,
     filterDrawer: false,
     isLevel: false,
@@ -191,6 +193,12 @@ export default new Vuex.Store({
     setisorgChartPage(state, value) {
       state.isorgChartPage = value;
     },
+    setisMainOrgChartPage(state, value) {
+      state.isMainOrgChartPage = value;
+    },
+    setsaveDraftDialog(state, value) {
+      state.saveDraftDialog = value;
+    },
     setisSavedPlanpage(state, value) {
       state.isSavedPlanpage = value;
     },
@@ -231,6 +239,12 @@ export default new Vuex.Store({
     },
     getisDetailPlanPage: (state) => {
       return state.isDetailPlanPage;
+    },
+    getisMainOrgChartPage: (state) => {
+      return state.isMainOrgChartPage;
+    },
+    getsaveDraftDialog: (state) => {
+      return state.saveDraftDialog;
     },
     getisorgChartPage: (state) => {
       return state.isorgChartPage;

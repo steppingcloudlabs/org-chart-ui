@@ -2,17 +2,20 @@
   <div class="home">
     <CoreAppBar @open-filter="openFilter"></CoreAppBar>
  <FilterDrawer v-model="showFilter" />
+ <SaveDraftDialog v-model="saveDraftDialog" />
     <core-view></core-view>
   </div>
 </template>
 
 <script>
 import FilterDrawer from '../components/FilterDrawer.vue'
+import SaveDraftDialog from '../components/saveDraftDialog.vue'
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
     FilterDrawer,
+    SaveDraftDialog,
      CoreAppBar: () => import("@/components/AppBar"),
     // CoreDrawer: () => import("@/components/Drawer")
     
@@ -24,6 +27,15 @@ export default {
     }
   },
    computed: {
+     saveDraftDialog: {
+      get() {
+        return this.$store.getters.getsaveDraftDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setsaveDraftDialog", data);
+      },
+    },
     userMasterData: {
       get() {
         return this.$store.getters.getuserMasterData;
