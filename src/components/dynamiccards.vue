@@ -292,6 +292,15 @@ export default {
         this.$store.commit("setselectedDept", data);
       },
     },
+    selectedPlan: {
+      get() {
+        return this.$store.getters.getselectedPlan;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedPlan", data);
+      },
+    },
   },
   methods: {
     OpenViewPlanPage(card) {
@@ -345,6 +354,16 @@ export default {
     getUserListView(data) {
       this.showLoading = true;
       // current date (YYYY-MM-DD)
+      this.selectedPlan = {
+        planId: "",
+        planName: "",
+        status: "",
+        effectiveDate: null,
+        deptId: null,
+        deptName: "",
+        fromDate: null,
+        toDate: null,
+      },
       this.selectedDept = data;
       var date1 = new Date().getTime();
       this.isorgChartPage = true;

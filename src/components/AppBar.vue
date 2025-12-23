@@ -127,7 +127,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
-            color="primary"
+            color="white"
             v-bind="attrs"
             v-on="on"
             @click="saveplan()"
