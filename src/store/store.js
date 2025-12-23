@@ -6,14 +6,15 @@ const companyId = "SFCPART000443"
 // const companyId = "SFPART041835"
 
 Vue.use(Vuex)
-
+// const basURLDev = 'http://localhost:3000';  //for development
+const basURLDev = '';   //fro deployement
 export default new Vuex.Store({
     state: {
         isDetailPlanPage: false,
-        isLevel:false,
-        levelPay:[],
+        isLevel: false,
+        levelPay: [],
         selectedSearchField: [],
-        allPaygrade:[],
+        allPaygrade: [],
         userMasterData: {},
         userData: [],
         inputDate: new Date().toISOString().substr(0, 10),
@@ -22,7 +23,7 @@ export default new Vuex.Store({
         department: [],
         division: [],
         BU: [],
-        location:[],
+        location: [],
         showNavDrawer: false,
         showFilter: false,
         showProfileDialog: false,
@@ -32,32 +33,31 @@ export default new Vuex.Store({
         parentData: null,
         showNodeProfile: false,
         empProfileData: {},
-        imgRequire:true,
+        imgRequire: true,
         isEmployeeDataFetched: "Not Fetched",
-        selectedDeptartmentUsers:{},
-        departmentList:[],
-        selectedDepartment:{},
-        showsplitDialog:false,
-        showinactivatedialog:false,
-        showmergedialog:false,
-        showupdatedialog:false,
+        selectedDeptartmentUsers: {},
+        departmentList: [],
+        selectedDepartment: {},
+        showsplitDialog: false,
+        showinactivatedialog: false,
+        showmergedialog: false,
+        showupdatedialog: false,
         overlay: false,
     },
     mutations: {
         setuserData: (state, data) => {
             state.userData = data
         },
-        setshowoverlay:(state,data)=>
-        {
-            state.overlay=data
+        setshowoverlay: (state, data) => {
+            state.overlay = data
         },
         setdeptUserData: (state, data) => {
-            console.log("store",data)
-            state.selectedDeptartmentUsers[data.deptid]=data.users
+            console.log("store", data)
+            state.selectedDeptartmentUsers[data.deptid] = data.users
         },
         setSelectedDept: (state, data) => {
-            
-            state.selectedDepartment=data
+
+            state.selectedDepartment = data
         },
         setisLevel: (state, data) => {
             state.isLevel = data
@@ -66,7 +66,7 @@ export default new Vuex.Store({
             state.isDetailPlanPage = data
         },
         setlevelPay: (state, data) => {
-            state.levelPay= data
+            state.levelPay = data
         },
         setsearchField: (state, data) => {
             state.selectedSearchField = data
@@ -115,20 +115,17 @@ export default new Vuex.Store({
         showFilter: (state) => {
             state.showFilter = true
         },
-        setshowsplitdialog: (state,data) => {
+        setshowsplitdialog: (state, data) => {
             state.showsplitDialog = data
         },
-        setshowinactivatedialog:(state,data)=>
-        {
-          state.showinactivatedialog=data
+        setshowinactivatedialog: (state, data) => {
+            state.showinactivatedialog = data
         },
-        setshowupdatedialog:(state,data)=>
-        {
-          state.showupdatedialog=data
+        setshowupdatedialog: (state, data) => {
+            state.showupdatedialog = data
         },
-        setshowmergedialog:(state,data)=>
-        {
-          state.showmergedialog=data
+        setshowmergedialog: (state, data) => {
+            state.showmergedialog = data
         },
         setShowProfileDialog: (state, data) => {
             state.showProfileDialog = data
@@ -168,30 +165,28 @@ export default new Vuex.Store({
         setIsEmployeeDataFetched: (state, data) => {
             state.isEmployeeDataFetched = data
         },
-        setDepartmentList:(state,data)=>
-        {
-         state.departmentList=data
+        setDepartmentList: (state, data) => {
+            state.departmentList = data
         },
-       
+
 
     },
     getters: {
-        getshowoverlay:(state)=>
-        {
-           return state.overlay
+        getshowoverlay: (state) => {
+            return state.overlay
         },
         getshowsplitdialog: (state) => {
-           return state.showsplitDialog
+            return state.showsplitDialog
         },
         getshowupdatedialog: (state) => {
             return state.showupdatedialog
-         },
+        },
         getshowmergedialog: (state) => {
             return state.showmergedialog
-         },
+        },
         getshowinactivatedialog: (state) => {
             return state.showinactivatedialog
-         },
+        },
         getuserData: (state) => {
             return state.userData
         },
@@ -272,19 +267,18 @@ export default new Vuex.Store({
         setIsEmployeeDataFetched: (state) => {
             return state.isEmployeeDataFetched
         },
-        getDepartmentList:(state)=>
-        {
+        getDepartmentList: (state) => {
             return state.departmentList
         }
     },
     actions: {
-        orgCategory:({
+        orgCategory: ({
             commit
         }, data) => {
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getOrgChartData/all',
+                    url: basURLDev + '/srv/getOrgChartData/all',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -295,7 +289,7 @@ export default new Vuex.Store({
                         "typeValue": data.typeValue,
                         "effectiveDateTime": data.date
                     }
-                    
+
                 }).then((response) => {
                     resolve(response.data)
                     commit('setuserData', response.data)
@@ -310,7 +304,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getOrgChartData', //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
+                    url: basURLDev + '/srv/getOrgChartData', //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -336,7 +330,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getOrgChartData',
+                    url: basURLDev + '/srv/getOrgChartData',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -361,7 +355,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getAllUsers',
+                    url: basURLDev + '/srv/getAllUsers',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -384,14 +378,14 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getEmpListView',
+                    url: basURLDev + '/srv/getEmpListView',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     params: {
                         "companyId": companyId,
-                        "dept":data
+                        "dept": data
                     }
                 }).then((response) => {
                     resolve(response.data)
@@ -408,7 +402,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getPayGrade?companyId=' + companyId,
+                    url: basURLDev + '/srv/getPayGrade?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -426,7 +420,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getBusinessUnitList?companyId=' + companyId,
+                    url: basURLDev + '/srv/getBusinessUnitList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -445,7 +439,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getDivisionList?companyId=' + companyId,
+                    url: basURLDev + '/srv/getDivisionList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -464,7 +458,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getDepartmentList?companyId=' + companyId,
+                    url: basURLDev + '/srv/getDepartmentList?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -482,7 +476,7 @@ export default new Vuex.Store({
 
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getDepartmentView?companyId=' + companyId,
+                    url: basURLDev + '/srv/getDepartmentView?companyId=' + companyId,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -490,7 +484,7 @@ export default new Vuex.Store({
 
                 }).then((response) => {
                     resolve(response.data.d.results)
-                   
+
                     //commit("setsearchField", response.data)
                     console.log(response)
                 })
@@ -504,7 +498,7 @@ export default new Vuex.Store({
         }, data) => {
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/getPosReqData',
+                    url: basURLDev + '/srv/getPosReqData',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -527,7 +521,7 @@ export default new Vuex.Store({
             console.log(data)
             return new Promise((resolve) => {
                 axios({
-                    url: 'http://localhost:3000/srv/employeeProfile',
+                    url: basURLDev + '/srv/employeeProfile',
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
