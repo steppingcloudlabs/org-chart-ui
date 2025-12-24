@@ -354,16 +354,7 @@ export default {
     getUserListView(data) {
       this.showLoading = true;
       // current date (YYYY-MM-DD)
-      this.selectedPlan = {
-        planId: "",
-        planName: "",
-        status: "",
-        effectiveDate: null,
-        deptId: null,
-        deptName: "",
-        fromDate: null,
-        toDate: null,
-      },
+      this.selectedPlan = {}
       this.selectedDept = data;
       var date1 = new Date().getTime();
       this.isorgChartPage = true;
