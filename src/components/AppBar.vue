@@ -50,7 +50,7 @@
       <!-- {{departmentList}} -->
       <!-- {{departmentSearchText}} -->
       <v-autocomplete
-        v-if="!isorgChartPage"
+        v-if="$route.path == '/plan'"
         v-model="departmentSearchText"
         :items="filteredDepartments"
         item-text="name"
@@ -81,10 +81,10 @@
 /> -->
 
       <!-- Right: Button -->
-      <v-tooltip bottom>
+      <v-tooltip bottom  v-if="$route.path == '/plan'">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            v-if="!isorgChartPage"
+           
             icon
             color="white"
             v-bind="attrs"
@@ -97,10 +97,10 @@
 
         <span>Merge Departments</span>
       </v-tooltip>
-      <v-tooltip bottom>
+      <v-tooltip bottom             v-if="$route.path == '/plan'"
+>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            v-if="!isorgChartPage"
             icon
             color="white"
             v-bind="attrs"
@@ -123,7 +123,7 @@
         <span>Create Plan</span>
       </v-tooltip>
       <!-- {{isMainOrgChartPage}} -->
-      <v-tooltip bottom v-if="isMainOrgChartPage">
+      <v-tooltip bottom v-if="showSaveBtn">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
@@ -138,7 +138,7 @@
 
         <span>Save Draft</span>
       </v-tooltip>
-      <v-menu v-if="isPlanOrgChart" offset-y left>
+      <v-menu v-if="showPlanActionsMenu" offset-y left>
         <!-- Three-dot button with tooltip -->
        
         <template v-slot:activator="{ on, attrs }">
@@ -250,6 +250,12 @@ export default {
         this.$store.commit("setapprovalDialog", data);
       },
     },
+     showPlanActionsMenu() {
+    return this.$route.path === '/orgchart2' && this.isPlanOrgChart === true;
+  },
+     showSaveBtn() {
+    return this.$route.path === '/orgchart2' && this.isMainOrgChartPage === true;
+  },
     isPlanOrgChart: {
       get() {
         return this.$store.getters.getisPlanOrgChart;

@@ -120,6 +120,15 @@ export default {
     };
   },
   computed: {
+     isPlanOrgChart: {
+      get() {
+        return this.$store.getters.getisPlanOrgChart;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisPlanOrgChart", data);
+      },
+    },
       isMainOrgChartPage: {
       get() {
         return this.$store.getters.getisMainOrgChartPage;
@@ -359,6 +368,7 @@ export default {
       var date1 = new Date().getTime();
       this.isorgChartPage = true;
       this.isMainOrgChartPage = true;
+      this.isPlanOrgChart = false;
       console.log(data);
       this.$store
         .dispatch("orgCategory", {

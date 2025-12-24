@@ -139,7 +139,16 @@ export default {
       set(data) {
         this.$store.commit("setselectedDept", data);
       }
-    }
+    },
+     isMainOrgChartPage: {
+      get() {
+        return this.$store.getters.getisMainOrgChartPage;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisMainOrgChartPage", data);
+      },
+    },
   },
 //   methods: {
 //     onPlanClick(data) {
@@ -215,10 +224,14 @@ this.userData = currentData ["currentData"]
          this.selectedPlan=data;
          this.planOrgChart = true;
          this.isPlanOrgChart=true;
+         this.isMainOrgChartPage = false;
       // this.$router.push({ path: "/orgchart2" });
     },
   openUpdateDialog(card) {
     this.selectedPlan = card;
+             this.isMainOrgChartPage = false;
+         this.planOrgChart = true;
+
   }, 
   getUserListView()
         {

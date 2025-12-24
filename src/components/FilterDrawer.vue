@@ -48,7 +48,7 @@
         clearable
         class="mb-3"
       />
-{{selectedDivision}}
+<!-- {{selectedDivision}} -->
       <v-autocomplete
       v-model="selectedDivision"
         item-text="name"
