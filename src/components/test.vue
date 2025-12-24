@@ -952,6 +952,24 @@ this.division.push(divisionValue);
     this.redraw(filteredData)
  },
 
+ copyHandler(nodeId){
+   var data = this.chart.get(nodeId);
+    data.id = this.chart.generateId();
+    data.pid = nodeId;
+    data.isRoot = false;
+    data.positionType = "Vacant";
+    data.positionVacant = true;
+    data.tags = ["Vacant",data.userPayGrade];
+    data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
+    data.userDepartmentId = ""
+    data.userDivision = ""
+    data.userId = ""
+    data.userManagerId = ""
+    data.userName =""
+    data.positionTitle = "New Position"
+   this.chart.addNode(data);
+},
+
  field2_binding(sender, node) {
      var data = sender.get(node.id);
      if (data[this.fieldToDisplay[0]] != null) {
@@ -1138,18 +1156,21 @@ this.division.push(divisionValue);
                  showYScroll: OrgChart.scroll.visible,
                  mouseScrool: OrgChart.action.none,
                  filterBy: {
-                         businessUnit:{},
                          positionTitle:{},
-                         department:{},
                          userPayGrade:{},
                          positionType:{}
                  },
                  editForm: {
-     generateElementsFromFields: false,
+                  generateElementsFromFields: false,
      elements: [
          { type: 'textbox', label: 'Position Title', binding: 'positionTitle' },
-         { type: 'textbox', label: 'Position Code', binding: 'position' }        
+         { type: 'textbox', label: 'Position Code', binding: 'id' },
+         { type: 'textbox', label: 'Position PayGrade', binding: 'userPayGrade' },
+         { type: 'textbox', label: 'Department', binding: 'department' }
+         
+
      ]
+    
  },
                  enableSearch: false,
                  menu: {
@@ -1181,7 +1202,7 @@ this.division.push(divisionValue);
          edit: {
            text: "Edit",
          },
-        add: {text:"Add New Position"},
+        add: {text:"Add New Position", onClick: this.copyHandler},
         remove: {text:"Remove Position"}
        },
        tags:{
@@ -1240,7 +1261,7 @@ this.division.push(divisionValue);
              edit: {
                text: "Edit",
              },
-             add: {text:"Add New Position"},
+             add: {text:"Add New Position", onClick:this.copyHandler},
              remove: {text:"Remove Position"}
            },
          },
