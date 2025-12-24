@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="px-6 pt-5">
+  <v-container fluid class="px-6 pt-5" style="height: 100vh">
     <!-- <v-toolbar
       color='primary accent-4'
       dark flat class="px-6" >
