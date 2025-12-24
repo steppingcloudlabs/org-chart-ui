@@ -6,7 +6,7 @@
         <!-- Title -->
         <v-card-title class="headline"> Save Plan </v-card-title>
         <!-- {{selectedDept}} -->
-        {{selectedPlan}}
+        <!-- {{selectedPlan}} -->
         <!-- {{finalPlanData}} -->
         <!-- Content -->
         <v-card-text>
@@ -158,6 +158,15 @@ export default {
     };
   },
   computed: {
+      showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
+      },
+    },
     finalPlanData() {
       return this.$store.getters.getFinalPlanData;
     },
@@ -223,6 +232,7 @@ export default {
       this.saveDraftDialog = false;
     },
     saveFormData() {
+      this.showLoading = true;
       this.form.departmentId = this.selectedDept.details.externalCode;
       this.form.departmentName = this.selectedDept.details.name;
       // attach chart data
@@ -245,6 +255,8 @@ export default {
       isUpdate: isUpdate,
     })
         .then(() => {
+                this.showLoading = false;
+
           this.saveDraftDialog = false;
         })
         .catch((err) => {
