@@ -75,6 +75,11 @@ export default {
     };
   },
     computed: {
+     
+      finalPlanAttach() {
+      return this.$store.getters.getFinalPlanAttach;
+    },  
+      
      showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
@@ -141,6 +146,7 @@ methods: {
        // attach chart data 
 //   this.form.chartData = this.finalPlanData;
       console.log("Form Data:", this.form);
+      this.form["file"]=this.finalPlanAttach
       this.$store
         .dispatch("SubmitPlanForApproval", this.form)
         .then(() => {

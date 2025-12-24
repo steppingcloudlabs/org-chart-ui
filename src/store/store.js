@@ -4,14 +4,17 @@ import axios from "axios";
 // const companyId = "SFPART041835"
 const companyId = "SFCPART000443";
 // const companyId = "SFPART041835"
-
+const baseDevURL = "http://localhost:3000"
+//const baseDevURL =""
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     isPlanOrgChart: false,
     triggerSavePlan: false,
+    triggerApprovalPlan: false,
     finalPlanData: null,
+    finalPlanAttach: "",
     allSavedPlans: [],
     selectedBusinessUnit: null,
     selectedStatus: null,
@@ -67,9 +70,20 @@ export default new Vuex.Store({
     RESET_TRIGGER_SAVE(state) {
       state.triggerSavePlan = false;
     },
+    TRIGGER_APPROVAL(state) {
+        state.triggerApprovalPlan = true;
+      },
+    RESET_TRIGGER_APPROVAL(state) {
+        state.triggerApprovalPlan = false;
+      },
     SET_FINAL_PLAN_DATA(state, payload) {
       state.finalPlanData = payload;
     },
+
+    SET_FINAL_PLAN_ATTACH(state, payload) {
+        state.finalPlanAttach = payload;
+      },
+
     setuserData: (state, data) => {
       state.userData = data;
     },
@@ -237,6 +251,8 @@ export default new Vuex.Store({
   getters: {
     getTriggerSavePlan: (state) => state.triggerSavePlan,
     getFinalPlanData: (state) => state.finalPlanData,
+    getTriggerApprovalPlan: (state) => state.triggerApprovalPlan,
+    getFinalPlanAttach: (state) => state.finalPlanAttach,
     getDepartmentSearchText: (state) => state.departmentSearchText,
     getallSavedPlans: (state) => state.allSavedPlans,
     getselectedBusinessUnit: (state) => state.selectedBusinessUnit,
@@ -370,7 +386,7 @@ export default new Vuex.Store({
     orgCategory: ({ commit }, data) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getOrgChartData/all",
+          url:  baseDevURL + "/srv/getOrgChartData/all",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -391,7 +407,7 @@ export default new Vuex.Store({
     testcall: ({ commit }, data) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getOrgChartData", //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
+          url: baseDevURL + "/srv/getOrgChartData", //https://ltwueeualhzv2jsd-orgchart-backend.cfapps.eu10.hana.ondemand.com
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -413,7 +429,7 @@ export default new Vuex.Store({
     testcall1: ({ commit }, data) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getOrgChartData",
+          url: baseDevURL + "/srv/getOrgChartData",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -434,7 +450,7 @@ export default new Vuex.Store({
     getAllUser: ({ commit }, data) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getAllUsers",
+          url: baseDevURL + "/srv/getAllUsers",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -454,7 +470,7 @@ export default new Vuex.Store({
     getDepUser: ({ commit }, data) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getEmpListView",
+          url: baseDevURL + "/srv/getEmpListView",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -475,7 +491,7 @@ export default new Vuex.Store({
     getAllPaygradeList: ({ commit }) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getPayGrade?companyId=" + companyId,
+          url: baseDevURL + "/srv/getPayGrade?companyId=" + companyId,
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -491,7 +507,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         axios({
           url:
-            "http://localhost:3000/srv/getLocationList?companyId=" + companyId,
+            baseDevURL + "/srv/getLocationList?companyId=" + companyId,
 
           method: "GET",
           headers: {
@@ -507,7 +523,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         axios({
           url:
-            "http://localhost:3000/srv/getBusinessUnitList?companyId=" +
+            baseDevURL + "/srv/getBusinessUnitList?companyId=" +
             companyId,
           method: "GET",
           headers: {
@@ -524,7 +540,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         axios({
           url:
-            "http://localhost:3000/srv/getDivisionList?companyId=" + companyId,
+            baseDevURL + "/srv/getDivisionList?companyId=" + companyId,
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -542,7 +558,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         axios({
           url:
-            "http://localhost:3000/srv/getDepartmentList?companyId=" +
+            baseDevURL + "/srv/getDepartmentList?companyId=" +
             companyId,
           method: "GET",
           headers: {
@@ -560,7 +576,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         axios({
           url:
-            "http://localhost:3000/srv/getDepartmentView?companyId=" +
+            baseDevURL + "/srv/getDepartmentView?companyId=" +
             companyId,
           method: "GET",
           headers: {
@@ -577,7 +593,7 @@ export default new Vuex.Store({
     getSavedPlan: (data, sampledata) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getSavedPlan",
+          url: baseDevURL + "/srv/getSavedPlan",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -621,15 +637,13 @@ export default new Vuex.Store({
           // Inline version increment logic
 if (sampledata.isUpdate && sampledata.form.planVersion) {
  
-  payload.planVersion =
-    'V' + (Number(sampledata.form.planVersion.slice(1)) + 0.1).toFixed(1);
-      console.log("payload.planVersion",)
-
+  payload.version =sampledata.form.planVersion
+    
 }
 
 
       return axios({
-        url: "http://localhost:3000/srv/plan",
+        url: baseDevURL + "/srv/plan",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -648,7 +662,7 @@ if (sampledata.isUpdate && sampledata.form.planVersion) {
     },
     SubmitPlanForApproval: (data, sampledata) => {
       return axios({
-        url: "http://localhost:3000/srv/submitPlanForApproval",
+        url: baseDevURL + "/srv/submitPlanForApproval",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -657,10 +671,11 @@ if (sampledata.isUpdate && sampledata.form.planVersion) {
           planId: sampledata.planId,
           planName: sampledata.planName,
           companyId: companyId,
-
+          fileName:"Attachment.png",
+         fileContent: sampledata.file,
           departmentId: sampledata.departmentId,
           version: sampledata.planVersion,
-          planEffectiveStartDate: sampledata.planEffectiveDate,
+          planEffectiveStartDate: sampledata.effectiveDate,
           // approver: {
           //   userId: sampledata.userId,
           //   userName: sampledata.userName,
@@ -682,7 +697,7 @@ if (sampledata.isUpdate && sampledata.form.planVersion) {
     getRecruitmentData: ({ commit }, data) => {
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/getPosReqData",
+          url: baseDevURL + "/srv/getPosReqData",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -702,7 +717,7 @@ if (sampledata.isUpdate && sampledata.form.planVersion) {
       console.log(data);
       return new Promise((resolve) => {
         axios({
-          url: "http://localhost:3000/srv/employeeProfile",
+          url: baseDevURL + "/srv/employeeProfile",
           method: "GET",
           headers: {
             "Content-Type": "application/json",

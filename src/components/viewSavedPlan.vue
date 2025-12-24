@@ -26,7 +26,7 @@
                  {{ card.planId }}
               </div>
               <div class="plan-subtitle">
-               {{ card.planName }}
+               {{ card.planName }} ({{ card.planVersion }})
               </div>
             </div>
           </v-card-title>
