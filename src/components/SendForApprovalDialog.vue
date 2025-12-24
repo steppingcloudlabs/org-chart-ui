@@ -75,7 +75,15 @@ export default {
     };
   },
     computed: {
-    
+     showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
+      },
+    },
       selectedPlan: {
       get() {
         return this.$store.getters.getselectedPlan;
@@ -127,6 +135,7 @@ methods: {
       this.approvalDialog = false;
     },
     saveFormData() {
+      this.showLoading = true;
       this.form.departmentId = this?.selectedDept?.details?.externalCode;
     //   this.form.departmentName = this?.selectedDept?.details?.name;
        // attach chart data 
@@ -135,6 +144,8 @@ methods: {
       this.$store
         .dispatch("SubmitPlanForApproval", this.form)
         .then(() => {
+                this.showLoading = false;
+
           this.approvalDialog = false;
         })
         .catch((err) => {
