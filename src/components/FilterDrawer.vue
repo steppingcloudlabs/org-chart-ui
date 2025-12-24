@@ -6,6 +6,7 @@
     class="mt-7"
     v-model="internalDrawer"
     width="300"
+    height="100vh"
   >
     <v-list-item class="px-2">
       <v-list-item-avatar>

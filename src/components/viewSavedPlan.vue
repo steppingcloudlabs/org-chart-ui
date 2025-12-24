@@ -2,7 +2,7 @@
   <v-container fluid class="px-6 pt-10">
     <v-row dense>
       <v-col
-        v-for="(card, index) in allSavedPlans"
+        v-for="(card, index) in filteredDeptCards"
         :key="index"
         cols="12"
         sm="6"
@@ -68,6 +68,15 @@ export default {
     return {};
   },
   computed: {
+     selectedStatus: {
+      get() {
+        return this.$store.getters.getselectedStatus;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedStatus", data);
+      },
+    },
      isPlanOrgChart: {
       get() {
         return this.$store.getters.getisPlanOrgChart;
@@ -148,6 +157,24 @@ export default {
       set(data) {
         this.$store.commit("setisMainOrgChartPage", data);
       },
+    },
+     filteredDeptCards() {
+
+      const selectedStatus = this.selectedStatus;
+      console.log("selectedStatus=",selectedStatus);
+
+      // 1️⃣ Department search has priority
+      if (selectedStatus) {
+        return this.allSavedPlans.filter(
+          (card) => card.planStatus === selectedStatus
+        );
+      }
+
+     
+    
+
+      // 3️⃣ No filter → show all
+      return this.allSavedPlans;
     },
   },
 //   methods: {

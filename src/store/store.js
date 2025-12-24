@@ -14,6 +14,7 @@ export default new Vuex.Store({
     finalPlanData: null,
     allSavedPlans: [],
     selectedBusinessUnit: null,
+    selectedStatus: null,
     selectedDept: null,
     selectedPlan: null,
     selectedDivision: null,
@@ -199,6 +200,9 @@ export default new Vuex.Store({
     setselectedBusinessUnit(state, value) {
       state.selectedBusinessUnit = value;
     },
+    setselectedStatus(state, value) {
+      state.selectedStatus = value;
+    },
     setselectedDivision(state, value) {
       state.selectedDivision = value;
     },
@@ -236,6 +240,7 @@ export default new Vuex.Store({
     getDepartmentSearchText: (state) => state.departmentSearchText,
     getallSavedPlans: (state) => state.allSavedPlans,
     getselectedBusinessUnit: (state) => state.selectedBusinessUnit,
+    getselectedStatus: (state) => state.selectedStatus,
     getselectedDivision: (state) => state.selectedDivision,
     getselectedDept: (state) => state.selectedDept,
     getselectedPlan: (state) => state.selectedPlan,

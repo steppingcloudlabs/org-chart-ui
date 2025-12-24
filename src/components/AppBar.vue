@@ -111,6 +111,22 @@
           </v-btn>
         </template>
 
+        <span>Filter Saved Plan</span>
+      </v-tooltip>
+      <v-tooltip bottom             v-if="$route.path == '/viewSavedPlan'"
+>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            color="white"
+            v-bind="attrs"
+            v-on="on"
+            @click="$emit('savedPlanfilter')"
+          >
+            <v-icon>mdi-filter</v-icon>
+          </v-btn>
+        </template>
+
         <span>Filter Departments</span>
       </v-tooltip>
       <v-tooltip bottom v-if="!isorgChartPage && isSavedPlanpage">

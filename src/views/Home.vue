@@ -1,11 +1,12 @@
 <template>
   <div class="home">
-    <CoreAppBar @open-filter="openFilter"></CoreAppBar>
+    <CoreAppBar @open-filter="openFilter" @savedPlanfilter="openSavedPlanFilter"></CoreAppBar>
  <FilterDrawer v-model="showFilter" />
  <SaveDraftDialog v-model="saveDraftDialog" />
  <ApprovalDialog v-model="approvalDialog" />
  <MergeDialog v-model="approvalDialog" />
  <SplitDialog v-model="showsplitdialog" />
+ <SavedPlanFilter v-model="showSavedPlanFilter" />
     <core-view></core-view>
   </div>
 </template>
@@ -16,10 +17,12 @@ import SaveDraftDialog from '../components/saveDraftDialog.vue'
 import ApprovalDialog from '../components/SendForApprovalDialog.vue'
 import MergeDialog from '../components/updates/mergedialog.vue'
 import SplitDialog from '../components/updates/splitdialog.vue'
+import SavedPlanFilter from '../components/PlanFilter.vue'
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
+    SavedPlanFilter,
     SplitDialog,
     ApprovalDialog,
     FilterDrawer,
@@ -32,7 +35,8 @@ export default {
   },
     data() {
     return {
-      showFilter: false
+      showFilter: false,
+      showSavedPlanFilter: false,
     }
   },
    computed: {
@@ -85,6 +89,10 @@ export default {
   methods:{
      openFilter() {
       this.showFilter = true
+    },
+     openSavedPlanFilter() {
+      console.log("Inside openSavedPlanFilter")
+      this.showSavedPlanFilter = true
     }
   }
 };
