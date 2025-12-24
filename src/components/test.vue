@@ -73,7 +73,16 @@ selectedView:true,
   triggerApprovalPlan() {
     return this.$store.getters.getTriggerApprovalPlan
   },
-
+  
+  showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
+      },
+    },
 
    showNodeProfile: {
      get() {
@@ -824,7 +833,7 @@ this.division.push(divisionValue);
      getData() {
        
      if (this.userData) {
-         
+     this.showLoading = true    
      this.nodes = this.userData;
       for (var i = 0; i < this.nodes.length; i++) {
       this.getChlidData(this.nodes[i]);
@@ -837,10 +846,10 @@ this.division.push(divisionValue);
      this.originalMasterData = this.nodes;
      console.log("BYEEE", this.nodes);
      this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
-     setTimeout(() => {
-       this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
-     }, 10)
-     
+    //  setTimeout(() => {
+    //    this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
+    //  }, 10)
+    this.showLoading = false
      for (var j = 0; j < this.gradecount.length; j = j + 3) {
          this.str +=
            "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
@@ -1337,6 +1346,7 @@ var legent = document.createElement("div");
          
        this.chart.element.appendChild(legent);
 
+       
 
 });
 

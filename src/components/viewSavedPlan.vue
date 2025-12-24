@@ -149,6 +149,15 @@ export default {
         this.$store.commit("setselectedDept", data);
       }
     },
+    showLoading: {
+      get() {
+        return this.$store.getters.getshowLoading;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowLoading", data);
+      },
+    },
      isMainOrgChartPage: {
       get() {
         return this.$store.getters.getisMainOrgChartPage;
@@ -252,7 +261,7 @@ this.userData = currentData ["currentData"]
          this.planOrgChart = true;
          this.isPlanOrgChart=true;
          this.isMainOrgChartPage = false;
-         this.showLoading = true;
+         this.showLoading = false;
       // this.$router.push({ path: "/orgchart2" });
     },
   openUpdateDialog(card) {
