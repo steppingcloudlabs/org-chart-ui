@@ -1,40 +1,61 @@
 <template>
-  <v-container fluid class="px-6">
-    <v-row class="pt-5" dense>
-      <!-- Loop through cardsData and create Vuetify cards dynamically -->
+  <v-container fluid class="px-6 pt-10">
+    <v-row dense>
       <v-col
         v-for="(card, index) in allSavedPlans"
         :key="index"
         cols="12"
+        sm="6"
         md="4"
+        lg="3"
       >
-        <!-- <v-col v-for="(card, index) in showdeptView" :key="index" cols="12" md="4"> -->
-        <v-card @click="onPlanClick(card)">
-          <v-card-title>
-            <v-icon color="primary" class="mr-2"> mdi-domain </v-icon
-            >{{ card.planName }} ({{ card.planId }})</v-card-title
-          >
-          <v-card-text>
-            {{ card.planStatus }}
-          </v-card-text>
+        <v-card
+          class="plan-card"
+          outlined
+          elevation="2"
+          @click="onPlanClick(card)"
+        >
+          <!-- Header -->
+          <v-card-title class="d-flex align-start">
+            <v-icon color="primary" class="mr-2 mt-1">
+              mdi-file-document-outline
+            </v-icon>
 
-          <v-spacer></v-spacer>
+            <div class="flex-grow-1">
+              <div class="plan-title">
+                 {{ card.planId }}
+              </div>
+              <div class="plan-subtitle">
+               {{ card.planName }}
+              </div>
+            </div>
+          </v-card-title>
 
-          <!-- Action -->
-          <!-- <v-divider></v-divider> -->
-          <v-card-actions class="">
-            <v-btn text color="primary" @click="openUpdateDialog(card)">
-              Edit Plan
-            </v-btn>
-            <!-- <v-btn
-              text
-              color="primary"
-              @click="OpenViewPlanPage()"
-             
-            >
-              View Saved Plan
-            </v-btn> -->
-          </v-card-actions>
+        <!-- Status + Action Row -->
+<v-card-actions class="px-4 pb-4 d-flex align-center">
+  <v-chip
+     v-if="card.planStatus"
+    small
+    :color="statusColor(card.planStatus)"
+    text-color="white"
+    class="text-capitalize"
+  >
+    {{ card.planStatus }}
+  </v-chip>
+  
+
+  <v-spacer></v-spacer>
+
+  <v-btn
+    text
+    small
+    color="primary"
+    @click="openUpdateDialog(card)"
+  >
+    Edit Plan
+  </v-btn>
+</v-card-actions>
+
         </v-card>
       </v-col>
     </v-row>
@@ -120,8 +141,70 @@ export default {
       }
     }
   },
+//   methods: {
+//     onPlanClick(data) {
+//       console.log("data=", data);
+
+// console.log("chartData type:", typeof data.chartData);
+// console.log("chartData value:", data.chartData);
+// var currentData = JSON.parse((data?.chartData));
+// this.userData = currentData ["currentData"]
+//       this.$router.push({ path: "/orgchart2" });
+//          this.selectedPlan=data;
+//          this.planOrgChart = true;
+//          this.isPlanOrgChart=true;
+//       // this.$router.push({ path: "/orgchart2" });
+//     },
+//     openUpdateDialog(card) {
+//       console.log("card data in openUpdateDialog=", card);
+//       this.selectedPlan=card;
+//       // this.saveDraftDialog= true;
+     
+
+//     },
+//     getUserListView()
+//         {
+          
+//           this.showoverlay=true
+//             let index=this.showdeptView.findIndex(item => item.id === this.showselecteddept.id);
+//             if(this.showdeptView[index].users.length<=0)
+//             {
+//               console.log("deptttt",this.showselecteddept)
+//               this.$store
+//               .dispatch("getDepUser",this.showselecteddept.details.externalCode)
+//               .then((response) => {
+              
+//                 this.showdeptView[index].users = response;
+//                 this.showselecteddept=this.showdeptView[index]
+//                 console.log(this.showdeptView[index])
+               
+//         })
+//             }
+//             else{
+//               this.showselecteddept=this.showdeptView[index]
+//             }
+//            this.showoverlay=false
+//             // this.$router.push({ path: "/detailplan" })
+          
+//         },
+//   },
   methods: {
-    onPlanClick(data) {
+  statusColor(status) {
+    if (!status) return ''
+
+    switch (status.toLowerCase()) {
+      case 'draft':
+        return 'blue'
+      case 'pending approval':
+        return 'orange'
+      case 'approved':
+        return 'green'
+      default:
+        return 'grey'
+    }
+  },
+
+  onPlanClick(data) {
       console.log("data=", data);
 
 console.log("chartData type:", typeof data.chartData);
@@ -134,14 +217,10 @@ this.userData = currentData ["currentData"]
          this.isPlanOrgChart=true;
       // this.$router.push({ path: "/orgchart2" });
     },
-    openUpdateDialog(card) {
-      console.log("card data in openUpdateDialog=", card);
-      this.selectedPlan=card;
-      // this.saveDraftDialog= true;
-     
-
-    },
-    getUserListView()
+  openUpdateDialog(card) {
+    this.selectedPlan = card;
+  }, 
+  getUserListView()
         {
           
           this.showoverlay=true
@@ -166,7 +245,8 @@ this.userData = currentData ["currentData"]
             // this.$router.push({ path: "/detailplan" })
           
         },
-  },
+},
+
   mounted(){
 
     this.getUserListView()
@@ -174,3 +254,29 @@ this.userData = currentData ["currentData"]
   }
 };
 </script>
+
+
+<style scoped>
+.plan-card {
+  height: 100%;
+  border-radius: 4px;
+  /* transition: all 0.2s ease; */
+  cursor: pointer;
+}
+
+.plan-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+}
+
+.plan-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.plan-subtitle {
+  font-size: 13px;
+  color: #6b7280;
+}
+</style>
