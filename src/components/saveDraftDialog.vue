@@ -6,7 +6,7 @@
         <!-- Title -->
         <v-card-title class="headline"> Save Plan </v-card-title>
         <!-- {{selectedDept}} -->
-        <!-- {{selectedPlan}} -->
+        {{selectedPlan}}
         <!-- {{finalPlanData}} -->
         <!-- Content -->
         <v-card-text>
@@ -233,6 +233,11 @@ export default {
   const isUpdate = !!this.selectedPlan?.planId; 
 
   console.log("isUpdate:", isUpdate);
+   // ✅ ADD planVersion ONLY FOR UPDATE
+  if (isUpdate && this.selectedPlan?.planVersion) {
+    
+    this.form.planVersion = this.selectedPlan?.planVersion;
+  }
       console.log("Form Data:", this.form);
       this.$store
         .dispatch("CreatePlan",  {

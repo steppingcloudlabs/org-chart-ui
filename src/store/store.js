@@ -590,8 +590,10 @@ export default new Vuex.Store({
         });
       });
     },
-    CreatePlan: (data, sampledata,isUpdate) => {
+    CreatePlan: (data, sampledata) => {
       console.log("data from store=", sampledata);
+       console.log("Inside update logic=",sampledata.isUpdate)
+  console.log("Inside update logic=",sampledata.form.planVersion)
       const payload =  {
           companyId: companyId, // ✅ make sure this exists
           planId: sampledata.form.planId,
@@ -612,9 +614,12 @@ export default new Vuex.Store({
           // userId: "",
         };
           // Inline version increment logic
-if (isUpdate && sampledata.form.planVersion) {
+if (sampledata.isUpdate && sampledata.form.planVersion) {
+ 
   payload.planVersion =
     'V' + (Number(sampledata.form.planVersion.slice(1)) + 0.1).toFixed(1);
+      console.log("payload.planVersion",)
+
 }
 
 
