@@ -242,7 +242,7 @@ export default {
 
   onPlanClick(data) {
       console.log("data=", data);
-
+      this.showLoading = true;
 console.log("chartData type:", typeof data.chartData);
 console.log("chartData value:", data.chartData);
 var currentData = JSON.parse((data?.chartData));
@@ -252,6 +252,7 @@ this.userData = currentData ["currentData"]
          this.planOrgChart = true;
          this.isPlanOrgChart=true;
          this.isMainOrgChartPage = false;
+         this.showLoading = true;
       // this.$router.push({ path: "/orgchart2" });
     },
   openUpdateDialog(card) {

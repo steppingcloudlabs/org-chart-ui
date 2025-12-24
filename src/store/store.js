@@ -676,6 +676,7 @@ export default new Vuex.Store({
                     departmentId: sampledata.departmentId,
                     version: sampledata.planVersion,
                     planEffectiveStartDate: sampledata.effectiveDate,
+                    chartData :sampledata.chartData
                     // approver: {
                     //   userId: sampledata.userId,
                     //   userName: sampledata.userName,

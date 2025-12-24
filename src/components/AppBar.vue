@@ -411,6 +411,7 @@ export default {
       this.saveDraftDialog = true;
     },
     sendForApproval() {
+      this.$store.commit("TRIGGER_SAVE");
       this.$store.commit("TRIGGER_APPROVAL");
       this.approvalDialog = true;
     },

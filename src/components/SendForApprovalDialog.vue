@@ -116,6 +116,9 @@ export default {
         this.$store.commit("setapprovalDialog", data);
       },
     },
+    finalPlanData() {
+      return this.$store.getters.getFinalPlanData;
+    }
   },
     watch: {
   selectedPlan: {
@@ -144,7 +147,7 @@ methods: {
       this.form.departmentId = this?.selectedDept?.details?.externalCode;
     //   this.form.departmentName = this?.selectedDept?.details?.name;
        // attach chart data 
-//   this.form.chartData = this.finalPlanData;
+     this.form.chartData = this.finalPlanData;
       console.log("Form Data:", this.form);
       this.form["file"]=this.finalPlanAttach
       this.$store
