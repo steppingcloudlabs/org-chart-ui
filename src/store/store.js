@@ -4,8 +4,8 @@ import axios from "axios";
 // const companyId = "SFPART041835"
 const companyId = "SFCPART000443";
 // const companyId = "SFPART041835"
-//const baseDevURL = "http://localhost:3000"
-const baseDevURL = ""
+const baseDevURL = "http://localhost:3000"
+//const baseDevURL = ""
 Vue.use(Vuex);
 
 export default new Vuex.Store({

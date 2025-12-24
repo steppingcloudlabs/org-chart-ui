@@ -38,7 +38,7 @@
       </v-btn>
       <img v-if="$route.path == '/plan'"
         src="/assets/logoSC.png" 
-        style="height: 50px; width: 100px; margin-left: 5px; margin-top: 2px"
+        style="height: 50px; margin-left: 5px; margin-top: 2px"
       />
 
       <!-- Center: Title -->

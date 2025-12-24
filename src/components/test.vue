@@ -528,11 +528,11 @@ this.division.push(divisionValue);
        }
      
      }
-     if (nodes[3]) {
-       nodes[3].tags.push("Critical");
-       nodes[3].tags.push("MediumImpact");
-       nodes[3].tags.push("HighRisk");
-     }
+    //  if (nodes[3]) {
+    //    nodes[3].tags.push("Critical");
+    //    nodes[3].tags.push("MediumImpact");
+    //    nodes[3].tags.push("HighRisk");
+    //  }
      console.log(this.vacantCount);
      // if(this.intersectPay.length<10)
      // {
