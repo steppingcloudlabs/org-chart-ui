@@ -300,11 +300,11 @@ selectedView:true,
        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
        this.totalHeadCount +
        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-       this.vacantCount +
-       "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-       this.maleCount +
-       ":" +
-       this.femaleCount +
+      //  this.vacantCount +
+      //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+      //  this.maleCount +
+      //  ":" +
+      //  this.femaleCount +
        "</p>" +
        this.str;
      this.chart.element.appendChild(legent);
@@ -374,10 +374,10 @@ selectedView:true,
        this.totalHeadCount +
        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
        this.vacantCount +
-       "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-       this.maleCount +
-       ":" +
-       this.femaleCount +
+      //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+      //  this.maleCount +
+      //  ":" +
+      //  this.femaleCount +
        "</p>" +
        this.str;
      this.chart.element.appendChild(legent);
@@ -708,10 +708,10 @@ this.division.push(divisionValue);
        this.totalHeadCount +
        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
        this.vacantCount +
-       "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-       this.maleCount +
-       ":" +
-       this.femaleCount +
+      //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+      //  this.maleCount +
+      //  ":" +
+      //  this.femaleCount +
        "</p>" +
        this.str;
      this.chart.element.appendChild(legent);
@@ -886,10 +886,10 @@ this.division.push(divisionValue);
          this.totalHeadCount +
          "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
          this.vacantCount +
-         "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-         this.maleCount +
-         ":" +
-         this.femaleCount +
+        //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
+        //  this.maleCount +
+        //  ":" +
+        //  this.femaleCount +
          "</p>" +
          this.str;
        this.chart.element.appendChild(legent);
@@ -1165,7 +1165,7 @@ this.division.push(divisionValue);
                  showYScroll: OrgChart.scroll.visible,
                  mouseScrool: OrgChart.action.none,
                  filterBy: {
-                         positionTitle:{},
+                         positionTitle:{label:"Position Title"},
                          userPayGrade:{},
                          positionType:{}
                  },
@@ -1329,23 +1329,51 @@ this.division.push(divisionValue);
 });
 
 this.chart.onRedraw(() => {
-var legent = document.createElement("div");
-       legent.setAttribute("id", "legendd");
-       legent.style.position = "absolute";
-       legent.style.top = "100px";
-       legent.style.right = "70px";
-       legent.style.color = "#2B81D6";
-       legent.style.width = "150px";
-       legent.style.border = "1px solid black";
-       legent.innerHTML =
-         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-         this.totalHeadCount +
-         "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-         this.vacantCount +
-         "</p>" 
-         
-       this.chart.element.appendChild(legent);
 
+  const elPositionTitle = document.querySelector('[data-filter-field="positionTitle"]');
+
+  if (elPositionTitle) {
+    elPositionTitle.innerHTML = 'Position Title';
+  }
+
+  const elpositionType = document.querySelector('[data-filter-field="positionType"]');
+
+  if (elpositionType) {
+    elpositionType.innerHTML = 'Position Type';
+  }
+
+
+  const eluserPayGrade = document.querySelector('[data-filter-field="userPayGrade"]');
+
+  if (eluserPayGrade) {
+    eluserPayGrade.innerHTML = 'Pay Grade';
+  }
+
+
+
+const legenddEl = document.getElementById("legendd");
+       if (!legenddEl) {
+       
+         var legent = document.createElement("div");
+                legent.setAttribute("id", "legendd");
+                legent.style.position = "absolute";
+                legent.style.top = "28px";
+                legent.style.right = "70px";
+                legent.style.color = "#2B81D6";
+                legent.style.width = "150px";
+                legent.style.border = "1px solid black";
+                legent.innerHTML =
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
+                  this.totalHeadCount +
+                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
+                  this.vacantCount +
+                  "</p>" 
+                  
+                this.chart.element.appendChild(legent);
+
+      
+      }   
+      
        
 
 });
@@ -1500,4 +1528,5 @@ this.chart.filterUI.on('show-items', function(sender, args){
 </script>
 
 <style scoped>
+ 
 </style>
