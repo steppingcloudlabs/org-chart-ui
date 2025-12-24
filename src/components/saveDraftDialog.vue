@@ -5,11 +5,29 @@
       <v-card>
         <!-- Title -->
         <v-card-title class="headline"> Save Plan </v-card-title>
+        <!-- {{selectedDept}} -->
         <!-- {{selectedPlan}} -->
         <!-- {{finalPlanData}} -->
         <!-- Content -->
         <v-card-text>
           <v-form ref="form">
+              <!-- Department Details (Auto-filled & Read-only) -->
+  <span>Department ID</span>
+  <v-text-field
+    v-model="form.deptId"
+    outlined
+    dense
+    disabled
+  />
+
+  <!-- Department Name -->
+  <span>Department Name</span>
+  <v-text-field
+    v-model="form.deptName"
+    outlined
+    dense
+    disabled
+  />
             <span>Plan Id</span>
             <v-text-field v-model="form.planId" outlined dense required />
             <span>Plan Name</span>
@@ -123,18 +141,19 @@ export default {
   data() {
     return {
       dateMenu: false,
-      fromMenu: false,
-      toMenu: false,
+      // fromMenu: false,
+      // toMenu: false,
       statusOptions: ["draft", "pending approval", "approved"],
       form: {
+        deptId: "",
+  deptName: "",
         planId: "",
         planName: "",
         status: "",
         effectiveDate: null,
-        deptId: null,
-        deptName: "",
-        fromDate: null,
-        toDate: null,
+        
+        // fromDate: null,
+        // toDate: null,
       },
     };
   },
@@ -171,6 +190,15 @@ export default {
     },
   },
   watch: {
+    selectedDept: {
+    immediate: true,
+    handler(dept) {
+      if (!dept?.details) return;
+
+      this.form.deptId = dept.details.externalCode || "";
+      this.form.deptName = dept.details.name || "";
+    },
+  },
     selectedPlan: {
       immediate: true, // runs when dialog opens or page reloads
       handler(plan) {
@@ -178,12 +206,13 @@ export default {
 
         this.form = {
           ...this.form, // keep defaults if some fields are missing
+          
           planId: plan.planId || "",
           planName: plan.planName || "",
           status: plan.planStatus || "",
           effectiveDate: plan.planEffectiveDate || null,
-          fromDate: plan.planPeriod.from || null,
-          toDate: plan.planPeriod.to || null,
+          // fromDate: plan.planPeriod.from || null,
+          // toDate: plan.planPeriod.to || null,
         };
       },
     },

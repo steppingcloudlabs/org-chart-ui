@@ -123,6 +123,9 @@ export default {
   methods: {
     onPlanClick(data) {
       console.log("data=", data);
+
+console.log("chartData type:", typeof data.chartData);
+console.log("chartData value:", data.chartData);
 var currentData = JSON.parse((data?.chartData));
 this.userData = currentData ["currentData"]
       this.$router.push({ path: "/orgchart2" });
