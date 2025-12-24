@@ -19,9 +19,9 @@ const routes = [{
     path: 'orgchart',
     name: 'Orgchart',
     component: orgchart,
-     meta: {
-    isorgChartPage: true
-  }
+    meta: {
+      isorgChartPage: true
+    }
   },
   {
     path: 'orgchart1',
@@ -32,20 +32,20 @@ const routes = [{
     path: 'orgchart2',
     name: 'Orgchart2',
     component: orgchart2,
-     meta: {
-    isorgChartPage: true,
-    isMainOrgChartPage: true,
+    meta: {
+      isorgChartPage: true,
+      isMainOrgChartPage: true,
 
-  }
+    }
   },
   {
     path: 'viewSavedPlan',
     name: 'viewSavedPlan',
     component: viewSavedPlan,
-     meta: {
-    isorgChartPage: true,
-    isSavedPlanpage: true
-  }
+    meta: {
+      isorgChartPage: true,
+      isSavedPlanpage: true
+    }
   },
   // {
   //   path: 'deptOrgChart',
@@ -59,21 +59,22 @@ const routes = [{
     path: 'plan',
     name: 'plan',
     component: dynamiccards,
-       meta: {
- isorgChartPage: false,
-    isSavedPlanpage: false  }
+    meta: {
+      isorgChartPage: false,
+      isSavedPlanpage: false
+    }
   },
   {
     path: 'detailplan',
     name: 'detailplan',
     component: listView,
-       meta: {
-    hideAppBar: true
-  }
+    meta: {
+      hideAppBar: true
+    }
   },
 
 
-]
+  ]
 },
 
 {
@@ -105,7 +106,7 @@ const routes = [{
 
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })
