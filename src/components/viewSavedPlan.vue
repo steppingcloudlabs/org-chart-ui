@@ -40,8 +40,7 @@
     text-color="white"
     class="text-capitalize"
   >
-    {{ card.planStatus }}
-  </v-chip>
+{{ card.planStatus?.toLowerCase() === 'approved' ? 'View Plan' : 'Edit Plan' }}  </v-chip>
   
 
   <v-spacer></v-spacer>
