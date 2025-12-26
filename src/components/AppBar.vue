@@ -47,7 +47,10 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <!-- {{departmentList}} -->
+ <div v-if="showSaveBtn" class="d-flex flex-column align-end mr-4">
+    <span class="white--text font-weight-bold">{{ selectedPlan.planName }}</span>
+    <span class="white--text caption">({{ selectedPlan.planId }})</span>
+  </div>      <!-- {{departmentList}} -->
       <!-- {{departmentSearchText}} -->
       <v-autocomplete
         v-if="$route.path == '/plan'"
@@ -400,6 +403,15 @@ export default {
         this.$store.commit("setshowFilter", data);
       },
     },
+     selectedPlan: {
+      get() {
+        return this.$store.getters.getselectedPlan;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setselectedPlan", data);
+      }
+    }
   },
 
   methods: {

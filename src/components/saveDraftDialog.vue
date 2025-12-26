@@ -11,28 +11,20 @@
         <!-- Content -->
         <v-card-text>
           <v-form ref="form">
-              <!-- Department Details (Auto-filled & Read-only) -->
-  <span>Department ID</span>
-  <v-text-field
-    v-model="form.deptId"
-    outlined
-    dense
-    disabled
-  />
+            <!-- Department Details (Auto-filled & Read-only) -->
+            <!-- {{selectedPlan}} -->
+            <span>Department ID</span>
+            <v-text-field v-model="form.deptId" outlined dense disabled />
 
-  <!-- Department Name -->
-  <span>Department Name</span>
-  <v-text-field
-    v-model="form.deptName"
-    outlined
-    dense
-    disabled
-  />
+            <!-- Department Name -->
+            <span>Department Name</span>
+            <v-text-field v-model="form.deptName" outlined dense disabled />
             <span>Plan Id</span>
             <v-text-field v-model="form.planId" outlined dense required />
             <span>Plan Name</span>
 
             <v-text-field v-model="form.planName" outlined dense required />
+            <!-- {{isEdit}} -->
             <span>Plan Status</span>
 
             <v-autocomplete
@@ -42,13 +34,8 @@
               dense
               :disabled="!isEdit"
             />
-<span>Plan Version</span>
-<v-text-field
-  v-model="form.planVersion"
-  outlined
-  dense
-  disabled
-/>
+            <span>Plan Version</span>
+            <v-text-field v-model="form.planVersion" outlined dense disabled />
             <span>Effective Date</span>
 
             <v-menu
@@ -153,23 +140,30 @@ export default {
       statusOptions: ["draft", "pending approval", "approved"],
       form: {
         deptId: "",
-  deptName: "",
+        deptName: "",
         planId: "",
         planName: "",
         status: "",
         effectiveDate: null,
-         planVersion: "",
-        
+        planVersion: "",
+
         // fromDate: null,
         // toDate: null,
       },
     };
   },
-  computed: { 
-     isEdit() {
-    return !!this.selectedPlan?.planId;
-  },
-      showLoading: {
+  computed: {
+ 
+    isEdit: {
+      get() {
+        return this.$store.getters.getisEdit;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisEdit", data);
+      },
+    },
+    showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
         // return true;
@@ -210,15 +204,18 @@ export default {
     },
   },
   watch: {
-    selectedDept: {
-    immediate: true,
-    handler(dept) {
-      if (!dept?.details) return;
-
-      this.form.deptId = dept.details.externalCode || "";
-      this.form.deptName = dept.details.name || "";
-    },
+      isEdit(val) {
+    console.log("val===============",val)
   },
+    selectedDept: {
+      immediate: true,
+      handler(dept) {
+        if (!dept?.details) return;
+
+        this.form.deptId = dept.details.externalCode || "";
+        this.form.deptName = dept.details.name || "";
+      },
+    },
     selectedPlan: {
       immediate: true, // runs when dialog opens or page reloads
       handler(plan) {
@@ -226,12 +223,13 @@ export default {
 
         if (!plan) return;
 
+
         this.form = {
           ...this.form, // keep defaults if some fields are missing
-          
+
           planId: plan.planId || "",
           planName: plan.planName || "",
-          status: plan.planStatus,
+          status: plan.planStatus || "draft",
           effectiveDate: plan.planEffectiveDate || null,
           planVersion: plan.planVersion || null,
           // fromDate: plan.planPeriod.from || null,
@@ -239,17 +237,16 @@ export default {
         };
       },
     },
-     isEdit: {
-    immediate: true,
-    handler(val) {
-      if (!val) {
-        // Create mode
-        this.form.status = "draft";
-              this.form.planVersion = "V1.0";
-
-      }
-    }
-  },
+    // isEdit: {
+    //   immediate: true,
+    //   handler(val) {
+    //     if (!val) {
+    //       // Create mode
+    //       this.form.status = "draft";
+    //       this.form.planVersion = "V1.0";
+    //     }
+    //   },
+    // },
   },
 
   methods: {
@@ -263,25 +260,23 @@ export default {
       // attach chart data
       this.form.chartData = this.finalPlanData;
 
-   
       // ✅ isUpdate logic
-  const isUpdate = !!this.selectedPlan?.planId; 
+      const isUpdate = !!this.selectedPlan?.planId;
 
-  console.log("isUpdate:", isUpdate);
-   // ✅ ADD planVersion ONLY FOR UPDATE
-  if (isUpdate && this.selectedPlan?.planVersion) {
-    
-    this.form.planVersion = this.selectedPlan?.planVersion;
-  }
+      console.log("isUpdate:", isUpdate);
+      // ✅ ADD planVersion ONLY FOR UPDATE
+      if (isUpdate && this.selectedPlan?.planVersion) {
+        this.form.planVersion = this.selectedPlan?.planVersion;
+      }
       console.log("Form Data:", this.form);
       this.$store
         .dispatch("CreatePlan", this.form)
-    //     .dispatch("CreatePlan",  {
-    //   form: this.form,
-    //   isUpdate: isUpdate,
-    // })
+        //     .dispatch("CreatePlan",  {
+        //   form: this.form,
+        //   isUpdate: isUpdate,
+        // })
         .then(() => {
-                this.showLoading = false;
+          this.showLoading = false;
 
           this.saveDraftDialog = false;
         })

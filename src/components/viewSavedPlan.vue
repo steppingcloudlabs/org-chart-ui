@@ -69,6 +69,15 @@ export default {
     return {};
   },
   computed: {
+      isEdit: {
+      get() {
+        return this.$store.getters.getisEdit;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisEdit", data);
+      },
+    },
      isApprovedPlan: {
       get() {
         return this.$store.getters.getisApprovedPlan;
@@ -279,6 +288,7 @@ this.userData = currentData ["currentData"]
     this.isApprovedPlan = true;
     }
     this.selectedPlan = card;
+    this.isEdit= true;
 
              this.isMainOrgChartPage = false;
          this.planOrgChart = true;

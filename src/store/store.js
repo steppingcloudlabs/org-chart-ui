@@ -11,6 +11,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         isApprovedPlan: false,
+        isEdit: false,
         isPlanOrgChart: false,
         triggerSavePlan: false,
         triggerApprovalPlan: false,
@@ -239,6 +240,11 @@ export default new Vuex.Store({
         setisApprovedPlan(state, value) {
             state.isApprovedPlan = value;
         },
+        setisEdit(state, value) {
+            console.log('setisEdit called with:', value);
+
+            state.isEdit = value;
+        },
         setisMainOrgChartPage(state, value) {
             state.isMainOrgChartPage = value;
         },
@@ -313,6 +319,9 @@ export default new Vuex.Store({
         },
         getisApprovedPlan: (state) => {
             return state.isApprovedPlan;
+        },
+        getisEdit: (state) => {
+            return state.isEdit;
         },
         getisSavedPlanpage: (state) => {
             return state.isSavedPlanpage;
@@ -621,23 +630,23 @@ export default new Vuex.Store({
         CreatePlan: (data, sampledata) => {
             console.log("data from store=", sampledata);
             // console.log("Inside update logic=", sampledata.isUpdate)
-            console.log("Inside update logic=", sampledata.form.planVersion)
+            console.log("Inside update logic=", sampledata.planVersion)
             const payload = {
                 companyId: companyId, // ✅ make sure this exists
-                planId: sampledata.form.planId,
-                planName: sampledata.form.planName,
+                planId: sampledata.planId,
+                planName: sampledata.planName,
 
-                departmentId: sampledata.form.departmentId,
+                departmentId: sampledata.departmentId,
                 // departmentName: sampledata.departmentName,
 
-                planEffectiveStartDate: sampledata.form.effectiveDate,
+                planEffectiveStartDate: sampledata.effectiveDate,
                 // planPeriod: {
                 //   from: sampledata.fromDate,
                 //   to: sampledata.toDate,
                 // },
 
-                chartData: sampledata.form.chartData,
-                version : sampledata.form.planVersion
+                chartData: sampledata.chartData,
+                version : sampledata.planVersion
                 // chartBase64: "",
 
                 // userId: "",

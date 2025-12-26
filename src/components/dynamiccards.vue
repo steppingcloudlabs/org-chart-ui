@@ -102,6 +102,15 @@ export default {
     };
   },
   computed: {
+      isEdit: {
+      get() {
+        return this.$store.getters.getisEdit;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisEdit", data);
+      },
+    },
     isPlanOrgChart: {
       get() {
         return this.$store.getters.getisPlanOrgChart;
@@ -344,8 +353,9 @@ export default {
     },
     getUserListView(data) {
       this.showLoading = true;
+      this.isEdit = false;
       // current date (YYYY-MM-DD)
-      this.selectedPlan = {};
+      // this.selectedPlan = {};
       this.selectedDept = data;
       var date1 = new Date().getTime();
       this.isorgChartPage = true;
@@ -362,13 +372,16 @@ export default {
           if (response) {
             console.log("testing");
             this.showLoading = false;
+           
             this.$router.push({ path: "/orgchart2" });
              // Generate Plan ID
         const generatedPlanId = `PLAN-${uuidv4().slice(0, 8).toUpperCase()}`;
+        const generatedPlanName = `${data.details.name}-PLAN-${uuidv4().slice(0,6).toUpperCase()}`;
 
         // Set plan detail (CREATE mode)
         this.selectedPlan = {
           planId: generatedPlanId,
+          planName: generatedPlanName,
           planVersion: "V1.0",
           planStatus: "draft"
         };
