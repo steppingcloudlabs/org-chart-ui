@@ -620,7 +620,7 @@ export default new Vuex.Store({
         },
         CreatePlan: (data, sampledata) => {
             console.log("data from store=", sampledata);
-            console.log("Inside update logic=", sampledata.isUpdate)
+            // console.log("Inside update logic=", sampledata.isUpdate)
             console.log("Inside update logic=", sampledata.form.planVersion)
             const payload = {
                 companyId: companyId, // ✅ make sure this exists
@@ -637,16 +637,17 @@ export default new Vuex.Store({
                 // },
 
                 chartData: sampledata.form.chartData,
+                version : sampledata.form.planVersion
                 // chartBase64: "",
 
                 // userId: "",
             };
             // Inline version increment logic
-            if (sampledata.isUpdate && sampledata.form.planVersion) {
+            // if (sampledata.isUpdate && sampledata.form.planVersion) {
 
-                payload.version = sampledata.form.planVersion
+            //     payload.version = sampledata.form.planVersion
 
-            }
+            // }
 
 
             return axios({

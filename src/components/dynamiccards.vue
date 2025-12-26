@@ -89,6 +89,8 @@
 
 <script>
 import mergedialog from "./updates/mergedialog.vue";
+import { v4 as uuidv4 } from "uuid";
+
 export default {
   components: {
     mergedialog
@@ -361,6 +363,17 @@ export default {
             console.log("testing");
             this.showLoading = false;
             this.$router.push({ path: "/orgchart2" });
+             // Generate Plan ID
+        const generatedPlanId = `PLAN-${uuidv4().slice(0, 8).toUpperCase()}`;
+
+        // Set plan detail (CREATE mode)
+        this.selectedPlan = {
+          planId: generatedPlanId,
+          planVersion: "V1.0",
+          planStatus: "draft"
+        };
+
+        console.log("Generated Plan:", this.selectedPlan);
           }
         });
       //  this.$store

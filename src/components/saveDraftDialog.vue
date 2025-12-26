@@ -40,8 +40,15 @@
               :items="statusOptions"
               outlined
               dense
+              :disabled="!isEdit"
             />
-
+<span>Plan Version</span>
+<v-text-field
+  v-model="form.planVersion"
+  outlined
+  dense
+  disabled
+/>
             <span>Effective Date</span>
 
             <v-menu
@@ -151,13 +158,17 @@ export default {
         planName: "",
         status: "",
         effectiveDate: null,
+         planVersion: "",
         
         // fromDate: null,
         // toDate: null,
       },
     };
   },
-  computed: {
+  computed: { 
+     isEdit() {
+    return !!this.selectedPlan?.planId;
+  },
       showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
@@ -211,6 +222,8 @@ export default {
     selectedPlan: {
       immediate: true, // runs when dialog opens or page reloads
       handler(plan) {
+        console.log("selectedPlan watcher fired:", plan);
+
         if (!plan) return;
 
         this.form = {
@@ -218,13 +231,25 @@ export default {
           
           planId: plan.planId || "",
           planName: plan.planName || "",
-          status: plan.planStatus || "",
+          status: plan.planStatus,
           effectiveDate: plan.planEffectiveDate || null,
+          planVersion: plan.planVersion || null,
           // fromDate: plan.planPeriod.from || null,
           // toDate: plan.planPeriod.to || null,
         };
       },
     },
+     isEdit: {
+    immediate: true,
+    handler(val) {
+      if (!val) {
+        // Create mode
+        this.form.status = "draft";
+              this.form.planVersion = "V1.0";
+
+      }
+    }
+  },
   },
 
   methods: {
@@ -250,10 +275,11 @@ export default {
   }
       console.log("Form Data:", this.form);
       this.$store
-        .dispatch("CreatePlan",  {
-      form: this.form,
-      isUpdate: isUpdate,
-    })
+        .dispatch("CreatePlan", this.form)
+    //     .dispatch("CreatePlan",  {
+    //   form: this.form,
+    //   isUpdate: isUpdate,
+    // })
         .then(() => {
                 this.showLoading = false;
 
