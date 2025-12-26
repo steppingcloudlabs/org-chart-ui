@@ -10,6 +10,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        isApprovedPlan: false,
         isPlanOrgChart: false,
         triggerSavePlan: false,
         triggerApprovalPlan: false,
@@ -235,6 +236,9 @@ export default new Vuex.Store({
         setisPlanOrgChart(state, value) {
             state.isPlanOrgChart = value;
         },
+        setisApprovedPlan(state, value) {
+            state.isApprovedPlan = value;
+        },
         setisMainOrgChartPage(state, value) {
             state.isMainOrgChartPage = value;
         },
@@ -306,6 +310,9 @@ export default new Vuex.Store({
         },
         getisPlanOrgChart: (state) => {
             return state.isPlanOrgChart;
+        },
+        getisApprovedPlan: (state) => {
+            return state.isApprovedPlan;
         },
         getisSavedPlanpage: (state) => {
             return state.isSavedPlanpage;

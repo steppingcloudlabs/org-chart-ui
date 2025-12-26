@@ -40,7 +40,8 @@
     text-color="white"
     class="text-capitalize"
   >
-{{ card.planStatus?.toLowerCase() === 'approved' ? 'View Plan' : 'Edit Plan' }}  </v-chip>
+    {{ card.planStatus }}
+  </v-chip>
   
 
   <v-spacer></v-spacer>
@@ -51,7 +52,8 @@
     color="primary"
     @click="openUpdateDialog(card)"
   >
-    Edit Plan
+     {{ card.planStatus?.toLowerCase() === 'approved' ? 'View Plan' : 'Edit Plan' }}
+
   </v-btn>
 </v-card-actions>
 
@@ -67,6 +69,15 @@ export default {
     return {};
   },
   computed: {
+     isApprovedPlan: {
+      get() {
+        return this.$store.getters.getisApprovedPlan;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisApprovedPlan", data);
+      },
+    },
      selectedStatus: {
       get() {
         return this.$store.getters.getselectedStatus;
@@ -264,7 +275,11 @@ this.userData = currentData ["currentData"]
       // this.$router.push({ path: "/orgchart2" });
     },
   openUpdateDialog(card) {
+    if(card.planStatus?.toLowerCase() === 'approved'){
+    this.isApprovedPlan = true;
+    }
     this.selectedPlan = card;
+
              this.isMainOrgChartPage = false;
          this.planOrgChart = true;
 

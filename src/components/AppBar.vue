@@ -201,6 +201,15 @@
               <v-list-item-title>Send for Approval</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <!-- {{isApprovedPlan}} -->
+          <v-list-item v-bind="attrs" v-on="on" @click="sendForApproval" v-if="isApprovedPlan">
+            <v-list-item-icon>
+              <v-icon color="primary">mdi-publish</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Publish Plan</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item v-bind="attrs" v-on="on" @click="openSplitdialog()">
             <v-list-item-icon>
               <v-icon color="primary">mdi-content-cut</v-icon>
@@ -239,6 +248,15 @@ export default {
 
   components: {},
   computed: {
+      isApprovedPlan: {
+      get() {
+        return this.$store.getters.getisApprovedPlan;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setisApprovedPlan", data);
+      },
+    },
       showsplitdialog: {
       get() {
         return this.$store.getters.getshowsplitdialog;
