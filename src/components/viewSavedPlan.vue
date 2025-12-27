@@ -270,7 +270,7 @@ export default {
 
     switch (status.toLowerCase()) {
       case 'draft':
-        return 'yellow'
+        return '#FFCA4B'
       case 'pending approval':
         return 'orange'
       case 'approved':

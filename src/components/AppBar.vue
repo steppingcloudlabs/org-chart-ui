@@ -58,8 +58,8 @@
 </v-chip>
 <v-chip v-else-if="selectedPlan.planStatus == 'draft'"
   small
-  color="yellow"
-  text-color="white"
+  color="#FFCA4B"
+  text-color="black"
   class="ma-0"
 >
   {{ selectedPlan.planStatus }}
