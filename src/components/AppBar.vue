@@ -34,25 +34,74 @@
   /> -->
   <v-btn v-if="$route.path !== '/plan'" class="ma-3" icon  @click="navigateBack()">
         
-        <v-icon color="white">mdi-backburger</v-icon>
+       <v-icon color="white">mdi-backburger</v-icon>
       </v-btn>
       <img v-if="$route.path == '/plan'"
-        src="/assets/logoSC.png" 
-        style="height: 50px; margin-left: 5px; margin-top: 2px"
+        src="/assets/ReOrglogo.png" 
+        style="height: 150px; margin-left: 5px; margin-top: 2px"
       />
 
+      <div v-if="showPlanActionsMenu" class="d-flex flex-column align-start ml-4">
+    <div class="d-flex align-center">
+    <span class="white--text font-weight-bold mr-2">
+      {{ selectedPlan.planName }}
+    </span>
+
+   
+  <v-chip v-if="selectedPlan.planStatus == 'approved'"
+  small
+  color="blue"
+  text-color="white"
+  class="ma-0"
+>
+  {{ selectedPlan.planStatus }}
+</v-chip>
+<v-chip v-else-if="selectedPlan.planStatus == 'draft'"
+  small
+  color="yellow"
+  text-color="white"
+  class="ma-0"
+>
+  {{ selectedPlan.planStatus }}
+</v-chip>
+<v-chip v-else-if="selectedPlan.planStatus == 'published'"
+  small
+  color="green"
+  text-color="white"
+  class="ma-0"
+>
+  {{ selectedPlan.planStatus }}
+</v-chip>
+<v-chip v-else
+  small
+  color="orange"
+  text-color="white"
+  class="ma-0"
+>
+  {{ selectedPlan.planStatus }}
+</v-chip>
+  </div>
+
+  <span class="white--text caption">
+    ({{ selectedPlan.planId }})
+  </span>
+
+  </div>  
+
       <!-- Center: Title -->
-      <v-toolbar-title class="absolute-center font-weight-medium" color="white">
+      <!-- <v-toolbar-title class="absolute-center font-weight-medium" color="white">
         Re-Org
-      </v-toolbar-title>
+      </v-toolbar-title> -->
 
       <v-spacer></v-spacer>
  <div v-if="showSaveBtn" class="d-flex flex-column align-end mr-4">
     <span class="white--text font-weight-bold">{{ selectedPlan.planName }}</span>
     <span class="white--text caption">({{ selectedPlan.planId }})</span>
-  </div>      <!-- {{departmentList}} -->
+  </div> 
+ 
+       <!-- {{departmentList}} -->
       <!-- {{departmentSearchText}} -->
-      <v-autocomplete
+    <v-autocomplete
         v-if="$route.path == '/plan'"
         v-model="departmentSearchText"
         :items="filteredDepartments"
@@ -181,7 +230,7 @@
           <!-- Save Plan -->
           <!-- <v-tooltip right>
       <template v-slot:activator="{ on, attrs }"> -->
-          <v-list-item v-bind="attrs" v-on="on" @click="saveplan">
+          <v-list-item v-bind="attrs" v-on="on" @click="saveplan" v-if="this.selectedPlan.planStatus.toLowerCase()=='draft'">
             <v-list-item-icon>
               <v-icon color="primary">mdi-content-save</v-icon>
             </v-list-item-icon>
@@ -196,7 +245,7 @@
           <!-- Send for Approval -->
           <!-- <v-tooltip right>
       <template v-slot:activator="{ on, attrs }"> -->
-          <v-list-item v-bind="attrs" v-on="on" @click="sendForApproval">
+          <v-list-item v-bind="attrs" v-on="on" @click="sendForApproval" v-if="this.selectedPlan.planStatus.toLowerCase()=='draft'">
             <v-list-item-icon>
               <v-icon color="primary">mdi-comment-account</v-icon>
             </v-list-item-icon>
@@ -205,7 +254,7 @@
             </v-list-item-content>
           </v-list-item>
           <!-- {{isApprovedPlan}} -->
-          <v-list-item v-bind="attrs" v-on="on" @click="sendForApproval" v-if="isApprovedPlan">
+          <v-list-item v-bind="attrs" v-on="on" @click="sendForPublish" v-if="isApprovedPlan">
             <v-list-item-icon>
               <v-icon color="primary">mdi-publish</v-icon>
             </v-list-item-icon>
@@ -443,6 +492,12 @@ export default {
     sendForApproval() {
       this.$store.commit("TRIGGER_SAVE");
       this.$store.commit("TRIGGER_APPROVAL");
+      this.approvalDialog = true;
+    },
+
+    sendForPublish()
+    {
+      this.$store.commit("TRIGGER_PUBLISH");
       this.approvalDialog = true;
     },
 

@@ -126,6 +126,7 @@
   fill: #039BE5 !important;
   cursor: pointer;
 }
+
 .department rect {
     fill: #B4FFFF !important;
 }
@@ -213,6 +214,35 @@
 .filter-item-hovered rect{
     fill: #F57C00;
 }
+
+#legendd {
+  font-size: 10px;
+}
+
+/* 2-column aligned layout */
+.legend-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* left block */
+.legend-summary p {
+  margin: 4px 0;
+  padding: 0 6px;
+}
+
+/* right block — your this.str output */
+.legend-grades {
+  display: grid !important; 
+  grid-template-columns: repeat(2, auto); /* 2 columns of grade rows */
+  gap: 2px 12px;
+}
+.legend-grades p {
+  margin: 2px 0;
+  padding: 0 6px;
+}
+
     
     
 #tree hr {

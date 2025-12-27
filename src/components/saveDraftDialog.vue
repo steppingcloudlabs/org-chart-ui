@@ -258,8 +258,8 @@ export default {
       this.form.departmentId = this.selectedDept.details.externalCode;
       this.form.departmentName = this.selectedDept.details.name;
       // attach chart data
-      this.form.chartData = this.finalPlanData;
-
+      this.form.chartData = this.finalPlanData["currentData"];
+      this.form.OriginalData = this.finalPlanData["originalData"];
       // ✅ isUpdate logic
       const isUpdate = !!this.selectedPlan?.planId;
 

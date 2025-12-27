@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="px-6 pt-10">
-    <v-row dense>
+    <v-row dense v-if="filteredDeptCards.length" >
       <v-col
         v-for="(card, index) in filteredDeptCards"
         :key="index"
@@ -52,13 +52,16 @@
     color="primary"
     @click="openUpdateDialog(card)"
   >
-     {{ card.planStatus?.toLowerCase() === 'approved' ? 'View Plan' : 'Edit Plan' }}
+     {{ card.planStatus?.toLowerCase() === 'published'? 'View Plan' : card.planStatus?.toLowerCase() === 'approved' ? 'Publish Plan' :"Edit Plan" }}
 
   </v-btn>
 </v-card-actions>
 
         </v-card>
       </v-col>
+    </v-row>
+    <v-row dense v-else>
+      <span class="text-center"> No Plans Available</span>
     </v-row>
   </v-container>
 </template>
@@ -148,6 +151,15 @@ export default {
         },
         set(data) {
           this.$store.commit("setuserData", data);
+        },
+      },
+      originalData: {
+        get() {
+          return this.$store.getters.getoriginalData;
+          // return true;
+        },
+        set(data) {
+          this.$store.commit("setoriginalData", data);
         },
       },
       showdeptView: {
@@ -258,11 +270,13 @@ export default {
 
     switch (status.toLowerCase()) {
       case 'draft':
-        return 'blue'
+        return 'yellow'
       case 'pending approval':
         return 'orange'
       case 'approved':
-        return 'green'
+        return 'blue'
+        case 'published':
+        return 'green'  
       default:
         return 'grey'
     }
@@ -274,14 +288,45 @@ export default {
 console.log("chartData type:", typeof data.chartData);
 console.log("chartData value:", data.chartData);
 var currentData = JSON.parse((data?.chartData));
-this.userData = currentData ["currentData"]
-      this.$router.push({ path: "/orgchart2" });
+this.originalData = data?.originalData ? JSON.parse((data.originalData)) : null
+var finalPlan = {}
+finalPlan["currentData"] = currentData
+finalPlan["originalData"] = this.originalData
+
+
+this.$store.commit("SET_FINAL_PLAN_DATA",finalPlan)
+
+this.userData = currentData
+const uniqueUserIds = [...new Set(this.userData.map(u => u.userId).filter(id => id) )];
+this.$store.dispatch("getProfileImages",uniqueUserIds)
+.then(response =>
+{
+   if (response)
+   {
+    // Convert photos array into dictionary for fast lookup
+  const photoMap = Object.fromEntries(
+  response.map(p => [p.userId, p.photo])
+);
+// Now add img to users where match exists
+const mergedUsers = this.userData.map(u => ({
+  ...u,
+  ...(photoMap[u.userId] && { img: "data:image/jpg;base64,"+ photoMap[u.userId] })
+}));
+this.userData = mergedUsers
+    console.log("this data", this.userData)
+    this.$router.push({ path: "/orgchart2" });
          this.selectedPlan=data;
          this.planOrgChart = true;
          this.isPlanOrgChart=true;
          this.isMainOrgChartPage = false;
          this.showLoading = false;
+   }
+})
+     
       // this.$router.push({ path: "/orgchart2" });
+
+
+
     },
   openUpdateDialog(card) {
     if(card.planStatus?.toLowerCase() === 'approved'){
@@ -322,7 +367,7 @@ this.userData = currentData ["currentData"]
 },
 
   mounted(){
-
+    this.isApprovedPlan = false
     this.getUserListView()
   
   }

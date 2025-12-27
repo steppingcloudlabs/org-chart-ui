@@ -74,7 +74,7 @@
               small
               @click="getUserListView(card)"
               :loading="loadingCardId"
-            >{{ card.details.headOfUnitNav ? 'Update Plan' : 'Start Planning' }}</v-btn>
+            >{{ card.details.headOfUnitNav ? 'Start Planning' : 'Start Planning' }}</v-btn>
 
             <v-spacer />
 

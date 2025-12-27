@@ -15,6 +15,7 @@ export default new Vuex.Store({
         isPlanOrgChart: false,
         triggerSavePlan: false,
         triggerApprovalPlan: false,
+        triggerPublishPlan:false,
         finalPlanData: null,
         finalPlanAttach: "",
         allSavedPlans: [],
@@ -64,6 +65,7 @@ export default new Vuex.Store({
         showmergedialog: false,
         showupdatedialog: false,
         overlay: false,
+        originalData:{},
     },
     mutations: {
         TRIGGER_SAVE(state) {
@@ -78,9 +80,16 @@ export default new Vuex.Store({
         RESET_TRIGGER_APPROVAL(state) {
             state.triggerApprovalPlan = false;
         },
+        TRIGGER_PUBLISH(state) {
+            state.triggerPublishPlan = true;
+        },
+        RESET_TRIGGER_PUBLISH(state) {
+            state.triggerPublishPlan = false;
+        },
         SET_FINAL_PLAN_DATA(state, payload) {
             state.finalPlanData = payload;
         },
+       
 
         SET_FINAL_PLAN_ATTACH(state, payload) {
             state.finalPlanAttach = payload;
@@ -88,6 +97,9 @@ export default new Vuex.Store({
 
         setuserData: (state, data) => {
             state.userData = data;
+        },
+        setoriginalData: (state, data) => {
+            state.originalData = data;
         },
         setshowoverlay: (state, data) => {
             state.overlay = data;
@@ -290,6 +302,9 @@ export default new Vuex.Store({
         getuserData: (state) => {
             return state.userData;
         },
+        getoriginalData: (state) => {
+            return state.originalData;
+        },
         getdeptUserData: (state) => {
             return state.selectedDeptartmentUsers;
         },
@@ -483,6 +498,70 @@ export default new Vuex.Store({
             });
         },
 
+        getProfileImages: ({ commit }, data) => {
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getProfileImages",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                        userId: data,
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setflag", "hello");
+                    console.log(response);
+                });
+            });
+        },
+        publishPlan: ({ commit }, data) => {
+            console.log("inside publish", data)
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/publishPlan",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: {
+                        companyId: companyId,
+                        summary: data,
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setflag", "hello");
+                    console.log(response);
+                }).catch((error) => {
+                    console.error("getSavedPlan error:", error);
+                    throw error;
+                });
+            });
+        },
+        updateStatus: ({ commit }, data) => {
+            console.log("inside publish")
+
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/updateStatus",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: {
+                        companyId: companyId,
+                        ...data,
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setflag", "hello");
+                    console.log(response);
+                });
+            });
+        },
+
         getDepUser: ({ commit }, data) => {
             return new Promise((resolve) => {
                 axios({
@@ -646,6 +725,7 @@ export default new Vuex.Store({
                 // },
 
                 chartData: sampledata.chartData,
+                originalData : sampledata.OriginalData,
                 version : sampledata.planVersion
                 // chartBase64: "",
 
@@ -693,7 +773,9 @@ export default new Vuex.Store({
                     departmentId: sampledata.departmentId,
                     version: sampledata.planVersion,
                     planEffectiveStartDate: sampledata.effectiveDate,
-                    chartData :sampledata.chartData
+                    chartData :sampledata.chartData,
+                    originalData:sampledata.originalData,
+                    summary : sampledata.summary
                     // approver: {
                     //   userId: sampledata.userId,
                     //   userName: sampledata.userName,

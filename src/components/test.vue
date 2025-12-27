@@ -40,6 +40,8 @@ selectedView:true,
      resignedCount: 0,
      maleCount: 0,
      femaleCount: 0,
+     totalPositionCount:0,
+     totalCriticalPosition:0,
      gradecount: [],
      gradeOccurence: [],
      originalMasterData:[],
@@ -218,7 +220,16 @@ selectedView:true,
      set(data) {
        this.$store.commit("setisLevel", data);
      },
-   }
+   },
+   originalData: {
+        get() {
+          return this.$store.getters.getoriginalData;
+          // return true;
+        },
+        set(data) {
+          this.$store.commit("setoriginalData", data);
+        },
+      },
  },
 
      methods: {
@@ -276,20 +287,20 @@ selectedView:true,
      this.str = ""
      for (var j = 0; j < this.gradecount.length; j = j + 3) {
        this.str +=
-         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'><span>" +
          this.userPayGrade[j] +
-         "-" +
+         ":" +
          this.gradecount[j] +
          "</span><span class='ml-2'>" +
          this.userPayGrade[j + 1] +
-         "-" +
+         ":" +
          this.gradecount[j + 1] +
          "</span>";
        if (this.gradecount[j + 3]) {
          this.str +=
            "<span class='ml-2'>" +
            this.userPayGrade[j + 2] +
-           "-" +
+           ":" +
            this.gradecount[j + 2] +
            "</span></p>";
        } else {
@@ -297,15 +308,15 @@ selectedView:true,
        }
      }
      legent.innerHTML =
-       "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-       this.totalHeadCount +
-       "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-      //  this.vacantCount +
-      //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-      //  this.maleCount +
-      //  ":" +
-      //  this.femaleCount +
-       "</p>" +
+     "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
+                  this.totalPositionCount +
+                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position-" +
+                  this.vacantCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount-" +
+                  this.totalHeadCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position-" +
+                  this.totalCriticalPosition +
+                  "</p>"  +
        this.str;
      this.chart.element.appendChild(legent);
      //this.gradeCounting();
@@ -340,20 +351,20 @@ selectedView:true,
      this.str = "";
      for (var j = 0; j < this.gradecount.length; j = j + 3) {
        this.str +=
-         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'><span>" +
          this.userPayGrade[j] +
-         "-" +
+         ":" +
          this.gradecount[j] +
          "</span><span class='ml-2'>" +
          this.userPayGrade[j + 1] +
-         "-" +
+         ":" +
          this.gradecount[j + 1] +
          "</span>";
        if (this.gradecount[j + 3]) {
          this.str +=
            "<span class='ml-2'>" +
            this.userPayGrade[j + 2] +
-           "-" +
+           ":" +
            this.gradecount[j + 2] +
            "</span></p>";
        } else {
@@ -370,15 +381,15 @@ selectedView:true,
      legent.style.border = "2px solid black";
 
      legent.innerHTML =
-       "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-       this.totalHeadCount +
-       "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-       this.vacantCount +
-      //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-      //  this.maleCount +
-      //  ":" +
-      //  this.femaleCount +
-       "</p>" +
+     "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
+                  this.totalPositionCount +
+                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position-" +
+                  this.vacantCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount-" +
+                  this.totalHeadCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position -" +
+                  this.totalCriticalPosition +
+                  "</p>"  +
        this.str;
      this.chart.element.appendChild(legent);
      var leg = document.createElement("div");
@@ -395,10 +406,26 @@ selectedView:true,
 
    exportUserProfile(nodeId) {
      var nodeData = this.chart.get(nodeId);
-     // this.$router.push(`/profile/${nodeData.userId}/template-selection`);
-     this.$store.commit("ShowProfileDialog", nodeData);
-     console.log(nodeId);
-   },      
+     var data1 = this.chart.get(nodeId.pid);
+     this.blur();
+       if (!this.showNodeProfile) {
+         this.$store.commit("ShowNodeProfile", nodeData);
+         this.$store.commit("parentNodeData", data1);
+       } else {
+         this.showNodeProfile = !this.showNodeProfile;
+       }
+     
+   }, 
+   
+   gradeCounting() {
+        for (var i = 0; i < this.userPayGrade.length; i++) {
+          var g = this;
+          this.gradecount[i] = this.gradeOccurence.filter(function (item) {
+            return item === g.userPayGrade[i];
+          }).length;
+          console.log(this.gradecount);
+        }
+      },
 
  getPayGrade(orgChartData) {
      let g = this;
@@ -474,12 +501,17 @@ this.division.push(divisionValue);
      this.intersectPay = uniqueArray;
      this.levelPay=this.intersectPay
      console.log(this.intersectPay);
-    // this.gradeCounting();
+    this.gradeCounting();
    },
 
    addTags(nodes) {
      for (var i = 0; i < nodes.length; i++) {
        this.totalHeadCount++;
+       this.totalPositionCount++;
+       if (nodes[i].positionCritical == "Critical")
+       {
+        this.totalCriticalPosition++;
+       }
        var node = nodes[i];
        var indexpay = this.intersectPay.findIndex(
          (x) => x.externalCode == node.userPayGrade
@@ -509,6 +541,7 @@ this.division.push(divisionValue);
            break;
        }
        node.tags.push(node.userPayGrade);
+       node.tags.push(node.positionCritical);
        switch (node.isRoot) {
          case true:
            node.tags.push("RootNode");
@@ -681,20 +714,20 @@ this.division.push(divisionValue);
      this.str = "";
      for (var j = 0; j < this.gradecount.length; j = j + 3) {
        this.str +=
-         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'><span>" +
          this.userPayGrade[j] +
-         "-" +
+         ":" +
          this.gradecount[j] +
          "</span><span class='ml-2'>" +
          this.userPayGrade[j + 1] +
-         "-" +
+         ":" +
          this.gradecount[j + 1] +
          "</span>";
        if (this.gradecount[j + 3]) {
          this.str +=
            "<span class='ml-2'>" +
            this.userPayGrade[j + 2] +
-           "-" +
+           ":" +
            this.gradecount[j + 2] +
            "</span></p>";
        } else {
@@ -704,15 +737,15 @@ this.division.push(divisionValue);
      var legent = document.getElementById("legendd");
 
      legent.innerHTML =
-       "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-       this.totalHeadCount +
-       "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-       this.vacantCount +
-      //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-      //  this.maleCount +
-      //  ":" +
-      //  this.femaleCount +
-       "</p>" +
+     "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
+                  this.totalPositionCount +
+                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position:" +
+                  this.vacantCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount:" +
+                  this.totalHeadCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position :" +
+                  this.totalCriticalPosition +
+                  "</p>"  +
        this.str;
      this.chart.element.appendChild(legent);
    },
@@ -763,13 +796,13 @@ this.division.push(divisionValue);
      svg = svg.replace("<svg", '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
      }
 
-     // var svg = document.getElementById("tree").innerHTML;
+    // svg = document.getElementById("tree").innerHTML;
 
-     //svg = svg.substr(0, svg.indexOf("</svg>") + 6);
-     // svg = svg.split("</svg>")[0];
-     // svg += document.getElementById("legendd").innerHTML + "</svg>";
-     // svg += "</svg>";
-     console.log(svg);
+    //  svg = svg.substr(0, svg.indexOf("</svg>") + 6);
+    //  svg = svg.split("</svg>")[0];
+    //  svg += document.getElementById("legendd").innerHTML + "</svg>";
+    //  svg += "</svg>";
+    //  console.log(svg);
      const canvas = document.createElement("canvas");
      canvas.height = 4000; //parseInt($("svg")[0].getAttribute("height")) * 40
      canvas.width = 4000; //parseInt($("svg")[0].getAttribute("width")) * 40
@@ -852,13 +885,13 @@ this.division.push(divisionValue);
     this.showLoading = false
      for (var j = 0; j < this.gradecount.length; j = j + 3) {
          this.str +=
-           "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'><span>" +
+           "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'><span>" +
            this.userPayGrade[j] +
-           "-" +
+           ":" +
            this.gradecount[j] +
            "</span><span class='ml-2'>" +
            this.userPayGrade[j + 1] +
-           "-" +
+           ":" +
            this.gradecount[j + 1] +
            "</span>";
 
@@ -866,13 +899,14 @@ this.division.push(divisionValue);
            this.str +=
              "<span class='ml-2'>" +
              this.userPayGrade[j + 2] +
-             "-" +
+             ":" +
              this.gradecount[j + 2] +
              "</span></p>";
          } else {
            this.str += "</p>";
          }
        }
+       console.log("Paygroade", this.str)
        var legent = document.createElement("div");
        legent.setAttribute("id", "legendd");
        legent.style.position = "absolute";
@@ -882,15 +916,15 @@ this.division.push(divisionValue);
        legent.style.width = "150px";
        legent.style.border = "1px solid black";
        legent.innerHTML =
-         "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-         this.totalHeadCount +
-         "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
-         this.vacantCount +
-        //  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Diversity Ratio(M:F)-" +
-        //  this.maleCount +
-        //  ":" +
-        //  this.femaleCount +
-         "</p>" +
+       "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
+                  this.totalPositionCount +
+                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position-" +
+                  this.vacantCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount-" +
+                  this.totalHeadCount +
+                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position -" +
+                  this.totalCriticalPosition +
+                  "</p>"  +
          this.str;
        this.chart.element.appendChild(legent);
 
@@ -904,7 +938,7 @@ this.division.push(divisionValue);
        leg.innerHTML =
          '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
        this.chart.element.appendChild(leg);
-       // this.gradeCounting()
+       this.gradeCounting()
        console.log("Versin",OrgChart.VERSION)
       
  }
@@ -918,9 +952,20 @@ this.division.push(divisionValue);
        /* eslint-disable no-unused-vars */
        const nodesWithoutImg = currentNodes.map(({ img, ...rest }) => rest);
        /* eslint-enable no-unused-vars */
-       this.finalPlan["currentData"] = nodesWithoutImg,
+       this.finalPlan["currentData"] = nodesWithoutImg;
+       if(!this.originalData.length)
+       {
+         /* eslint-disable no-unused-vars */
+       const nodesWithoutImg1 = this.originalMasterData.map(({ img, ...rest }) => rest);
+       /* eslint-enable no-unused-vars */
+       this.finalPlan["originalData"] = nodesWithoutImg1;
+       }
+       else
+       {
+        this.finalPlan["originalData"] = this.originalData;
        
-       //this.finalPlan["originalData"] = this.originalMasterData
+       }
+      
        console.log(this.finalPlan);
        
   this.$store.commit("SET_FINAL_PLAN_DATA", this.finalPlan)
@@ -931,7 +976,7 @@ this.division.push(divisionValue);
 
  changeView()
  {
-     var filteredData=this.orgChartData
+     var filteredData=this.chart.config.nodes ? this.chart.config.nodes : this.orgChartData
     
     if(this.selectedView)
      {
@@ -960,6 +1005,46 @@ this.division.push(divisionValue);
      }
     this.redraw(filteredData)
  },
+
+ diffNodes(original, current) {
+  // Build fast lookup maps by id
+  const originalMap = new Map(original.map(o => [o.id, o]));
+  const currentMap  = new Map(current.map(c => [c.id, c]));
+
+  const add = [];
+  const del = [];
+  const update = [];
+
+  // 1) Check current -> find new & updated
+  for (const [id, curNode] of currentMap.entries()) {
+    const origNode = originalMap.get(id);
+
+    if (!origNode) {
+      // id exists only in current => ADD
+      add.push(curNode);
+    } else {
+      // id exists in both => check pid change
+      if (origNode.pid !== curNode.pid) {
+        // you can push just curNode or include oldPid for reference
+        update.push({
+          ...curNode,
+          oldPid: origNode.pid, // optional, for tracking
+        });
+      }
+    }
+  }
+
+  // 2) Check original -> find deleted
+  for (const [id, origNode] of originalMap.entries()) {
+    if (!currentMap.has(id)) {
+      // id exists only in original => DELETE
+      del.push(origNode);
+    }
+  }
+
+  return { add, del, update };
+},
+
 
  copyHandler(nodeId){
    var data = this.chart.get(nodeId);
@@ -1102,10 +1187,10 @@ this.division.push(divisionValue);
        '<text width="200" text-overflow="ellipsis" style="font-size: 11px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
      OrgChart.templates.myTemplate.field_8 =
        '<text text-overflow="ellipsis" style="font-size: 12px;" fill="white" x="155" y="130" text-anchor="middle">({val})</text>';
-     OrgChart.templates.myTemplate.field_1 =
+     OrgChart.templates.myTemplate.field_3 =
        '<text width="120" text-overflow="ellipsis" style="font-size: 16px;" fill="white" x="80" y="130" font-weight="BOLD" text-anchor="middle">{val}</text>';
 
-     OrgChart.templates.myTemplate.field_3 = '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="190" text-anchor="middle">{val}</text>';
+     OrgChart.templates.myTemplate.field_1 = '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="90" y="190" text-anchor="middle">{val}</text>';
      OrgChart.templates.myTemplate.field_4 =  '<text  text-overflow="multiline" style="font-size: 14px;" fill="white" x="60" y="210" text-anchor="middle">{val}</text>';
      OrgChart.templates.myTemplate.field_5 =  '<text text-overflow="multiline" style="font-size: 14px;" fill="white" x="120" y="210" text-anchor="middle">({val})</text>';
      OrgChart.templates.myTemplate.field_7 = "{val}";
@@ -1117,7 +1202,61 @@ this.division.push(divisionValue);
      //   '<g><line x1="1" y1="260" x2="179" y2="260"  /> </g>';
       OrgChart.templates.myTemplate.img_0 ='<clipPath id="ulaImg"><circle cx="90" cy="60" r="40" stroke="white" stroke-width="5"></circle></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" x="50" y="20"  width="80" height="80"></image>';
      // OrgChart.templates.myTemplate.webcallMe = '<g  transform="translate(35,230)" class="flag"><path d="M18.344,16.174l-7.98-12.856c-0.172-0.288-0.586-0.288-0.758,0L1.627,16.217c0.339-0.543-0.603,0.668,0.384,0.682h15.991C18.893,16.891,18.167,15.961,18.344,16.174 M2.789,16.008l7.196-11.6l7.224,11.6H2.789z M10.455,7.552v3.561c0,0.244-0.199,0.445-0.443,0.445s-0.443-0.201-0.443-0.445V7.552c0-0.245,0.199-0.445,0.443-0.445S10.455,7.307,10.455,7.552M10.012,12.439c-0.733,0-1.33,0.6-1.33,1.336s0.597,1.336,1.33,1.336c0.734,0,1.33-0.6,1.33-1.336S10.746,12.439,10.012,12.439M10.012,14.221c-0.244,0-0.443-0.199-0.443-0.445c0-0.244,0.199-0.445,0.443-0.445s0.443,0.201,0.443,0.445C10.455,14.021,10.256,14.221,10.012,14.221"></path></g>'
-     OrgChart.templates.myTemplate.field_10 = "{val}";
+     OrgChart.templates.myTemplate.field_10 = function(node, data, template, config){
+     // var isResigned = false;
+    // var isCritical = false;
+     
+     console.log("Console",template,config,node)
+    //  let resignedIndex = data.tags.findIndex((element) => {
+    //    return element == "Resigned";
+    //  });
+     let criticalIndex = data.tags.findIndex((element) => {
+       return element == "Critical";
+     });
+     if (criticalIndex > -1) {
+      //return '<image  xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="35" y="229" width="20" height="20"> <title>Risk of Loss</title></image>';
+     return '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="200" text-anchor="middle">${data.positionCritical}<</text>';
+    }
+     else{
+      return null
+     }
+
+
+
+    //  var field =
+    //    '<image     xlink:href="https://i.ibb.co/rxM0SM2/caution-Copy.png" x="10" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
+    //  var flag_field =
+    //    '<image class="redflag" xlink:href="/assets/redflag.png" x="10" y="225" width="22" height="22"> <title>Resigned</title></image>';
+    //  if (resignedIndex > -1) {
+    //    isResigned = true;
+    //  }
+    //  if (criticalIndex > -1) {
+    //    isCritical = true;
+    //  }
+    //  if (isResigned && isCritical) {
+    //    field =
+    //      '<image   xlink:href="https://i.ibb.co/FWZTmXh/resign-Copy.png" x="35" y="230" width="22" height="22"> <title>Vacant Position</title></image>';
+    //    flag_field =
+    //      '<image class="redflag" xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="10" y="230" width="22" height="22"> <title>Impact of loss</title></image>';
+
+    //    return field + flag_field;
+    //  } else if (isResigned) {
+    //    flag_field =
+    //      '<image class="redflag"  xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="10" y="225" width="22" height="22"> <title>Impact of Loss</title></image>';
+    //    var field1 =
+    //      '<image   xlink:href="https://i.ibb.co/wSZNKXY/yellowface.png" x="35" y="225" width="22" height="22"> <title>Risk of Loss</title></image>';
+    //    var field2 =
+    //      '<image  xlink:href="https://i.ibb.co/FWZTmXh/resign-Copy.png" x="65" y="225" width="22" height="22"> <title>Resigned</title></image>';
+
+    //    return flag_field + field1 + field2;
+    //  } else if (isCritical) {
+    //    var field5 =
+    //      '<image  xlink:href="https://i.ibb.co/phcGNq5/redflag-Copy.png" x="35" y="229" width="20" height="20"> <title>Risk of Loss</title></image>';
+    //    return field + field5;
+    //  } else {
+    //    return null;
+    //  }
+};
 
      OrgChart.templates.myTemplate.plus =
        '<rect x="3" y="0" width="22" height="22" rx="12" ry="12" fill="#2E2E2E" stroke="#aeaeae" stroke-width="1"></rect>' +
@@ -1141,10 +1280,10 @@ this.division.push(divisionValue);
      
      
      OrgChart.templates.myTemplate.min = Object.assign({}, OrgChart.templates.ana);
-     OrgChart.templates.myTemplate.min.size = [250, 60];
+     OrgChart.templates.myTemplate.min.size = [250, 80];
    OrgChart.templates.myTemplate.min.img_0 = "";
    OrgChart.templates.myTemplate.min.field_0 = '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="40" text-anchor="middle">{val}</text>';
-   OrgChart.templates.myTemplate.min.field_1 = "";
+   OrgChart.templates.myTemplate.min.field_1 = '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="60" text-anchor="middle">{val}</text>';
 
 
 
@@ -1282,9 +1421,9 @@ this.division.push(divisionValue);
          template :"myTemplate",
          nodeBinding: {
          field_0: "positionTitle",
-         field_1: "userName",
+         field_1: "userPayGrade",
          img_0: "img",
-         field_3: "userPayGrade",
+         field_3: "userName",
          field_4: "userDepartmentName",
          field_5:  "userDivisionName",
          field_6: "positionVacant",
@@ -1299,16 +1438,16 @@ this.division.push(divisionValue);
        this.chart.on("click", (sender, args) => {
        var data = sender.get(args.node.id);
        
-       var data1 = sender.get(args.node.pid);
+       //var data1 = sender.get(args.node.pid);
 
        this.selectedId = data.id;
-       this.blur();
-       if (!this.showNodeProfile) {
-         this.$store.commit("ShowNodeProfile", data);
-         this.$store.commit("parentNodeData", data1);
-       } else {
-         this.showNodeProfile = !this.showNodeProfile;
-       }
+      //  this.blur();
+      //  if (!this.showNodeProfile) {
+      //    this.$store.commit("ShowNodeProfile", data);
+      //    this.$store.commit("parentNodeData", data1);
+      //  } else {
+      //    this.showNodeProfile = !this.showNodeProfile;
+      //  }
        if (args.node.min) {
      sender.maximize(args.node.id);
  }
@@ -1319,11 +1458,16 @@ this.division.push(divisionValue);
      });
 
      this.chart.onExportStart((args) => {
-       
 
-       
+      args.options.header = "Plan 2026"
+    
    args.styles += document.getElementById('myStyles').outerHTML;
- 
+   
+  //   // add legend html
+  // const legendEl = document.getElementById('legendd');
+  // if (legendEl) {
+  //   args.content += legendEl.outerHTML; // << adds legend to exported content
+  // }
 
 
 });
@@ -1356,6 +1500,7 @@ const legenddEl = document.getElementById("legendd");
        
          var legent = document.createElement("div");
                 legent.setAttribute("id", "legendd");
+                
                 legent.style.position = "absolute";
                 legent.style.top = "28px";
                 legent.style.right = "70px";
@@ -1363,13 +1508,54 @@ const legenddEl = document.getElementById("legendd");
                 legent.style.width = "150px";
                 legent.style.border = "1px solid black";
                 legent.innerHTML =
-                  "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:5px;'>Total Head Count-" +
-                  this.totalHeadCount +
-                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:5px;'>Total Vacant Position-" +
+                  "<p style = 'font-size:10px;text-align: center;margin-bottom:1px'>Position Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position: " +
+                  this.totalPositionCount +
+                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position: " +
                   this.vacantCount +
+                  "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'>Total HeadCount: " +
+                  this.totalHeadCount +
+                  "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'>Total Critical Position: " +
+                  this.totalCriticalPosition +
                   "</p>" 
-                  
-                this.chart.element.appendChild(legent);
+
+
+                var legent1 = document.createElement("div");
+                legent1.setAttribute("id", "legendd1");
+                
+                legent1.style.position = "absolute";
+                legent1.style.top = "28px";
+                legent1.style.right = "230px";
+                legent1.style.color = "#2B81D6";
+                legent1.style.width = "150px";
+                legent1.style.border = "1px solid black";
+                legent1.innerHTML ="<p style = 'font-size:10px;text-align: center;margin-bottom:1px'>Pay Grade Count </p>" +this.str
+                 
+                // Recrutiment Stats
+
+                var legent2 = document.createElement("div");
+                legent2.setAttribute("id", "legendd2");
+                
+                legent2.style.position = "absolute";
+                legent2.style.top = "28px";
+                legent2.style.right = "390px";
+                legent2.style.color = "#2B81D6";
+                legent2.style.width = "150px";
+                legent2.style.border = "1px solid black";
+                legent2.innerHTML =
+                  "<p style = 'font-size:10px;text-align:center;margin-bottom:1px'>Recruitment Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Approved Offers: " +
+                  0 +
+                  "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Approved Resignation: " +
+                  0 +
+                  "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'>Open Requistion: " +
+                  0 +
+                 
+                  "</p>" 
+
+
+
+                  this.chart.element.appendChild(legent); 
+                this.chart.element.appendChild(legent1);
+                this.chart.element.appendChild(legent2);
 
       
       }   
@@ -1502,6 +1688,8 @@ this.chart.filterUI.on('show-items', function(sender, args){
 
     mounted(){
     console.log("From mounted",this.userData) 
+    this.$store.commit("RESET_TRIGGER_APPROVAL")
+    this.$store.commit("RESET_TRIGGER_SAVE")
   this.getData()
  //    this.nodes = JSON.parse(JSON.stringify(this.userData));
   //  this.mytree(this.$refs.tree, this.nodes)  
@@ -1522,6 +1710,10 @@ this.chart.filterUI.on('show-items', function(sender, args){
     }
   },
 
+},
+beforeDestroy()
+{
+  this.originalData = null
 }
 
  }
