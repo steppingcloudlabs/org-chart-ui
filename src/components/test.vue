@@ -1504,15 +1504,16 @@ const legenddEl = document.getElementById("legendd");
                 legent.style.position = "absolute";
                 legent.style.top = "28px";
                 legent.style.right = "70px";
-                legent.style.color = "#2B81D6";
+                legent.style.color = "black";
                 legent.style.width = "150px";
                 legent.style.border = "1px solid black";
+                
                 legent.innerHTML =
-                  "<p style = 'font-size:10px;text-align: center;margin-bottom:1px'>Position Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position: " +
+                  "<p style = 'font-size:10px;font-weight: bold;text-align:center;margin-bottom:1px'>Position Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position: " +
                   this.totalPositionCount +
                   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position: " +
                   this.vacantCount +
-                  "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'>Total HeadCount: " +
+                  "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'> Total HeadCount:  " +
                   this.totalHeadCount +
                   "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'>Total Critical Position: " +
                   this.totalCriticalPosition +
@@ -1525,10 +1526,10 @@ const legenddEl = document.getElementById("legendd");
                 legent1.style.position = "absolute";
                 legent1.style.top = "28px";
                 legent1.style.right = "230px";
-                legent1.style.color = "#2B81D6";
+                legent1.style.color = "black";
                 legent1.style.width = "150px";
                 legent1.style.border = "1px solid black";
-                legent1.innerHTML ="<p style = 'font-size:10px;text-align: center;margin-bottom:1px'>Pay Grade Count </p>" +this.str
+                legent1.innerHTML ="<p style = 'font-size:10px;font-weight: bold;text-align: center;margin-bottom:1px'>Pay Grade Count </p>" +this.str
                  
                 // Recrutiment Stats
 
@@ -1538,11 +1539,11 @@ const legenddEl = document.getElementById("legendd");
                 legent2.style.position = "absolute";
                 legent2.style.top = "28px";
                 legent2.style.right = "390px";
-                legent2.style.color = "#2B81D6";
+                legent2.style.color = "black";
                 legent2.style.width = "150px";
                 legent2.style.border = "1px solid black";
                 legent2.innerHTML =
-                  "<p style = 'font-size:10px;text-align:center;margin-bottom:1px'>Recruitment Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Approved Offers: " +
+                  "<p style = 'font-size:10px;text-align:center;font-weight: bold;margin-bottom:1px'>Recruitment Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Approved Offers: " +
                   0 +
                   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Approved Resignation: " +
                   0 +
