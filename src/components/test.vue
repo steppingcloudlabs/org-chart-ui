@@ -1494,8 +1494,9 @@ this.chart.onRedraw(() => {
   }
 
 
-
-const legenddEl = document.getElementById("legendd");
+if(this.selectedView)
+{
+  const legenddEl = document.getElementById("legendd");
        if (!legenddEl) {
        
          var legent = document.createElement("div");
@@ -1560,6 +1561,21 @@ const legenddEl = document.getElementById("legendd");
 
       
       }   
+}
+
+else
+{
+  const legenddEl = document.getElementById("legendd");
+  const legenddEl1 = document.getElementById("legendd1");
+  const legenddEl2 = document.getElementById("legendd2");
+  if (legenddEl)
+  {
+    legenddEl.style.visibility = "hidden"
+    legenddEl1.style.visibility = "hidden"
+    legenddEl2.style.visibility = "hidden"
+  }
+}
+
       
        
 
