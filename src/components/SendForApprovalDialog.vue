@@ -261,11 +261,19 @@ methods: {
 
           this.approvalDialog = false;
           this.selectedPlan.planStatus = "Pending Approval"
+           this.$store.commit("SHOW_TOAST", {
+            message: "Plan saved successfully",
+            color: "success",
+          });
         })
         .catch((err) => {
           this.showLoading = false;
 
           console.error("Failed to load saved plan", err);
+            this.$store.commit("SHOW_TOAST", {
+            message: err?.message || "Something went wrong",
+            color: "error",
+          });
         });
     },
     publishFormData()
@@ -286,6 +294,11 @@ methods: {
           this.approvalDialog = false;
         this.showLoading =false
         this.selectedPlan.planStatus = "published"
+         this.$store.commit("SHOW_TOAST", {
+            message: "Plan saved successfully",
+            color: "success",
+          });
+        
         })
 
         this.showLoading =false
@@ -294,6 +307,10 @@ methods: {
         .catch((err) => {
           this.showLoading =false
           console.error("Failed to load saved plan", err);
+            this.$store.commit("SHOW_TOAST", {
+            message: err?.message || "Something went wrong",
+            color: "error",
+          });
         });
 
     }
