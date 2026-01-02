@@ -3,8 +3,8 @@
     v-model="toast.show"
     :color="toast.color"
     :timeout="toast.timeout"
-    top
-    right
+    bottom
+    
   >
     {{ toast.message }}
 

@@ -99,9 +99,9 @@
     <span class="white--text caption">({{ selectedPlan.planId }})</span>
   </div> 
 
-    <!-- <v-btn color="primary" small @click="onTopButtonClick">
+    <v-btn color="primary" small @click="onTopButtonClick">
       Top Button
-    </v-btn> -->
+    </v-btn>
   
        <!-- {{departmentList}} -->
       <!-- {{departmentSearchText}} -->
@@ -468,12 +468,12 @@ export default {
   },
 
   methods: {
-  //  onTopButtonClick() {
-  //   this.$store.commit("SHOW_TOAST", {
-  //     message: "Button clicked err",
-  //     color: "error",
-  //   });
-  //    },
+   onTopButtonClick() {
+    this.$store.commit("SHOW_TOAST", {
+      message: "Button clicked err",
+      color: "error",
+    });
+     },
     navigateBack() {
       // Navigate to the previous page
       this.$router.go(-1);
