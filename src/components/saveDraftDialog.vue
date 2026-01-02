@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Dialog -->
-    <v-dialog v-model="saveDraftDialog" max-width="400px" persistent>
+    <v-dialog v-model="saveDraftDialog" max-width="800px" persistent>
       <v-card>
         <!-- Title -->
         <v-card-title class="headline"> Save Plan </v-card-title>
@@ -11,57 +11,127 @@
         <!-- Content -->
         <v-card-text>
           <v-form ref="form">
-            <!-- Department Details (Auto-filled & Read-only) -->
-            <!-- {{selectedPlan}} -->
-            <span>Department ID</span>
-            <v-text-field v-model="form.deptId" outlined dense disabled />
-
-            <!-- Department Name -->
-            <span>Department Name</span>
-            <v-text-field v-model="form.deptName" outlined dense disabled />
-            <span>Plan Id</span>
-            <v-text-field v-model="form.planId" outlined dense required />
-            <span>Plan Name</span>
-
-            <v-text-field v-model="form.planName" outlined dense required />
-            <!-- {{isEdit}} -->
-            <span>Plan Status</span>
-
-            <v-autocomplete
-              v-model="form.status"
-              :items="statusOptions"
-              outlined
-              dense
-              :disabled="!isEdit"
-            />
-            <span>Plan Version</span>
-            <v-text-field v-model="form.planVersion" outlined dense disabled />
-            <span>Effective Date</span>
-
-            <v-menu
-              v-model="dateMenu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
+            <v-row dense>
+              <v-col cols="6">
+                <span>Department ID</span>
                 <v-text-field
-                  v-model="form.effectiveDate"
+                  v-model="form.deptId"
                   outlined
                   dense
-                  readonly
-                  append-icon="mdi-calendar"
-                  v-bind="attrs"
-                  v-on="on"
+                  disabled
+                  hide-details
                 />
-              </template>
+              </v-col>
+              <!-- Department Name -->
+              <v-col cols="6">
+                <span>Department Name</span>
+                <v-text-field
+                  v-model="form.deptName"
+                  outlined
+                  dense
+                  disabled
+                  hide-details
+                />
+              </v-col>
 
-              <v-date-picker
-                v-model="form.effectiveDate"
-                @input="dateMenu = false"
-              />
-            </v-menu>
+              <v-col cols="6">
+                <span>Plan Id</span>
+                <v-text-field
+                  v-model="form.planId"
+                  outlined
+                  dense
+                  required
+                  hide-details
+                />
+              </v-col>
+
+              <v-col cols="6">
+                <span>Plan Name</span>
+
+                <v-text-field
+                  v-model="form.planName"
+                  outlined
+                  dense
+                  required
+                  hide-details
+              /></v-col>
+              <!-- {{isEdit}} -->
+
+              <v-col cols="6">
+                <span>Plan Status</span>
+
+                <v-autocomplete
+                  v-model="form.status"
+                  :items="statusOptions"
+                  outlined
+                  dense
+                  :disabled="!isEdit"
+                  hide-details
+              /></v-col>
+
+              <v-col cols="6">
+                <span>Plan Version</span>
+                <v-text-field
+                  v-model="form.planVersion"
+                  outlined
+                  dense
+                  disabled
+                  hide-details
+                />
+              </v-col>
+
+              <v-col cols="6">
+                <span>Comment</span>
+                <v-textarea
+                  v-model="form.comment"
+                  outlined
+                  dense
+                  rows="1"
+                  auto-grow
+                  hide-details
+                ></v-textarea>
+              </v-col>
+
+              <v-col cols="6">
+                <span>Summary</span>
+                <v-textarea
+                  v-model="form.summary"
+                  outlined
+                  dense
+                  rows="1"
+                  auto-grow
+                  hide-details
+                ></v-textarea
+              ></v-col>
+              <v-col cols="6">
+                <span>Effective Date</span>
+
+                <v-menu
+                  v-model="dateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="form.effectiveDate"
+                      outlined
+                      dense
+                      readonly
+                      append-icon="mdi-calendar"
+                      v-bind="attrs"
+                      v-on="on"
+                    />
+                  </template>
+
+                  <v-date-picker
+                    v-model="form.effectiveDate"
+                    @input="dateMenu = false"
+                  /> </v-menu
+              ></v-col>
+            </v-row>
+
             <!-- From Date -->
             <!-- <span>From</span>
             <v-menu
@@ -146,6 +216,8 @@ export default {
         status: "",
         effectiveDate: null,
         planVersion: "",
+        summary: "",
+        comment: "",
 
         // fromDate: null,
         // toDate: null,
@@ -153,7 +225,6 @@ export default {
     };
   },
   computed: {
- 
     isEdit: {
       get() {
         return this.$store.getters.getisEdit;
@@ -204,9 +275,9 @@ export default {
     },
   },
   watch: {
-      isEdit(val) {
-    console.log("val===============",val)
-  },
+    isEdit(val) {
+      console.log("val===============", val);
+    },
     selectedDept: {
       immediate: true,
       handler(dept) {
@@ -222,7 +293,6 @@ export default {
         console.log("selectedPlan watcher fired:", plan);
 
         if (!plan) return;
-
 
         this.form = {
           ...this.form, // keep defaults if some fields are missing
