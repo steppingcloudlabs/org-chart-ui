@@ -66,8 +66,27 @@ export default new Vuex.Store({
         showupdatedialog: false,
         overlay: false,
         originalData:{},
+
+         // GLOBAL MESSAGE TOAST
+        toast: {
+            show: false,
+            message: "",
+            color: "success", // success | error | warning | info
+            timeout: 5000,
+        },
     },
     mutations: {
+        SHOW_TOAST(state, payload) {
+            console.log("SHOW_TOAST fired", payload);
+
+  state.toast.show = true;
+  state.toast.message = payload.message;
+  state.toast.color = payload.color || "success";
+  state.toast.timeout = 5000;
+},
+  HIDE_TOAST(state) {
+    state.toast.show = false;
+  },
         TRIGGER_SAVE(state) {
             state.triggerSavePlan = true;
         },
@@ -271,6 +290,7 @@ export default new Vuex.Store({
         },
     },
     getters: {
+          getToast: (state) => state.toast,
         getTriggerSavePlan: (state) => state.triggerSavePlan,
         getFinalPlanData: (state) => state.finalPlanData,
         getTriggerApprovalPlan: (state) => state.triggerApprovalPlan,

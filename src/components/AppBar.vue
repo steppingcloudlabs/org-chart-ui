@@ -98,7 +98,11 @@
     <span class="white--text font-weight-bold">{{ selectedPlan.planName }}</span>
     <span class="white--text caption">({{ selectedPlan.planId }})</span>
   </div> 
- 
+
+    <!-- <v-btn color="primary" small @click="onTopButtonClick">
+      Top Button
+    </v-btn> -->
+  
        <!-- {{departmentList}} -->
       <!-- {{departmentSearchText}} -->
     <v-autocomplete
@@ -464,7 +468,12 @@ export default {
   },
 
   methods: {
-
+  //  onTopButtonClick() {
+  //   this.$store.commit("SHOW_TOAST", {
+  //     message: "Button clicked err",
+  //     color: "error",
+  //   });
+  //    },
     navigateBack() {
       // Navigate to the previous page
       this.$router.go(-1);

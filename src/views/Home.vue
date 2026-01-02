@@ -7,6 +7,7 @@
  <MergeDialog v-model="approvalDialog" />
  <SplitDialog v-model="showsplitdialog" />
  <SavedPlanFilter v-model="showSavedPlanFilter" />
+ <SnackBar />
     <core-view></core-view>
   </div>
 </template>
@@ -18,10 +19,12 @@ import ApprovalDialog from '../components/SendForApprovalDialog.vue'
 import MergeDialog from '../components/updates/mergedialog.vue'
 import SplitDialog from '../components/updates/splitdialog.vue'
 import SavedPlanFilter from '../components/PlanFilter.vue'
+import SnackBar from '../components/SnackBar.vue'
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
+    SnackBar,
     SavedPlanFilter,
     SplitDialog,
     ApprovalDialog,

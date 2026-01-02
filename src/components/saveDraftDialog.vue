@@ -349,9 +349,17 @@ export default {
           this.showLoading = false;
 
           this.saveDraftDialog = false;
+          this.$store.commit("SHOW_TOAST", {
+            message: "Plan saved successfully",
+            color: "success",
+          });
         })
         .catch((err) => {
           console.error("Failed to load saved plan", err);
+          this.$store.commit("SHOW_TOAST", {
+            message: err?.message || "Something went wrong",
+            color: "error",
+          });
         });
     },
   },

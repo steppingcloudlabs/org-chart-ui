@@ -43,6 +43,27 @@
                 @input="dateMenu = false"
               />
             </v-menu>
+            
+                <span>Comment</span>
+                <v-textarea
+                  v-model="form.comment"
+                  outlined
+                  dense
+                  rows="1"
+                  auto-grow
+                  hide-details
+                ></v-textarea>
+           
+                <span>Summary</span>
+                <v-textarea
+                  v-model="form.summary"
+                  outlined
+                  dense
+                  rows="1"
+                  auto-grow
+                  hide-details
+                ></v-textarea
+              >
        
           </v-form>
         </v-card-text>
@@ -67,6 +88,8 @@ export default {
       form: {
         planId: "",
        planName:"",
+       comment:"",
+       summary:"",
        
         effectiveDate: null,
         deptId: null,
