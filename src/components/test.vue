@@ -62,6 +62,14 @@ export default {
   },
 
   computed: {
+    jobInfo: {
+      get() {
+        return this.$store.getters.getjobInfo;
+      },
+      set(data) {
+        this.$store.commit("setjobInfo", data);
+      },
+    },
     triggerSavePlan() {
       return this.$store.getters.getTriggerSavePlan;
     },
@@ -395,6 +403,12 @@ export default {
       leg.innerHTML =
         '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
       this.chart.element.appendChild(leg);
+    },
+    showJobProfile(){
+      let data = {};
+      this.$store.dispatch("getJobProfileData",data);
+      this.jobInfo = true;
+      console.log("this.jobInfo==",this.jobInfo);
     },
 
     exportUserProfile(nodeId) {
@@ -1351,10 +1365,13 @@ export default {
           exportProfile: {
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
-            onClick: this.exportUserProfile,
+            // onClick: this.exportUserProfile,
+            onClick: this.showJobProfile
+
           },
           edit: {
             text: "Edit",
+
           },
           add: { text: "Add New Position", onClick: this.copyHandler },
           remove: { text: "Remove Position" },

@@ -33,6 +33,7 @@ export default new Vuex.Store({
         approvalDialog: false,
         isSavedPlanpage: false,
         filterDrawer: false,
+        jobInfo: false,
         isLevel: false,
         levelPay: [],
         selectedSearchField: [],
@@ -55,6 +56,7 @@ export default new Vuex.Store({
         parentData: null,
         showNodeProfile: false,
         empProfileData: {},
+        jobProfileData: {},
         imgRequire: true,
         isEmployeeDataFetched: "Not Fetched",
         selectedDeptartmentUsers: {},
@@ -138,6 +140,9 @@ export default new Vuex.Store({
         },
         setfilterDrawer: (state, data) => {
             state.filterDrawer = data;
+        },
+        setjobInfo: (state, data) => {
+            state.jobInfo = data;
         },
         setlevelPay: (state, data) => {
             state.levelPay = data;
@@ -230,6 +235,9 @@ export default new Vuex.Store({
         },
         setEmpProfileData: (state, data) => {
             state.empProfileData = data;
+        },
+        setJobProfileData: (state, data) => {
+            state.jobProfileData = data;
         },
         setIsEmployeeDataFetched: (state, data) => {
             state.isEmployeeDataFetched = data;
@@ -364,6 +372,9 @@ export default new Vuex.Store({
         getfilterDrawer: (state) => {
             return state.filterDrawer;
         },
+        getjobInfo: (state) => {
+            return state.jobInfo;
+        },
         getlevelPay: (state) => {
             return state.levelPay;
         },
@@ -425,6 +436,9 @@ export default new Vuex.Store({
         },
         getEmpProfileData: (state) => {
             return state.empProfileData;
+        },
+        getJobProfileData: (state) => {
+            return state.jobProfileData;
         },
         setIsEmployeeDataFetched: (state) => {
             return state.isEmployeeDataFetched;
@@ -850,6 +864,26 @@ export default new Vuex.Store({
                     resolve(response.data);
                     commit("setEmpProfileData", response.data);
                     console.log(response);
+                });
+            });
+        },
+        getJobProfileData: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getJobProfile",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                        positionId: "3000775",
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setJobProfileData", response.data.results[0]);
+                    console.log("response from getjobprofiledata",response.data);
                 });
             });
         },

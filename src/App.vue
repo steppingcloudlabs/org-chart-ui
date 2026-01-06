@@ -24,6 +24,7 @@ export default {
     // overlayloader
   },
   computed: {
+    
        filterDrawer: {
       get() {
         return this.$store.getters.getfilterDrawer;

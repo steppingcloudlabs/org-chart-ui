@@ -8,6 +8,7 @@
  <SplitDialog v-model="showsplitdialog" />
  <SavedPlanFilter v-model="showSavedPlanFilter" />
  <SnackBar />
+ <JobProfile />
     <core-view></core-view>
   </div>
 </template>
@@ -20,10 +21,12 @@ import MergeDialog from '../components/updates/mergedialog.vue'
 import SplitDialog from '../components/updates/splitdialog.vue'
 import SavedPlanFilter from '../components/PlanFilter.vue'
 import SnackBar from '../components/SnackBar.vue'
+import JobProfile from '../components/JobProfileData.vue'
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
+    JobProfile,
     SnackBar,
     SavedPlanFilter,
     SplitDialog,
@@ -43,6 +46,14 @@ export default {
     }
   },
    computed: {
+     jobInfo: {
+      get() {
+        return this.$store.getters.getjobInfo;
+      },
+      set(data) {
+        this.$store.commit("setjobInfo", data);
+      },
+    },
       showsplitdialog: {
       get() {
         return this.$store.getters.getshowsplitdialog;
