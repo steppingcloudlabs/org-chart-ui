@@ -363,7 +363,7 @@ export default {
 //         Position ${d.code} has been deleted.
 //       </li>`
 //     );
-        lines.push(`🔴 Position ${d.code} deleted`);
+        lines.push(`🔴 Position ${d.positionTitle} (${d.code}) deleted`);
       });
 
       return lines.join("\n");

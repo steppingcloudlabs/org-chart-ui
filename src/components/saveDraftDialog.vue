@@ -275,6 +275,27 @@ export default {
     },
   },
   watch: {
+     saveDraftDialog(val) {
+      if (!val) return; // dialog closed → do nothing
+
+      // safety checks
+      // if (
+      //   !this.finalPlanData?.originalData ||
+      //   !this.finalPlanData?.currentData ||
+      //   !this.form.effectiveDate
+      // ) {
+      //   this.form.summary = "";
+      //   return;
+      // }
+
+      const diff = this.diffNodes(
+        this.finalPlanData.originalData,
+        this.finalPlanData.currentData,
+        // this.form.effectiveDate
+      );
+
+      this.form.summary = this.buildSummaryText(diff);
+    },
     isEdit(val) {
       console.log("val===============", val);
     },
@@ -320,6 +341,108 @@ export default {
   },
 
   methods: {
+    diffNodes(original, current) {
+      // Build fast lookup maps by id
+      const originalMap = new Map(original.map((o) => [o.id, o]));
+      const currentMap = new Map(current.map((c) => [c.id, c]));
+
+      const add = [];
+      const del = [];
+      const update = [];
+
+      // 1) Check current -> find new & updated
+      for (const [id, curNode] of currentMap.entries()) {
+        const origNode = originalMap.get(id);
+
+        if (!origNode) {
+          // id exists only in current => ADD
+          // add.push(curNode);
+      var addNode = {};
+          console.log("Node to be added", curNode);
+          //addNode["code"]=curNode["id"],
+          //addNode["businessUnit"] = curNode["businessUnit"],
+          (addNode["department"] = curNode["department"]),
+            (addNode["costCenter"] = curNode["costCenter"]),
+            (addNode["vacant"] = true),
+            (addNode["targetFTE"] = "1"),
+            (addNode["payGrade"] = curNode["userPayGrade"]),
+            (addNode["positionCriticality"] = "0"),
+            (addNode["effectiveStatus"] = "A"),
+            (addNode["positionTitle"] = curNode["positionTitle"]);
+          addNode["jobTitle"] = curNode["positionTitle"];
+          addNode["parentPosition"] = {
+            code: curNode.pid,
+            // effectiveStartDate: effectiveDate,
+          };
+
+          add.push({ ...addNode});
+          // add.push({ ...addNode, effectiveStartDate: effectiveDate });
+        } else {
+          // id exists in both => check pid change
+          if (origNode.pid !== curNode.pid) {
+            // you can push just curNode or include oldPid for reference
+            update.push({
+              ...curNode,
+              code: curNode.id,
+
+              newPid: curNode.pid,
+              oldPid: origNode.pid, // optional, for tracking
+            });
+          }
+        }
+      }
+
+      // 2) Check original -> find deleted
+      for (const [id, origNode] of originalMap.entries()) {
+        if (!currentMap.has(id)) {
+          // id exists only in original => DELETE
+          // del.push(origNode);
+          del.push({ code: origNode.id, positionTitle: origNode.positionTitle});
+        }
+      }
+      console.log("add===", add);
+      console.log("del===", del);
+      console.log("update===", update);
+
+      return { add, del, update };
+    },
+       buildSummaryText({ add, del, update }) {
+      console.log("Inside buildSummaryText");
+      const lines = [];
+
+      update.forEach((u) => {
+        lines.push(
+          `🟠 Position ${u.positionTitle} (${u.code}) is now reporting to ${u.newPid}, previously reporting to ${u.oldPid}.`
+      //    `<li class="summary-update">
+      //   Position ${u.positionTitle || "Position"} (${u.code})
+      //   is now reporting to ${u.newPid},
+      //   previously reporting to ${u.oldPid}.
+      // </li>`
+        );
+        console.log("text===")
+      });
+
+      add.forEach((a) => {
+        lines.push(`🟢 Position ${a.positionTitle || ""} added under parent ${a.parentPosition.code}.`);
+    //    lines.push(
+    //   `<li class="summary-add">
+    //     Position ${a.positionTitle || ""} added under parent ${a.parentPosition.code}.
+    //   </li>`
+    // );
+      });
+
+      del.forEach((d) => {
+//  lines.push(
+//       `<li class="summary-delete">
+//         Position ${d.code} has been deleted.
+//       </li>`
+//     );
+        lines.push(`🔴 Position ${d.positionTitle} (${d.code}) deleted`);
+      });
+
+      return lines.join("\n");
+      // return `<ul>${lines.join("")}</ul>`;
+    },
     closeDialog() {
       this.saveDraftDialog = false;
     },
