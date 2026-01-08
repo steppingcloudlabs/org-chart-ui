@@ -9,6 +9,8 @@
  <SavedPlanFilter v-model="showSavedPlanFilter" />
  <SnackBar />
  <JobProfile />
+     <CompareDialog v-model="showSkillDialog"/>
+
     <core-view></core-view>
   </div>
 </template>
@@ -22,6 +24,8 @@ import SplitDialog from '../components/updates/splitdialog.vue'
 import SavedPlanFilter from '../components/PlanFilter.vue'
 import SnackBar from '../components/SnackBar.vue'
 import JobProfile from '../components/JobProfileData.vue'
+import CompareDialog from "../components/CompareDialog.vue"
+
 // @ is an alias to /src
 export default {
   name: "Home",
@@ -34,6 +38,7 @@ export default {
     FilterDrawer,
     SaveDraftDialog,
     MergeDialog,
+      CompareDialog,
      CoreAppBar: () => import("@/components/AppBar"),
     // CoreDrawer: () => import("@/components/Drawer")
     
@@ -46,6 +51,15 @@ export default {
     }
   },
    computed: {
+     showSkillDialog: {
+      get() {
+        return this.$store.getters.getshowSkillDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowSkillDialog", data);
+      },
+    },
      jobInfo: {
       get() {
         return this.$store.getters.getjobInfo;

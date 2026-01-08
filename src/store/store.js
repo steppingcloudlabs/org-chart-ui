@@ -10,6 +10,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        skillComparison: null,
+        showSkillDialog: false,
         isApprovedPlan: false,
         isEdit: false,
         isPlanOrgChart: false,
@@ -78,6 +80,7 @@ export default new Vuex.Store({
         },
     },
     mutations: {
+   
         SHOW_TOAST(state, payload) {
             console.log("SHOW_TOAST fired", payload);
 
@@ -118,6 +121,22 @@ export default new Vuex.Store({
 
         setuserData: (state, data) => {
             state.userData = data;
+        },
+        // setskillComparison: (state, data) => {
+        //     state.skillComparison = data;
+        // },
+         setskillComparison(state, data) {
+    state.skillComparison = {
+  
+      sourcePositionTitle: data.sourcePositionTitle || [],
+      targetPositionTitle: data.targetPositionTitle || [],
+      commonSkills: data.commonSkills || [],
+      onlyInSource: data.onlyInSource || [],
+      onlyInTarget: data.onlyInTarget || []
+    };
+  },
+        setshowSkillDialog: (state, data) => {
+            state.showSkillDialog = data;
         },
         setoriginalData: (state, data) => {
             state.originalData = data;
@@ -300,6 +319,8 @@ export default new Vuex.Store({
     getters: {
           getToast: (state) => state.toast,
         getTriggerSavePlan: (state) => state.triggerSavePlan,
+        getskillComparison: (state) => state.skillComparison,
+        getshowSkillDialog: (state) => state.showSkillDialog,
         getFinalPlanData: (state) => state.finalPlanData,
         getTriggerApprovalPlan: (state) => state.triggerApprovalPlan,
         getFinalPlanAttach: (state) => state.finalPlanAttach,

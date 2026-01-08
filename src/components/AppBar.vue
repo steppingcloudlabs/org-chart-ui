@@ -210,6 +210,7 @@
 
         <span>Save Draft</span>
       </v-tooltip>
+      {{showSkillDialog}}
       <v-menu v-if="showPlanActionsMenu" offset-y left>
         <!-- Three-dot button with tooltip -->
        
@@ -304,6 +305,15 @@ export default {
 
   components: {},
   computed: {
+        showSkillDialog: {
+      get() {
+        return this.$store.getters.getshowSkillDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowSkillDialog", data);
+      },
+    },
       isApprovedPlan: {
       get() {
         return this.$store.getters.getisApprovedPlan;

@@ -77,6 +77,24 @@ export default {
       return this.$store.getters.getTriggerApprovalPlan;
     },
 
+    showSkillDialog: {
+      get() {
+        return this.$store.getters.getshowSkillDialog;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setshowSkillDialog", data);
+      },
+    },
+    skillComparison: {
+      get() {
+        return this.$store.getters.getskillComparison;
+        // return true;
+      },
+      set(data) {
+        this.$store.commit("setskillComparison", data);
+      },
+    },
     showLoading: {
       get() {
         return this.$store.getters.getshowLoading;
@@ -404,14 +422,14 @@ export default {
         '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
       this.chart.element.appendChild(leg);
     },
-    showJobProfile(positionId){
-      console.log("Position Id =",positionId);
+    showJobProfile(positionId) {
+      console.log("Position Id =", positionId);
       const payload = {
-    positionId: positionId   // nodeId IS the id
-  };
-      this.$store.dispatch("getJobProfileData",payload);
+        positionId: positionId, // nodeId IS the id
+      };
+      this.$store.dispatch("getJobProfileData", payload);
       this.jobInfo = true;
-      console.log("this.jobInfo==",this.jobInfo);
+      console.log("this.jobInfo==", this.jobInfo);
     },
 
     exportUserProfile(nodeId) {
@@ -1358,7 +1376,7 @@ export default {
           pp_export: { text: "Export PowerPoint" },
           json_export: { text: "Export JSON" },
         },
-        // Node menu 
+        // Node menu
         nodeMenu: {
           levelDown: {
             text: "Level Down",
@@ -1369,15 +1387,13 @@ export default {
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
             // onClick: this.exportUserProfile,
-             onClick: (nodeId) => {
-    this.showJobProfile(nodeId);
-  }
+            onClick: (nodeId) => {
+              this.showJobProfile(nodeId);
+            },
             // onClick: this.showJobProfile
-
           },
           edit: {
             text: "Edit",
-
           },
           add: { text: "Add New Position", onClick: this.copyHandler },
           remove: { text: "Remove Position" },
@@ -1462,6 +1478,19 @@ export default {
           // field_11: "positionVacant",
           field_10: this.binder,
         },
+      });
+
+      this.chart.on("drop", async (sender, draggedNodeId, droppedNodeId) => {
+        const draggedNode = sender.get(draggedNodeId);
+        const targetNode = sender.get(droppedNodeId);
+
+        console.log("Dragged Node ID:", draggedNodeId);
+        console.log("Target Node ID:", droppedNodeId);
+        const sourcePositionTitle =  draggedNode.positionTitle;
+        const targetPositionTitle =  targetNode.positionTitle;
+        console.log("Dragged Node:", draggedNode.positionTitle);
+        console.log("Target Node:", targetNode.positionTitle);
+        await this.compareJobSkills(draggedNodeId, droppedNodeId,sourcePositionTitle,targetPositionTitle);
       });
 
       this.chart.on("click", (sender, args) => {
@@ -1680,6 +1709,67 @@ export default {
           });
         }
       });
+    },
+    async compareJobSkills(sourcePositionId, targetPositionId,sourcePositionTitle,targetPositionTitle) {
+      console.log("Inside compareJobSkills");
+      try {
+        // Fetch both job profiles
+        const [sourceProfile, targetProfile] = await Promise.all([
+          this.$store.dispatch("getJobProfileData", {
+            positionId: sourcePositionId,
+          }),
+          this.$store.dispatch("getJobProfileData", {
+            positionId: targetPositionId,
+          }),
+        ]);
+        console.log("sourceProfile=", sourceProfile?.results[0]?.jobProfile);
+        const sourceSkills =
+          sourceProfile?.results[0]?.jobProfile?.competencyContents?.results ||
+          [];
+
+        const targetSkills =
+          targetProfile?.results[0]?.jobProfile?.competencyContents?.results ||
+          [];
+
+        const sourceSkillNames = sourceSkills.map(
+          (s) => s.entityNav?.name_en_US
+        );
+        console.log("targetSkills=", sourceSkillNames);
+        console.log("sourceSkillNames=", sourceSkillNames);
+        const targetSkillNames = targetSkills.map(
+          (s) => s.entityNav?.name_en_US
+        );
+
+        // Compare
+        const commonSkills = sourceSkillNames.filter((skill) =>
+          targetSkillNames.includes(skill)
+        );
+
+        const onlyInSource = sourceSkillNames.filter(
+          (skill) => !targetSkillNames.includes(skill)
+        );
+
+        const onlyInTarget = targetSkillNames.filter(
+          (skill) => !sourceSkillNames.includes(skill)
+        );
+
+         
+
+          console.log("sourcePosition and targetPosition=",sourcePositionTitle,targetPositionTitle);
+        // Store in Vuex
+        this.skillComparison = {
+          sourcePositionTitle,
+          targetPositionTitle,
+          commonSkills,
+          onlyInSource,
+          onlyInTarget,
+        };
+
+        // Open dialog
+        this.showSkillDialog = true;
+      } catch (e) {
+        console.error("Skill comparison failed", e);
+      }
     },
 
     blur() {
