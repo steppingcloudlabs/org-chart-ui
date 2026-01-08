@@ -404,9 +404,12 @@ export default {
         '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
       this.chart.element.appendChild(leg);
     },
-    showJobProfile(){
-      let data = {};
-      this.$store.dispatch("getJobProfileData",data);
+    showJobProfile(positionId){
+      console.log("Position Id =",positionId);
+      const payload = {
+    positionId: positionId   // nodeId IS the id
+  };
+      this.$store.dispatch("getJobProfileData",payload);
       this.jobInfo = true;
       console.log("this.jobInfo==",this.jobInfo);
     },
@@ -1366,7 +1369,10 @@ export default {
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
             // onClick: this.exportUserProfile,
-            onClick: this.showJobProfile
+             onClick: (nodeId) => {
+    this.showJobProfile(nodeId);
+  }
+            // onClick: this.showJobProfile
 
           },
           edit: {

@@ -878,7 +878,7 @@ export default new Vuex.Store({
                     },
                     params: {
                         companyId: companyId,
-                        positionId: "3000775",
+                        positionId: data.positionId,
                     },
                 }).then((response) => {
                     resolve(response.data);
