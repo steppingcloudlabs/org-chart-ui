@@ -11,6 +11,9 @@
           {{ s }}
         </v-chip>
       </v-chip-group>
+      <p>
+  <strong>Skill Match: {{ matchPercentage }}%</strong>
+</p>
 
       <p class="mt-4"><strong>Required Skills in {{skillComparison.sourcePositionTitle}}</strong></p>
       <v-chip-group column>
@@ -56,7 +59,15 @@ export default {
         this.$store.commit("setskillComparison", data);
       },
     },
- 
+  matchPercentage() {
+    const common = this.skillComparison.commonSkills.length;
+    const totalTarget =
+      this.skillComparison.onlyInTarget.length;
+
+    if (!totalTarget) return 0;
+
+    return Math.round((common / totalTarget) * 100);
+  }
 
   },
   methods: {

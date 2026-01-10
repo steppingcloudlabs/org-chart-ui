@@ -210,7 +210,7 @@
 
         <span>Save Draft</span>
       </v-tooltip>
-      {{showSkillDialog}}
+      <!-- {{showSkillDialog}} -->
       <v-menu v-if="showPlanActionsMenu" offset-y left>
         <!-- Three-dot button with tooltip -->
        
