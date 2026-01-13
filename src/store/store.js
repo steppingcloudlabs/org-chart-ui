@@ -10,7 +10,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        companyPayGradeData: [],
         skillComparison: null,
+        addPositionDialog: false,
         showSkillDialog: false,
         isApprovedPlan: false,
         isEdit: false,
@@ -137,6 +139,9 @@ export default new Vuex.Store({
   },
         setshowSkillDialog: (state, data) => {
             state.showSkillDialog = data;
+        },
+        setaddPositionDialog: (state, data) => {
+            state.addPositionDialog = data;
         },
         setoriginalData: (state, data) => {
             state.originalData = data;
@@ -321,6 +326,7 @@ export default new Vuex.Store({
         getTriggerSavePlan: (state) => state.triggerSavePlan,
         getskillComparison: (state) => state.skillComparison,
         getshowSkillDialog: (state) => state.showSkillDialog,
+        getaddPositionDialog: (state) => state.addPositionDialog,
         getFinalPlanData: (state) => state.finalPlanData,
         getTriggerApprovalPlan: (state) => state.triggerApprovalPlan,
         getFinalPlanAttach: (state) => state.finalPlanAttach,
@@ -908,5 +914,25 @@ export default new Vuex.Store({
                 });
             });
         },
+        // getPayGrade: ({ commit }, data) => {
+        //     console.log(data);
+        //     return new Promise((resolve) => {
+        //         axios({
+        //             url: baseDevURL + "/srv/getPayGrade",
+        //             method: "GET",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //             params: {
+        //                 companyId: companyId,
+                        
+        //             },
+        //         }).then((response) => {
+        //             resolve(response.data);
+        //             commit("setJobProfileData", response.data.results[0]);
+        //             console.log("response from getjobprofiledata",response.data);
+        //         });
+        //     });
+        // },
     },
 });

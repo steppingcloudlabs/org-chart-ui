@@ -9,6 +9,7 @@
     </v-flex>
 
     <nodeProfile></nodeProfile>
+    <addPositionDialog v-if="addPositionDialog"></addPositionDialog>
   </v-layout>
 </template>
 
@@ -17,6 +18,8 @@ import OrgChart from "../assets/orgchart";
 //import Sidenav from "@/components/Sidenav";
 // import profile from "@/components/profileDialog";
 import nodeProfile from "@/components/NodeProfile";
+import addPositionDialog from "./AddPositionDialog.vue";
+
 import $ from "jquery";
 import Canvg from "canvg";
 
@@ -59,9 +62,19 @@ export default {
   components: {
     //  Sidenav,
     nodeProfile,
+    addPositionDialog,
   },
 
   computed: {
+      addPositionDialog: {
+      get() {
+        return this.$store.getters.getaddPositionDialog;
+       
+      },
+      set(data) {
+        this.$store.commit("setaddPositionDialog", data);
+      },
+    },
     jobInfo: {
       get() {
         return this.$store.getters.getjobInfo;
@@ -1067,23 +1080,30 @@ export default {
       return { add, del, update };
     },
 
-    copyHandler(nodeId) {
-      var data = this.chart.get(nodeId);
-      data.id = this.chart.generateId();
-      data.pid = nodeId;
-      data.isRoot = false;
-      data.positionType = "Vacant";
-      data.positionVacant = true;
-      data.tags = ["Vacant", data.userPayGrade];
-      data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
-      data.userDepartmentId = "";
-      data.userDivision = "";
-      data.userId = "";
-      data.userManagerId = "";
-      data.userName = "";
-      data.positionTitle = "New Position";
-      this.chart.addNode(data);
+    copyPosition(nodeId) {
+      console.log("nodeId=",nodeId);
+      this.addPositionDialog = true;
+      // var data = this.chart.get(nodeId);
+      // data.id = this.chart.generateId();
+   
     },
+    // copyHandler(nodeId) {
+    //   var data = this.chart.get(nodeId);
+    //   data.id = this.chart.generateId();
+    //   data.pid = nodeId;
+    //   data.isRoot = false;
+    //   data.positionType = "Vacant";
+    //   data.positionVacant = true;
+    //   data.tags = ["Vacant", data.userPayGrade];
+    //   data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
+    //   data.userDepartmentId = "";
+    //   data.userDivision = "";
+    //   data.userId = "";
+    //   data.userManagerId = "";
+    //   data.userName = "";
+    //   data.positionTitle = "New Position";
+    //   this.chart.addNode(data);
+    // },
 
     field2_binding(sender, node) {
       var data = sender.get(node.id);
@@ -1395,7 +1415,10 @@ export default {
           edit: {
             text: "Edit",
           },
-          add: { text: "Add New Position", onClick: this.copyHandler },
+         // add: { text: "Add New Position", onClick: this.copyHandler },
+          CopyPosition: { text: "Copy Position", onClick: this.copyPosition },
+          addLevelDownPosition: { text: "Add Level Down Position", onClick: this.copyHandler },
+          addSameLevelPosition: { text: "Add Same Level Position", onClick: this.copyHandler },
           remove: { text: "Remove Position" },
         },
         tags: {

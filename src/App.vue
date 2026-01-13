@@ -58,7 +58,7 @@ export default {
     getPaygrade()
     {
         this.$store.dispatch("getAllPaygradeList").then((response) => {
-          console.log(response);
+          console.log(" response from APPP getPaygrade",response);
          
           })
       
