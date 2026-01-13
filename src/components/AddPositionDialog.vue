@@ -106,17 +106,20 @@
                 />
               </v-col>
 
-              <v-col cols="6">
-                <span>Business Unit</span>
-                <v-textarea
-                  v-model="form.businessUnit"
-                  outlined
-                  dense
-                  rows="1"
-                  auto-grow
-                  hide-details
-                ></v-textarea>
-              </v-col>
+             
+                  <v-col cols="6">
+  <span>Business Unit</span>
+  <v-select
+    v-model="form.payGrade"
+    :items="BU"
+    item-text="name"
+    item-value="externalCode"
+    outlined
+    dense
+    hide-details
+   
+  ></v-select>
+</v-col>
 
               <v-col cols="6">
                 <span>Division</span>
@@ -172,7 +175,7 @@
     outlined
     dense
     hide-details
-    placeholder="Select Pay Grade"
+  
   ></v-select>
 </v-col>
 
@@ -466,6 +469,15 @@ export default {
       },
       set(data) {
         this.$store.commit("setallPaygradeData", data);
+      },
+    },
+     BU: {
+      get() {
+        return this.$store.getters.getbusinessunit;
+       
+      },
+      set(data) {
+        this.$store.commit("setbusinessunit", data);
       },
     },
 

@@ -675,7 +675,7 @@ export default new Vuex.Store({
                 });
             });
         },
-        getAllBusinessUnitList: () => {
+        getAllBusinessUnitList: (commit) => {
             return new Promise((resolve) => {
                 axios({
                     url:
@@ -687,7 +687,7 @@ export default new Vuex.Store({
                     },
                 }).then((response) => {
                     resolve(response.data);
-                    //commit("setsearchField", response.data.d.results)
+                    commit("setbusinessunit", response.data.d.results);
                 });
             });
         },

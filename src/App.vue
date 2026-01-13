@@ -62,11 +62,20 @@ export default {
          
           })
       
+    },
+    getBU()
+    {
+        this.$store.dispatch("getAllBusinessUnitList").then((response) => {
+          console.log(" response from APPP getPaygrade",response);
+         
+          })
+      
     }
   },
   mounted()
   {
-this.getPaygrade()
+this.getPaygrade();
+this.getBU();
   }
 };
 </script>
