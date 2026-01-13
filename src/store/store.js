@@ -48,8 +48,11 @@ export default new Vuex.Store({
         flag: "",
         userPayGrade: [],
         department: [],
+        departmentByDiv: [],
         division: [],
+        DivisionByBU: [],
         BU: [],
+        BUbyLU: [],
         location: [],
         showNavDrawer: false,
         showFilter: false,
@@ -187,8 +190,14 @@ export default new Vuex.Store({
         setdepartment: (state, data) => {
             state.department = data;
         },
+        setdepartmentByDiv: (state, data) => {
+            state.departmentByDiv = data;
+        },
         setdivision: (state, data) => {
             state.division = data;
+        },
+        setDivisionByBU: (state, data) => {
+            state.DivisionByBU = data;
         },
         setlocation: (state, data) => {
             state.location = data;
@@ -256,6 +265,9 @@ export default new Vuex.Store({
         },
         setbusinessunit: (state, data) => {
             state.BU = data;
+        },
+        setBUbyLU: (state, data) => {
+            state.BUbyLU = data;
         },
         setEmpProfileData: (state, data) => {
             state.empProfileData = data;
@@ -420,6 +432,9 @@ export default new Vuex.Store({
         getbusinessunit: (state) => {
             return state.BU;
         },
+        getBUbyLU: (state) => {
+            return state.BUbyLU;
+        },
         getlocation: (state) => {
             return state.location;
         },
@@ -429,8 +444,14 @@ export default new Vuex.Store({
         getdepartment: (state) => {
             return state.department;
         },
+        getdepartmentByDiv: (state) => {
+            return state.departmentByDiv;
+        },
         getdivision: (state) => {
             return state.division;
+        },
+        getDivisionByBU: (state) => {
+            return state.DivisionByBU;
         },
         getuserMasterData: (state) => {
             console.log(state.userMasterData);
@@ -911,6 +932,63 @@ export default new Vuex.Store({
                     resolve(response.data);
                     commit("setJobProfileData", response.data.results[0]);
                     console.log("response from getjobprofiledata",response.data);
+                });
+            });
+        },
+        getBusinessUnitByLU: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getBusinessUnitByLU",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                        lu: data.lu,
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setBUbyLU", response.data.results[0]);
+                });
+            });
+        },
+        getDivisionByBU: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getDivisionByBU",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                        bu: data.businessUnit,
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setDivisionByBU", response.data.results[0]);
+                });
+            });
+        },
+        getDepartmentByDivision: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getDepartmentByDiv",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                        division: data.division,
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setdepartmentByDiv", response.data.results[0]);
                 });
             });
         },

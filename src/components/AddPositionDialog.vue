@@ -111,27 +111,29 @@
   <span>Business Unit</span>
   <v-select
     v-model="form.payGrade"
-    :items="BU"
+    :items="BUbyLU"
     item-text="name"
     item-value="externalCode"
     outlined
     dense
     hide-details
-   
+     @change="getDivisionByBU"
   ></v-select>
 </v-col>
 
-              <v-col cols="6">
-                <span>Division</span>
-                <v-textarea
-                  v-model="form.division"
-                  outlined
-                  dense
-                  rows="1"
-                  auto-grow
-                  hide-details
-                ></v-textarea
-              ></v-col>
+            <v-col cols="6">
+  <span>Division</span>
+  <v-select
+    v-model="form.division"
+    :items="DivisionByBU"
+    item-text="name"
+    item-value="externalCode"
+    outlined
+    dense
+    hide-details
+  />
+</v-col>
+
               <v-col cols="6">
                 <span>Department</span>
                 <v-textarea
@@ -141,6 +143,7 @@
                   rows="1"
                   auto-grow
                   hide-details
+                  @change="getDeptByDivision"
                 ></v-textarea
               ></v-col>
               <v-col cols="6">
@@ -453,6 +456,24 @@ export default {
       }
     }},
   computed: {
+     DivisionByBU: {
+      get() {
+        return this.$store.getters.getDivisionByBU;
+       
+      },
+      set(data) {
+        this.$store.commit("setDivisionByBU", data);
+      },
+    },
+     BUbyLU: {
+      get() {
+        return this.$store.getters.getBUbyLU;
+       
+      },
+      set(data) {
+        this.$store.commit("setBUbyLU", data);
+      },
+    },
      addPositionDialog: {
       get() {
         return this.$store.getters.getaddPositionDialog;
@@ -486,6 +507,36 @@ export default {
   methods:{
     closeDialog(){
       this.addPositionDialog= false;
+    },
+    getBUByLU(lu){
+      let dataToSend = {
+        lu: lu,
+      }
+      this.$store.dispatch("getBusinessUnitByLU",dataToSend).then((response) => {
+        console.log("response=",response);
+        // this.DivisionByBU = response;
+         this.form.businessUnit = "";
+      })
+    },
+    getDivisionByBU(businessUnit){
+      let dataToSend = {
+        businessUnit: businessUnit
+      }
+      this.$store.dispatch("getDivisionByBU",dataToSend).then((response) => {
+        console.log("response=",response);
+        // this.DivisionByBU = response;
+         this.form.division = "";
+      })
+    },
+    getDeptByDivision(division){
+      let dataToSend = {
+        division: division
+      }
+      this.$store.dispatch("getDepartmentByDivision",dataToSend).then((response) => {
+        console.log("response=",response);
+        // this.DivisionByBU = response;
+         this.form.department = "";
+      })
     },
     // getPayGradeData(){
     //   this.$store.dispatch("getPayGrade").then((response) => {
