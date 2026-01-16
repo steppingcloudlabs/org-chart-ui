@@ -23,6 +23,8 @@ export default new Vuex.Store({
         finalPlanData: null,
         finalPlanAttach: "",
         allSavedPlans: [],
+        costCenter: [],
+        jobCode: [],
         selectedBusinessUnit: null,
         selectedStatus: null,
         selectedDept: null,
@@ -51,7 +53,9 @@ export default new Vuex.Store({
         departmentByDiv: [],
         division: [],
         DivisionByBU: [],
+        LocByDiv: [],
         BU: [],
+        LegalUnit: [],
         BUbyLU: [],
         location: [],
         showNavDrawer: false,
@@ -199,6 +203,12 @@ export default new Vuex.Store({
         setDivisionByBU: (state, data) => {
             state.DivisionByBU = data;
         },
+        setLocByDiv: (state, data) => {
+            state.LocByDiv = data;
+        },
+        setLegalUnit: (state, data) => {
+            state.LegalUnit = data;
+        },
         setlocation: (state, data) => {
             state.location = data;
         },
@@ -288,6 +298,12 @@ export default new Vuex.Store({
         setallSavedPlans(state, value) {
             state.allSavedPlans = value;
         },
+        setcostCenter(state, value) {
+            state.costCenter = value;
+        },
+        setjobCode(state, value) {
+            state.jobCode = value;
+        },
         setselectedBusinessUnit(state, value) {
             state.selectedBusinessUnit = value;
         },
@@ -344,6 +360,8 @@ export default new Vuex.Store({
         getFinalPlanAttach: (state) => state.finalPlanAttach,
         getDepartmentSearchText: (state) => state.departmentSearchText,
         getallSavedPlans: (state) => state.allSavedPlans,
+        getcostCenter: (state) => state.costCenter,
+        getjobCode: (state) => state.jobCode,
         getselectedBusinessUnit: (state) => state.selectedBusinessUnit,
         getselectedStatus: (state) => state.selectedStatus,
         getselectedDivision: (state) => state.selectedDivision,
@@ -432,6 +450,9 @@ export default new Vuex.Store({
         getbusinessunit: (state) => {
             return state.BU;
         },
+        getLegalUnit: (state) => {
+            return state.LegalUnit;
+        },
         getBUbyLU: (state) => {
             return state.BUbyLU;
         },
@@ -452,6 +473,9 @@ export default new Vuex.Store({
         },
         getDivisionByBU: (state) => {
             return state.DivisionByBU;
+        },
+        getLocByDiv: (state) => {
+            return state.LocByDiv;
         },
         getuserMasterData: (state) => {
             console.log(state.userMasterData);
@@ -935,6 +959,28 @@ export default new Vuex.Store({
                 });
             });
         },
+        getLegalUnit: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getLU",
+ 
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                       
+                    },
+                }).then((response) => {
+                    resolve(response);
+                    console.log("response",response);
+                    console.log("response from stooooooooreeeeeee",response.data.results);
+                    commit("setLegalUnit", response.data.results);
+                });
+            });
+        },
         getBusinessUnitByLU: ({ commit }, data) => {
             console.log(data);
             return new Promise((resolve) => {
@@ -950,7 +996,7 @@ export default new Vuex.Store({
                     },
                 }).then((response) => {
                     resolve(response.data);
-                    commit("setBUbyLU", response.data.results[0]);
+                    commit("setBUbyLU", response.data.results);
                 });
             });
         },
@@ -969,7 +1015,26 @@ export default new Vuex.Store({
                     },
                 }).then((response) => {
                     resolve(response.data);
-                    commit("setDivisionByBU", response.data.results[0]);
+                    commit("setDivisionByBU", response.data.results);
+                });
+            });
+        },
+        getLocationByDivision: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getLocationByDiv",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                        division: data.division,
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setLocByDiv", response.data.results);
                 });
             });
         },
@@ -988,7 +1053,45 @@ export default new Vuex.Store({
                     },
                 }).then((response) => {
                     resolve(response.data);
-                    commit("setdepartmentByDiv", response.data.results[0]);
+                    commit("setdepartmentByDiv", response.data.results);
+                });
+            });
+        },
+        getCostCenter: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getCostCenter",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                       
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setcostCenter", response.data.results);
+                });
+            });
+        },
+        getJobCode: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getJobCode",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                       
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setjobCode", response.data.results);
                 });
             });
         },

@@ -1,19 +1,20 @@
 <template>
-  <div>
-    <!-- Dialog -->
-    <v-dialog v-model="addPositionDialog" max-width="800px" persistent>
-      <v-card>
-        <!-- Title -->
-        <v-card-title class="headline"> Add Position </v-card-title>
-        <!-- {{selectedDept}} -->
-        <!-- {{selectedPlan}} -->
-        <!-- {{finalPlanData}} -->
-        <!-- Content -->
-        <v-card-text>
-          <v-form ref="form">
-            <v-row dense>
-              <v-col cols="6">
-                <span>Position Code</span>
+  <v-dialog v-model="addPositionDialog" max-width="600px" persistent>
+    <v-card>
+      <v-card-title class="headline"> Add Position </v-card-title>
+      <v-card-text>
+        <v-form ref="form">
+          <v-container fluid>
+            <!-- Position Code -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Position Code <span class="required">*</span>
+              </v-col>
+              <v-col cols="7">
                 <v-text-field
                   v-model="form.posCode"
                   outlined
@@ -22,9 +23,18 @@
                   hide-details
                 />
               </v-col>
-               <v-col cols="6">
-                <span>Start Date</span>
+            </v-row>
 
+            <!-- Start Date -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Start Date <span class="required">*</span>
+              </v-col>
+              <v-col cols="7">
                 <v-menu
                   v-model="dateMenu"
                   :close-on-content-click="false"
@@ -41,149 +51,268 @@
                       append-icon="mdi-calendar"
                       v-bind="attrs"
                       v-on="on"
+                      hide-details
                     />
                   </template>
-
                   <v-date-picker
-                    v-model="form.effectiveDate"
+                    v-model="form.startDate"
                     @input="dateMenu = false"
-                  /> </v-menu
-              ></v-col>
-              <v-col cols="6">
-                <span>Change Reason</span>
-                <v-text-field
+                  />
+                </v-menu>
+              </v-col>
+            </v-row>
+
+            <!-- Change Reason -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Change Reason
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.changeReason"
+                  :items="changeReasonOptions"
+                  item-text="text"
+                  item-value="value"
                   outlined
                   dense
-                  disabled
                   hide-details
                 />
               </v-col>
+            </v-row>
 
-              <v-col cols="6">
-                <span>Select Job Code</span>
-                <v-text-field
+            <!-- Select Job Code -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Select Job Code
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.jobCode"
+                  :items="jobCode"
+                  :item-text="(item) => `${item.name} (${item.jobCode})`"
+                  item-value="jobcode"
                   outlined
                   dense
-                  required
                   hide-details
                 />
               </v-col>
+            </v-row>
 
-              <v-col cols="6">
-                <span>Position Title</span>
-
+            <!-- Position Title -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Position Title <span class="required">*</span>
+              </v-col>
+              <v-col cols="7">
                 <v-text-field
                   v-model="form.positionTitle"
                   outlined
                   dense
-                  required
                   hide-details
-              /></v-col>
-              <!-- {{isEdit}} -->
+                  placeholder="Click or focus to edit"
+                />
+              </v-col>
+            </v-row>
 
-              <v-col cols="6">
-                <span>Job Title</span>
-
-                <v-autocomplete
-                  v-model="form.jobTitle"
-                  :items="statusOptions"
-                  outlined
-                  dense
-                  :disabled="!isEdit"
-                  hide-details
-              /></v-col>
-
-              <v-col cols="6">
-                <span>Company</span>
+            <!-- Job Title -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Job Title
+              </v-col>
+              <v-col cols="7">
                 <v-text-field
-                  v-model="form.comapany"
+                  v-model="form.jobTitle"
                   outlined
                   dense
-                  disabled
+                  hide-details
+                  placeholder="Click or focus to edit"
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Company -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Company
+              </v-col>
+              <v-col cols="7">
+                <v-select
+                  v-model="form.company"
+                  :items="LegalUnit"
+                  :item-text="(item) => `${item.name} (${item.externalCode})`"
+                  item-value="externalCode"
+                  outlined
+                  dense
+                  @change="getBUByLU"
                   hide-details
                 />
               </v-col>
+            </v-row>
 
-             
-                  <v-col cols="6">
-  <span>Business Unit</span>
-  <v-select
-    v-model="form.payGrade"
-    :items="BUbyLU"
-    item-text="name"
-    item-value="externalCode"
-    outlined
-    dense
-    hide-details
-     @change="getDivisionByBU"
-  ></v-select>
-</v-col>
+            <!-- Business Unit -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Business Unit
+              </v-col>
+              <v-col cols="7">
+                <v-select
+                  v-model="form.businessUnit"
+                  :items="BUbyLU"
+                  :item-text="(item) => `${item.name} (${item.externalCode})`"
+                  item-value="externalCode"
+                  outlined
+                  dense
+                  @change="getDivisionByBU"
+                  hide-details
+                />
+              </v-col>
+            </v-row>
 
-            <v-col cols="6">
-  <span>Division</span>
-  <v-select
-    v-model="form.division"
-    :items="DivisionByBU"
-    item-text="name"
-    item-value="externalCode"
-    outlined
-    dense
-    hide-details
-  />
-</v-col>
+            <!-- Division -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Division
+              </v-col>
+              <v-col cols="7">
+                <v-select
+                  v-model="form.division"
+                  :items="DivisionByBU"
+                  :item-text="(item) => `${item.name} (${item.externalCode})`"
+                  item-value="externalCode"
+                  outlined
+                  dense
+                  @change="getdeptLoc"
+                  hide-details
+                />
+              </v-col>
+            </v-row>
 
-              <v-col cols="6">
-                <span>Department</span>
-                <v-textarea
+            <!-- Department -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Department
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.department"
+                  :items="departmentByDiv"
+                  :item-text="(item) => `${item.name} (${item.externalCode})`"
+                  item-value="externalCode"
                   outlined
                   dense
-                  rows="1"
-                  auto-grow
                   hide-details
-                  @change="getDeptByDivision"
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Location</span>
-                <v-textarea
-                  v-model="form.location"
-                  outlined
-                  dense
-                  rows="1"
-                  auto-grow
-                  hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Cost Centre</span>
-                <v-textarea
-                  v-model="form.costCenter"
-                  outlined
-                  dense
-                  rows="1"
-                  auto-grow
-                  hide-details
-                ></v-textarea
-              ></v-col>
-             <v-col cols="6">
-  <span>Pay Grade</span>
-  <v-select
-    v-model="form.payGrade"
-    :items="allPaygrade"
-    item-text="name"
-    item-value="externalCode"
-    outlined
-    dense
-    hide-details
-  
-  ></v-select>
-</v-col>
+                />
+              </v-col>
+            </v-row>
 
-              <v-col cols="6">
-                <span>Job Level</span>
+            <!-- Location -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Location
+              </v-col>
+              <v-col cols="7">
+                <v-select
+                  v-model="form.location"
+                  :items="LocByDiv"
+                  :item-text="(item) => `${item.name} (${item.externalCode})`"
+                  item-value="externalCode"
+                  outlined
+                  dense
+                  hide-details
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Cost Centre -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Cost Centre
+              </v-col>
+              <v-col cols="7">
+                <v-select
+                  v-model="form.costCenter"
+                  :items="costCenter"
+                  :item-text="(item) => `${item.name} (${item.externalCode})`"
+                  item-value="externalCode"
+                  outlined
+                  dense
+                  hide-details
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Pay Grade -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Pay Grade
+              </v-col>
+              <v-col cols="7">
+                <v-select
+                  v-model="form.payGrade"
+                  :items="allPaygrade"
+                  item-text="name"
+                  item-value="externalCode"
+                  outlined
+                  dense
+                  hide-details
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Job Level -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Job Level
+              </v-col>
+              <v-col cols="7">
                 <v-textarea
                   v-model="form.jobLevel"
                   outlined
@@ -191,10 +320,20 @@
                   rows="1"
                   auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Employee Class</span>
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Employee Class -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Employee Class
+              </v-col>
+              <v-col cols="7">
                 <v-textarea
                   v-model="form.empClass"
                   outlined
@@ -202,10 +341,20 @@
                   rows="1"
                   auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>FTE</span>
+                />
+              </v-col>
+            </v-row>
+
+            <!-- FTE -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                FTE
+              </v-col>
+              <v-col cols="7">
                 <v-textarea
                   v-model="form.fte"
                   outlined
@@ -213,21 +362,42 @@
                   rows="1"
                   auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Regular/ Temporary</span>
-                <v-textarea
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Regular/ Temporary -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Regular/ Temporary
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.regTemp"
+                  :items="regularTempOptions"
+                  item-text="text"
+                  item-value="value"
                   outlined
                   dense
-                  rows="1"
-                  auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Title</span>
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Title -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Title
+              </v-col>
+              <v-col cols="7">
                 <v-textarea
                   v-model="form.title"
                   outlined
@@ -235,32 +405,57 @@
                   rows="1"
                   auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Position Type</span>
-                <v-textarea
+                  placeholder="Click or focus to edit"
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Position Type -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Position Type <span class="required">*</span>
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.posType"
+                  :items="positionTypeOptions"
+                  item-text="text"
+                  item-value="value"
                   outlined
                   dense
-                  rows="1"
-                  auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Type</span>
-                <v-textarea
-                  v-model="form.type"
-                  outlined
-                  dense
-                  rows="1"
-                  auto-grow
-                  hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Position Incumbent</span>
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Type -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Type
+              </v-col>
+              <v-col cols="7">
+                <v-select v-model="form.type" outlined dense hide-details />
+              </v-col>
+            </v-row>
+
+            <!-- Position Incumbent -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Position Incumbent
+              </v-col>
+              <v-col cols="7">
                 <v-textarea
                   v-model="form.posIncumbent"
                   outlined
@@ -268,10 +463,21 @@
                   rows="1"
                   auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Description</span>
+                  placeholder="Click or focus to edit"
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Description -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Description
+              </v-col>
+              <v-col cols="7">
                 <v-textarea
                   v-model="form.description"
                   outlined
@@ -279,54 +485,103 @@
                   rows="1"
                   auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>To Be Recruited</span>
-                <v-textarea
+                  placeholder="Click or focus to edit"
+                />
+              </v-col>
+            </v-row>
+
+            <!-- To Be Recruited -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                To Be Recruited
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.recruited"
+                  :items="['Yes', 'No']"
                   outlined
                   dense
-                  rows="1"
-                  auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Critical Position?</span>
-                <v-textarea
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Critical Position? -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Critical Position?
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.criticalPos"
+                  :items="['Yes', 'No']"
                   outlined
                   dense
-                  rows="1"
-                  auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Subject to Position Control</span>
-                <v-textarea
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Subject to Position Control -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Subject to Position Control
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.SubjControl"
+                  :items="['Yes', 'No']"
                   outlined
                   dense
-                  rows="1"
-                  auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Position Criticality</span>
-                <v-textarea
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Position Criticality -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Position Criticality
+              </v-col>
+              <v-col cols="7">
+                <v-select
                   v-model="form.positionCriticality"
+                  :items="posCriticalityOptions"
+                  :item-text="(item) => `${item.text} (${item.value})`"
+                  :item-value="value"
                   outlined
                   dense
-                  rows="1"
-                  auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Recruiter</span>
+                />
+              </v-col>
+            </v-row>
+
+            <!-- Recruiter -->
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Recruiter
+              </v-col>
+              <v-col cols="7">
                 <v-textarea
                   v-model="form.Recruiter"
                   outlined
@@ -334,103 +589,80 @@
                   rows="1"
                   auto-grow
                   hide-details
-                ></v-textarea
-              ></v-col>
-              <v-col cols="6">
-                <span>Job Function</span>
-                <v-textarea
-                  v-model="form.jobFun"
-                  outlined
-                  dense
-                  rows="1"
-                  auto-grow
-                  hide-details
-                ></v-textarea
-              ></v-col>
-            
-            
+                />
+              </v-col>
             </v-row>
+            <v-row align="center" class="form-row">
+              <v-col
+                cols="5"
+                class="label-col"
+                style="text-align: right; padding-right: 16px"
+              >
+                Higher Level Position
+              </v-col>
+              <v-col cols="7">
+               <span>Hii</span>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+      </v-card-text>
 
-            <!-- From Date -->
-            <!-- <span>From</span>
-            <v-menu
-              v-model="fromMenu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="form.fromDate"
-                  outlined
-                  dense
-                  readonly
-                  append-icon="mdi-calendar"
-                  v-bind="attrs"
-                  v-on="on"
-                />
-              </template>
-
-              <v-date-picker
-                v-model="form.fromDate"
-                @input="fromMenu = false"
-              />
-            </v-menu> -->
-
-            <!-- To Date -->
-            <!-- <span>To</span>
-            <v-menu
-              v-model="toMenu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="form.toDate"
-                  outlined
-                  dense
-                  readonly
-                  append-icon="mdi-calendar"
-                  v-bind="attrs"
-                  v-on="on"
-                />
-              </template>
-
-              <v-date-picker
-                v-model="form.toDate"
-                :min="form.fromDate"
-                @input="toMenu = false"
-              />
-            </v-menu> -->
-          </v-form>
-        </v-card-text>
-
-        <!-- Actions -->
-        <v-card-actions class="justify-end">
-          <v-btn text @click="closeDialog"> Close </v-btn>
-
-          <v-btn color="primary" @click="saveFormData()"> Save </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+      <v-card-actions class="justify-end">
+        <v-btn text @click="closeDialog"> Close </v-btn>
+        <v-btn color="primary" @click="saveFormData"> Save </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
+
+<style scoped>
+.required {
+  color: red;
+  margin-left: 2px;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.label-col {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+</style>
 
 <script>
 export default {
   data() {
     return {
-      form:{
+      changeReasonOptions: [
+        { text: "Values to be provided", value: "New" },
+        { text: "Update Position", value: "Update" },
+      ],
+      regularTempOptions: [
+        { text: "Regular", value: "R" },
+        { text: "Temporary", value: "T" },
+      ],
+      positionTypeOptions: [
+        { text: "Active", value: "Active" },
+        { text: "Inactive", value: "Inactive" },
+      ],
+      posCriticalityOptions: [
+        { text: "Not Critical", value: "0" },
+        { text: "Critical", value: "1" },
+      ],
+      requiredRule: [(v) => !!v || "This field is required"],
+      form: {
         posCode: "",
         startDate: "",
-        changeReason: "",
+        changeReason: "New",
         jobCode: "",
         positionTitle: "",
         jobTitle: "",
-        comapany: "",
+        company: "",
         businessUnit: "",
         division: "",
         department: "",
@@ -452,104 +684,180 @@ export default {
         positionCriticality: "",
         Recruiter: "",
         jobFun: "",
-
-      }
-    }},
+      },
+    };
+  },
   computed: {
-     DivisionByBU: {
+    LegalUnit: {
+      get() {
+        return this.$store.getters.getLegalUnit;
+      },
+      set(data) {
+        this.$store.commit("setLegalUnit", data);
+      },
+    },
+    LocByDiv: {
+      get() {
+        return this.$store.getters.getLocByDiv;
+      },
+      set(data) {
+        this.$store.commit("setLocByDiv", data);
+      },
+    },
+    DivisionByBU: {
       get() {
         return this.$store.getters.getDivisionByBU;
-       
       },
       set(data) {
         this.$store.commit("setDivisionByBU", data);
       },
     },
-     BUbyLU: {
+    departmentByDiv: {
+      get() {
+        return this.$store.getters.getdepartmentByDiv;
+      },
+      set(data) {
+        this.$store.commit("setdepartmentByDiv", data);
+      },
+    },
+    BUbyLU: {
       get() {
         return this.$store.getters.getBUbyLU;
-       
       },
       set(data) {
         this.$store.commit("setBUbyLU", data);
       },
     },
-     addPositionDialog: {
+    addPositionDialog: {
       get() {
         return this.$store.getters.getaddPositionDialog;
-       
       },
       set(data) {
         this.$store.commit("setaddPositionDialog", data);
       },
     },
-     allPaygrade: {
+    allPaygrade: {
       get() {
         return this.$store.getters.getallPaygradeData;
-       
       },
       set(data) {
         this.$store.commit("setallPaygradeData", data);
       },
     },
-     BU: {
+    costCenter: {
       get() {
-        return this.$store.getters.getbusinessunit;
-       
+        return this.$store.getters.getcostCenter;
       },
       set(data) {
-        this.$store.commit("setbusinessunit", data);
+        this.$store.commit("setcostCenter", data);
       },
     },
-
-
-  },
-  methods:{
-    closeDialog(){
-      this.addPositionDialog= false;
+    jobCode: {
+      get() {
+        return this.$store.getters.getjobCode;
+      },
+      set(data) {
+        this.$store.commit("setjobCode", data);
+      },
     },
-    getBUByLU(lu){
+  },
+  methods: {
+    getdeptLoc(division) {
+      this.getDeptByDivision(division);
+      this.getLocByDivision(division);
+    },
+    saveFormData() {
+      if (!this.$refs.form.validate()) {
+        return;
+      }
+      // proceed with save logic
+    },
+    closeDialog() {
+      this.addPositionDialog = false;
+    },
+    getLU() {
+      this.$store.dispatch("getLegalUnit").then((response) => {
+        console.log("response=", response);
+        // this.DivisionByBU = response;
+        this.form.company = "";
+      });
+    },
+    getBUByLU(lu) {
       let dataToSend = {
         lu: lu,
-      }
-      this.$store.dispatch("getBusinessUnitByLU",dataToSend).then((response) => {
-        console.log("response=",response);
-        // this.DivisionByBU = response;
-         this.form.businessUnit = "";
-      })
+      };
+      this.$store
+        .dispatch("getBusinessUnitByLU", dataToSend)
+        .then((response) => {
+          console.log("response=", response);
+          // this.DivisionByBU = response;
+          this.form.businessUnit = "";
+        });
     },
-    getDivisionByBU(businessUnit){
+    getDivisionByBU(businessUnit) {
       let dataToSend = {
-        businessUnit: businessUnit
-      }
-      this.$store.dispatch("getDivisionByBU",dataToSend).then((response) => {
-        console.log("response=",response);
+        businessUnit: businessUnit,
+      };
+      this.$store.dispatch("getDivisionByBU", dataToSend).then((response) => {
+        console.log("response=", response);
         // this.DivisionByBU = response;
-         this.form.division = "";
-      })
+        this.form.division = "";
+      });
     },
-    getDeptByDivision(division){
+    getDeptByDivision(division) {
       let dataToSend = {
-        division: division
-      }
-      this.$store.dispatch("getDepartmentByDivision",dataToSend).then((response) => {
-        console.log("response=",response);
-        // this.DivisionByBU = response;
-         this.form.department = "";
-      })
+        division: division,
+      };
+      this.$store
+        .dispatch("getDepartmentByDivision", dataToSend)
+        .then((response) => {
+          console.log("response=", response);
+          // this.DivisionByBU = response;
+          this.form.department = "";
+        });
     },
-    // getPayGradeData(){
-    //   this.$store.dispatch("getPayGrade").then((response) => {
-    //   console.log("response from getPayGradeData=",response);
-    //   this.payGradeData = response;
-    //   });
-
-    // }
-
+    getLocByDivision(division) {
+      let dataToSend = {
+        division: division,
+      };
+      this.$store
+        .dispatch("getLocationByDivision", dataToSend)
+        .then((response) => {
+          console.log("response=", response);
+          // this.DivisionByBU = response;
+          this.form.location = "";
+        });
+    },
+    getCostCenter() {
+      this.$store.dispatch("getCostCenter").then((response) => {
+        console.log("response from getCostCenter=", response);
+      });
+    },
+    getJobCode() {
+      this.$store.dispatch("getJobCode").then((response) => {
+        console.log("response from getJobCode=", response);
+      });
+    },
   },
-  mounted(){
-    // this.getPayGradeData();
-  }
+  mounted() {
+    this.getLU();
+    this.getCostCenter();
+    this.getJobCode();
+    // Set Start Date to today's date (YYYY-MM-DD)
+    const today = new Date().toISOString().substr(0, 10);
+    this.form.startDate = today;
 
-}
+    this.form.empClass = "Active (1)";
+    this.form.fte = "1";
+    this.form.regTemp = "Regular (R)";
+
+    this.form.posType = "Active";
+    this.form.type = "Regular Position (Regular)";
+    this.form.positionCriticality = "Not Critical (0)";
+
+    this.form.recruited = "Yes";
+    this.form.criticalPos = "No";
+    this.form.SubjControl = "No";
+  },
+};
 </script>
