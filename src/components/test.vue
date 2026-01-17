@@ -66,10 +66,18 @@ export default {
   },
 
   computed: {
-      addPositionDialog: {
+    positionCreateLevel() {
+      return this.$store.getters.getPositionCreateLevel;
+    },
+    triggerAddNode() {
+      return this.$store.getters.getTriggerAddNode;
+    },
+    newNodePayload() {
+      return this.$store.getters.getNewNodePayload;
+    },
+    addPositionDialog: {
       get() {
         return this.$store.getters.getaddPositionDialog;
-       
       },
       set(data) {
         this.$store.commit("setaddPositionDialog", data);
@@ -273,6 +281,53 @@ export default {
   },
 
   methods: {
+    createNodeFromDialog(formData) {
+      const selected = this.currentNodeData;
+      if (!selected) return;
+
+      let pid;
+      // let order = 0;
+
+      // if (this.positionCreateLevel === "child") {
+      //   pid = selected.id;
+      //   order = this.getNextOrder(pid);   //  child order
+      // }
+
+      // if (this.positionCreateLevel === "sibling") {
+      //   pid = selected.pid;
+      //   order = this.getNextOrder(pid);   //  sibling order
+      // }
+
+      const node = {
+        id: this.chart.generateId(),
+        pid,
+        // order,                           //  THIS fixes BOTH cases
+        ...formData,
+        positionVacant: true,
+        tags: ["Vacant", formData.userPayGrade],
+        img: "https://i.ibb.co/LShM7dV/vacantposition.png",
+      };
+
+      this.chart.addNode(node);
+      this.chart.draw();
+
+      // cleanup
+      this.addPositionDialog = false;
+      this.$store.commit("setPositionCreateLevel", null);
+    },
+
+    //     copyHandler(data) {
+    //   const node = {
+    //     ...data,
+    //     id: this.chart.generateId(),
+    //     tags: ["Vacant", data.userPayGrade],
+    //     img: "https://i.ibb.co/LShM7dV/vacantposition.png",
+    //   };
+
+    //   this.chart.addNode(node);
+    //   this.chart.draw();
+    // },
+
     pdf() {
       OrgChart.pdfPrevUI.show(this.chart, {
         format: "A4",
@@ -381,7 +436,7 @@ export default {
         (this.isLevel = false);
       for (let i = 0; i < this.orgChartData?.length; i++) {
         this.orgChartData[i].tags = this.orgChartData[i].tags.filter(function (
-          item
+          item,
         ) {
           return item.indexOf("subLevels") !== 0;
         });
@@ -481,7 +536,7 @@ export default {
         console.log(orgChartData[i].userPayGrade);
         console.log(
           "orgChartData[i].userDepartmentName==",
-          orgChartData[i].userDepartmentName
+          orgChartData[i].userDepartmentName,
         );
         this.gradeOccurence.push(orgChartData[i].userPayGrade);
         if (this.userPayGrade.indexOf(orgChartData[i].userPayGrade) === -1) {
@@ -548,7 +603,7 @@ export default {
       });
 
       this.intersectPay.sort(
-        (a, b) => parseInt(b.paygradeLevel) - parseInt(a.paygradeLevel)
+        (a, b) => parseInt(b.paygradeLevel) - parseInt(a.paygradeLevel),
       );
 
       let jsonObject = this.intersectPay.map(JSON.stringify);
@@ -569,7 +624,7 @@ export default {
         }
         var node = nodes[i];
         var indexpay = this.intersectPay.findIndex(
-          (x) => x.externalCode == node.userPayGrade
+          (x) => x.externalCode == node.userPayGrade,
         );
         console.log(indexpay);
 
@@ -666,7 +721,7 @@ export default {
               if (!node.isRoot) {
                 this.userMasterData[node.userId] = response.splice(
                   1,
-                  response?.length
+                  response?.length,
                 );
                 console.log(node.userId, this.userMasterData[node.userId]);
                 this.isbuffered[node.userId] = true;
@@ -676,7 +731,7 @@ export default {
                 let index = this.userMasterData[node.userManagerId].findIndex(
                   (element) => {
                     return node.userId == element.userId;
-                  }
+                  },
                 );
                 this.isbuffered[node.userManagerId] = true;
                 console.log(index);
@@ -690,7 +745,7 @@ export default {
 
                 console.log(
                   node.userManagerId,
-                  this.userMasterData[node.userManagerId]
+                  this.userMasterData[node.userManagerId],
                 );
               }
             }
@@ -720,15 +775,15 @@ export default {
             this.userMasterData[nodeData.userManagerId][0].isRoot = true;
             this.getPayGrade(this.userMasterData[nodeData.userManagerId]);
             this.userMasterData[nodeData.userManagerId] = this.addTags(
-              this.userMasterData[nodeData.userManagerId]
+              this.userMasterData[nodeData.userManagerId],
             );
             bufferedChild = this.userMasterData[nodeData.userManagerId];
 
             this.orgChartData = this.orgChartData.concat(
-              this.userMasterData[nodeData.userManagerId]
+              this.userMasterData[nodeData.userManagerId],
             );
             this.originalMasterData = this.originalMasterData.concat(
-              this.userMasterData[nodeData.userManagerId]
+              this.userMasterData[nodeData.userManagerId],
             );
             this.orgChartData = JSON.parse(JSON.stringify(this.orgChartData));
             console.log(JSON.stringify(this.orgChartData));
@@ -736,15 +791,15 @@ export default {
         } else {
           this.getPayGrade(this.userMasterData[nodeData.userId]);
           this.userMasterData[nodeData.userId] = this.addTags(
-            this.userMasterData[nodeData.userId]
+            this.userMasterData[nodeData.userId],
           );
           bufferedChild = this.userMasterData[nodeData.userId];
 
           this.orgChartData = this.orgChartData.concat(
-            this.userMasterData[nodeData.userId]
+            this.userMasterData[nodeData.userId],
           );
           this.originalMasterData = this.originalMasterData.concat(
-            this.userMasterData[nodeData.userId]
+            this.userMasterData[nodeData.userId],
           );
         }
 
@@ -846,7 +901,7 @@ export default {
       if (!svg.includes('xmlns:xlink="http://www.w3.org/1999/xlink"')) {
         svg = svg.replace(
           "<svg",
-          '<svg xmlns:xlink="http://www.w3.org/1999/xlink"'
+          '<svg xmlns:xlink="http://www.w3.org/1999/xlink"',
         );
       }
 
@@ -892,7 +947,7 @@ export default {
       if (!svg.includes('xmlns:xlink="http://www.w3.org/1999/xlink"')) {
         svg = svg.replace(
           "<svg",
-          '<svg xmlns:xlink="http://www.w3.org/1999/xlink"'
+          '<svg xmlns:xlink="http://www.w3.org/1999/xlink"',
         );
       }
 
@@ -1006,7 +1061,7 @@ export default {
       if (!this.originalData?.length) {
         /* eslint-disable no-unused-vars */
         const nodesWithoutImg1 = this.originalMasterData.map(
-          ({ img, ...rest }) => rest
+          ({ img, ...rest }) => rest,
         );
         /* eslint-enable no-unused-vars */
         this.finalPlan["originalData"] = nodesWithoutImg1;
@@ -1028,7 +1083,7 @@ export default {
         this.isLevel = true;
         for (let i = 0; i < filteredData?.length; i++) {
           var indexpay = this.levelPay.findIndex(
-            (x) => x.externalCode == filteredData[i].userPayGrade
+            (x) => x.externalCode == filteredData[i].userPayGrade,
           );
           console.log(indexpay);
           filteredData[i].tags.push("subLevels" + indexpay);
@@ -1087,20 +1142,30 @@ export default {
 
       return { add, del, update };
     },
+    copyPosition(level, nodeId) {
+      const node = this.chart.get(nodeId); // ✅ get clicked node
 
-    copyPosition(nodeId) {
-      console.log("nodeId=",nodeId);
-      var data = this.chart.get(nodeId);
-      console.log("data--------*******",data);
-      this.currentNodeData = data;
-      data.id = this.chart.generateId();
-      data.pid = nodeId;
-      console.log(" data.pid ======>>>>", data.pid)
+      this.currentNodeData = node; // ✅ THIS WAS MISSING
+      this.$store.commit("setPositionCreateLevel", level);
+
       this.addPositionDialog = true;
-      // var data = this.chart.get(nodeId);
-      // data.id = this.chart.generateId();
-   
     },
+
+    // copyPosition(level) {
+    //   // console.log("nodeId=",nodeId);
+    //   // var data = this.chart.get(nodeId);
+    //   // console.log("data--------*******",data);
+    //   // this.currentNodeData = data;
+    //   // data.id = this.chart.generateId();
+    //   // data.pid = nodeId;
+    //   // console.log(" data.pid ======>>>>", data.pid)
+
+    //   this.$store.commit("setPositionCreateLevel", level);
+
+    //   this.addPositionDialog = true;
+    //   // var data = this.chart.get(nodeId);
+    //   // data.id = this.chart.generateId();
+    // },
     // copyHandler(nodeId) {
     //   var data = this.chart.get(nodeId);
     //   data.id = this.chart.generateId();
@@ -1240,7 +1305,7 @@ export default {
       // alert(OrgChart.VERSION)
       OrgChart.templates.myTemplate = Object.assign(
         {},
-        OrgChart.templates.rony
+        OrgChart.templates.rony,
       );
       //OrgChart.templates.myTemplate.size=[300, 180];
       OrgChart.templates.myTemplate.field_0 =
@@ -1270,7 +1335,7 @@ export default {
         node,
         data,
         template,
-        config
+        config,
       ) {
         // var isResigned = false;
         // var isCritical = false;
@@ -1346,7 +1411,7 @@ export default {
 
       OrgChart.templates.myTemplate.min = Object.assign(
         {},
-        OrgChart.templates.ana
+        OrgChart.templates.ana,
       );
       OrgChart.templates.myTemplate.min.size = [250, 80];
       OrgChart.templates.myTemplate.min.img_0 = "";
@@ -1429,10 +1494,17 @@ export default {
           edit: {
             text: "Edit",
           },
-         // add: { text: "Add New Position", onClick: this.copyHandler },
+          // add: { text: "Add New Position", onClick: this.copyHandler },
           CopyPosition: { text: "Copy Position", onClick: this.copyHandler },
-          addLevelDownPosition: { text: "Create Lower Level Position", onClick: this.copyPosition },
-          addSameLevelPosition: { text: "Create Same Level Position", onClick: this.copyPosition },
+
+          addLevelDownPosition: {
+            text: "Create Lower Level Position",
+            onClick: (nodeId) => this.copyPosition("child", nodeId),
+          },
+          addSameLevelPosition: {
+            text: "Create Same Level Position",
+            onClick: (nodeId) => this.copyPosition("sibling", nodeId),
+          },
           remove: { text: "Remove Position" },
         },
         tags: {
@@ -1523,11 +1595,16 @@ export default {
 
         console.log("Dragged Node ID:", draggedNodeId);
         console.log("Target Node ID:", droppedNodeId);
-        const sourcePositionTitle =  draggedNode.positionTitle;
-        const targetPositionTitle =  targetNode.positionTitle;
+        const sourcePositionTitle = draggedNode.positionTitle;
+        const targetPositionTitle = targetNode.positionTitle;
         console.log("Dragged Node:", draggedNode.positionTitle);
         console.log("Target Node:", targetNode.positionTitle);
-        await this.compareJobSkills(draggedNodeId, droppedNodeId,sourcePositionTitle,targetPositionTitle);
+        await this.compareJobSkills(
+          draggedNodeId,
+          droppedNodeId,
+          sourcePositionTitle,
+          targetPositionTitle,
+        );
       });
 
       this.chart.on("click", (sender, args) => {
@@ -1565,7 +1642,7 @@ export default {
 
       this.chart.onRedraw(() => {
         const elPositionTitle = document.querySelector(
-          '[data-filter-field="positionTitle"]'
+          '[data-filter-field="positionTitle"]',
         );
 
         if (elPositionTitle) {
@@ -1573,7 +1650,7 @@ export default {
         }
 
         const elpositionType = document.querySelector(
-          '[data-filter-field="positionType"]'
+          '[data-filter-field="positionType"]',
         );
 
         if (elpositionType) {
@@ -1581,7 +1658,7 @@ export default {
         }
 
         const eluserPayGrade = document.querySelector(
-          '[data-filter-field="userPayGrade"]'
+          '[data-filter-field="userPayGrade"]',
         );
 
         if (eluserPayGrade) {
@@ -1747,7 +1824,12 @@ export default {
         }
       });
     },
-    async compareJobSkills(sourcePositionId, targetPositionId,sourcePositionTitle,targetPositionTitle) {
+    async compareJobSkills(
+      sourcePositionId,
+      targetPositionId,
+      sourcePositionTitle,
+      targetPositionTitle,
+    ) {
       console.log("Inside compareJobSkills");
       try {
         // Fetch both job profiles
@@ -1769,30 +1851,32 @@ export default {
           [];
 
         const sourceSkillNames = sourceSkills.map(
-          (s) => s.entityNav?.name_en_US
+          (s) => s.entityNav?.name_en_US,
         );
         console.log("targetSkills=", sourceSkillNames);
         console.log("sourceSkillNames=", sourceSkillNames);
         const targetSkillNames = targetSkills.map(
-          (s) => s.entityNav?.name_en_US
+          (s) => s.entityNav?.name_en_US,
         );
 
         // Compare
         const commonSkills = sourceSkillNames.filter((skill) =>
-          targetSkillNames.includes(skill)
+          targetSkillNames.includes(skill),
         );
 
         const onlyInSource = sourceSkillNames.filter(
-          (skill) => !targetSkillNames.includes(skill)
+          (skill) => !targetSkillNames.includes(skill),
         );
 
         const onlyInTarget = targetSkillNames.filter(
-          (skill) => !sourceSkillNames.includes(skill)
+          (skill) => !sourceSkillNames.includes(skill),
         );
 
-         
-
-          console.log("sourcePosition and targetPosition=",sourcePositionTitle,targetPositionTitle);
+        console.log(
+          "sourcePosition and targetPosition=",
+          sourcePositionTitle,
+          targetPositionTitle,
+        );
         // Store in Vuex
         this.skillComparison = {
           sourcePositionTitle,
@@ -1856,6 +1940,15 @@ export default {
     //    console.log("After mounted",this.userData)
   },
   watch: {
+    triggerAddNode(val) {
+      if (!val || !this.newNodePayload) return;
+
+      this.createNodeFromDialog(this.newNodePayload);
+
+      this.$store.commit("setTriggerAddNode", false);
+      this.$store.commit("setNewNodePayload", null);
+    },
+
     triggerSavePlan(val) {
       if (val) {
         this.saveData();

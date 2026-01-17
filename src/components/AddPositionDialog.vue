@@ -785,16 +785,59 @@ export default {
     },
   },
   methods: {
+    copyHandler(nodeId) {
+      var data = this.chart.get(nodeId);
+      data.id = this.chart.generateId();
+      data.pid = nodeId;
+      data.isRoot = false;
+      data.positionType = "Vacant";
+      data.positionVacant = true;
+      data.tags = ["Vacant", data.userPayGrade];
+      data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
+      data.userDepartmentId = "";
+      data.userDivision = "";
+      data.userId = "";
+      data.userManagerId = "";
+      data.userName = "";
+      data.positionTitle = "New Position";
+      this.chart.addNode(data);
+    },
     getdeptLoc(division) {
       this.getDeptByDivision(division);
       this.getLocByDivision(division);
     },
     saveFormData() {
-      if (!this.$refs.form.validate()) {
-        return;
+      if (!this.$refs.form.validate()) return;
+
+      // Determine parent ID based on desired level
+      let pid;
+      if (this.$store.getters.getPositionCreateLevel === "sibling") {
+        pid = this.currentNodeData.pid; // sibling
+      } else {
+        pid = this.currentNodeData.id; // child
       }
-      // proceed with save logic
+
+      const payload = {
+        pid: pid, // ✅ use correct parent
+        positionTitle: this.form.positionTitle,
+        jobTitle: this.form.jobTitle,
+        businessUnit: this.form.businessUnit,
+        userDivision: this.form.division,
+        department: this.form.department,
+        location: this.form.location,
+        costCenter: this.form.costCenter,
+        userPayGrade: this.form.payGrade,
+        fte: this.form.fte,
+        positionType: this.form.posType,
+        positionVacant: true,
+      };
+
+      this.$store.commit("setNewNodePayload", payload);
+      this.$store.commit("setTriggerAddNode", true);
+
+      this.addPositionDialog = false;
     },
+
     closeDialog() {
       this.addPositionDialog = false;
     },

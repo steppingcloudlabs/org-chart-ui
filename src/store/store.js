@@ -10,6 +10,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        positionCreateLevel: null,
+         triggerAddNode: false,
+  newNodePayload: null,
         companyPayGradeData: [],
         skillComparison: null,
         addPositionDialog: false,
@@ -92,6 +95,15 @@ export default new Vuex.Store({
         },
     },
     mutations: {
+         setPositionCreateLevel(state, level) {
+    state.positionCreateLevel = level;
+  },
+         setTriggerAddNode(state, val) {
+    state.triggerAddNode = val;
+  },
+  setNewNodePayload(state, payload) {
+    state.newNodePayload = payload;
+  },
    
         SHOW_TOAST(state, payload) {
             console.log("SHOW_TOAST fired", payload);
@@ -362,6 +374,9 @@ export default new Vuex.Store({
         },
     },
     getters: {
+        getPositionCreateLevel: state => state.positionCreateLevel,
+         getTriggerAddNode: state => state.triggerAddNode,
+  getNewNodePayload: state => state.newNodePayload,
           getToast: (state) => state.toast,
         getTriggerSavePlan: (state) => state.triggerSavePlan,
         getskillComparison: (state) => state.skillComparison,
