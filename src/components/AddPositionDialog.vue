@@ -2,6 +2,7 @@
   <v-dialog v-model="addPositionDialog" max-width="600px" persistent>
     <v-card>
       <v-card-title class="headline"> Add Position </v-card-title>
+      <!-- {{currentNodeData}} -->
       <v-card-text>
         <v-form ref="form">
           <v-container fluid>
@@ -14,15 +15,7 @@
               >
                 Position Code <span class="required">*</span>
               </v-col>
-              <v-col cols="7">
-                <v-text-field
-                  v-model="form.posCode"
-                  outlined
-                  dense
-                  disabled
-                  hide-details
-                />
-              </v-col>
+              <v-col cols="7"> </v-col>
             </v-row>
 
             <!-- Start Date -->
@@ -313,8 +306,11 @@
                 Job Level
               </v-col>
               <v-col cols="7">
-                <v-textarea
+                <v-select
                   v-model="form.jobLevel"
+                  :items="jobLevel"
+                  :item-text="(item) => `${item.label} (${item.externalCode})`"
+                  item-value="externalCode"
                   outlined
                   dense
                   rows="1"
@@ -334,8 +330,11 @@
                 Employee Class
               </v-col>
               <v-col cols="7">
-                <v-textarea
+                <v-select
                   v-model="form.empClass"
+                  :items="empClass"
+                  :item-text="(item) => `${item.label} (${item.externalCode})`"
+                  item-value="externalCode"
                   outlined
                   dense
                   rows="1"
@@ -601,7 +600,7 @@
                 Higher Level Position
               </v-col>
               <v-col cols="7">
-               <span>Hii</span>
+                <span>{{ currentNodeData.positionTitle }}</span>
               </v-col>
             </v-row>
           </v-container>
@@ -651,7 +650,7 @@ export default {
         { text: "Inactive", value: "Inactive" },
       ],
       posCriticalityOptions: [
-        { text: "Not Critical", value: "0" },
+        { text: "Non Critical", value: "0" },
         { text: "Critical", value: "1" },
       ],
       requiredRule: [(v) => !!v || "This field is required"],
@@ -688,6 +687,30 @@ export default {
     };
   },
   computed: {
+    empClass: {
+      get() {
+        return this.$store.getters.getempClass;
+      },
+      set(data) {
+        this.$store.commit("setempClass", data);
+      },
+    },
+    jobLevel: {
+      get() {
+        return this.$store.getters.getjobLevel;
+      },
+      set(data) {
+        this.$store.commit("setjobLevel", data);
+      },
+    },
+    currentNodeData: {
+      get() {
+        return this.$store.getters.getcurrentNodeData;
+      },
+      set(data) {
+        this.$store.commit("setcurrentNodeData", data);
+      },
+    },
     LegalUnit: {
       get() {
         return this.$store.getters.getLegalUnit;
@@ -779,7 +802,7 @@ export default {
       this.$store.dispatch("getLegalUnit").then((response) => {
         console.log("response=", response);
         // this.DivisionByBU = response;
-        this.form.company = "";
+        // this.form.company = "";
       });
     },
     getBUByLU(lu) {
@@ -791,7 +814,7 @@ export default {
         .then((response) => {
           console.log("response=", response);
           // this.DivisionByBU = response;
-          this.form.businessUnit = "";
+          // this.form.businessUnit = "";
         });
     },
     getDivisionByBU(businessUnit) {
@@ -801,7 +824,7 @@ export default {
       this.$store.dispatch("getDivisionByBU", dataToSend).then((response) => {
         console.log("response=", response);
         // this.DivisionByBU = response;
-        this.form.division = "";
+        // this.form.division = "";
       });
     },
     getDeptByDivision(division) {
@@ -813,7 +836,7 @@ export default {
         .then((response) => {
           console.log("response=", response);
           // this.DivisionByBU = response;
-          this.form.department = "";
+          // this.form.department = "";
         });
     },
     getLocByDivision(division) {
@@ -825,7 +848,7 @@ export default {
         .then((response) => {
           console.log("response=", response);
           // this.DivisionByBU = response;
-          this.form.location = "";
+          // this.form.location = "";
         });
     },
     getCostCenter() {
@@ -838,11 +861,27 @@ export default {
         console.log("response from getJobCode=", response);
       });
     },
+    getJobLevel() {
+      this.$store.dispatch("getJobLevel").then((response) => {
+        console.log("response from getJobLevel=", response);
+      });
+    },
+    getEmpClass() {
+      this.$store.dispatch("getEmpClass").then((response) => {
+        console.log("response from getEmplClass=", response);
+      });
+    },
   },
   mounted() {
     this.getLU();
     this.getCostCenter();
     this.getJobCode();
+    this.getBUByLU();
+    this.getDivisionByBU();
+    this.getDeptByDivision();
+    this.getLocByDivision();
+    this.getJobLevel();
+    this.getEmpClass();
     // Set Start Date to today's date (YYYY-MM-DD)
     const today = new Date().toISOString().substr(0, 10);
     this.form.startDate = today;
@@ -853,11 +892,24 @@ export default {
 
     this.form.posType = "Active";
     this.form.type = "Regular Position (Regular)";
-    this.form.positionCriticality = "Not Critical (0)";
+    this.form.positionCriticality = "Non Critical (0)";
 
     this.form.recruited = "Yes";
     this.form.criticalPos = "No";
     this.form.SubjControl = "No";
+    if (this.currentNodeData) {
+      // set location
+      this.form.costCenter = this.currentNodeData.costCenter;
+      this.form.payGrade = this.currentNodeData.userPayGrade;
+      this.form.fte = this.currentNodeData.fte;
+      this.form.positionCriticality = this.currentNodeData.positionCritical;
+      // this.form.positionTitle = this.currentNodeData.positionTitle;
+      this.form.posType = this.currentNodeData.positionType;
+      this.form.businessUnit = this.currentNodeData.businessUnit;
+      this.form.department = this.currentNodeData.department;
+      this.form.location = this.currentNodeData.location;
+      this.form.division = this.currentNodeData.userDivision;
+    }
   },
 };
 </script>

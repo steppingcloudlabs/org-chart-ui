@@ -25,6 +25,8 @@ export default new Vuex.Store({
         allSavedPlans: [],
         costCenter: [],
         jobCode: [],
+        jobLevel:[],
+        empClass:[],
         selectedBusinessUnit: null,
         selectedStatus: null,
         selectedDept: null,
@@ -45,6 +47,7 @@ export default new Vuex.Store({
         selectedSearchField: [],
         allPaygrade: [],
         userMasterData: {},
+        currentNodeData: {},
         userData: [],
         inputDate: new Date().toISOString().substr(0, 10),
         flag: "",
@@ -215,6 +218,9 @@ export default new Vuex.Store({
         setuserMasterData: (state, data) => {
             state.userMasterData = data;
         },
+        setcurrentNodeData: (state, data) => {
+            state.currentNodeData = data;
+        },
         setInputDate: (state, data) => {
             state.inputDate = data;
         },
@@ -304,6 +310,12 @@ export default new Vuex.Store({
         setjobCode(state, value) {
             state.jobCode = value;
         },
+        setjobLevel(state, value) {
+            state.jobLevel = value;
+        },
+        setempClass(state, value) {
+            state.empClass = value;
+        },
         setselectedBusinessUnit(state, value) {
             state.selectedBusinessUnit = value;
         },
@@ -362,6 +374,8 @@ export default new Vuex.Store({
         getallSavedPlans: (state) => state.allSavedPlans,
         getcostCenter: (state) => state.costCenter,
         getjobCode: (state) => state.jobCode,
+        getjobLevel: (state) => state.jobLevel,
+        getempClass: (state) => state.empClass,
         getselectedBusinessUnit: (state) => state.selectedBusinessUnit,
         getselectedStatus: (state) => state.selectedStatus,
         getselectedDivision: (state) => state.selectedDivision,
@@ -478,8 +492,10 @@ export default new Vuex.Store({
             return state.LocByDiv;
         },
         getuserMasterData: (state) => {
-            console.log(state.userMasterData);
             return state.userMasterData;
+        },
+        getcurrentNodeData: (state) => {
+            return state.currentNodeData;
         },
         getinputDate: (state) => {
             return state.inputDate;
@@ -1095,6 +1111,45 @@ export default new Vuex.Store({
                 });
             });
         },
+        getJobLevel: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getJobLevel",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                       
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setjobLevel", response.data);
+                });
+            });
+        },
+        getEmpClass: ({ commit }, data) => {
+            console.log(data);
+            return new Promise((resolve) => {
+                axios({
+                    url: baseDevURL + "/srv/getEmplClass",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    params: {
+                        companyId: companyId,
+                       
+                    },
+                }).then((response) => {
+                    resolve(response.data);
+                    commit("setempClass", response.data);
+                });
+            });
+        },
+      
         // getPayGrade: ({ commit }, data) => {
         //     console.log(data);
         //     return new Promise((resolve) => {

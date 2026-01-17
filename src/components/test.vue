@@ -262,6 +262,14 @@ export default {
         this.$store.commit("setoriginalData", data);
       },
     },
+    currentNodeData: {
+      get() {
+        return this.$store.getters.getcurrentNodeData;
+      },
+      set(data) {
+        this.$store.commit("setcurrentNodeData", data);
+      },
+    },
   },
 
   methods: {
@@ -1082,6 +1090,12 @@ export default {
 
     copyPosition(nodeId) {
       console.log("nodeId=",nodeId);
+      var data = this.chart.get(nodeId);
+      console.log("data--------*******",data);
+      this.currentNodeData = data;
+      data.id = this.chart.generateId();
+      data.pid = nodeId;
+      console.log(" data.pid ======>>>>", data.pid)
       this.addPositionDialog = true;
       // var data = this.chart.get(nodeId);
       // data.id = this.chart.generateId();
@@ -1416,9 +1430,9 @@ export default {
             text: "Edit",
           },
          // add: { text: "Add New Position", onClick: this.copyHandler },
-          CopyPosition: { text: "Copy Position", onClick: this.copyPosition },
-          addLevelDownPosition: { text: "Add Level Down Position", onClick: this.copyHandler },
-          addSameLevelPosition: { text: "Add Same Level Position", onClick: this.copyHandler },
+          CopyPosition: { text: "Copy Position", onClick: this.copyHandler },
+          addLevelDownPosition: { text: "Create Lower Level Position", onClick: this.copyPosition },
+          addSameLevelPosition: { text: "Create Same Level Position", onClick: this.copyPosition },
           remove: { text: "Remove Position" },
         },
         tags: {
