@@ -10,7 +10,7 @@
 
     <nodeProfile></nodeProfile>
     <addPositionDialog v-if="addPositionDialog"></addPositionDialog>
-    <copyPositionDialog v-if="copyPositionDialog"></copyPositionDialog>
+    <copyPositionDialog v-if="copyPositionDialog" @close="closeDialogs"></copyPositionDialog>
   </v-layout>
 </template>
 
@@ -295,6 +295,13 @@ export default {
   },
 
   methods: {
+    closeDialogs(){
+    console.log("Inside closeDialog before",this.copyPositionDialog )
+
+    this.copyPositionDialog=false;
+    console.log("Inside closeDialogafter ",this.copyPositionDialog )
+
+    },
     createNodeFromDialog(formData) {
       const selected = this.currentNodeData;
       if (!selected) return;

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="copyPositionDialog" max-width="500px" persistent>
+  <v-dialog v-model="copyPositionDialog" max-width="500px" >
     <v-card>
       <v-card-title class="headline"> Copy Position </v-card-title>
 
@@ -41,7 +41,7 @@
       </v-card-text>
 
       <v-card-actions class="justify-end">
-        <v-btn text @click="closeDialog">Cancel</v-btn>
+        <v-btn text @click="closeDialog()">Cancel</v-btn>
         <v-btn color="primary" @click="confirmCopy">OK</v-btn>
       </v-card-actions>
     </v-card>
@@ -50,7 +50,7 @@
 
 <script>
 export default {
-  name: "CopyPositionDialog",
+//   name: "CopyPositionDialog",
 
   data() {
     return {
@@ -83,13 +83,14 @@ export default {
 
   methods: {
     closeDialog() {
-this.copyPositionDialog = false;    },
+    this.copyPositionDialog = false; 
+    console.log("Inside closeDialog",this.copyPositionDialog )
+
+    this.$emit('close');
+  },
 
     confirmCopy() {
-         if (!this.currentNodeData) {
-    console.error("No node selected for copy");
-    return;
-  }
+  
       const payload = {
         sourceNodeId: this.currentNodeData.id,
         pid: this.currentNodeData.pid, // SAME parent
@@ -112,4 +113,6 @@ p {
   font-size: 14px;
   color: #555;
 }
+
+
 </style>
