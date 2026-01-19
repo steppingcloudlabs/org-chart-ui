@@ -10,12 +10,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+         copyPositionPayload: null,
+  triggerCopyPosition: false,
         positionCreateLevel: null,
          triggerAddNode: false,
   newNodePayload: null,
         companyPayGradeData: [],
         skillComparison: null,
         addPositionDialog: false,
+        copyPositionDialog: false,
         showSkillDialog: false,
         isApprovedPlan: false,
         isEdit: false,
@@ -95,6 +98,13 @@ export default new Vuex.Store({
         },
     },
     mutations: {
+          setCopyPositionPayload(state, payload) {
+    state.copyPositionPayload = payload;
+  },
+
+  setTriggerCopyPosition(state, value) {
+    state.triggerCopyPosition = value;
+  },
          setPositionCreateLevel(state, level) {
     state.positionCreateLevel = level;
   },
@@ -164,6 +174,9 @@ export default new Vuex.Store({
         },
         setaddPositionDialog: (state, data) => {
             state.addPositionDialog = data;
+        },
+        setcopyPositionDialog: (state, data) => {
+            state.copyPositionDialog = data;
         },
         setoriginalData: (state, data) => {
             state.originalData = data;
@@ -374,6 +387,8 @@ export default new Vuex.Store({
         },
     },
     getters: {
+         getCopyPositionPayload: (state) => state.copyPositionPayload,
+  getTriggerCopyPosition: (state) => state.triggerCopyPosition,
         getPositionCreateLevel: state => state.positionCreateLevel,
          getTriggerAddNode: state => state.triggerAddNode,
   getNewNodePayload: state => state.newNodePayload,
@@ -382,6 +397,7 @@ export default new Vuex.Store({
         getskillComparison: (state) => state.skillComparison,
         getshowSkillDialog: (state) => state.showSkillDialog,
         getaddPositionDialog: (state) => state.addPositionDialog,
+        getcopyPositionDialog: (state) => state.copyPositionDialog,
         getFinalPlanData: (state) => state.finalPlanData,
         getTriggerApprovalPlan: (state) => state.triggerApprovalPlan,
         getFinalPlanAttach: (state) => state.finalPlanAttach,

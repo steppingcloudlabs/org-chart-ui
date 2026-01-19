@@ -10,6 +10,7 @@
 
     <nodeProfile></nodeProfile>
     <addPositionDialog v-if="addPositionDialog"></addPositionDialog>
+    <copyPositionDialog v-if="copyPositionDialog"></copyPositionDialog>
   </v-layout>
 </template>
 
@@ -19,6 +20,7 @@ import OrgChart from "../assets/orgchart";
 // import profile from "@/components/profileDialog";
 import nodeProfile from "@/components/NodeProfile";
 import addPositionDialog from "./AddPositionDialog.vue";
+import copyPositionDialog from "./CopyPositionDialog.vue";
 
 import $ from "jquery";
 import Canvg from "canvg";
@@ -63,6 +65,7 @@ export default {
     //  Sidenav,
     nodeProfile,
     addPositionDialog,
+    copyPositionDialog,
   },
 
   computed: {
@@ -71,6 +74,9 @@ export default {
     },
     triggerAddNode() {
       return this.$store.getters.getTriggerAddNode;
+    },
+    triggerCopyPosition() {
+      return this.$store.getters.getTriggerCopyPosition;
     },
     newNodePayload() {
       return this.$store.getters.getNewNodePayload;
@@ -81,6 +87,14 @@ export default {
       },
       set(data) {
         this.$store.commit("setaddPositionDialog", data);
+      },
+    },
+    copyPositionDialog: {
+      get() {
+        return this.$store.getters.getcopyPositionDialog;
+      },
+      set(data) {
+        this.$store.commit("setcopyPositionDialog", data);
       },
     },
     jobInfo: {
@@ -1142,13 +1156,21 @@ export default {
 
       return { add, del, update };
     },
-    copyPosition(level, nodeId) {
-      const node = this.chart.get(nodeId); // ✅ get clicked node
+    addPosition(level, nodeId) {
+      const node = this.chart.get(nodeId); // get clicked node
 
-      this.currentNodeData = node; // ✅ THIS WAS MISSING
+      this.currentNodeData = node; 
       this.$store.commit("setPositionCreateLevel", level);
 
       this.addPositionDialog = true;
+    },
+    copyPosition(nodeId) {
+      const node = this.chart.get(nodeId); //  get clicked node
+
+      this.currentNodeData = node; 
+      // this.$store.commit("setPositionCreateLevel", level);
+
+      this.copyPositionDialog = true;
     },
 
     // copyPosition(level) {
@@ -1495,15 +1517,15 @@ export default {
             text: "Edit",
           },
           // add: { text: "Add New Position", onClick: this.copyHandler },
-          CopyPosition: { text: "Copy Position", onClick: this.copyHandler },
+          CopyPosition: { text: "Copy Position", onClick: this.copyPosition },
 
           addLevelDownPosition: {
             text: "Create Lower Level Position",
-            onClick: (nodeId) => this.copyPosition("child", nodeId),
+            onClick: (nodeId) => this.addPosition("child", nodeId),
           },
           addSameLevelPosition: {
             text: "Create Same Level Position",
-            onClick: (nodeId) => this.copyPosition("sibling", nodeId),
+            onClick: (nodeId) => this.addPosition("sibling", nodeId),
           },
           remove: { text: "Remove Position" },
         },
@@ -1940,6 +1962,49 @@ export default {
     //    console.log("After mounted",this.userData)
   },
   watch: {
+    triggerCopyPosition(val) {
+    if (!val) return;
+
+    const payload = this.$store.getters.getCopyPositionPayload;
+
+    const {
+      sourceNodeId,
+      pid,
+      copyCount,
+      toBeRecruited,
+    } = payload;
+
+    // Get source node (original position)
+    const sourceNode = this.chart.get(sourceNodeId);
+
+    for (let i = 0; i < copyCount; i++) {
+      // Deep copy so original is untouched
+      const data = JSON.parse(JSON.stringify(sourceNode));
+
+      // OrgChart generates ID
+      data.id = this.chart.generateId();
+
+      // SAME parent → sibling
+      data.pid = pid;
+
+      // Business rules
+      data.positionVacant = true;
+      data.toBeRecruited = toBeRecruited;
+      data.positionType = "Vacant";
+
+      data.userId = "";
+      data.userName = "";
+      data.userManagerId = "";
+
+      data.tags = ["Vacant", data.userPayGrade];
+      data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
+
+      this.chart.addNode(data);
+    }
+
+    // reset trigger
+    this.$store.commit("setTriggerCopyPosition", false);
+  },
     triggerAddNode(val) {
       if (!val || !this.newNodePayload) return;
 
