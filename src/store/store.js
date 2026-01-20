@@ -987,21 +987,42 @@ export default new Vuex.Store({
                 });
             });
         },
-getJobProfileData: async (_, data) => {
+// getJobProfileData: async (_, data) => {
+//   const response = await axios({
+//     url: baseDevURL + "/srv/getJobProfile",
+//     method: "GET",
+//     headers: { "Content-Type": "application/json" },
+//     params: {
+//       companyId,
+//       positionId: data.positionId
+//     }
+//   });
+  
+
+//   return response.data.results[0];
+// },
+
+
+
+      getJobProfileData: async (_, data) => {
+  console.log(data);
+
   const response = await axios({
     url: baseDevURL + "/srv/getJobProfile",
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
     params: {
       companyId,
-      positionId: data.positionId
-    }
+      positionId: data.positionId,
+    },
   });
 
-  return response.data.results[0];
+  console.log("response from store", response.data.results[0]);
+
+  return response.data.results[0]; // 🔥 THIS is what the component receives
 },
-
-
 
         getLegalUnit: ({ commit }, data) => {
             console.log(data);

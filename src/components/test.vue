@@ -533,6 +533,7 @@ export default {
     "getJobProfileData",
     payload
   );
+  console.log("jobProfileData",jobProfileData);
 
   // Open a NEW drawer with its own data
   this.$refs.jobDrawerStack.openDrawer(jobProfileData);

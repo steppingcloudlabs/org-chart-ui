@@ -4,12 +4,14 @@
     <v-navigation-drawer
   v-for="(drawer, index) in drawers"
   :key="drawer.id"
-  left
+  right
   absolute
   clipped
   width="420"
   :value="drawer.open"
   :style="drawerStyle(index)"
+ 
+ 
   class="mt-7 stacked-drawer"
 >
 
@@ -23,7 +25,11 @@
         </v-card-title>
 
         <v-divider />
-
+  <!-- <div
+      class="drawer-body"
+      ref="drawerBody"
+      @scroll="syncScroll"
+    > -->
         <!-- BODY -->
         <v-card-text>
           <!-- Job Title -->
@@ -74,6 +80,7 @@
             </v-chip>
           </v-chip-group>
         </v-card-text>
+  <!-- </div> -->
       </v-card>
     </v-navigation-drawer>
   </div>
@@ -90,10 +97,22 @@ export default {
   },
 
   methods: {
+  //    syncScroll(event) {
+  //   const scrollTop = event.target.scrollTop;
+
+  //   // sync scroll for all drawers
+  //   this.$refs.drawerBody.forEach(el => {
+  //     if (el !== event.target) {
+  //       el.scrollTop = scrollTop;
+  //     }
+  //   });
+  // },
     // Call this when clicking "Show Profile"
  openDrawer(jobProfileData) {
+  console.log("this.drawers=",this.drawers)
+  console.log("this.jobProfileData=",this.jobProfileData)
   const exists = this.drawers.find(
-    d => d.jobProfileData.jobReqId === jobProfileData.jobReqId
+    d => d?.jobProfileData?.jobReqId === jobProfileData?.jobReqId
   );
   if (exists) return;
 
@@ -116,10 +135,24 @@ export default {
         zIndex: 2000 + index
       };
     }
+  },
+  watch: {
+  drawers(val) {
+    console.log("OPEN DRAWERS:", val.length);
   }
+}
 };
 </script>
 <style scoped>
+.drawer-body {
+  height: calc(100vh - 120px); /* header height compensation */
+  overflow-y: auto;
+}
+
+.v-navigation-drawer {
+  overflow: hidden !important; /* disable native drawer scroll */
+}
+
 .stacked-drawer {
   transition: right 0.3s ease;
 }
