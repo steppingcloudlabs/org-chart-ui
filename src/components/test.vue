@@ -9,6 +9,8 @@
     </v-flex>
 
     <nodeProfile></nodeProfile>
+    <JobProfileDrawerStack ref="jobDrawerStack" />
+
     <addPositionDialog v-if="addPositionDialog"></addPositionDialog>
     <copyPositionDialog v-if="copyPositionDialog" @close="closeDialogs"></copyPositionDialog>
   </v-layout>
@@ -21,6 +23,7 @@ import OrgChart from "../assets/orgchart";
 import nodeProfile from "@/components/NodeProfile";
 import addPositionDialog from "./AddPositionDialog.vue";
 import copyPositionDialog from "./CopyPositionDialog.vue";
+import JobProfileDrawerStack from "./JobProfileData.vue";
 
 import $ from "jquery";
 import Canvg from "canvg";
@@ -66,6 +69,7 @@ export default {
     nodeProfile,
     addPositionDialog,
     copyPositionDialog,
+    JobProfileDrawerStack,
   },
 
   computed: {
@@ -519,15 +523,20 @@ export default {
         '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
       this.chart.element.appendChild(leg);
     },
-    showJobProfile(positionId) {
-      console.log("Position Id =", positionId);
-      const payload = {
-        positionId: positionId, // nodeId IS the id
-      };
-      this.$store.dispatch("getJobProfileData", payload);
-      this.jobInfo = true;
-      console.log("this.jobInfo==", this.jobInfo);
-    },
+  async showJobProfile(positionId) {
+  console.log("Position Id =", positionId);
+
+  const payload = { positionId };
+
+  // Fetch data
+  const jobProfileData = await this.$store.dispatch(
+    "getJobProfileData",
+    payload
+  );
+
+  // Open a NEW drawer with its own data
+  this.$refs.jobDrawerStack.openDrawer(jobProfileData);
+},
 
     exportUserProfile(nodeId) {
       var nodeData = this.chart.get(nodeId);

@@ -10,6 +10,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        
          copyPositionPayload: null,
   triggerCopyPosition: false,
         positionCreateLevel: null,
@@ -986,26 +987,22 @@ export default new Vuex.Store({
                 });
             });
         },
-        getJobProfileData: ({ commit }, data) => {
-            console.log(data);
-            return new Promise((resolve) => {
-                axios({
-                    url: baseDevURL + "/srv/getJobProfile",
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    params: {
-                        companyId: companyId,
-                        positionId: data.positionId,
-                    },
-                }).then((response) => {
-                    resolve(response.data);
-                    commit("setJobProfileData", response.data.results[0]);
-                    console.log("response from getjobprofiledata",response.data);
-                });
-            });
-        },
+getJobProfileData: async (_, data) => {
+  const response = await axios({
+    url: baseDevURL + "/srv/getJobProfile",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    params: {
+      companyId,
+      positionId: data.positionId
+    }
+  });
+
+  return response.data.results[0];
+},
+
+
+
         getLegalUnit: ({ commit }, data) => {
             console.log(data);
             return new Promise((resolve) => {

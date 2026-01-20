@@ -1,124 +1,130 @@
 <template>
-<v-navigation-drawer
-  right
-  temporary
+  <div>
+    <!-- STACKED DRAWERS -->
+    <v-navigation-drawer
+  v-for="(drawer, index) in drawers"
+  :key="drawer.id"
+  left
+  absolute
   clipped
   width="420"
-  v-model="jobInfo"
-  class="mt-7"
-  height="100vh"
+  :value="drawer.open"
+  :style="drawerStyle(index)"
+  class="mt-7 stacked-drawer"
 >
-  <v-card flat>
-    <v-card-title class="text-h6">
-      Job Details
-    </v-card-title>
 
-    <v-divider />
+      <v-card flat>
+        <!-- HEADER -->
+        <v-card-title class="text-h6 d-flex justify-space-between">
+          Job Details
+          <v-btn icon @click="closeDrawer(index)">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
 
-    <v-card-text>
-      <!-- BASIC INFO -->
-<!-- JOB HEADER -->
-<div class="mb-4">
-  <!-- Job Title -->
-  <p class="text-h6 font-weight-bold mb-1">
-    {{ jobProfileData?.jobProfile?.name_en_US }}
-  </p>
+        <v-divider />
 
-  <!-- Job Req ID & Status -->
-  <v-row dense align="center">
-    <v-col cols="6">
-      <p class="mb-0">
-        <strong>Job Req ID:</strong>
-        <span class="ml-1">{{ jobProfileData?.jobReqId }}</span>
-      </p>
-    </v-col>
+        <!-- BODY -->
+        <v-card-text>
+          <!-- Job Title -->
+          <p class="text-h6 font-weight-bold mb-1">
+            {{ drawer.jobProfileData?.jobProfile?.name_en_US }}
+          </p>
 
-    <v-col cols="6" class="text-right">
-      <v-chip small color="green" dark>
-        {{ jobProfileData?.internalStatus }}
-      </v-chip>
-    </v-col>
-  </v-row>
-</div>
+          <!-- Job Req & Status -->
+          <v-row dense align="center">
+            <v-col cols="6">
+              <strong>Job Req ID:</strong>
+              {{ drawer.jobProfileData?.jobReqId }}
+            </v-col>
 
-<v-divider class="my-3" />
+            <v-col cols="6" class="text-right">
+              <v-chip small color="green" dark>
+                {{ drawer.jobProfileData?.internalStatus }}
+              </v-chip>
+            </v-col>
+          </v-row>
 
-       <!-- DESCRIPTION -->
-      <div class="job-description">
-       <p><strong>  Job Description:</strong></p>
-      </div>
-      <div v-html="jobProfileData?.jobProfile?.shortDesciptions?.results[0]?.desc_en_US"></div>
+          <v-divider class="my-3" />
 
-      <v-divider class="my-3" />
+          <!-- Description -->
+          <p><strong>Job Description:</strong></p>
+          <div
+            v-html="drawer.jobProfileData?.jobProfile?.shortDesciptions?.results?.[0]?.desc_en_US"
+          />
 
-    <!-- <div class="text-subtitle-1 font-weight-medium mb-1">
-        Responsibilities
-      </div> -->
-      <div v-html="jobProfileData?.jobProfile?.longDesciptions?.results[0]?.desc_en_US"></div>
+          <v-divider class="my-3" />
 
-      <v-divider class="my-3" />
-     
+          <div
+            v-html="drawer.jobProfileData?.jobProfile?.longDesciptions?.results?.[0]?.desc_en_US"
+          />
 
-      <!-- SKILLS -->
-      <div >
-       <p><strong>  Required Skills:</strong></p>
-      </div>
+          <v-divider class="my-3" />
 
-      <v-chip-group column  v-if="
-    jobProfileData &&
-    jobProfileData?.jobProfile &&
-    jobProfileData?.jobProfile?.competencyContents
-  ">
-        <v-chip
-          v-for="(skill, i) in jobProfileData?.jobProfile?.competencyContents?.results || []"
-          :key="i"
-          small
-          outlined
-        >
-          {{ skill?.entityNav?.name_en_US }}
-        </v-chip>
-      </v-chip-group>
-    </v-card-text>
-  </v-card>
-</v-navigation-drawer>
-
+          <!-- Skills -->
+          <p><strong>Required Skills:</strong></p>
+          <v-chip-group column>
+            <v-chip
+              v-for="(skill, i) in drawer.jobProfileData?.jobProfile?.competencyContents?.results || []"
+              :key="i"
+              small
+              outlined
+            >
+              {{ skill?.entityNav?.name_en_US }}
+            </v-chip>
+          </v-chip-group>
+        </v-card-text>
+      </v-card>
+    </v-navigation-drawer>
+  </div>
 </template>
-
 
 <script>
 export default {
+  name: "JobProfileDrawerStack",
+
   data() {
     return {
-        
+      drawers: [] // STACK of drawers
+    };
+  },
+
+  methods: {
+    // Call this when clicking "Show Profile"
+ openDrawer(jobProfileData) {
+  const exists = this.drawers.find(
+    d => d.jobProfileData.jobReqId === jobProfileData.jobReqId
+  );
+  if (exists) return;
+
+  this.drawers.push({
+    id: `${jobProfileData.jobReqId}-${Date.now()}`,
+    jobProfileData,
+    open: true
+  });
+},
+
+
+
+    closeDrawer(index) {
+      this.drawers.splice(index, 1);
+    },
+
+    drawerStyle(index) {
+      return {
+        right: `${index * 420}px`,
+        zIndex: 2000 + index
+      };
     }
-    },
-    computed:{
-        
-      jobProfileData: {
-      get() {
-        return this.$store.getters.getJobProfileData;
-        // return true;
-      },
-      set(data) {
-        this.$store.commit("setJobProfileData", data);
-      },
-    },
-      jobInfo: {
-      get() {
-        return this.$store.getters.getjobInfo;
-        // return true;
-      },
-      set(data) {
-        this.$store.commit("setjobInfo", data);
-      },
-    },
-   
-    }
-}
+  }
+};
 </script>
 <style scoped>
+.stacked-drawer {
+  transition: right 0.3s ease;
+}
+
 .job-description {
   text-align: justify;
 }
-
 </style>
