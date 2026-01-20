@@ -25,11 +25,11 @@
         </v-card-title>
 
         <v-divider />
-  <!-- <div
+  <div
       class="drawer-body"
       ref="drawerBody"
       @scroll="syncScroll"
-    > -->
+    >
         <!-- BODY -->
         <v-card-text>
           <!-- Job Title -->
@@ -80,7 +80,7 @@
             </v-chip>
           </v-chip-group>
         </v-card-text>
-  <!-- </div> -->
+  </div>
       </v-card>
     </v-navigation-drawer>
   </div>
@@ -97,16 +97,16 @@ export default {
   },
 
   methods: {
-  //    syncScroll(event) {
-  //   const scrollTop = event.target.scrollTop;
+     syncScroll(event) {
+    const scrollTop = event.target.scrollTop;
 
-  //   // sync scroll for all drawers
-  //   this.$refs.drawerBody.forEach(el => {
-  //     if (el !== event.target) {
-  //       el.scrollTop = scrollTop;
-  //     }
-  //   });
-  // },
+    // sync scroll for all drawers
+    this.$refs.drawerBody.forEach(el => {
+      if (el !== event.target) {
+        el.scrollTop = scrollTop;
+      }
+    });
+  },
     // Call this when clicking "Show Profile"
  openDrawer(jobProfileData) {
   console.log("this.drawers=",this.drawers)
