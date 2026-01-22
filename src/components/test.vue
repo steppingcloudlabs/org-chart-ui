@@ -780,7 +780,7 @@ console.log("node==",node)
 
           // 🔍 DEBUG (can remove later)
           console.log(
-            "JOB CODE AFTER API 👉",
+            "JOB CODE AFTER API  ",
             response.map(r => ({ id: r.id, jobCode: r.jobCode }))
           );
         }
@@ -1087,7 +1087,7 @@ console.log("node==",node)
         this.originalMasterData = this.nodes;
         console.log("BYEEE", this.nodes);
         console.log(
-  "JOB CODE CHECK BEFORE ORGCHART 👉",
+  "JOB CODE CHECK BEFORE ORGCHART  ",
   this.nodes.map(n => ({
     id: n.id,
     jobCode: n.jobCode
@@ -1611,8 +1611,8 @@ console.log("node==",node)
             onClick: (nodeId) => {
   const node = this.chart.get(nodeId); // ✅ OrgChart API
 
-  console.log("FULL NODE OBJECT 👉", node);
-  console.log("JOB CODE 👉", node.jobCode);
+  console.log("FULL NODE OBJECT  ", node);
+  console.log("JOB CODE  ", node.jobCode);
 
   this.showJobProfile({
     positionId: node.id,
@@ -1624,7 +1624,7 @@ console.log("node==",node)
 //     const node = this.orgChartData.find(
 //       n => String(n.id) === String(nodeId)
 //     );
-//  console.log("FULL NODE OBJECT 👉", node);
+//  console.log("FULL NODE OBJECT  ", node);
 //     this.showJobProfile({
 //       positionId: node.id,
 //       jobCode: node.jobCode   // ✅ directly passed
