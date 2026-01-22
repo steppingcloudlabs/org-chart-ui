@@ -605,6 +605,7 @@ export default new Vuex.Store({
                     },
                 }).then((response) => {
                     resolve(response.data);
+                    console.log("responseeeeeeeeee=",response.data)
                     commit("setuserData", response.data);
                     console.log(response);
                 });
@@ -612,6 +613,7 @@ export default new Vuex.Store({
         },
 
         testcall1: ({ commit }, data) => {
+            console.log("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
             return new Promise((resolve) => {
                 axios({
                     url: baseDevURL + "/srv/getOrgChartData",
@@ -626,11 +628,21 @@ export default new Vuex.Store({
                         effectiveDateTime: data.date,
                     },
                 }).then((response) => {
+                    console.log("API HIT length =", response.data.length);
+                    console.log("response.data from storeeee=",response.data)
+
                     resolve(response.data);
                     commit("setflag", "hello");
                     console.log(response);
                 });
-            });
+                
+            })
+            .catch((error) => {
+  console.error("❌ API FAILED", error);
+})
+.finally(() => {
+  console.log("✅ API CALL COMPLETED");
+});
         },
         getAllUser: ({ commit }, data) => {
             return new Promise((resolve) => {
@@ -1015,13 +1027,13 @@ export default new Vuex.Store({
     },
     params: {
       companyId,
-      positionId: data.positionId,
+      jobCode: data.jobCode,
     },
   });
 
-  console.log("response from store", response.data.results[0]);
+  console.log("response from store", response.data.result[0]);
 
-  return response.data.results[0]; // 🔥 THIS is what the component receives
+  return response.data.result[0]; // THIS is what the component receives
 },
 
         getLegalUnit: ({ commit }, data) => {

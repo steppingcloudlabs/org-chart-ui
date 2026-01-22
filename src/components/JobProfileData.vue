@@ -1,163 +1,256 @@
 <template>
   <div>
-    <!-- STACKED DRAWERS -->
-    <v-navigation-drawer
-  v-for="(drawer, index) in drawers"
-  :key="drawer.id"
-  right
-  absolute
-  clipped
-  width="420"
-  :value="drawer.open"
-  :style="drawerStyle(index)"
- 
- 
-  class="mt-7 stacked-drawer"
->
-
+    <!-- STACKED DRAGGABLE DRAWERS -->
+    <div
+      v-for="(drawer, index) in drawers"
+      :key="drawer.id"
+      right
+      absolute
+      clipped
+      class="draggable-drawer"
+      :style="drawerStyle(drawer)"
+      @mousedown="startDrag($event, index)"
+    >
       <v-card flat>
         <!-- HEADER -->
-        <v-card-title class="text-h6 d-flex justify-space-between">
+        <v-card-title class="text-h6 d-flex justify-space-between cursor-move">
           Job Details
-          <v-btn icon @click="closeDrawer(index)">
+         
+          
+          <div>
+            <!-- SAVE BUTTON -->
+            <v-btn small color="primary" class="mr-2" @click.stop="saveDrawerAsPDF(drawer)">
+              Save
+            </v-btn>
+
+            <!-- CLOSE BUTTON -->
+            <v-btn icon @click.stop="closeDrawer(index)">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+          
+          <!-- <v-btn icon @click.stop="closeDrawer(index)">
             <v-icon>mdi-close</v-icon>
-          </v-btn>
+          </v-btn> -->
         </v-card-title>
 
         <v-divider />
-  <div
-      class="drawer-body"
-      ref="drawerBody"
-      @scroll="syncScroll"
-    >
-        <!-- BODY -->
-        <v-card-text>
-          <!-- Job Title -->
-          <p class="text-h6 font-weight-bold mb-1">
-            {{ drawer.jobProfileData?.jobProfile?.name_en_US }}
-          </p>
 
-          <!-- Job Req & Status -->
-          <v-row dense align="center">
-            <v-col cols="6">
-              <strong>Job Req ID:</strong>
-              {{ drawer.jobProfileData?.jobReqId }}
-            </v-col>
+        <div class="drawer-body" ref="drawerBody" @scroll="syncScroll">
+          <!-- BODY -->
+          <v-card-text>
+            <p class="text-h6 font-weight-bold mb-1">
+              {{ drawer.jobProfileData?.name_defaultValue }}
+            </p>
 
-            <v-col cols="6" class="text-right">
-              <v-chip small color="green" dark>
-                {{ drawer.jobProfileData?.internalStatus }}
+            <v-row dense align="center">
+              <v-col cols="6">
+                <strong>Position ID:</strong> {{ drawer.jobProfileData?.externalCode }}
+              </v-col>
+             
+            </v-row>
+
+            <v-divider class="my-3" />
+            <v-row dense align="center">
+              <v-col cols="6">
+                <strong>Job Req ID:</strong> {{ drawer.jobProfileData?.jobReqId }}
+              </v-col>
+              <v-col cols="6" class="text-right">
+                <v-chip small color="green" dark>
+                  {{ drawer.jobProfileData?.status }}
+                </v-chip>
+              </v-col>
+            </v-row>
+
+            <v-divider class="my-3" />
+
+            <p><strong>Job Description:</strong></p>
+            <div
+              v-html="drawer.jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue"
+            />
+            <v-divider class="my-3" />
+            <div
+              v-html="drawer.jobProfileData?.longDesciptions?.results?.[0]?.desc_localized"
+            />
+            <v-divider class="my-3" />
+
+            <p><strong>Required Skills:</strong></p>
+            <v-chip-group column>
+              <v-chip
+                v-for="(skill, i) in drawer.jobProfileData?.competencyContents?.results || []"
+                :key="i"
+                small
+                outlined
+              >
+                {{ skill?.entityNav?.name_en_US }}
               </v-chip>
-            </v-col>
-          </v-row>
-
-          <v-divider class="my-3" />
-
-          <!-- Description -->
-          <p><strong>Job Description:</strong></p>
-          <div
-            v-html="drawer.jobProfileData?.jobProfile?.shortDesciptions?.results?.[0]?.desc_en_US"
-          />
-
-          <v-divider class="my-3" />
-
-          <div
-            v-html="drawer.jobProfileData?.jobProfile?.longDesciptions?.results?.[0]?.desc_en_US"
-          />
-
-          <v-divider class="my-3" />
-
-          <!-- Skills -->
-          <p><strong>Required Skills:</strong></p>
-          <v-chip-group column>
-            <v-chip
-              v-for="(skill, i) in drawer.jobProfileData?.jobProfile?.competencyContents?.results || []"
-              :key="i"
-              small
-              outlined
-            >
-              {{ skill?.entityNav?.name_en_US }}
-            </v-chip>
-          </v-chip-group>
-        </v-card-text>
-  </div>
+            </v-chip-group>
+          </v-card-text>
+        </div>
       </v-card>
-    </v-navigation-drawer>
+    </div>
   </div>
 </template>
 
 <script>
+import jsPDF from "jspdf";
 export default {
   name: "JobProfileDrawerStack",
 
   data() {
     return {
-      drawers: [] // STACK of drawers
+      drawers: [],
+      dragInfo: null // for drag tracking
     };
   },
 
   methods: {
-     syncScroll(event) {
-    const scrollTop = event.target.scrollTop;
+      // SAVE DRAWER DATA
+   saveDrawerAsPDF(drawer) {
+  const doc = new jsPDF();
 
-    // sync scroll for all drawers
-    this.$refs.drawerBody.forEach(el => {
-      if (el !== event.target) {
-        el.scrollTop = scrollTop;
-      }
-    });
-  },
-    // Call this when clicking "Show Profile"
- openDrawer(jobProfileData) {
-  console.log("this.drawers=",this.drawers)
-  console.log("this.jobProfileData=",this.jobProfileData)
-  const exists = this.drawers.find(
-    d => d?.jobProfileData?.jobReqId === jobProfileData?.jobReqId
-  );
-  if (exists) return;
+  const { jobProfileData } = drawer;
 
-  this.drawers.push({
-    id: `${jobProfileData.jobReqId}-${Date.now()}`,
-    jobProfileData,
-    open: true
-  });
+  let y = 10;
+
+  doc.setFontSize(16);
+  doc.text("Job Details", 10, y);
+  y += 10;
+
+  doc.setFontSize(12);
+  doc.text(`Name: ${jobProfileData?.name_defaultValue || "-"}`, 10, y);
+  y += 8;
+  doc.text(`Position ID: ${jobProfileData?.externalCode || "-"}`, 10, y);
+  y += 8;
+  doc.text(`Job Req ID: ${jobProfileData?.jobReqId || "-"}`, 10, y);
+  y += 8;
+  doc.text(`Status: ${jobProfileData?.status || "-"}`, 10, y);
+  y += 10;
+
+  doc.setFontSize(14);
+  doc.text("Job Description:", 10, y);
+  y += 8;
+
+  const shortDesc =
+    jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue || "-";
+  const shortDescLines = doc.splitTextToSize(shortDesc, 180);
+  doc.setFontSize(12);
+  doc.text(shortDescLines, 10, y);
+  y += shortDescLines.length * 6;
+
+  const longDesc =
+    jobProfileData?.longDesciptions?.results?.[0]?.desc_localized || "-";
+  const longDescLines = doc.splitTextToSize(longDesc, 180);
+  doc.text(longDescLines, 10, y);
+  y += longDescLines.length * 6;
+
+  y += 5;
+  doc.setFontSize(14);
+  doc.text("Required Skills:", 10, y);
+  y += 8;
+
+  const skills =
+    (jobProfileData?.competencyContents?.results || []).map(
+      (s) => s?.entityNav?.name_en_US
+    );
+  doc.setFontSize(12);
+  doc.text(skills.join(", ") || "-", 10, y);
+
+  doc.save(`Job_${jobProfileData?.jobReqId || Date.now()}.pdf`);
 },
 
 
+    // Helper to split long text for PDF
+    splitText(text, maxWidth) {
+      return jsPDF.splitTextToSize(text, maxWidth);
+    },
+
+    calcTextHeight(text, maxWidth) {
+      return this.splitText(text, maxWidth).length * 6;
+    },
+    syncScroll(event) {
+      const scrollTop = event.target.scrollTop;
+      this.$refs.drawerBody.forEach(el => {
+        if (el !== event.target) el.scrollTop = scrollTop;
+      });
+    },
+
+    openDrawer(jobProfileData) {
+      const exists = this.drawers.find(
+        d => d?.jobProfileData?.jobReqId === jobProfileData?.jobReqId
+      );
+      if (exists) return;
+
+      this.drawers.push({
+        id: `${jobProfileData.jobReqId}-${Date.now()}`,
+        jobProfileData,
+        open: true,
+        x: 100 + this.drawers.length * 30, // initial positions
+        y: 100 + this.drawers.length * 30
+      });
+    },
 
     closeDrawer(index) {
       this.drawers.splice(index, 1);
     },
 
-    drawerStyle(index) {
+    drawerStyle(drawer) {
       return {
-        right: `${index * 420}px`,
-        zIndex: 2000 + index
+        position: "absolute",
+        top: drawer.y + "px",
+        left: drawer.x + "px",
+        width: "420px",
+        zIndex: 2000 + this.drawers.indexOf(drawer),
+        cursor: "grab"
       };
+    },
+
+    // DRAG HANDLERS
+    startDrag(e, index) {
+      if (e.target.closest(".v-btn")) return; // don't drag on close button
+
+      const drawer = this.drawers[index];
+      this.dragInfo = {
+        index,
+        startX: e.clientX,
+        startY: e.clientY,
+        origX: drawer.x,
+        origY: drawer.y
+      };
+
+      document.addEventListener("mousemove", this.onDrag);
+      document.addEventListener("mouseup", this.stopDrag);
+    },
+
+    onDrag(e) {
+      if (!this.dragInfo) return;
+
+      const drawer = this.drawers[this.dragInfo.index];
+      drawer.x = this.dragInfo.origX + (e.clientX - this.dragInfo.startX);
+      drawer.y = this.dragInfo.origY + (e.clientY - this.dragInfo.startY);
+    },
+
+    stopDrag() {
+      document.removeEventListener("mousemove", this.onDrag);
+      document.removeEventListener("mouseup", this.stopDrag);
+      this.dragInfo = null;
     }
-  },
-  watch: {
-  drawers(val) {
-    console.log("OPEN DRAWERS:", val.length);
   }
-}
 };
 </script>
+
 <style scoped>
+.draggable-drawer {
+  transition: none !important;
+  user-select: none;
+}
+
 .drawer-body {
-  height: calc(100vh - 120px); /* header height compensation */
+  height: calc(100vh - 120px);
   overflow-y: auto;
 }
 
-.v-navigation-drawer {
-  overflow: hidden !important; /* disable native drawer scroll */
-}
-
-.stacked-drawer {
-  transition: right 0.3s ease;
-}
-
-.job-description {
-  text-align: justify;
+.cursor-move {
+  cursor: grab;
 }
 </style>
