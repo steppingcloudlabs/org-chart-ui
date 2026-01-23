@@ -524,9 +524,10 @@ export default {
       this.chart.element.appendChild(leg);
     },
  async showJobProfile(nodeId) {
-    // const node = this.chart.get(nodeId); 
+    const node = this.chart.get(nodeId); 
+    console.log("node=",node)
  // Find the node from the source data (this.orgChartData) instead of chart.get
-  const node = this.orgChartData.find(n => String(n.id) === String(nodeId));
+  // const node = this.orgChartData.find(n => String(n.id) === String(nodeId));
   
   if (!node) {
     console.error("Node not found in orgChartData for nodeId:", nodeId);
