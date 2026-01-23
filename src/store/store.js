@@ -1016,7 +1016,7 @@ export default new Vuex.Store({
 
 
 
-      getJobProfileData: async (_, data) => {
+getJobProfileData: async (_, data) => {
   console.log(data);
 
   const response = await axios({

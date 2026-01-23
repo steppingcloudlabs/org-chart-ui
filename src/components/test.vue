@@ -523,25 +523,31 @@ export default {
         '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
       this.chart.element.appendChild(leg);
     },
-  async showJobProfile(nodee,nodeId) {
-  // console.log("Position Id =", positionId);
-        const node = this.chart.get(nodeId); //  get clicked node
-console.log("node==",node)
-  // console.log("jobCode=", jobCode);
-  const jobCode = "50029122";
-
+ async showJobProfile(nodeId) {
+    // const node = this.chart.get(nodeId); // ✅ OrgChart API
+ // Find the node from the source data (this.orgChartData) instead of chart.get
+  const node = this.orgChartData.find(n => String(n.id) === String(nodeId));
+  
+  if (!node) {
+    console.error("Node not found in orgChartData for nodeId:", nodeId);
+    return;
+  }
+  console.log("FULL NODE OBJECT  ", node);
+  console.log("JOB CODE  ", node.jobCode);
+  // console.log("jobCode =", jobCode);
+let jobCode= node.jobCode
   const payload = { jobCode };
 
-  // Fetch data
   const jobProfileData = await this.$store.dispatch(
     "getJobProfileData",
     payload
   );
-  console.log("jobProfileData",jobProfileData);
 
-  // Open a NEW drawer with its own data
+  console.log("jobProfileData", jobProfileData);
+
   this.$refs.jobDrawerStack.openDrawer(jobProfileData);
 },
+
 
     exportUserProfile(nodeId) {
       var nodeData = this.chart.get(nodeId);
@@ -732,61 +738,130 @@ console.log("node==",node)
   });
     },
     getChlidData(node) {
-  if (
-    node &&
-    node.userId &&
-    (!this.userMasterData[node.userId] ||
-      !this.userMasterData[node.userManagerId])
-  ) {
-    let userNameInput = null;
-    let userPosition = null;
-    let date1 = new Date(this.inputDate).getTime();
-
-    if (!node.isRoot) {
-      userNameInput = node.userId;
-      userPosition = node.id;
-      this.isbuffered[node.userId] = false;
-    } else {
-      userNameInput = node.userManagerId;
-      userPosition = node.pid;
-      this.isbuffered[node.userManagerId] = false;
-    }
-
-    this.$store
-      .dispatch("testcall1", {
-        userid: userNameInput,
-        position: userPosition,
-        date: date1,
-      })
-      .then((response) => {
-        if (response && response.length) {
-
-          // ✅ STEP 1: SAFELY PRESERVE jobCode (NO BREAKING CHANGE)
-          response = response.map(item => ({
-            ...item,
-            jobCode: item.jobCode || item.positionCode || null
-          }));
-
-          // ✅ STEP 2: EXISTING LOGIC (UNCHANGED)
-          if (!node.isRoot) {
-            this.userMasterData[node.userId] = response;
-            this.isbuffered[node.userId] = true;
-          } else {
-            this.userMasterData[node.userManagerId] = response.filter(
-              item => item.userId !== node.userId
-            );
-            this.isbuffered[node.userManagerId] = true;
-          }
-
-          // 🔍 DEBUG (can remove later)
-          console.log(
-            "JOB CODE AFTER API  ",
-            response.map(r => ({ id: r.id, jobCode: r.jobCode }))
-          );
+      console.log(node);
+      if (
+        node &&
+        node.userId &&
+        (!this.userMasterData[node.userId] ||
+          !this.userMasterData[node.userManagerId])
+      ) {
+        var userNameInput = null;
+        var userPosition = null;
+        var date1 = new Date(this.inputDate).getTime();
+        if (!node.isRoot) {
+          userNameInput = node.userId;
+          userPosition = node.id;
+          this.isbuffered[node.userId] = false;
+        } else {
+          userNameInput = node.userManagerId;
+          userPosition = node.pid;
+          this.isbuffered[node.userManagerId] = false;
         }
-      });
-  }
-},
+        this.$store
+          .dispatch("testcall1", {
+            userid: userNameInput,
+            position: userPosition,
+            date: date1,
+          })
+          .then((response) => {
+            console.log("response==>>>>>>>>>>",response)
+            if (response && response?.length) {
+              if (!node.isRoot) {
+                this.userMasterData[node.userId] = response.splice(
+                  1,
+                  response?.length,
+                );
+                console.log(node.userId, this.userMasterData[node.userId]);
+                this.isbuffered[node.userId] = true;
+              } else {
+                // userMasterData[node.userManagerId] = response.data.splice(1, response.data?.length)
+                this.userMasterData[node.userManagerId] = response;
+                let index = this.userMasterData[node.userManagerId].findIndex(
+                  (element) => {
+                    return node.userId == element.userId;
+                  },
+                );
+                this.isbuffered[node.userManagerId] = true;
+                console.log(index);
+                this.userMasterData[node.userManagerId] = this.userMasterData[
+                  node.userManagerId
+                ].filter(function (item) {
+                  if (node.userId != item.userId) {
+                    return item;
+                  }
+                });
+
+                console.log(
+                  node.userManagerId,
+                  this.userMasterData[node.userManagerId],
+                );
+              }
+            }
+          });
+      }
+    },
+//     getChlidData(node) {
+//   if (
+//     node &&
+//     node.userId &&
+//     (!this.userMasterData[node.userId] ||
+//       !this.userMasterData[node.userManagerId])
+//   ) {
+//     let userNameInput = null;
+//     let userPosition = null;
+//     let date1 = new Date(this.inputDate).getTime();
+
+//     if (!node.isRoot) {
+//       userNameInput = node.userId;
+//       userPosition = node.id;
+//       this.isbuffered[node.userId] = false;
+//     } else {
+//       userNameInput = node.userManagerId;
+//       userPosition = node.pid;
+//       this.isbuffered[node.userManagerId] = false;
+//     }
+
+//     this.$store
+//       .dispatch("testcall1", {
+//         userid: userNameInput,
+//         position: userPosition,
+//         date: date1,
+//       })
+//      .then((response) => {
+//   if (response && response.length) {
+
+//     // normalize jobCode
+//     response = response.map(item => ({
+//       ...item,
+//       jobCode: item.jobCode || item.positionCode || null
+//     }));
+
+//     // ✅ FIND CURRENT NODE'S JOB CODE
+//     const selfData = response.find(r => r.id === node.id);
+
+//     // ✅ ASSIGN DIRECTLY TO NODE
+//     this.$set(node, "jobCode", selfData?.jobCode || null);
+
+//     // keep existing logic (SAFE)
+//     if (!node.isRoot) {
+//       this.userMasterData[node.userId] = response;
+//       this.isbuffered[node.userId] = true;
+//     } else {
+//       this.userMasterData[node.userManagerId] = response.filter(
+//         item => item.userId !== node.userId
+//       );
+//       this.isbuffered[node.userManagerId] = true;
+//     }
+
+//     console.log("NODE UPDATED 👉", {
+//       id: node.id,
+//       jobCode: node.jobCode
+//     });
+//   }
+// });
+
+//   }
+// },
 
     // getChlidData(node) {
     //   console.log("node==>",node);
@@ -1086,13 +1161,7 @@ console.log("node==",node)
         this.orgChartData = this.nodes;
         this.originalMasterData = this.nodes;
         console.log("BYEEE", this.nodes);
-        console.log(
-  "JOB CODE CHECK BEFORE ORGCHART  ",
-  this.nodes.map(n => ({
-    id: n.id,
-    jobCode: n.jobCode
-  }))
-);
+   
 
         this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
         //  setTimeout(() => {
@@ -1430,7 +1499,7 @@ console.log("node==",node)
         '<text width="200" text-overflow="ellipsis" style="font-size: 11px;" fill="white" x="90" y="150" text-anchor="middle">{val}</text>';
       OrgChart.templates.myTemplate.field_8 =
         '<text text-overflow="ellipsis" style="font-size: 12px;" fill="white" x="155" y="130" text-anchor="middle">({val})</text>';
-      OrgChart.templates.myTemplate.field_3 =
+           OrgChart.templates.myTemplate.field_3 =
         '<text width="120" text-overflow="ellipsis" style="font-size: 16px;" fill="white" x="80" y="130" font-weight="BOLD" text-anchor="middle">{val}</text>';
 
       OrgChart.templates.myTemplate.field_1 =
@@ -1604,21 +1673,18 @@ console.log("node==",node)
             text: "View Profile",
             icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
             // onClick: this.exportUserProfile,
-            // onClick: (nodeId) => {
-            //   this.showJobProfile(nodeId);
-            // },
-            // onClick: this.showJobProfile
             onClick: (nodeId) => {
-  const node = this.chart.get(nodeId); // ✅ OrgChart API
+              this.showJobProfile(nodeId);
+            },
+            // onClick: this.showJobProfile
+//             onClick: (nodeId) => {
+//   const node = this.chart.get(nodeId); // ✅ OrgChart API
 
-  console.log("FULL NODE OBJECT  ", node);
-  console.log("JOB CODE  ", node.jobCode);
+//   console.log("FULL NODE OBJECT  ", node);
+//   console.log("JOB CODE  ", node.jobCode);
 
-  this.showJobProfile({
-    positionId: node.id,
-    jobCode: node.jobCode
-  });
-}
+//   this.showJobProfile(node.jobCode)
+// }
 
 //              onClick: (nodeId) => {
 //     const node = this.orgChartData.find(
@@ -1724,8 +1790,10 @@ console.log("node==",node)
           field_7: "businessUnit",
           field_8: "jobLevel",
           field_9: "positionVacant",
+          field_99: "jobCode",
           // field_11: "positionVacant",
           field_10: this.binder,
+          
         },
       });
 
