@@ -524,7 +524,7 @@ export default {
       this.chart.element.appendChild(leg);
     },
  async showJobProfile(nodeId) {
-    // const node = this.chart.get(nodeId); // ✅ OrgChart API
+    // const node = this.chart.get(nodeId); 
  // Find the node from the source data (this.orgChartData) instead of chart.get
   const node = this.orgChartData.find(n => String(n.id) === String(nodeId));
   
