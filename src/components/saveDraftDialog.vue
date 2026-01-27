@@ -287,6 +287,11 @@ export default {
       //   this.form.summary = "";
       //   return;
       // }
+      this.$nextTick(() => {
+      if (
+        !this.finalPlanData?.originalData ||
+        !this.finalPlanData?.currentData
+      ) return;
 
       const diff = this.diffNodes(
         this.finalPlanData.originalData,
@@ -295,6 +300,7 @@ export default {
       );
 
       this.form.summary = this.buildSummaryText(diff);
+      });
     },
     isEdit(val) {
       console.log("val===============", val);
