@@ -105,59 +105,179 @@ export default {
   },
 
   methods: {
-      // SAVE DRAWER DATA
-   saveDrawerAsPDF(drawer) {
-  const doc = new jsPDF();
+  htmlToPlainText(html) {
+  if (!html) return "-";
 
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+
+  // Replace <li> with bullet points
+  temp.querySelectorAll("li").forEach(li => {
+    li.innerHTML = "• " + li.innerText;
+  });
+
+  // Add line breaks for paragraphs
+  temp.querySelectorAll("p").forEach(p => {
+    p.innerHTML = p.innerText + "\n\n";
+  });
+
+  return temp.innerText.replace(/\n{3,}/g, "\n\n");
+},
+
+      // SAVE DRAWER DATA
+//    saveDrawerAsPDF(drawer) {
+//   const doc = new jsPDF();
+
+//   const { jobProfileData } = drawer;
+
+//   let y = 10;
+
+//   doc.setFontSize(16);
+//   doc.text("Job Details", 10, y);
+//   y += 10;
+
+//   doc.setFontSize(12);
+//   doc.text(`Name: ${jobProfileData?.name_defaultValue || "-"}`, 10, y);
+//   y += 8;
+//   doc.text(`Position ID: ${jobProfileData?.externalCode || "-"}`, 10, y);
+//   y += 8;
+//   doc.text(`Job Req ID: ${jobProfileData?.jobReqId || "-"}`, 10, y);
+//   y += 8;
+//   doc.text(`Status: ${jobProfileData?.status || "-"}`, 10, y);
+//   y += 10;
+
+//   doc.setFontSize(14);
+//   doc.text("Job Description:", 10, y);
+//   y += 8;
+
+//   const shortDesc =
+//     jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue || "-";
+//   const shortDescLines = doc.splitTextToSize(shortDesc, 180);
+//   doc.setFontSize(12);
+//   doc.text(shortDescLines, 10, y);
+//   y += shortDescLines.length * 6;
+
+//   const longDesc =
+//     jobProfileData?.longDesciptions?.results?.[0]?.desc_localized || "-";
+//   const longDescLines = doc.splitTextToSize(longDesc, 180);
+//   doc.text(longDescLines, 10, y);
+//   y += longDescLines.length * 6;
+
+//   y += 5;
+//   doc.setFontSize(14);
+//   doc.text("Required Skills:", 10, y);
+//   y += 8;
+
+//   const skills =
+//     (jobProfileData?.competencyContents?.results || []).map(
+//       (s) => s?.entityNav?.name_en_US
+//     );
+//   doc.setFontSize(12);
+//   doc.text(skills.join(", ") || "-", 10, y);
+
+//   doc.save(`Job_${jobProfileData?.jobReqId || Date.now()}.pdf`);
+// },
+saveDrawerAsPDF(drawer) {
+  const doc = new jsPDF();
   const { jobProfileData } = drawer;
 
-  let y = 10;
+  let y = 12;
+  const pageHeight = doc.internal.pageSize.height;
 
+  // ---------- HELPERS ----------
+  const checkPageBreak = (extra = 10) => {
+    if (y + extra > pageHeight - 10) {
+      doc.addPage();
+      y = 12;
+    }
+  };
+
+  const htmlToPlainText = (html) => {
+    if (!html) return "-";
+
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+
+    temp.querySelectorAll("li").forEach(li => {
+      li.innerHTML = "• " + li.innerText;
+    });
+
+    temp.querySelectorAll("p").forEach(p => {
+      p.innerHTML = p.innerText + "\n\n";
+    });
+
+    return temp.innerText.replace(/\n{3,}/g, "\n\n");
+  };
+
+  // ---------- TITLE ----------
   doc.setFontSize(16);
   doc.text("Job Details", 10, y);
   y += 10;
 
+  // ---------- BASIC INFO ----------
   doc.setFontSize(12);
   doc.text(`Name: ${jobProfileData?.name_defaultValue || "-"}`, 10, y);
-  y += 8;
+  y += 7;
+
   doc.text(`Position ID: ${jobProfileData?.externalCode || "-"}`, 10, y);
-  y += 8;
+  y += 7;
+
   doc.text(`Job Req ID: ${jobProfileData?.jobReqId || "-"}`, 10, y);
-  y += 8;
+  y += 7;
+
   doc.text(`Status: ${jobProfileData?.status || "-"}`, 10, y);
   y += 10;
 
+  // ---------- JOB DESCRIPTION ----------
+  checkPageBreak(20);
   doc.setFontSize(14);
-  doc.text("Job Description:", 10, y);
+  doc.text("Job Description", 10, y);
   y += 8;
 
-  const shortDesc =
-    jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue || "-";
-  const shortDescLines = doc.splitTextToSize(shortDesc, 180);
   doc.setFontSize(12);
-  doc.text(shortDescLines, 10, y);
-  y += shortDescLines.length * 6;
+  const shortDescHTML =
+    jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue;
+  const shortDesc = htmlToPlainText(shortDescHTML);
+  const shortLines = doc.splitTextToSize(shortDesc, 180);
 
-  const longDesc =
-    jobProfileData?.longDesciptions?.results?.[0]?.desc_localized || "-";
-  const longDescLines = doc.splitTextToSize(longDesc, 180);
-  doc.text(longDescLines, 10, y);
-  y += longDescLines.length * 6;
+  checkPageBreak(shortLines.length * 6);
+  doc.text(shortLines, 10, y);
+  y += shortLines.length * 6 + 4;
 
-  y += 5;
+  const longDescHTML =
+    jobProfileData?.longDesciptions?.results?.[0]?.desc_localized;
+  const longDesc = htmlToPlainText(longDescHTML);
+  const longLines = doc.splitTextToSize(longDesc, 180);
+
+  checkPageBreak(longLines.length * 6);
+  doc.text(longLines, 10, y);
+  y += longLines.length * 6 + 6;
+
+  // ---------- SKILLS ----------
+  checkPageBreak(20);
   doc.setFontSize(14);
-  doc.text("Required Skills:", 10, y);
+  doc.text("Required Skills", 10, y);
   y += 8;
 
+  doc.setFontSize(12);
   const skills =
-    (jobProfileData?.competencyContents?.results || []).map(
-      (s) => s?.entityNav?.name_en_US
-    );
-  doc.setFontSize(12);
-  doc.text(skills.join(", ") || "-", 10, y);
+    jobProfileData?.competencyContents?.results || [];
 
+  const skillsText =
+    skills.length
+      ? skills.map(s => `• ${s?.entityNav?.name_en_US}`).join("\n")
+      : "-";
+
+  const skillLines = doc.splitTextToSize(skillsText, 180);
+
+  checkPageBreak(skillLines.length * 6);
+  doc.text(skillLines, 10, y);
+  y += skillLines.length * 6;
+
+  // ---------- SAVE ----------
   doc.save(`Job_${jobProfileData?.jobReqId || Date.now()}.pdf`);
 },
+
 
 
     // Helper to split long text for PDF
