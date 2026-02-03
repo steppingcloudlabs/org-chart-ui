@@ -1,124 +1,376 @@
 <template>
-<v-navigation-drawer
-  right
-  temporary
-  clipped
-  width="420"
-  v-model="jobInfo"
-  class="mt-7"
-  height="100vh"
->
-  <v-card flat>
-    <v-card-title class="text-h6">
-      Job Details
-    </v-card-title>
+  <div>
+    <!-- STACKED DRAGGABLE DRAWERS -->
+    <div
+      v-for="(drawer, index) in drawers"
+      :key="drawer.id"
+      right
+      absolute
+      clipped
+      class="draggable-drawer"
+      :style="drawerStyle(drawer)"
+      @mousedown="startDrag($event, index)"
+    >
+      <v-card flat>
+        <!-- HEADER -->
+        <v-card-title class="text-h6 d-flex justify-space-between cursor-move">
+          Job Details
+         
+          
+          <div>
+            <!-- SAVE BUTTON -->
+            <v-btn small color="primary" class="mr-2" @click.stop="saveDrawerAsPDF(drawer)">
+              Save
+            </v-btn>
 
-    <v-divider />
+            <!-- CLOSE BUTTON -->
+            <v-btn icon @click.stop="closeDrawer(index)">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+          
+          <!-- <v-btn icon @click.stop="closeDrawer(index)">
+            <v-icon>mdi-close</v-icon>
+          </v-btn> -->
+        </v-card-title>
 
-    <v-card-text>
-      <!-- BASIC INFO -->
-<!-- JOB HEADER -->
-<div class="mb-4">
-  <!-- Job Title -->
-  <p class="text-h6 font-weight-bold mb-1">
-    {{ jobProfileData?.jobProfile?.name_en_US }}
-  </p>
+        <v-divider />
 
-  <!-- Job Req ID & Status -->
-  <v-row dense align="center">
-    <v-col cols="6">
-      <p class="mb-0">
-        <strong>Job Req ID:</strong>
-        <span class="ml-1">{{ jobProfileData?.jobReqId }}</span>
-      </p>
-    </v-col>
+        <div class="drawer-body" ref="drawerBody" @scroll="syncScroll">
+          <!-- BODY -->
+          <v-card-text>
+            <p class="text-h6 font-weight-bold mb-1">
+              {{ drawer.jobProfileData?.name_defaultValue }}
+            </p>
 
-    <v-col cols="6" class="text-right">
-      <v-chip small color="green" dark>
-        {{ jobProfileData?.internalStatus }}
-      </v-chip>
-    </v-col>
-  </v-row>
-</div>
+            <v-row dense align="center">
+              <v-col cols="6">
+                <strong>Position ID:</strong> {{ drawer.jobProfileData?.externalCode }}
+              </v-col>
+             
+            </v-row>
 
-<v-divider class="my-3" />
+            <v-divider class="my-3" />
+            <v-row dense align="center">
+              <v-col cols="6">
+                <strong>Job Req ID:</strong> {{ drawer.jobProfileData?.jobReqId }}
+              </v-col>
+              <v-col cols="6" class="text-right">
+                <v-chip small color="green" dark>
+                  {{ drawer.jobProfileData?.status }}
+                </v-chip>
+              </v-col>
+            </v-row>
 
-       <!-- DESCRIPTION -->
-      <div class="job-description">
-       <p><strong>  Job Description:</strong></p>
-      </div>
-      <div v-html="jobProfileData?.jobProfile?.shortDesciptions?.results[0]?.desc_en_US"></div>
+            <v-divider class="my-3" />
 
-      <v-divider class="my-3" />
+            <p><strong>Job Description:</strong></p>
+            <div
+              v-html="drawer.jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue"
+            />
+            <v-divider class="my-3" />
+            <div
+              v-html="drawer.jobProfileData?.longDesciptions?.results?.[0]?.desc_localized"
+            />
+            <v-divider class="my-3" />
 
-    <!-- <div class="text-subtitle-1 font-weight-medium mb-1">
-        Responsibilities
-      </div> -->
-      <div v-html="jobProfileData?.jobProfile?.longDesciptions?.results[0]?.desc_en_US"></div>
-
-      <v-divider class="my-3" />
-     
-
-      <!-- SKILLS -->
-      <div >
-       <p><strong>  Required Skills:</strong></p>
-      </div>
-
-      <v-chip-group column  v-if="
-    jobProfileData &&
-    jobProfileData?.jobProfile &&
-    jobProfileData?.jobProfile?.competencyContents
-  ">
-        <v-chip
-          v-for="(skill, i) in jobProfileData?.jobProfile?.competencyContents?.results || []"
-          :key="i"
-          small
-          outlined
-        >
-          {{ skill?.entityNav?.name_en_US }}
-        </v-chip>
-      </v-chip-group>
-    </v-card-text>
-  </v-card>
-</v-navigation-drawer>
-
+            <p><strong>Required Skills:</strong></p>
+            <v-chip-group column>
+              <v-chip
+                v-for="(skill, i) in drawer.jobProfileData?.competencyContents?.results || []"
+                :key="i"
+                small
+                outlined
+              >
+                {{ skill?.entityNav?.name_en_US }}
+              </v-chip>
+            </v-chip-group>
+          </v-card-text>
+        </div>
+      </v-card>
+    </div>
+  </div>
 </template>
 
-
 <script>
+import jsPDF from "jspdf";
 export default {
+  name: "JobProfileDrawerStack",
+
   data() {
     return {
-        
+      drawers: [],
+      dragInfo: null // for drag tracking
+    };
+  },
+
+  methods: {
+  htmlToPlainText(html) {
+  if (!html) return "-";
+
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+
+  // Replace <li> with bullet points
+  temp.querySelectorAll("li").forEach(li => {
+    li.innerHTML = "• " + li.innerText;
+  });
+
+  // Add line breaks for paragraphs
+  temp.querySelectorAll("p").forEach(p => {
+    p.innerHTML = p.innerText + "\n\n";
+  });
+
+  return temp.innerText.replace(/\n{3,}/g, "\n\n");
+},
+
+      // SAVE DRAWER DATA
+//    saveDrawerAsPDF(drawer) {
+//   const doc = new jsPDF();
+
+//   const { jobProfileData } = drawer;
+
+//   let y = 10;
+
+//   doc.setFontSize(16);
+//   doc.text("Job Details", 10, y);
+//   y += 10;
+
+//   doc.setFontSize(12);
+//   doc.text(`Name: ${jobProfileData?.name_defaultValue || "-"}`, 10, y);
+//   y += 8;
+//   doc.text(`Position ID: ${jobProfileData?.externalCode || "-"}`, 10, y);
+//   y += 8;
+//   doc.text(`Job Req ID: ${jobProfileData?.jobReqId || "-"}`, 10, y);
+//   y += 8;
+//   doc.text(`Status: ${jobProfileData?.status || "-"}`, 10, y);
+//   y += 10;
+
+//   doc.setFontSize(14);
+//   doc.text("Job Description:", 10, y);
+//   y += 8;
+
+//   const shortDesc =
+//     jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue || "-";
+//   const shortDescLines = doc.splitTextToSize(shortDesc, 180);
+//   doc.setFontSize(12);
+//   doc.text(shortDescLines, 10, y);
+//   y += shortDescLines.length * 6;
+
+//   const longDesc =
+//     jobProfileData?.longDesciptions?.results?.[0]?.desc_localized || "-";
+//   const longDescLines = doc.splitTextToSize(longDesc, 180);
+//   doc.text(longDescLines, 10, y);
+//   y += longDescLines.length * 6;
+
+//   y += 5;
+//   doc.setFontSize(14);
+//   doc.text("Required Skills:", 10, y);
+//   y += 8;
+
+//   const skills =
+//     (jobProfileData?.competencyContents?.results || []).map(
+//       (s) => s?.entityNav?.name_en_US
+//     );
+//   doc.setFontSize(12);
+//   doc.text(skills.join(", ") || "-", 10, y);
+
+//   doc.save(`Job_${jobProfileData?.jobReqId || Date.now()}.pdf`);
+// },
+saveDrawerAsPDF(drawer) {
+  const doc = new jsPDF();
+  const { jobProfileData } = drawer;
+
+  let y = 12;
+  const pageHeight = doc.internal.pageSize.height;
+
+  // ---------- HELPERS ----------
+  const checkPageBreak = (extra = 10) => {
+    if (y + extra > pageHeight - 10) {
+      doc.addPage();
+      y = 12;
     }
+  };
+
+  const htmlToPlainText = (html) => {
+    if (!html) return "-";
+
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+
+    temp.querySelectorAll("li").forEach(li => {
+      li.innerHTML = "• " + li.innerText;
+    });
+
+    temp.querySelectorAll("p").forEach(p => {
+      p.innerHTML = p.innerText + "\n\n";
+    });
+
+    return temp.innerText.replace(/\n{3,}/g, "\n\n");
+  };
+
+  // ---------- TITLE ----------
+  doc.setFontSize(16);
+  doc.text("Job Details", 10, y);
+  y += 10;
+
+  // ---------- BASIC INFO ----------
+  doc.setFontSize(12);
+  doc.text(`Name: ${jobProfileData?.name_defaultValue || "-"}`, 10, y);
+  y += 7;
+
+  doc.text(`Position ID: ${jobProfileData?.externalCode || "-"}`, 10, y);
+  y += 7;
+
+  doc.text(`Job Req ID: ${jobProfileData?.jobReqId || "-"}`, 10, y);
+  y += 7;
+
+  doc.text(`Status: ${jobProfileData?.status || "-"}`, 10, y);
+  y += 10;
+
+  // ---------- JOB DESCRIPTION ----------
+  checkPageBreak(20);
+  doc.setFontSize(14);
+  doc.text("Job Description", 10, y);
+  y += 8;
+
+  doc.setFontSize(12);
+  const shortDescHTML =
+    jobProfileData?.shortDesciptions?.results?.[0]?.desc_defaultValue;
+  const shortDesc = htmlToPlainText(shortDescHTML);
+  const shortLines = doc.splitTextToSize(shortDesc, 180);
+
+  checkPageBreak(shortLines.length * 6);
+  doc.text(shortLines, 10, y);
+  y += shortLines.length * 6 + 4;
+
+  const longDescHTML =
+    jobProfileData?.longDesciptions?.results?.[0]?.desc_localized;
+  const longDesc = htmlToPlainText(longDescHTML);
+  const longLines = doc.splitTextToSize(longDesc, 180);
+
+  checkPageBreak(longLines.length * 6);
+  doc.text(longLines, 10, y);
+  y += longLines.length * 6 + 6;
+
+  // ---------- SKILLS ----------
+  checkPageBreak(20);
+  doc.setFontSize(14);
+  doc.text("Required Skills", 10, y);
+  y += 8;
+
+  doc.setFontSize(12);
+  const skills =
+    jobProfileData?.competencyContents?.results || [];
+
+  const skillsText =
+    skills.length
+      ? skills.map(s => `• ${s?.entityNav?.name_en_US}`).join("\n")
+      : "-";
+
+  const skillLines = doc.splitTextToSize(skillsText, 180);
+
+  checkPageBreak(skillLines.length * 6);
+  doc.text(skillLines, 10, y);
+  y += skillLines.length * 6;
+
+  // ---------- SAVE ----------
+  doc.save(`Job_${jobProfileData?.jobReqId || Date.now()}.pdf`);
+},
+
+
+
+    // Helper to split long text for PDF
+    splitText(text, maxWidth) {
+      return jsPDF.splitTextToSize(text, maxWidth);
     },
-    computed:{
-        
-      jobProfileData: {
-      get() {
-        return this.$store.getters.getJobProfileData;
-        // return true;
-      },
-      set(data) {
-        this.$store.commit("setJobProfileData", data);
-      },
+
+    calcTextHeight(text, maxWidth) {
+      return this.splitText(text, maxWidth).length * 6;
     },
-      jobInfo: {
-      get() {
-        return this.$store.getters.getjobInfo;
-        // return true;
-      },
-      set(data) {
-        this.$store.commit("setjobInfo", data);
-      },
+    syncScroll(event) {
+      const scrollTop = event.target.scrollTop;
+      this.$refs.drawerBody.forEach(el => {
+        if (el !== event.target) el.scrollTop = scrollTop;
+      });
     },
-   
+
+    openDrawer(jobProfileData) {
+      const exists = this.drawers.find(
+        d => d?.jobProfileData?.jobReqId === jobProfileData?.jobReqId
+      );
+      if (exists) return;
+
+      this.drawers.push({
+        id: `${jobProfileData.jobReqId}-${Date.now()}`,
+        jobProfileData,
+        open: true,
+        x: 100 + this.drawers.length * 30, // initial positions
+        y: 100 + this.drawers.length * 30
+      });
+    },
+
+    closeDrawer(index) {
+      this.drawers.splice(index, 1);
+    },
+
+    drawerStyle(drawer) {
+      return {
+        position: "absolute",
+        top: drawer.y + "px",
+        left: drawer.x + "px",
+        width: "420px",
+        zIndex: 2000 + this.drawers.indexOf(drawer),
+        cursor: "grab"
+      };
+    },
+
+    // DRAG HANDLERS
+    startDrag(e, index) {
+      if (e.target.closest(".v-btn")) return; // don't drag on close button
+
+      const drawer = this.drawers[index];
+      this.dragInfo = {
+        index,
+        startX: e.clientX,
+        startY: e.clientY,
+        origX: drawer.x,
+        origY: drawer.y
+      };
+
+      document.addEventListener("mousemove", this.onDrag);
+      document.addEventListener("mouseup", this.stopDrag);
+    },
+
+    onDrag(e) {
+      if (!this.dragInfo) return;
+
+      const drawer = this.drawers[this.dragInfo.index];
+      drawer.x = this.dragInfo.origX + (e.clientX - this.dragInfo.startX);
+      drawer.y = this.dragInfo.origY + (e.clientY - this.dragInfo.startY);
+    },
+
+    stopDrag() {
+      document.removeEventListener("mousemove", this.onDrag);
+      document.removeEventListener("mouseup", this.stopDrag);
+      this.dragInfo = null;
     }
-}
+  }
+};
 </script>
+
 <style scoped>
-.job-description {
-  text-align: justify;
+.draggable-drawer {
+  transition: none !important;
+  user-select: none;
 }
 
+.drawer-body {
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.cursor-move {
+  cursor: grab;
+}
 </style>
