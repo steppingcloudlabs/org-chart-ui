@@ -1789,9 +1789,10 @@ let jobCode= node.jobCode
           field_5: "userDivisionName",
           field_6: "positionVacant",
           field_7: "businessUnit",
-          field_8: "jobLevel",
+          field_8: "jobCode",
+          // field_8: "jobLevel",
           field_9: "positionVacant",
-          field_99: "jobCode",
+         // field_99: "jobCode",
           // field_11: "positionVacant",
           field_10: this.binder,
           
@@ -2195,7 +2196,7 @@ let jobCode= node.jobCode
     triggerAddNode(val) {
       if (!val || !this.newNodePayload) return;
 
-      this.createNodeFromDialog(this.newNodePayload);
+       this.createNodeFromDialog(this.newNodePayload);
 
       this.$store.commit("setTriggerAddNode", false);
       this.$store.commit("setNewNodePayload", null);
