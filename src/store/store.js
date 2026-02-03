@@ -986,26 +986,45 @@ export default new Vuex.Store({
                 });
             });
         },
-        getJobProfileData: ({ commit }, data) => {
-            console.log(data);
-            return new Promise((resolve) => {
-                axios({
-                    url: baseDevURL + "/srv/getJobProfile",
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    params: {
-                        companyId: companyId,
-                        positionId: data.positionId,
-                    },
-                }).then((response) => {
-                    resolve(response.data);
-                    commit("setJobProfileData", response.data.results[0]);
-                    console.log("response from getjobprofiledata",response.data);
-                });
-            });
-        },
+        // getJobProfileData: ({ commit }, data) => {
+        //     console.log(data);
+        //     return new Promise((resolve) => {
+        //         axios({
+        //             url: baseDevURL + "/srv/getJobProfile",
+        //             method: "GET",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //             params: {
+        //                 companyId: companyId,
+        //                 positionId: data.positionId,
+        //             },
+        //         }).then((response) => {
+        //             resolve(response.data);
+        //             commit("setJobProfileData", response.data.results[0]);
+        //             console.log("response from getjobprofiledata",response.data);
+        //         });
+        //     });
+        // },
+        getJobProfileData: async (_, data) => {
+  console.log(data);
+
+  const response = await axios({
+    url: baseDevURL + "/srv/getJobProfile",
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    params: {
+      companyId,
+      jobCode: data.jobCode,
+    },
+  });
+
+  console.log("response from store", response.data.result[0]);
+
+  return response.data.result[0]; // THIS is what the component receives
+},
         getLegalUnit: ({ commit }, data) => {
             console.log(data);
             return new Promise((resolve) => {

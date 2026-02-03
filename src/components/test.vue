@@ -519,15 +519,41 @@ export default {
         '<div style="font-size:8px"><div ><div id="UCgrade"></div> UC</div><div><div id="Mgrade"></div>M1-M5</div><div><div id="Sgrade"></div>S1-S5</div><div><div class="mr-1" id="vac"></div>Vacant</div></div>';
       this.chart.element.appendChild(leg);
     },
-    showJobProfile(positionId) {
-      console.log("Position Id =", positionId);
-      const payload = {
-        positionId: positionId, // nodeId IS the id
-      };
-      this.$store.dispatch("getJobProfileData", payload);
-      this.jobInfo = true;
-      console.log("this.jobInfo==", this.jobInfo);
-    },
+    // showJobProfile(positionId) {
+    //   console.log("Position Id =", positionId);
+    //   const payload = {
+    //     positionId: positionId, // nodeId IS the id
+    //   };
+    //   this.$store.dispatch("getJobProfileData", payload);
+    //   this.jobInfo = true;
+    //   console.log("this.jobInfo==", this.jobInfo);
+    // },
+
+ async showJobProfile(nodeId) {
+    const node = this.chart.get(nodeId); 
+    console.log("node=",node)
+ // Find the node from the source data (this.orgChartData) instead of chart.get
+  // const node = this.orgChartData.find(n => String(n.id) === String(nodeId));
+  
+  if (!node) {
+    console.error("Node not found in orgChartData for nodeId:", nodeId);
+    return;
+  }
+  console.log("FULL NODE OBJECT  ", node);
+  console.log("JOB CODE  ", node.jobCode);
+  // console.log("jobCode =", jobCode);
+let jobCode= node.jobCode
+  const payload = { jobCode };
+
+  const jobProfileData = await this.$store.dispatch(
+    "getJobProfileData",
+    payload
+  );
+
+  console.log("jobProfileData", jobProfileData);
+
+  this.$refs.jobDrawerStack.openDrawer(jobProfileData);
+},
 
     exportUserProfile(nodeId) {
       var nodeData = this.chart.get(nodeId);
