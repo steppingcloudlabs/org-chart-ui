@@ -18,10 +18,22 @@
          
           
           <div>
-            <!-- SAVE BUTTON -->
-            <v-btn small color="primary" class="mr-2" @click.stop="saveDrawerAsPDF(drawer)">
-              Save
-            </v-btn>
+            <!-- Download BUTTON -->
+            <v-tooltip bottom>
+  <template v-slot:activator="{ on, attrs }">
+    <v-btn
+      icon
+      color="primary"
+      v-bind="attrs"
+      v-on="on"
+      @click.stop="saveDrawerAsPDF(drawer)"
+    >
+      <v-icon>mdi-download</v-icon>
+    </v-btn>
+  </template>
+  <span>Download PDF</span>
+</v-tooltip>
+
 
             <!-- CLOSE BUTTON -->
             <v-btn icon @click.stop="closeDrawer(index)">
@@ -297,7 +309,7 @@ saveDrawerAsPDF(drawer) {
 
     openDrawer(jobProfileData) {
       const exists = this.drawers.find(
-        d => d?.jobProfileData?.jobReqId === jobProfileData?.jobReqId
+        d => d?.jobProfileData?.externalCode  === jobProfileData?.externalCode 
       );
       if (exists) return;
 

@@ -9,6 +9,8 @@
     </v-flex>
 
     <nodeProfile></nodeProfile>
+        <JobProfileDrawerStack ref="jobDrawerStack" />
+
     <addPositionDialog v-if="addPositionDialog"></addPositionDialog>
     <copyPositionDialog v-if="copyPositionDialog" @close="closeDialogs"></copyPositionDialog>
   </v-layout>
@@ -21,6 +23,7 @@ import OrgChart from "../assets/orgchart";
 import nodeProfile from "@/components/NodeProfile";
 import addPositionDialog from "./AddPositionDialog.vue";
 import copyPositionDialog from "./CopyPositionDialog.vue";
+import JobProfileDrawerStack from "./JobProfileData.vue";
 
 import $ from "jquery";
 import Canvg from "canvg";
@@ -66,6 +69,7 @@ export default {
     nodeProfile,
     addPositionDialog,
     copyPositionDialog,
+    JobProfileDrawerStack
   },
 
   computed: {
