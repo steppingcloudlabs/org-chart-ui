@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="copyPositionDialog" max-width="500px" >
+  <v-dialog v-model="copyPositionDialog" max-width="500px" retain-focus=false>
     <v-card>
       <v-card-title class="headline"> Copy Position </v-card-title>
 
@@ -84,6 +84,11 @@ export default {
   methods: {
     closeDialog() {
     this.copyPositionDialog = false; 
+    const overlay = document.querySelector('v-overlay'); // Standard Balkan overlay class
+    if (overlay) {
+        overlay.style.display = 'none';
+        overlay.remove(); // Completely remove it from the DOM
+    }
     console.log("Inside closeDialog",this.copyPositionDialog )
 
     this.$emit('close');

@@ -61,6 +61,7 @@ export default {
       str: "",
       selectedId: null,
       temp: {},
+      tempData:[]
     };
   },
 
@@ -391,10 +392,10 @@ export default {
       });
     },
 
-    redraw(data) {
+    redraw(data,template=null) {
       this.fieldToDisplay = data.fieldToDisplay;
       var view = !this.selectedView;
-      this.mytree(this.$refs.tree, data, view);
+      this.mytree(this.$refs.tree, data, view,template);
       var legent = document.createElement("div");
       legent.setAttribute("id", "legendd");
       legent.style.position = "absolute";
@@ -1038,7 +1039,7 @@ let jobCode= node.jobCode
         this.orgChartData = this.nodes;
         this.originalMasterData = this.nodes;
         console.log("BYEEE", this.nodes);
-        this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
+        this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)),false, 'myTemplate');
         //  setTimeout(() => {
         //    this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)));
         //  }, 10)
@@ -1125,7 +1126,122 @@ let jobCode= node.jobCode
       this.$store.commit("SET_FINAL_PLAN_DATA", this.finalPlan);
     },
 
-    changeView() {
+    compressByPositionTitle(nodes) {
+    const slug = (s) =>
+      String(s || "NA").trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
+  
+    // groupKey = pid + positionTitle (keeps hierarchy intact)
+    const groups = new Map();
+  
+    for (const n of nodes) {
+      const pid = n.pid != null ? String(n.pid) : "ROOT";
+      const title = n.positionTitle || "NA";
+      const key = `${pid}|${title}`;
+  
+      if (!groups.has(key)) {
+        groups.set(key, {
+          id: `G_${pid}_${slug(title)}`,
+          pid: pid === "ROOT" ? null : pid,
+  
+          positionTitle: title,
+          name: title, // use in nodeBinding
+  
+          vacantCount: 0,
+          filledCount: 0,
+          totalCount: 0,
+  
+          // keep any common fields if you want
+          positionCost: n.positionCost ?? null,
+          department: n.department ?? n.userDepartmentId ?? null,
+          jobLevel: n.jobLevel ?? null,
+          userPayGrade: n.userPayGrade
+        });
+      }
+  
+      const g = groups.get(key);
+      g.totalCount += 1;
+  
+      // vacant vs filled
+      if (n.positionVacant === true) g.vacantCount += 1;
+      else g.filledCount += 1;
+    }
+  
+    // finalize tags + label
+    const groupedNodes = [];
+    for (const g of groups.values()) {
+      const tags = [];
+      if (g.vacantCount > 0 &&  g.filledCount == 0) tags.push("Vacant");
+      if (g.filledCount > 0 && g.vacantCount == 0) tags.push("Filled");
+  
+      g.tags = tags; // your rule
+      g.countsLabel = `Filled: ${g.filledCount} | Vacant: ${g.vacantCount}`;
+  
+      // optional: show Vacant image if any vacant else default
+      // g.img = g.vacantCount > 0 ? "vacant.png" : "filled.png";
+  
+      groupedNodes.push(g);
+    }
+  
+    // IMPORTANT:
+    // Now pids still point to original parent position IDs (e.g., "50024039").
+    // But in grouped view, parents are also grouped, so we must remap pid -> grouped parent id.
+    const originalToGroupId = new Map();
+  
+    // Build mapping: original node id belongs to which grouped node?
+    for (const n of nodes) {
+      const pid = n.pid != null ? String(n.pid) : "ROOT";
+      const title = n.positionTitle || "NA";
+      const key = `${pid}|${title}`;
+      const groupId = groups.get(key).id;
+      originalToGroupId.set(String(n.id), groupId);
+    }
+  
+    // Remap pid for each grouped node
+    for (const g of groupedNodes) {
+      if (g.pid != null) {
+        const mappedParent = originalToGroupId.get(String(g.pid));
+        if (mappedParent) g.pid = mappedParent;
+        // else keep as is or set null
+      }
+    }
+  
+    return groupedNodes;
+  },
+
+  changeView() {
+        var filteredData = this.orgChartData
+          ? this.orgChartData
+          : this.nodes.config.data;
+        var template 
+        if (this.selectedView) {
+          this.tempData = filteredData
+          filteredData = this.compressByPositionTitle(filteredData)
+          
+          this.isLevel = true;
+          for (let i = 0; i < filteredData?.length; i++) {
+            var indexpay = this.levelPay.findIndex(
+              (x) => x.externalCode == filteredData[i].userPayGrade
+            );
+            console.log(indexpay);
+            filteredData[i].tags.push("subLevels" + indexpay);
+          }
+          this.selectedView = !this.selectedView;
+          template = "groupTemplate"
+          console.log("Data to be shown", filteredData)
+        } else {
+          this.isLevel = false;
+          for (let i = 0; i < filteredData?.length; i++) {
+            filteredData[i].tags = filteredData[i].tags.filter(function (item) {
+              return item.indexOf("subLevels") !== 0;
+            });
+          }
+          this.selectedView = !this.selectedView;
+          template = "myTemplate"
+        }
+        this.redraw(filteredData,template);
+      },
+
+    changeView1() {
       var filteredData = this.chart.config.nodes
         ? this.chart.config.nodes
         : this.orgChartData;
@@ -1360,8 +1476,12 @@ let jobCode= node.jobCode
         return null;
       }
     },
-    mytree: function (domEl, x, test = false) {
+    mytree: function (domEl, x, test = false,myTemplate) {
       // alert(OrgChart.VERSION)
+      if (myTemplate===null)
+        {
+          myTemplate = "myTemplate"
+        }
       OrgChart.templates.myTemplate = Object.assign(
         {},
         OrgChart.templates.rony,
@@ -1468,6 +1588,7 @@ let jobCode= node.jobCode
                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" /> \
                    </filter>';
 
+
       OrgChart.templates.myTemplate.min = Object.assign(
         {},
         OrgChart.templates.ana,
@@ -1478,7 +1599,19 @@ let jobCode= node.jobCode
         '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="40" text-anchor="middle">{val}</text>';
       OrgChart.templates.myTemplate.min.field_1 =
         '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="60" text-anchor="middle">{val}</text>';
-
+     
+        OrgChart.templates.groupTemplate = Object.assign(
+          {},
+          OrgChart.templates.ana
+        );
+        OrgChart.templates.groupTemplate.size = [270,100];
+  
+        OrgChart.templates.groupTemplate.field_0 =
+          '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="40" text-anchor="middle">{val}</text>';
+        OrgChart.templates.groupTemplate.field_1 =
+          '<text data-width="230" style="font-size: 18px;" fill="#ffffff" x="125" y="60" text-anchor="middle">{val}</text>'; 
+      if (myTemplate === 'myTemplate')  
+    {
       this.chart = new OrgChart(domEl, {
         nodes: x,
         enableDragDrop: true,
@@ -1641,12 +1774,176 @@ let jobCode= node.jobCode
           field_5: "userDivisionName",
           field_6: "positionVacant",
           field_7: "businessUnit",
-          field_8: "jobLevel",
+          field_8: "jobCode",
           field_9: "positionVacant",
           // field_11: "positionVacant",
           field_10: this.binder,
         },
       });
+    }
+    else
+    {
+      this.chart = new OrgChart(domEl, {
+        nodes: x,
+        enableDragDrop: true,
+        min: test,
+        scaleInitial: OrgChart.match.boundary,
+        levelSeparation: 30,
+        subtreeSeparation: 30,
+        nodeMouseClick: OrgChart.action.none,
+        toolbar: {
+          zoom: true,
+          fit: true,
+          expandAll: false,
+        },
+        showXScroll: OrgChart.scroll.visible,
+        showYScroll: OrgChart.scroll.visible,
+        mouseScrool: OrgChart.action.none,
+        filterBy: {
+          positionTitle: { label: "Position Title" },
+          userPayGrade: {},
+          positionType: {},
+        },
+        editForm: {
+          generateElementsFromFields: false,
+          elements: [
+            {
+              type: "textbox",
+              label: "Position Title",
+              binding: "positionTitle",
+            },
+            { type: "textbox", label: "Position Code", binding: "id" },
+            {
+              type: "textbox",
+              label: "Position PayGrade",
+              binding: "userPayGrade",
+            },
+            { type: "textbox", label: "Department", binding: "department" },
+          ],
+        },
+        enableSearch: false,
+        // Right Navigation Drawer
+        menu: {
+          Export: {
+            text: "Export Chart",
+            icon: OrgChart.icon.svg(18, 18),
+            onClick: this.download,
+          },
+          View: {
+            text: "Change View",
+            icon: OrgChart.icon.visio(24, 24, "#7A7A7A"),
+            onClick: this.changeView,
+          },
+          pdf_export: { text: "Export PDF" },
+          pp_export: { text: "Export PowerPoint" },
+          json_export: { text: "Export JSON" },
+        },
+        // Node menu
+        nodeMenu: {
+          levelDown: {
+            text: "Level Down",
+            icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
+            onClick: this.addChildDataToChart,
+          },
+          exportProfile: {
+            text: "View Profile",
+            icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
+            // onClick: this.exportUserProfile,
+            onClick: (nodeId) => {
+              this.showJobProfile(nodeId);
+            },
+            // onClick: this.showJobProfile
+          },
+          edit: {
+            text: "Edit",
+          },
+          // add: { text: "Add New Position", onClick: this.copyHandler },
+          CopyPosition: { text: "Copy Position", onClick: this.copyPosition },
+
+          addLevelDownPosition: {
+            text: "Create Lower Level Position",
+            onClick: (nodeId) => this.addPosition("child", nodeId),
+          },
+          addSameLevelPosition: {
+            text: "Create Same Level Position",
+            onClick: (nodeId) => this.addPosition("sibling", nodeId),
+          },
+          remove: { text: "Remove Position" },
+        },
+        tags: {
+          subLevels0: {
+            subLevels: 0,
+            levelSeparation: 10,
+          },
+          subLevels1: {
+            subLevels: 1,
+            levelSeparation: 10,
+          },
+          subLevels2: {
+            subLevels: 2,
+            levelSeparation: 10,
+          },
+          subLevels3: {
+            subLevels: 3,
+            levelSeparation: 10,
+          },
+          subLevels4: {
+            subLevels: 4,
+            levelSeparation: 10,
+          },
+          subLevels5: {
+            subLevels: 5,
+            levelSeparation: 10,
+          },
+          subLevels6: {
+            subLevels: 6,
+            levelSeparation: 10,
+          },
+          subLevels7: {
+            subLevels: 7,
+            levelSeparation: 10,
+          },
+          subLevels8: {
+            subLevels: 8,
+            levelSeparation: 10,
+          },
+          subLevels9: {
+            subLevels: 9,
+            levelSeparation: 10,
+          },
+          RootNode: {
+            nodeMenu: {
+              levelUp: {
+                text: "Level Up",
+                icon: OrgChart.icon.add(18, 18, "#7A7A7A"),
+                onClick: this.addChildDataToChart,
+              },
+              exportProfile: {
+                text: "View Profile",
+                icon: OrgChart.icon.pdf(18, 18, "#7A7A7A"),
+                onClick: this.exportUserProfile,
+              },
+              edit: {
+                text: "Edit",
+              },
+              add: { text: "Add New Position", onClick: this.copyHandler },
+              remove: { text: "Remove Position" },
+            },
+          },
+          filter: {
+            template: "dot",
+          },
+        },
+        template: "groupTemplate",
+        // Data mapping for Node data
+        nodeBinding: {
+          field_0: "positionTitle",
+            field_1: "countsLabel",
+        },
+      });
+    }
+     
+      
 
       this.chart.on("drop", async (sender, draggedNodeId, droppedNodeId) => {
         const draggedNode = sender.get(draggedNodeId);
@@ -2045,10 +2342,10 @@ let jobCode= node.jobCode
     triggerAddNode(val) {
       if (!val || !this.newNodePayload) return;
 
-      this.createNodeFromDialog(this.newNodePayload);
+      // this.createNodeFromDialog(this.newNodePayload);
 
-      this.$store.commit("setTriggerAddNode", false);
-      this.$store.commit("setNewNodePayload", null);
+      // this.$store.commit("setTriggerAddNode", false);
+      // this.$store.commit("setNewNodePayload", null);
     },
 
     triggerSavePlan(val) {
