@@ -3,11 +3,11 @@
     <v-card>
       <v-card-title class="headline"> Add Position </v-card-title>
       <!-- {{currentNodeData}} -->
-      <v-card-text>
+      <v-card-text class="pa-0">
         <v-form ref="form">
-          <v-container fluid>
+          <v-container fluid class="pa-0">
             <!-- Position Code -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -19,7 +19,7 @@
             </v-row>
 
             <!-- Start Date -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -56,7 +56,7 @@
             </v-row>
 
             <!-- Change Reason -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -78,7 +78,7 @@
             </v-row>
 
             <!-- Select Job Code -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -100,7 +100,7 @@
             </v-row>
 
             <!-- Position Title -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -120,7 +120,7 @@
             </v-row>
 
             <!-- Job Title -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -140,7 +140,7 @@
             </v-row>
 
             <!-- Company -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -163,7 +163,7 @@
             </v-row>
 
             <!-- Business Unit -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -186,7 +186,7 @@
             </v-row>
 
             <!-- Division -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -209,7 +209,7 @@
             </v-row>
 
             <!-- Department -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -231,7 +231,7 @@
             </v-row>
 
             <!-- Location -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -253,7 +253,7 @@
             </v-row>
 
             <!-- Cost Centre -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -275,7 +275,7 @@
             </v-row>
 
             <!-- Pay Grade -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -297,7 +297,7 @@
             </v-row>
 
             <!-- Job Level -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -321,7 +321,7 @@
             </v-row>
 
             <!-- Employee Class -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -345,7 +345,7 @@
             </v-row>
 
             <!-- FTE -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -366,7 +366,7 @@
             </v-row>
 
             <!-- Regular/ Temporary -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -388,7 +388,7 @@
             </v-row>
 
             <!-- Title -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -410,7 +410,7 @@
             </v-row>
 
             <!-- Position Type -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -432,7 +432,7 @@
             </v-row>
 
             <!-- Type -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -446,7 +446,7 @@
             </v-row>
 
             <!-- Position Incumbent -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -468,7 +468,7 @@
             </v-row>
 
             <!-- Description -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -490,7 +490,7 @@
             </v-row>
 
             <!-- To Be Recruited -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -510,7 +510,7 @@
             </v-row>
 
             <!-- Critical Position? -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -530,7 +530,7 @@
             </v-row>
 
             <!-- Subject to Position Control -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -550,7 +550,7 @@
             </v-row>
 
             <!-- Position Criticality -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -572,7 +572,7 @@
             </v-row>
 
             <!-- Recruiter -->
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
@@ -591,7 +591,7 @@
                 />
               </v-col>
             </v-row>
-            <v-row align="center" class="form-row">
+            <v-row align="center" class="form-row pr-4" no-gutters >
               <v-col
                 cols="5"
                 class="label-col"
