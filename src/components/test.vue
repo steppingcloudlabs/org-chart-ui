@@ -557,7 +557,7 @@ let jobCode= node.jobCode
 
   console.log("jobProfileData", jobProfileData);
 
-  this.$refs.jobDrawerStack.openDrawer(jobProfileData);
+  this.$refs.jobDrawerStack.openDrawer(jobProfileData,node);
 },
 
     exportUserProfile(nodeId) {
