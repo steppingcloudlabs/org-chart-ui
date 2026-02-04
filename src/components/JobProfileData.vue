@@ -53,13 +53,13 @@
 
         <v-divider />
         <v-card-text v-if="drawer.loading" class="text-center py-10">
-  <v-progress-circular
-    indeterminate
-    color="primary"
-    size="40"
-  />
-  <div class="mt-2 text-caption">Loading job profile…</div>
-</v-card-text>
+          <v-progress-linear
+            indeterminate
+            color="primary"
+            size="40"
+          />
+          <div class="mt-2 text-caption">Loading job profile…</div>
+        </v-card-text>
 
         <div
          v-else
