@@ -56,6 +56,7 @@ export default {
       ],
       filter1: [],
       orgChartData: [],
+
       field: "true",
       field1: "true",
       str: "",
@@ -335,23 +336,26 @@ export default {
       };
 
       this.chart.addNode(node);
-      this.chart.draw();
+      this.totalPositionCount = this.totalPositionCount + 1
+      this.chart.redraw();
 
       // cleanup
       this.addPositionDialog = false;
       this.$store.commit("setPositionCreateLevel", null);
     },
 
-    //     copyHandler(data) {
+    //     copyHandler(nodeId) {
+    //       var data = this.chart.get(nodeId);   
     //   const node = {
     //     ...data,
     //     id: this.chart.generateId(),
-    //     tags: ["Vacant", data.userPayGrade],
+    //     tags: ["Vacant", data.userPayGrade,"New"],
     //     img: "https://i.ibb.co/LShM7dV/vacantposition.png",
     //   };
 
     //   this.chart.addNode(node);
-    //   this.chart.draw();
+    //   this.totalPositionCount += 1
+    //   this.chart.redraw();
     // },
 
     pdf() {
@@ -498,20 +502,53 @@ export default {
       legent.style.top = "20px";
       legent.style.left = "50px";
       legent.style.color = "#2B81D6";
-      legent.style.width = "150px";
-      legent.style.border = "2px solid black";
+      //legent.style.width = "150px";
+     // legent.style.border = "2px solid black";
 
-      legent.innerHTML =
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
-        this.totalPositionCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position-" +
-        this.vacantCount +
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount-" +
-        this.totalHeadCount +
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position -" +
-        this.totalCriticalPosition +
-        "</p>" +
-        this.str;
+      // legent.innerHTML =
+      //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
+      //   this.totalPositionCount +
+      //   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position-" +
+      //   this.vacantCount +
+      //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount-" +
+      //   this.totalHeadCount +
+      //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position -" +
+      //   this.totalCriticalPosition +
+      //   "</p>" +
+      //   this.str;
+
+      const filledCount = this.totalPositionCount - this.vacantCount;
+
+legent.innerHTML = `
+  <div style="
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-family: sans-serif;
+    min-width: 160px;
+  ">
+    <div style="font-size: 14px; font-weight: bold; color: #5f6368; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; text-align: center; border-bottom: 1px solid #f1f1f1; padding-bottom: 4px;">
+      Position Stats
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+      <span style="font-size: 12px; color: #3c4043;"><span style="color: #4CAF50; margin-right: 5px;">●</span>Filled:</span>
+      <span style="font-size: 12px; font-weight: 600;">${filledCount}</span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <span style="font-size: 12px; color: #3c4043;"><span style="color: #039BE5; margin-right: 5px;">●</span>Vacant:</span>
+      <span style="font-size: 12px; font-weight: 600;">${this.vacantCount}</span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px dashed #e0e0e0;">
+      <span style="font-size: 12px; font-weight: bold; color: #202124;">Total:</span>
+      <span style="font-size: 12px; font-weight: bold; color: #1a73e8;">${this.totalPositionCount}</span>
+    </div>
+  </div>
+`; 
       this.chart.element.appendChild(legent);
       var leg = document.createElement("div");
       leg.setAttribute("id", "legTag");
@@ -683,7 +720,7 @@ async showJobProfile(nodeId) {
       this.gradeCounting();
     },
 
-    addTags(nodes) {
+    addTags1(nodes) {
       for (var i = 0; i < nodes?.length; i++) {
         this.totalHeadCount++;
         this.totalPositionCount++;
@@ -758,6 +795,93 @@ async showJobProfile(nodeId) {
       //}
       return nodes;
     },
+    addTags(nodes) {
+  if (!nodes) return nodes;
+
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    
+    // 1. Initialize tags if they don't exist, otherwise keep existing ones
+    if (!node.tags) {
+      node.tags = [];
+    }
+
+    // Helper to add tag only if it doesn't exist (prevents duplicates on redraw)
+    const safeAddTag = (tag) => {
+      if (tag && !node.tags.includes(tag)) {
+        node.tags.push(tag);
+      }
+    };
+
+    this.totalHeadCount++;
+    this.totalPositionCount++;
+
+    if (node.positionCritical == "Critical") {
+      this.totalCriticalPosition++;
+      safeAddTag("Critical"); // Adding as a tag for styling
+    }
+
+    var indexpay = this.intersectPay.findIndex(
+      (x) => x.externalCode == node.userPayGrade
+    );
+
+    // 2. Handle Occupancy Status (Merged logic to prevent replacement)
+    if (node.positionVacant === true) {
+      safeAddTag("Vacant");
+      this.vacantCount++;
+    } else {
+      safeAddTag("Occupied");
+    }
+
+    // 3. Handle Gender
+    if (node.gender === "M") {
+      safeAddTag("male");
+      this.maleCount++;
+    } else if (node.gender === "F") {
+      safeAddTag("female");
+      this.femaleCount++;
+    }
+
+    // 4. Add dynamic attributes as tags
+    safeAddTag(node.userPayGrade);
+    safeAddTag(node.positionCritical);
+
+    if (node.isRoot === true) {
+      safeAddTag("RootNode");
+    }
+
+    // 5. Handle Resignation (Swapping Occupied for Resigned)
+    if (node.resignationStatus === "On Notice Period") {
+      const occIndex = node.tags.indexOf("Occupied");
+      if (occIndex > -1) {
+        node.tags.splice(occIndex, 1);
+      }
+      safeAddTag("Resigned");
+      this.resignedCount++;
+    }
+
+    // 6. Image Logic
+    if (node.positionVacant === false) {
+      if (!node.img) {
+        node.img = "https://i.ibb.co/zxjJ4TK/placeholder.png";
+      }
+    } else {
+      node.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
+    }
+
+    // 7. Special cases
+    if (node.userId === "poojas") {
+      safeAddTag("assistant");
+    }
+
+    if (this.isLevel === true && indexpay !== -1) {
+      safeAddTag("subLevels" + indexpay);
+    }
+  }
+
+  console.log("Vacant Count:", this.vacantCount);
+  return nodes;
+},
     getChlidData(node) {
       console.log(node);
       if (
@@ -854,6 +978,7 @@ async showJobProfile(nodeId) {
               this.userMasterData[nodeData.userManagerId],
             );
             this.orgChartData = JSON.parse(JSON.stringify(this.orgChartData));
+            this.tempData = this.orgChartData
             console.log(JSON.stringify(this.orgChartData));
           }
         } else {
@@ -866,6 +991,7 @@ async showJobProfile(nodeId) {
           this.orgChartData = this.orgChartData.concat(
             this.userMasterData[nodeData.userId],
           );
+          this.tempData = this.orgChartData
           this.originalMasterData = this.originalMasterData.concat(
             this.userMasterData[nodeData.userId],
           );
@@ -912,17 +1038,49 @@ async showJobProfile(nodeId) {
       }
       var legent = document.getElementById("legendd");
 
-      legent.innerHTML =
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
-        this.totalPositionCount +
-        "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position:" +
-        this.vacantCount +
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount:" +
-        this.totalHeadCount +
-        "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position :" +
-        this.totalCriticalPosition +
-        "</p>" +
-        this.str;
+      // legent.innerHTML =
+      //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
+      //   this.totalPositionCount +
+      //   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position:" +
+      //   this.vacantCount +
+      //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount:" +
+      //   this.totalHeadCount +
+      //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position :" +
+      //   this.totalCriticalPosition +
+      //   "</p>" +
+      //   this.str;
+      const filledCount = this.totalPositionCount - this.vacantCount;
+
+legent.innerHTML = `
+  <div style="
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-family: sans-serif;
+    min-width: 160px;
+  ">
+    <div style="font-size: 14px; font-weight: bold; color: #5f6368; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; text-align: center; border-bottom: 1px solid #f1f1f1; padding-bottom: 4px;">
+      Position Stats
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+      <span style="font-size: 12px; color: #3c4043;"><span style="color: #4CAF50; margin-right: 5px;">●</span>Filled:</span>
+      <span style="font-size: 12px; font-weight: 600;">${filledCount}</span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <span style="font-size: 12px; color: #3c4043;"><span style="color: #039BE5; margin-right: 5px;">●</span>Vacant:</span>
+      <span style="font-size: 12px; font-weight: 600;">${this.vacantCount}</span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px dashed #e0e0e0;">
+      <span style="font-size: 12px; font-weight: bold; color: #202124;">Total:</span>
+      <span style="font-size: 12px; font-weight: bold; color: #1a73e8;">${this.totalPositionCount}</span>
+    </div>
+  </div>
+`; 
       this.chart.element.appendChild(legent);
     },
 
@@ -1053,6 +1211,7 @@ async showJobProfile(nodeId) {
         // this.nodes = this.addTags(this.nodes);
         this.nodes = this.addTags(this.nodes);
         this.orgChartData = this.nodes;
+        this.tempData = this.orgChartData
         this.originalMasterData = this.nodes;
         console.log("BYEEE", this.nodes);
         this.mytree(this.$refs.tree, JSON.parse(JSON.stringify(this.nodes)),false, 'myTemplate');
@@ -1091,18 +1250,20 @@ async showJobProfile(nodeId) {
         legent.style.left = "50px";
         legent.style.color = "#2B81D6";
         legent.style.width = "150px";
-        legent.style.border = "1px solid black";
-        legent.innerHTML =
-          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
-          this.totalPositionCount +
-          "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position-" +
-          this.vacantCount +
-          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount-" +
-          this.totalHeadCount +
-          "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position -" +
-          this.totalCriticalPosition +
-          "</p>" +
-          this.str;
+
+        
+       
+        // legent.innerHTML =
+        //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position -" +
+        //   this.totalPositionCount +
+        //   "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position-" +
+        //   this.vacantCount +
+        //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total HeadCount-" +
+        //   this.totalHeadCount +
+        //   "<p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Critical Position -" +
+        //   this.totalCriticalPosition +
+        //   "</p>" +
+        //   this.str;
         this.chart.element.appendChild(legent);
 
         var leg = document.createElement("div");
@@ -1225,12 +1386,14 @@ async showJobProfile(nodeId) {
   },
 
   changeView() {
-        var filteredData = this.orgChartData
-          ? this.orgChartData
+        var filteredData = this.tempData
+          ? this.tempData
           : this.nodes.config.data;
         var template 
+       // const filterMenu = document.querySelector('.boc-filter')
+       // filterMenu.style.visibility = this.selectedView ? 'hidden' : 'visible';
         if (this.selectedView) {
-          this.tempData = filteredData
+          
           filteredData = this.compressByPositionTitle(filteredData)
           
           this.isLevel = true;
@@ -1342,6 +1505,83 @@ async showJobProfile(nodeId) {
       this.copyPositionDialog = true;
     },
 
+    updateChartStats() {
+
+      const elPositionTitle = document.querySelector(
+          '[data-filter-field="positionTitle"]',
+        );
+
+        if (elPositionTitle) {
+          elPositionTitle.innerHTML = "Position Title";
+        }
+
+        const elpositionType = document.querySelector(
+          '[data-filter-field="positionType"]',
+        );
+
+        if (elpositionType) {
+          elpositionType.innerHTML = "Position Type";
+        }
+
+        const eluserPayGrade = document.querySelector(
+          '[data-filter-field="userPayGrade"]',
+        );
+
+        if (eluserPayGrade) {
+          eluserPayGrade.innerHTML = "Pay Grade";
+        } 
+    // 1. Check if the view is active
+    if (this.selectedView) {
+        let legendEl = document.getElementById("legendd");
+
+        // 2. Create the element if it doesn't exist
+        if (!legendEl) {
+            legendEl = document.createElement("div");
+            legendEl.setAttribute("id", "legendd");
+            
+            // Set Base Styles
+            Object.assign(legendEl.style, {
+                position: "absolute",
+                top: "28px",
+                right: "100px",
+                zIndex: "100", // Ensure it's above the chart but below dialogs
+                pointerEvents: "none" // Prevents legend from blocking chart drags
+            });
+
+            this.chart.element.appendChild(legendEl);
+        }
+
+        // 3. Always update content (ensures stats refresh on redraw)
+        const filledCount = this.totalPositionCount - this.vacantCount;
+        legendEl.style.visibility = "visible";
+        legendEl.innerHTML = `
+            <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-family: sans-serif; min-width: 160px;">
+                <div style="font-size: 14px; font-weight: bold; color: #5f6368; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; text-align: center; border-bottom: 1px solid #f1f1f1; padding-bottom: 4px;">
+                    Position Stats
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="font-size: 12px; color: #3c4043;"><span style="color: #4CAF50; margin-right: 5px;">●</span>Filled:</span>
+                    <span style="font-size: 12px; font-weight: 600;">${filledCount}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 12px; color: #3c4043;"><span style="color: #039BE5; margin-right: 5px;">●</span>Vacant:</span>
+                    <span style="font-size: 12px; font-weight: 600;">${this.vacantCount}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px dashed #e0e0e0;">
+                    <span style="font-size: 12px; font-weight: bold; color: #202124;">Total:</span>
+                    <span style="font-size: 12px; font-weight: bold; color: #1a73e8;">${this.totalPositionCount}</span>
+                </div>
+            </div>`;
+    } 
+    else {
+        // 4. Hide if selectedView is false
+        const legendEl = document.getElementById("legendd");
+        if (legendEl) {
+            legendEl.style.visibility = "hidden";
+        }
+    }
+},
+
     // copyPosition(level) {
     //   // console.log("nodeId=",nodeId);
     //   // var data = this.chart.get(nodeId);
@@ -1357,23 +1597,27 @@ async showJobProfile(nodeId) {
     //   // var data = this.chart.get(nodeId);
     //   // data.id = this.chart.generateId();
     // },
-    // copyHandler(nodeId) {
-    //   var data = this.chart.get(nodeId);
-    //   data.id = this.chart.generateId();
-    //   data.pid = nodeId;
-    //   data.isRoot = false;
-    //   data.positionType = "Vacant";
-    //   data.positionVacant = true;
-    //   data.tags = ["Vacant", data.userPayGrade];
-    //   data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
-    //   data.userDepartmentId = "";
-    //   data.userDivision = "";
-    //   data.userId = "";
-    //   data.userManagerId = "";
-    //   data.userName = "";
-    //   data.positionTitle = "New Position";
-    //   this.chart.addNode(data);
-    // },
+    copyHandler(nodeId) {
+      var data = this.chart.get(nodeId);
+      data.id = this.chart.generateId();
+      data.pid = nodeId;
+      data.isRoot = false;
+      data.positionType = "Vacant";
+      data.positionVacant = true;
+      data.tags = ["Vacant", data.userPayGrade, "New"];
+      data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
+      data.userDepartmentId = "";
+      data.userDivision = "";
+      data.userId = "";
+      data.userManagerId = "";
+      data.userName = "";
+      data.positionTitle = "New Position";
+      this.chart.addNode(data);
+      this.tempData.push(data)
+      this.totalPositionCount+=1
+      this.vacantCount +=1
+      this.updateChartStats()
+    },
 
     field2_binding(sender, node) {
       var data = sender.get(node.id);
@@ -1650,21 +1894,21 @@ async showJobProfile(nodeId) {
           positionType: {},
         },
         editForm: {
-          generateElementsFromFields: false,
-          elements: [
-            {
-              type: "textbox",
-              label: "Position Title",
-              binding: "positionTitle",
-            },
-            { type: "textbox", label: "Position Code", binding: "id" },
-            {
-              type: "textbox",
-              label: "Position PayGrade",
-              binding: "userPayGrade",
-            },
-            { type: "textbox", label: "Department", binding: "department" },
-          ],
+          generateElementsFromFields: true,
+          // elements: [
+          //   {
+          //     type: "textbox",
+          //     label: "Position Title",
+          //     binding: "positionTitle",
+          //   },
+          //   { type: "textbox", label: "Position Code", binding: "id" },
+          //   {
+          //     type: "textbox",
+          //     label: "Position PayGrade",
+          //     binding: "userPayGrade",
+          //   },
+          //   { type: "textbox", label: "Department", binding: "department" },
+          // ],
         },
         enableSearch: false,
         // Right Navigation Drawer
@@ -1702,17 +1946,17 @@ async showJobProfile(nodeId) {
           edit: {
             text: "Edit",
           },
-          // add: { text: "Add New Position", onClick: this.copyHandler },
+          add: { text: "Add New Position", onClick: this.copyHandler },
           CopyPosition: { text: "Copy Position", onClick: this.copyPosition },
 
-          addLevelDownPosition: {
-            text: "Create Lower Level Position",
-            onClick: (nodeId) => this.addPosition("child", nodeId),
-          },
-          addSameLevelPosition: {
-            text: "Create Same Level Position",
-            onClick: (nodeId) => this.addPosition("sibling", nodeId),
-          },
+          // addLevelDownPosition: {
+          //   text: "Create Lower Level Position",
+          //   onClick: (nodeId) => this.addPosition("child", nodeId),
+          // },
+          // addSameLevelPosition: {
+          //   text: "Create Same Level Position",
+          //   onClick: (nodeId) => this.addPosition("sibling", nodeId),
+          // },
           remove: { text: "Remove Position" },
         },
         tags: {
@@ -1790,8 +2034,8 @@ async showJobProfile(nodeId) {
           field_5: "userDivisionName",
           field_6: "positionVacant",
           field_7: "businessUnit",
-          field_8: "jobCode",
-          field_9: "positionVacant",
+          field_8: "jobLevel",
+          field_9: "jobCode",
           // field_11: "positionVacant",
           field_10: this.binder,
         },
@@ -1815,11 +2059,7 @@ async showJobProfile(nodeId) {
         showXScroll: OrgChart.scroll.visible,
         showYScroll: OrgChart.scroll.visible,
         mouseScrool: OrgChart.action.none,
-        filterBy: {
-          positionTitle: { label: "Position Title" },
-          userPayGrade: {},
-          positionType: {},
-        },
+        
         editForm: {
           generateElementsFromFields: false,
           elements: [
@@ -1959,7 +2199,14 @@ async showJobProfile(nodeId) {
       });
     }
      
-      
+  // Instead of: chart.on('remove', function(sender, args) { ... })
+this.chart.on('remove', (sender, args) => {
+    // Now 'this' correctly refers to your component/class
+    this.tempData = this.tempData.filter(item => item.id !== args.id);
+    this.totalPositionCount-=1
+    this.vacantCount -= 1
+    this.updateChartStats(); 
+});
 
       this.chart.on("drop", async (sender, draggedNodeId, droppedNodeId) => {
         const draggedNode = sender.get(draggedNodeId);
@@ -2045,21 +2292,53 @@ async showJobProfile(nodeId) {
 
             legent.style.position = "absolute";
             legent.style.top = "28px";
-            legent.style.right = "70px";
+            legent.style.right = "100px";
             legent.style.color = "black";
             legent.style.width = "150px";
-            legent.style.border = "1px solid black";
+           
 
-            legent.innerHTML =
-              "<p style = 'font-size:10px;font-weight: bold;text-align:center;margin-bottom:1px'>Position Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Total Position: " +
-              this.totalPositionCount +
-              "</p><p class='pl-2 pr-2'style='font-size:10px;margin-bottom:1px;'>Total Vacant Position: " +
-              this.vacantCount +
-              "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'> Total HeadCount:  " +
-              this.totalHeadCount +
-              "<p class='pl-2 pr-2' style='font-size:10px;margin-bottom:1px;'>Total Critical Position: " +
-              this.totalCriticalPosition +
-              "</p>";
+            // legent.innerHTML =
+            //   "<p style = 'font-size:12px;font-weight: bold;text-align:center;margin-bottom:1px'>Position Stats </p><p class='pl-2 pr-2 pt-1' style='font-size:10px;margin-bottom:1px;'>Filled Position: " +
+            //   this.totalPositionCount - this.vacantCount +
+            //   "</p><p class='pl-2 pr-2'style='font-size:12px;margin-bottom:1px;'>Total Vacant Position: " +
+            //   this.vacantCount +
+            //   "<p class='pl-2 pr-2' style='font-size:12px;margin-bottom:1px;font-weight: bold;'> Total Position:  " +
+            //   this.totalPositionCount +
+              
+            //   "</p>";
+
+              const filledCount = this.totalPositionCount - this.vacantCount;
+
+legent.innerHTML = `
+  <div style="
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-family: sans-serif;
+    min-width: 160px;
+  ">
+    <div style="font-size: 14px; font-weight: bold; color: #5f6368; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; text-align: center; border-bottom: 1px solid #f1f1f1; padding-bottom: 4px;">
+      Position Stats
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+      <span style="font-size: 12px; color: #3c4043;"><span style="color: #4CAF50; margin-right: 5px;">●</span>Filled:</span>
+      <span style="font-size: 12px; font-weight: 600;">${filledCount}</span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <span style="font-size: 12px; color: #3c4043;"><span style="color: #039BE5; margin-right: 5px;">●</span>Vacant:</span>
+      <span style="font-size: 12px; font-weight: 600;">${this.vacantCount}</span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px dashed #e0e0e0;">
+      <span style="font-size: 12px; font-weight: bold; color: #202124;">Total:</span>
+      <span style="font-size: 12px; font-weight: bold; color: #1a73e8;">${this.totalPositionCount}</span>
+    </div>
+  </div>
+`; 
 
             var legent1 = document.createElement("div");
             legent1.setAttribute("id", "legendd1");
@@ -2095,8 +2374,8 @@ async showJobProfile(nodeId) {
               "</p>";
 
             this.chart.element.appendChild(legent);
-            this.chart.element.appendChild(legent1);
-            this.chart.element.appendChild(legent2);
+           // this.chart.element.appendChild(legent1);
+            //this.chart.element.appendChild(legent2);
           }
         } else {
           const legenddEl = document.getElementById("legendd");
@@ -2346,11 +2625,16 @@ async showJobProfile(nodeId) {
       data.userName = "";
       data.userManagerId = "";
 
-      data.tags = ["Vacant", data.userPayGrade];
+      data.tags = ["Vacant", data.userPayGrade,"New"];
       data.img = "https://i.ibb.co/LShM7dV/vacantposition.png";
-
+      this.totalPositionCount = this.totalPositionCount + 1
+      this.vacantCount +=1
+      this.updateChartStats()
       this.chart.addNode(data);
+
     }
+
+
 
     // reset trigger
     this.$store.commit("setTriggerCopyPosition", false);
@@ -2358,10 +2642,10 @@ async showJobProfile(nodeId) {
     triggerAddNode(val) {
       if (!val || !this.newNodePayload) return;
 
-      // this.createNodeFromDialog(this.newNodePayload);
+      this.createNodeFromDialog(this.newNodePayload);
 
-      // this.$store.commit("setTriggerAddNode", false);
-      // this.$store.commit("setNewNodePayload", null);
+      this.$store.commit("setTriggerAddNode", false);
+      this.$store.commit("setNewNodePayload", null);
     },
 
     triggerSavePlan(val) {
@@ -2379,6 +2663,7 @@ async showJobProfile(nodeId) {
   },
   beforeDestroy() {
     this.originalData = null;
+    this.selectedView = false
   },
 };
 </script>

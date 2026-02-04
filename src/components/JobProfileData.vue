@@ -14,7 +14,7 @@
       <v-card flat class="drawer-card">
         <!-- HEADER -->
         <v-card-title class="text-h6 d-flex justify-space-between cursor-move">
-          Job Details
+          Job Profile
 
           <div>
             <!-- MINIMIZE / RESTORE BUTTON -->
@@ -71,13 +71,13 @@
             </p>
 
             <v-row dense align="center">
-              <v-col cols="6">
+              <v-col cols="12">
                 <strong>Position ID:</strong>
                 {{ drawer.node?.id || "-" }}
               </v-col>
             </v-row>
             <v-row dense align="center">
-              <v-col cols="6">
+              <v-col cols="12">
                 <strong>Position Title:</strong>
                 {{ drawer.node?.positionTitle || "-" }}
               </v-col>
