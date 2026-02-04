@@ -52,8 +52,17 @@
         </v-card-title>
 
         <v-divider />
+        <v-card-text v-if="drawer.loading" class="text-center py-10">
+  <v-progress-circular
+    indeterminate
+    color="primary"
+    size="40"
+  />
+  <div class="mt-2 text-caption">Loading job profile…</div>
+</v-card-text>
 
         <div
+         v-else
           class="drawer-body"
           ref="drawerBody"
           @scroll="syncScroll"
@@ -141,6 +150,15 @@ export default {
   },
 
   methods: {
+    updateDrawerData(drawerId, jobProfileData) {
+  const drawer = this.drawers.find(d => d.id === drawerId);
+  if (!drawer) return;
+
+  drawer.loading = false;
+
+  
+  Object.assign(drawer.jobProfileData, jobProfileData);
+},
     toggleMinimize(drawer) {
       drawer.minimized = !drawer.minimized;
     },
@@ -331,23 +349,38 @@ export default {
       });
     },
 
-    openDrawer(jobProfileData,node) {
-      const exists = this.drawers.find(
-        (d) => d?.node?.id === node?.id,
-        // (d) => d?.jobProfileData?.externalCode === jobProfileData?.externalCode,
-      );
-      if (exists) return;
+    // openDrawer(jobProfileData,node) {
+    //   const exists = this.drawers.find(
+    //     (d) => d?.node?.id === node?.id,
+    //     // (d) => d?.jobProfileData?.externalCode === jobProfileData?.externalCode,
+    //   );
+    //   if (exists) return;
 
-      this.drawers.push({
-        id: `${jobProfileData.jobReqId}-${Date.now()}`,
-        jobProfileData,
-        node,
-        open: true,
-        minimized: false,
-        x: 100 + this.drawers.length * 30, // initial positions
-        y: 100 + this.drawers.length * 30,
-      });
-    },
+    //   this.drawers.push({
+    //     id: `${jobProfileData.jobReqId}-${Date.now()}`,
+    //     jobProfileData,
+    //     node,
+    //     open: true,
+    //     minimized: false,
+    //     x: 100 + this.drawers.length * 30, // initial positions
+    //     y: 100 + this.drawers.length * 30,
+    //   });
+    // },
+openDrawer(node) {
+  const id = `${node.id}-${Date.now()}`;
+
+  this.drawers.push({
+    id,
+    node,                 
+    loading: true,        
+    jobProfileData: {},   
+    minimized: false,
+    x: 100 + this.drawers.length * 30,
+    y: 100 + this.drawers.length * 30,
+  });
+
+  return id; 
+},
 
     closeDrawer(index) {
       this.drawers.splice(index, 1);

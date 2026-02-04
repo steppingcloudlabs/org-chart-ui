@@ -533,32 +533,48 @@ export default {
     //   this.jobInfo = true;
     //   console.log("this.jobInfo==", this.jobInfo);
     // },
+async showJobProfile(nodeId) {
+  const node = this.chart.get(nodeId);
+  if (!node) return;
 
- async showJobProfile(nodeId) {
-    const node = this.chart.get(nodeId); 
-    console.log("node=",node)
- // Find the node from the source data (this.orgChartData) instead of chart.get
-  // const node = this.orgChartData.find(n => String(n.id) === String(nodeId));
-  
-  if (!node) {
-    console.error("Node not found in orgChartData for nodeId:", nodeId);
-    return;
-  }
-  console.log("FULL NODE OBJECT  ", node);
-  console.log("JOB CODE  ", node.jobCode);
-  // console.log("jobCode =", jobCode);
-let jobCode= node.jobCode
-  const payload = { jobCode };
+  const drawerId = this.$refs.jobDrawerStack.openDrawer(node);
+  const payload = { jobCode: node.jobCode };
 
   const jobProfileData = await this.$store.dispatch(
     "getJobProfileData",
     payload
   );
 
-  console.log("jobProfileData", jobProfileData);
-
-  this.$refs.jobDrawerStack.openDrawer(jobProfileData,node);
+  this.$refs.jobDrawerStack.updateDrawerData(drawerId, jobProfileData);
 },
+
+
+
+//  async showJobProfile(nodeId) {
+//     const node = this.chart.get(nodeId); 
+//     console.log("node=",node)
+//  // Find the node from the source data (this.orgChartData) instead of chart.get
+//   // const node = this.orgChartData.find(n => String(n.id) === String(nodeId));
+  
+//   if (!node) {
+//     console.error("Node not found in orgChartData for nodeId:", nodeId);
+//     return;
+//   }
+//   console.log("FULL NODE OBJECT  ", node);
+//   console.log("JOB CODE  ", node.jobCode);
+//   // console.log("jobCode =", jobCode);
+// let jobCode= node.jobCode
+//   const payload = { jobCode };
+
+//   const jobProfileData = await this.$store.dispatch(
+//     "getJobProfileData",
+//     payload
+//   );
+
+//   console.log("jobProfileData", jobProfileData);
+
+//   this.$refs.jobDrawerStack.openDrawer(jobProfileData,node);
+// },
 
     exportUserProfile(nodeId) {
       var nodeData = this.chart.get(nodeId);
