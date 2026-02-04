@@ -11,13 +11,20 @@
       :style="drawerStyle(drawer)"
       @mousedown="startDrag($event, index)"
     >
-      <v-card flat>
+      <v-card flat class="drawer-card">
         <!-- HEADER -->
         <v-card-title class="text-h6 d-flex justify-space-between cursor-move">
           Job Details
          
           
           <div>
+            <!-- MINIMIZE / RESTORE BUTTON -->
+<v-btn icon @click.stop="toggleMinimize(drawer)">
+  <v-icon>
+    {{ drawer.minimized ? 'mdi-window-restore' : 'mdi-minus' }}
+  </v-icon>
+</v-btn>
+
             <!-- Download BUTTON -->
             <v-tooltip bottom>
   <template v-slot:activator="{ on, attrs }">
@@ -48,7 +55,8 @@
 
         <v-divider />
 
-        <div class="drawer-body" ref="drawerBody" @scroll="syncScroll">
+        <div class="drawer-body" ref="drawerBody" @scroll="syncScroll"   v-show="!drawer.minimized"
+>
           <!-- BODY -->
           <v-card-text>
             <p class="text-h6 font-weight-bold mb-1">
@@ -117,6 +125,10 @@ export default {
   },
 
   methods: {
+    toggleMinimize(drawer) {
+  drawer.minimized = !drawer.minimized;
+},
+
   htmlToPlainText(html) {
   if (!html) return "-";
 
@@ -317,6 +329,7 @@ saveDrawerAsPDF(drawer) {
         id: `${jobProfileData.jobReqId}-${Date.now()}`,
         jobProfileData,
         open: true,
+         minimized: false,
         x: 100 + this.drawers.length * 30, // initial positions
         y: 100 + this.drawers.length * 30
       });
@@ -372,6 +385,12 @@ saveDrawerAsPDF(drawer) {
 </script>
 
 <style scoped>
+.drawer-card {
+  border: 2px solid #1976d2;
+  border-radius: 6px;
+}
+
+
 .draggable-drawer {
   transition: none !important;
   user-select: none;
